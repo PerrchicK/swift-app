@@ -14,7 +14,15 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismiss:"))
+        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "dismiss:"))
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func dismiss(gestureRecognizer: UIGestureRecognizer) {
+        print("Dismissing keyboard due to \(gestureRecognizer)")
+        valueTextField.resignFirstResponder()
     }
     
     override func didReceiveMemoryWarning() {
@@ -43,7 +51,9 @@ class ViewController: UIViewController {
     
     // Question: What is the problem in the following function?
     @IBAction func getButtonPressed(sender: AnyObject) {
-        alert("beloved string", message: valueTextField.😍()!)
+        if let beloved = valueTextField.😍() {
+            alert("beloved string", message: beloved)
+        }
     }
     
     func alert(title: String, message: String) {
