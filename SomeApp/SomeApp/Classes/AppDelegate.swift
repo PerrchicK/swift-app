@@ -179,8 +179,19 @@ extension NSURL {
     }
 }
 
+// dispatch block on main queue
 public func runOnUiThread(afterDelay seconds: Double = 0.0, block: dispatch_block_t) {
+    runBlockAfterDelay(afterDelay: seconds, block: block)
+}
+
+// runClosureAfterDelay
+public func runBlockAfterDelay(afterDelay seconds: Double = 0.0,
+    onQueue: dispatch_queue_t = dispatch_get_main_queue(),
+    block: dispatch_block_t) {
     let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC))) // 2 seconds delay before retry
     dispatch_after(delayTime, dispatch_get_main_queue(), block)
 }
 
+public func className(type: AnyClass) -> String {
+    return NSStringFromClass(type).componentsSeparatedByString(".").last!
+}

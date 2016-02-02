@@ -20,9 +20,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swift-logo" translatesAutoresizingMaskIntoConstraints="NO" id="ffq-x2-Syp">
-                                <rect key="frame" x="66" y="190" width="188" height="188"/>
+                                <rect key="frame" x="70" y="194" width="180" height="180"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ffq-x2-Syp" secondAttribute="height" multiplier="1:1" id="Gis-Rq-olc"/>
+                                    <constraint firstAttribute="width" constant="180" id="fkr-HQ-sq8"/>
                                     <constraint firstAttribute="width" secondItem="ffq-x2-Syp" secondAttribute="height" multiplier="1:1" id="hDD-9a-A29"/>
                                     <constraint firstAttribute="width" constant="240" id="i5p-ea-jFm"/>
                                 </constraints>
@@ -33,24 +34,38 @@
                                     </mask>
                                 </variation>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Code in Swift" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="36N-e3-ZzE">
+                                <rect key="frame" x="26" y="133.5" width="268" height="20.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" red="0.93092105263157898" green="0.53939423344030868" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="36N-e3-ZzE" secondAttribute="trailing" constant="10" id="00Z-N8-4u9"/>
+                            <constraint firstItem="ffq-x2-Syp" firstAttribute="centerX" secondItem="B5q-wx-G5c" secondAttribute="centerX" id="3Dz-Dr-IRI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ffq-x2-Syp" secondAttribute="trailing" constant="50" id="Fsm-Ik-Xm8"/>
                             <constraint firstItem="ffq-x2-Syp" firstAttribute="centerX" secondItem="B5q-wx-G5c" secondAttribute="centerX" id="KQO-pD-yY4"/>
                             <constraint firstItem="ffq-x2-Syp" firstAttribute="width" secondItem="ffq-x2-Syp" secondAttribute="height" multiplier="1:1" id="MmK-1b-se2"/>
                             <constraint firstItem="ffq-x2-Syp" firstAttribute="centerY" secondItem="B5q-wx-G5c" secondAttribute="centerY" id="PjK-nb-Zw4"/>
                             <constraint firstItem="ffq-x2-Syp" firstAttribute="leading" secondItem="B5q-wx-G5c" secondAttribute="leadingMargin" constant="50" id="cD1-50-H8t"/>
+                            <constraint firstItem="ffq-x2-Syp" firstAttribute="top" secondItem="36N-e3-ZzE" secondAttribute="bottom" constant="40" id="dDw-Xh-mpe"/>
+                            <constraint firstItem="36N-e3-ZzE" firstAttribute="leading" secondItem="B5q-wx-G5c" secondAttribute="leadingMargin" constant="10" id="jp2-Ph-hRa"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="Fsm-Ik-Xm8"/>
                                 <exclude reference="KQO-pD-yY4"/>
                                 <exclude reference="MmK-1b-se2"/>
+                                <exclude reference="cD1-50-H8t"/>
                             </mask>
                         </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="swiftLabel" destination="36N-e3-ZzE" id="XTS-9s-6Rh"/>
+                        <outlet property="swiftLogo" destination="ffq-x2-Syp" id="iJK-gZ-DtO"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="StarterViewController" id="ej9-sk-oT8"/>
                     </connections>
                 </viewController>
