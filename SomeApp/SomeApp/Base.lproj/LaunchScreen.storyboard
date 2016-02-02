@@ -3,8 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,26 +16,7 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swift-logo" translatesAutoresizingMaskIntoConstraints="NO" id="VLe-kr-Eyg">
-                                <rect key="frame" x="66" y="190" width="188" height="188"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="VLe-kr-Eyg" secondAttribute="height" multiplier="1:1" id="WZo-wh-eCK"/>
-                                    <constraint firstAttribute="width" constant="240" id="iJw-rC-8x4"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="iJw-rC-8x4"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="VLe-kr-Eyg" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="50" id="Diz-4E-e4D"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="VLe-kr-Eyg" secondAttribute="trailing" constant="50" id="pvZ-Uu-CT8"/>
-                            <constraint firstItem="VLe-kr-Eyg" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="rgr-d6-uJQ"/>
-                        </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
@@ -46,7 +25,4 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="swift-logo" width="352" height="352"/>
-    </resources>
 </document>

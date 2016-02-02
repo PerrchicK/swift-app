@@ -1,15 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WS7-E4-8ja">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Splash Screen View Controller-->
+        <scene sceneID="m7F-Xj-C2T">
+            <objects>
+                <viewController storyboardIdentifier="SplashScreenViewController" id="WS7-E4-8ja" customClass="SplashScreenViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="t7M-cf-qBg"/>
+                        <viewControllerLayoutGuide type="bottom" id="OSK-BF-MAD"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="B5q-wx-G5c">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swift-logo" translatesAutoresizingMaskIntoConstraints="NO" id="ffq-x2-Syp">
+                                <rect key="frame" x="66" y="190" width="188" height="188"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ffq-x2-Syp" secondAttribute="height" multiplier="1:1" id="Gis-Rq-olc"/>
+                                    <constraint firstAttribute="width" secondItem="ffq-x2-Syp" secondAttribute="height" multiplier="1:1" id="hDD-9a-A29"/>
+                                    <constraint firstAttribute="width" constant="240" id="i5p-ea-jFm"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Gis-Rq-olc"/>
+                                        <exclude reference="i5p-ea-jFm"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="ffq-x2-Syp" secondAttribute="trailing" constant="50" id="Fsm-Ik-Xm8"/>
+                            <constraint firstItem="ffq-x2-Syp" firstAttribute="centerX" secondItem="B5q-wx-G5c" secondAttribute="centerX" id="KQO-pD-yY4"/>
+                            <constraint firstItem="ffq-x2-Syp" firstAttribute="width" secondItem="ffq-x2-Syp" secondAttribute="height" multiplier="1:1" id="MmK-1b-se2"/>
+                            <constraint firstItem="ffq-x2-Syp" firstAttribute="centerY" secondItem="B5q-wx-G5c" secondAttribute="centerY" id="PjK-nb-Zw4"/>
+                            <constraint firstItem="ffq-x2-Syp" firstAttribute="leading" secondItem="B5q-wx-G5c" secondAttribute="leadingMargin" constant="50" id="cD1-50-H8t"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="KQO-pD-yY4"/>
+                                <exclude reference="MmK-1b-se2"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="StarterViewController" id="ej9-sk-oT8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZEg-LC-lFD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-281" y="354"/>
+        </scene>
+        <!--Starter View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StarterViewController" id="BYZ-38-t0r" customClass="StarterViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -59,6 +111,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="173" y="354"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="swift-logo" width="352" height="352"/>
+    </resources>
 </document>
