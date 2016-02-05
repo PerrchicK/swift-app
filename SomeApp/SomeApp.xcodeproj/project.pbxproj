@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		751D39671C6498DA003CFF46 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751D39661C6498DA003CFF46 /* Extensions.swift */; };
 		7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */; };
 		7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */; };
-		7570D2DE1C600E8B00EA34D3 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DD1C600E8B00EA34D3 /* Splash.swift */; };
+		7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */; };
 		75D7A4BD1C4E924400CDD88F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75D7A4BB1C4E924400CDD88F /* Main.storyboard */; };
 		75D7A4C01C4E924400CDD88F /* SomeApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4BE1C4E924400CDD88F /* SomeApp.xcdatamodeld */; };
 		75D7A4C21C4E924400CDD88F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75D7A4C11C4E924400CDD88F /* Assets.xcassets */; };
 		75D7A4C51C4E924400CDD88F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75D7A4C31C4E924400CDD88F /* LaunchScreen.storyboard */; };
 		75D7A4D01C4E924400CDD88F /* SomeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4CF1C4E924400CDD88F /* SomeAppTests.swift */; };
 		75D7A4DB1C4E924400CDD88F /* SomeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4DA1C4E924400CDD88F /* SomeAppUITests.swift */; };
-		75D7A4EA1C4E933700CDD88F /* NSObject+SomeApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4E91C4E933700CDD88F /* NSObject+SomeApplication.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		751D39661C6498DA003CFF46 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarterViewController.swift; sourceTree = "<group>"; };
-		7570D2DD1C600E8B00EA34D3 /* Splash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
+		7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		75D7A4B41C4E924400CDD88F /* SomeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D7A4BC1C4E924400CDD88F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		75D7A4BF1C4E924400CDD88F /* SomeApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SomeApp.xcdatamodel; sourceTree = "<group>"; };
@@ -52,7 +53,6 @@
 		75D7A4D61C4E924400CDD88F /* SomeAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SomeAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D7A4DA1C4E924400CDD88F /* SomeAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomeAppUITests.swift; sourceTree = "<group>"; };
 		75D7A4DC1C4E924400CDD88F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		75D7A4E91C4E933700CDD88F /* NSObject+SomeApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+SomeApplication.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,11 +80,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		751D39651C6498DA003CFF46 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				751D39661C6498DA003CFF46 /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		7570D2D91C600E6A00EA34D3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */,
-				7570D2DD1C600E8B00EA34D3 /* Splash.swift */,
+				7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -112,6 +120,7 @@
 		75D7A4B61C4E924400CDD88F /* SomeApp */ = {
 			isa = PBXGroup;
 			children = (
+				751D39651C6498DA003CFF46 /* Extensions */,
 				75D7A4E81C4E933700CDD88F /* Classes */,
 				75D7A4BB1C4E924400CDD88F /* Main.storyboard */,
 				75D7A4C11C4E924400CDD88F /* Assets.xcassets */,
@@ -145,7 +154,6 @@
 			children = (
 				7570D2D91C600E6A00EA34D3 /* ViewControllers */,
 				7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */,
-				75D7A4E91C4E933700CDD88F /* NSObject+SomeApplication.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -282,10 +290,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
-				75D7A4EA1C4E933700CDD88F /* NSObject+SomeApplication.swift in Sources */,
+				751D39671C6498DA003CFF46 /* Extensions.swift in Sources */,
 				7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */,
 				75D7A4C01C4E924400CDD88F /* SomeApp.xcdatamodeld in Sources */,
-				7570D2DE1C600E8B00EA34D3 /* Splash.swift in Sources */,
+				7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

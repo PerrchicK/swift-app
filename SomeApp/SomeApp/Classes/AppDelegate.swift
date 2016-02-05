@@ -114,70 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-// MARK:- Extensions
-
-extension UIAlertController {
-
-    /**
-     A service method that alerts with title and message in the top view controller
-
-     - parameter title: The title of the UIAlertView
-     - parameter message: The message inside the UIAlertView
-     */
-    static func alert(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) {
-        guard var topController = UIApplication.sharedApplication().keyWindow?.rootViewController else {
-            return
-        }
-
-        // topController should now be the most top view controller
-        if let presentedViewController = topController.presentedViewController {
-            topController = presentedViewController
-        }
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
-            guard let onGone = onGone else {
-                return
-            }
-
-            onGone()
-        }))
-
-        topController.presentViewController(alertController, animated: true, completion: nil)
-    }
-}
-
-extension UIViewController {
-    
-    class func instantiate(storyboardName storyboardName: String? = nil) -> Self {
-        return instantiateFromStoryboardHelper(storyboardName)
-    }
-    
-    private class func instantiateFromStoryboardHelper<T: UIViewController>(storyboardName: String?) -> T {
-        let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
-        let identifier = NSStringFromClass(T).componentsSeparatedByString(".").last!
-        let controller = storyboard.instantiateViewControllerWithIdentifier(identifier) as! T
-        return controller
-    }
-}
-
-extension NSURL {
-    
-    func queryStringComponents() -> [String: AnyObject] {
-        var dict = [String: AnyObject]()
-        // Check for query string
-        if let query = self.query {
-            // Loop through pairings (separated by &)
-            for pair in query.componentsSeparatedByString("&") {
-                // Pull key, val from from pair parts (separated by =) and set dict[key] = value
-                let components = pair.componentsSeparatedByString("=")
-                dict[components[0]] = components[1]
-            }
-        }
-        
-        return dict
-    }
-}
+// MARK: - Global Methods
 
 // dispatch block on main queue
 public func runOnUiThread(afterDelay seconds: Double = 0.0, block: dispatch_block_t) {
