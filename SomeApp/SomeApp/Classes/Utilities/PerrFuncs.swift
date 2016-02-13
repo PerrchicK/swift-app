@@ -197,11 +197,7 @@ extension UIAlertController {
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
-            guard let onGone = onGone else {
-                return
-            }
-            
-            onGone()
+            onGone?()
         }))
         
         topController.presentViewController(alertController, animated: true, completion: nil)
