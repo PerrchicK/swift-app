@@ -18,12 +18,17 @@ class StarterViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismiss:"))
-        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "dismiss:"))
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        PerrFuncs.fetchAndPresentImage("http://vignette4.wikia.nocookie.net/simpsons/images/9/92/WOOHOO.jpg")
     }
     
     override func didReceiveMemoryWarning() {
@@ -50,7 +55,6 @@ class StarterViewController: UIViewController {
         }
     }
     
-    // Question: What is the problem in the following function?
     @IBAction func getButtonPressed(sender: AnyObject) {
         if let beloved = valueTextField.😍() {
             UIAlertController.alert(title: "beloved string", message: beloved)
@@ -61,4 +65,14 @@ class StarterViewController: UIViewController {
         print("Dismissing keyboard due to \(gestureRecognizer)")
         valueTextField.resignFirstResponder()
     }
+    
+    // MARK: - Other super class methods
+    
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
+        if motion == .MotionShake {
+            // Show local UI live debugging tool
+            FLEXManager.sharedManager().showExplorer() // Delete if it doesn't exist
+        }
+    }
+
 }

@@ -13,9 +13,16 @@ class SplashScreenViewController : UIViewController {
     @IBOutlet weak var swiftLogo: UIImageView!
     @IBOutlet weak var swiftLabel: UILabel!
 
-    override func viewDidAppear(animated: Bool) {
-        swiftLogo.animateMoveCenterTo(x: self.view.center.x, y: self.view.center.y)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         swiftLogo.animateFade(fadeIn: true)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        swiftLogo.animateMoveCenterTo(x: self.view.center.x, y: self.view.center.y)
         swiftLogo.animateZoom(zoomIn: true) { (finished) -> Void in
             self.swiftLabel.animateBump { [weak self] (finished) -> Void in
                 guard let strongSelf = self else { return }
