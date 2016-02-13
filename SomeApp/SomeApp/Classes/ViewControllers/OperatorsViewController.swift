@@ -23,13 +23,21 @@ class OperatorsViewController: UIViewController {
 
         valueTextField.placeholder = "value that a String object will love"
     }
-    
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        valueTextField.resignFirstResponder()
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     @IBAction func setButtonPressed(sender: AnyObject) {
+        valueTextField.resignFirstResponder()
+
         var lovingResult : AnyObject?
         
         do {
@@ -49,6 +57,8 @@ class OperatorsViewController: UIViewController {
     }
     
     @IBAction func getButtonPressed(sender: AnyObject) {
+        valueTextField.resignFirstResponder()
+
         if let beloved = valueTextField.😍() {
             UIAlertController.alert(title: "beloved string", message: beloved)
         }

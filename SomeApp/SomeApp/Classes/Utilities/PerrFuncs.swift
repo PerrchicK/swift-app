@@ -72,7 +72,7 @@ public class PerrFuncs: NSObject {
     }
 
     func removeImage() {
-        imageContainer.animateFade(fadeIn: false) { (doneSuccessfully) in
+        imageContainer.animateFade(fadeIn: false, duration: 0.5) { (doneSuccessfully) in
             self.imageContainer.removeAllSubviews()
             self.imageContainer.removeFromSuperview()
         }
@@ -90,9 +90,10 @@ public class PerrFuncs: NSObject {
         loadingSpinner.startAnimating()
         sharedInstance.imageContainer.addSubview(loadingSpinner)
         loadingSpinner.pinToSuperViewCenter()
-        sharedInstance.imageContainer.show(show: true, faded: true)
-
+        sharedInstance.imageContainer.animateFade(fadeIn: true, duration: 0.5)
+        
         window.addSubview(sharedInstance.imageContainer)
+        sharedInstance.imageContainer.stretchToSuperViewEdges()
 
         let screenWidth = WIDTH(window.frame) //UIScreen.mainScreen().bounds.width
         UIImageView(frame: CGRectMake(0.0, 0.0, screenWidth, screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in
