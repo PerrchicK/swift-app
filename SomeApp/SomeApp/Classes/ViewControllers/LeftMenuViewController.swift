@@ -24,7 +24,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     let menuItems = [LeftMenuOptions.UI.title:[LeftMenuOptions.UI.UIViews,LeftMenuOptions.UI.Animations],
         LeftMenuOptions.SwiftStuff.title:[LeftMenuOptions.SwiftStuff.OperatorsOverloading],
         LeftMenuOptions.Concurrency.title:[LeftMenuOptions.Concurrency.GCD]]
-    let leftMenuCellReuseIdentifier = StringFromClass(LeftMenuCell.self)
+    let leftMenuCellReuseIdentifier = className(LeftMenuCell)
 
     @IBOutlet weak var itemsTableView: UITableView!
 

@@ -13,7 +13,6 @@
 		75D7A4D01C4E924400CDD88F /* SomeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4CF1C4E924400CDD88F /* SomeAppTests.swift */; };
 		75D7A4DB1C4E924400CDD88F /* SomeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4DA1C4E924400CDD88F /* SomeAppUITests.swift */; };
 		75F1AD701C6E8C92005D7FCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD691C6E8C92005D7FCA /* Assets.xcassets */; };
-		75F1AD711C6E8C92005D7FCA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6A1C6E8C92005D7FCA /* Info.plist */; };
 		75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */; };
 		75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */; };
 		75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */; };
@@ -324,7 +323,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */,
-				75F1AD711C6E8C92005D7FCA /* Info.plist in Resources */,
 				75F1AD701C6E8C92005D7FCA /* Assets.xcassets in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
 			);
@@ -461,7 +459,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -531,6 +528,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Perry Shalom (EPDKG23J64)";
 				INFOPLIST_FILE = "SomeApp/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeApp;

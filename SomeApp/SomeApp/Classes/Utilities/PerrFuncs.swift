@@ -16,17 +16,6 @@ typealias CompletionClosure = ((AnyObject?) -> Void)?
 func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-func StringFromClass(aClass: AnyClass) -> String {
-    let classNSString = NSStringFromClass(aClass)
-    let components = classNSString.componentsSeparatedByString(".")
-
-    if components.count > 0 {
-        return components.last!
-    } else {
-        return classNSString
-    }
-}
-
 // MARK: - Global Methods
 
 // dispatch block on main queue
@@ -42,8 +31,15 @@ public func runBlockAfterDelay(afterDelay seconds: Double = 0.0,
         dispatch_after(delayTime, dispatch_get_main_queue(), block)
 }
 
-public func className(type: AnyClass) -> String {
-    return NSStringFromClass(type).componentsSeparatedByString(".").last!
+public func className(aClass: AnyClass) -> String {
+    let className = NSStringFromClass(aClass)
+    let components = className.componentsSeparatedByString(".")
+    
+    if components.count > 0 {
+        return components.last!
+    } else {
+        return className
+    }
 }
 
 // MARK: - Class
