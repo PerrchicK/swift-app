@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */; };
 		7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */; };
 		7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */; };
 		7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		403511240D2B0B8D83C4B099 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencyViewController.swift; sourceTree = "<group>"; };
 		7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarterViewController.swift; sourceTree = "<group>"; };
 		7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				75F1AD821C6F4010005D7FCA /* OperatorsViewController.swift */,
 				75F1AD841C6F42BC005D7FCA /* MainViewController.swift */,
 				75F1AD8C1C6F7BB4005D7FCA /* AnimationsViewController.swift */,
+				753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */,
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
 				75F1AD811C6F3D5B005D7FCA /* LeftMenuViewController.swift in Sources */,
+				753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */,
 				7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */,
 				7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */,
 				75F1AD7A1C6E8CBC005D7FCA /* PerrFuncs.swift in Sources */,
@@ -544,6 +548,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Perry Shalom (BYQ4J9BT99)";
 				INFOPLIST_FILE = "SomeApp/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeApp;
