@@ -14,13 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        var rootViewController : UIViewController = SplashScreenViewController.instantiate()
-        if (NSUserDefaults.standardUserDefaults().objectForKey("shouldPushViewControllers") != nil) {
-            rootViewController = UINavigationController(rootViewController: rootViewController)
-        }
-        
+        let rootViewController : UIViewController = SplashScreenViewController.instantiate()
         self.window?.rootViewController = rootViewController
         // Override point for customization after application launch.
         return true

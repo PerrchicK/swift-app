@@ -9,6 +9,24 @@
 import UIKit
 import ObjectiveC
 
+// MARK: - "macros"
+
+typealias CompletionClosure = ((AnyObject?) -> Void)?
+
+func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
+func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
+
+func StringFromClass(aClass: AnyClass) -> String {
+    let classNSString = NSStringFromClass(aClass)
+    let components = classNSString.componentsSeparatedByString(".")
+
+    if components.count > 0 {
+        return components.last!
+    } else {
+        return classNSString
+    }
+}
+
 // MARK: - Global Methods
 
 // dispatch block on main queue
@@ -26,12 +44,6 @@ public func runBlockAfterDelay(afterDelay seconds: Double = 0.0,
 
 public func className(type: AnyClass) -> String {
     return NSStringFromClass(type).componentsSeparatedByString(".").last!
-}
-
-// MARK: - "macros"
-typealias CompletionClosure = ((AnyObject?) -> Void)?
-func WIDTH(frame: CGRect) -> CGFloat {
-    return frame.size.width
 }
 
 // MARK: - Class
@@ -67,7 +79,7 @@ public class PerrFuncs: NSObject {
     }
 
     class func fetchAndPresentImage(imageUrl: String?) {
-        guard let imageUrl = imageUrl where imageUrl.characters.count > 0,
+        guard let imageUrl = imageUrl where imageUrl.length() > 0,
             let app = UIApplication.sharedApplication().delegate as? AppDelegate,
             let window = app.window
             else { return }
@@ -78,6 +90,7 @@ public class PerrFuncs: NSObject {
         loadingSpinner.startAnimating()
         sharedInstance.imageContainer.addSubview(loadingSpinner)
         loadingSpinner.pinToSuperViewCenter()
+        sharedInstance.imageContainer.show(show: true, faded: true)
 
         window.addSubview(sharedInstance.imageContainer)
 
@@ -91,6 +104,53 @@ public class PerrFuncs: NSObject {
                 sharedInstance.removeImage()
             }
         }
+    }
+}
+
+extension String {
+    func length() -> Int {
+        return self.characters.count
+    }
+
+    func toEmoji() -> String {
+        guard self.length() > 0 else { return self }
+        
+        var emoji = ""
+        
+        switch self {
+
+            // Just for fun
+        case "yo":
+            emoji = "👋🏻"
+        case "ahalan":
+            emoji = "👋🏾"
+        case "ok":
+            emoji = "👌"
+        case "victory":
+            fallthrough
+        case "peace":
+            emoji = "✌🏽"
+
+            // Icons for menu titles
+        case "UI":
+            emoji = "👋🏻"
+        case "GCD":
+            emoji = "🚦"
+        case "UIViews":
+            emoji = "👀"
+        case "Animations":
+            emoji = "💫"
+        case "Operators Overloading":
+            emoji = "🔧"
+
+        default:
+            print("Error: Couldn't find emoji for string '\(self)'")
+            break
+        }
+        
+        print("string to emoji: \(self) -> \(emoji)")
+        
+        return emoji
     }
 }
 
@@ -121,7 +181,7 @@ extension UIImage {
 
 extension UIImageView {
     func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure) {
-        guard urlString.characters.count > 0 else { completionClosure?(nil); return }
+        guard urlString.length() > 0 else { completionClosure?(nil); return }
 
         UIImage.fetchImage(withUrl: urlString) { (image) in
             defer {
@@ -153,14 +213,14 @@ func 😘(left: NSObject, right: String) throws -> Bool {
 extension NSObject { // try extending 'AnyObject'...
     //infix operator 😘 { associativity left precedence 140 }
     func 😘(beloved beloved: String) throws -> Bool {
-        guard beloved.characters.count > 0 else {
+        guard beloved.length() > 0 else {
             return false
         }
         
         print("loving \(beloved)")
         
         // "Hard" guard
-        //assert(beloved.characters.count > 0, "non-empty strings only")
+        //assert(beloved.length() > 0, "non-empty strings only")
         
         objc_setAssociatedObject(self, &SompApplicationBelovedProperty, beloved, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
@@ -174,6 +234,14 @@ extension NSObject { // try extending 'AnyObject'...
         }
         
         return value
+    }
+}
+
+extension UIViewController {
+    func mostTopViewController() -> UIViewController {
+        guard let topController = self.presentedViewController else { return self }
+
+        return topController.mostTopViewController()
     }
 }
 
@@ -191,10 +259,8 @@ extension UIAlertController {
         }
         
         // topController should now be the most top view controller
-        if let presentedViewController = topController.presentedViewController {
-            topController = presentedViewController
-        }
-        
+        topController = topController.mostTopViewController()
+
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
             onGone?()

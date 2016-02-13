@@ -15,13 +15,18 @@ class SplashScreenViewController : UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        swiftLogo.animateFade(fadeIn: true)
+
+        swiftLogo.show(show: false)
     }
 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
+        swiftLogo.animateFade(fadeIn: true)
         swiftLogo.animateMoveCenterTo(x: self.view.center.x, y: self.view.center.y)
         swiftLogo.animateZoom(zoomIn: true) { (finished) -> Void in
             self.swiftLabel.animateBump { [weak self] (finished) -> Void in

@@ -10,60 +10,42 @@ import UIKit
 
 class StarterViewController: UIViewController {
 
-    @IBOutlet weak var valueTextField: UITextField!
+    lazy var drawer:MMDrawerController = {
+        // Configure:
+        let mainViewController = MainViewController.instantiate()
+        let leftMenuViewController = LeftMenuViewController.instantiate()
+        leftMenuViewController.delegate = mainViewController
+        let drawerController = MMDrawerController(centerViewController: mainViewController, leftDrawerViewController: leftMenuViewController)
+        drawerController.openDrawerGestureModeMask = .All
+        drawerController.closeDrawerGestureModeMask = .All
+        drawerController.title = "Swift Course"
+        return drawerController
+    }()
 
     // MARK: - Lifcycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismiss:"))
-        // Do any additional setup after loading the view, typically from a nib.
+
+        NSNotificationCenter.defaultCenter().addObserverForName(Notifications.CloseDrawer, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+            guard let strongSelf = self else { return }
+
+            strongSelf.drawer.closeDrawerAnimated(true, completion: nil)
+        }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
-    }
-
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        PerrFuncs.fetchAndPresentImage("http://vignette4.wikia.nocookie.net/simpsons/images/9/92/WOOHOO.jpg")
+        // Will run only once
+        let navigationController = UINavigationController(rootViewController: drawer)
+        navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .Done, target: self, action: "openLeftMenu")
+        presentViewController(navigationController, animated: true, completion: nil)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    @IBAction func setButtonPressed(sender: AnyObject) {
-        var lovingResult : AnyObject?
-        
-        do {
-            lovingResult = try valueTextField.😘(beloved: valueTextField.text!)
-        } catch {
-        }
-        
-        defer {
-            if let lovingResult = lovingResult as? Bool {
-                let isThisLove = lovingResult ? "❤️" : "💔"
-                
-                UIAlertController.alert(title: "love result", message: isThisLove)
-                
-                valueTextField.text = ""
-            }
-        }
-    }
-    
-    @IBAction func getButtonPressed(sender: AnyObject) {
-        if let beloved = valueTextField.😍() {
-            UIAlertController.alert(title: "beloved string", message: beloved)
-        }
-    }
-    
-    func dismiss(gestureRecognizer: UIGestureRecognizer) {
-        print("Dismissing keyboard due to \(gestureRecognizer)")
-        valueTextField.resignFirstResponder()
     }
     
     // MARK: - Other super class methods
@@ -73,6 +55,12 @@ class StarterViewController: UIViewController {
             // Show local UI live debugging tool
             FLEXManager.sharedManager().showExplorer() // Delete if it doesn't exist
         }
+    }
+
+    // MARK: - Other super class methods
+
+    private func openLeftMenu () {
+        drawer.openDrawerSide(.Left, animated: true, completion: nil)
     }
 
 }

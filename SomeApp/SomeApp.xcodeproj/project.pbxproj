@@ -18,6 +18,11 @@
 		75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */; };
 		75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */; };
 		75F1AD7A1C6E8CBC005D7FCA /* PerrFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD791C6E8CBC005D7FCA /* PerrFuncs.swift */; };
+		75F1AD811C6F3D5B005D7FCA /* LeftMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD801C6F3D5B005D7FCA /* LeftMenuViewController.swift */; };
+		75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD821C6F4010005D7FCA /* OperatorsViewController.swift */; };
+		75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD841C6F42BC005D7FCA /* MainViewController.swift */; };
+		75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD8A1C6F780F005D7FCA /* Constants.swift */; };
+		75F1AD8D1C6F7BB4005D7FCA /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD8C1C6F7BB4005D7FCA /* AnimationsViewController.swift */; };
 		E7C5AF2B4FAB2D3E019A06A4 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F43C2A525847F823E4E5B03E /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -56,7 +61,12 @@
 		75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		75F1AD791C6E8CBC005D7FCA /* PerrFuncs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerrFuncs.swift; sourceTree = "<group>"; };
-		75F1AD7B1C6E8D73005D7FCA /* SomeApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SomeApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		75F1AD801C6F3D5B005D7FCA /* LeftMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftMenuViewController.swift; sourceTree = "<group>"; };
+		75F1AD821C6F4010005D7FCA /* OperatorsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorsViewController.swift; sourceTree = "<group>"; };
+		75F1AD841C6F42BC005D7FCA /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		75F1AD861C6F4B8A005D7FCA /* SomeApp-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SomeApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		75F1AD8A1C6F780F005D7FCA /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		75F1AD8C1C6F7BB4005D7FCA /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		DB0C033BF3BDE91234F4F6BC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		F43C2A525847F823E4E5B03E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -101,6 +111,10 @@
 			children = (
 				7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */,
 				7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */,
+				75F1AD801C6F3D5B005D7FCA /* LeftMenuViewController.swift */,
+				75F1AD821C6F4010005D7FCA /* OperatorsViewController.swift */,
+				75F1AD841C6F42BC005D7FCA /* MainViewController.swift */,
+				75F1AD8C1C6F7BB4005D7FCA /* AnimationsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -168,10 +182,10 @@
 		75F1AD681C6E8C92005D7FCA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				75F1AD861C6F4B8A005D7FCA /* SomeApp-Bridging-Header.h */,
 				75F1AD691C6E8C92005D7FCA /* Assets.xcassets */,
 				75F1AD6A1C6E8C92005D7FCA /* Info.plist */,
 				75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */,
-				75F1AD7B1C6E8D73005D7FCA /* SomeApp-Bridging-Header.h */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -189,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				75F1AD791C6E8CBC005D7FCA /* PerrFuncs.swift */,
+				75F1AD8A1C6F780F005D7FCA /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -384,11 +399,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */,
 				75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */,
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
+				75F1AD811C6F3D5B005D7FCA /* LeftMenuViewController.swift in Sources */,
 				7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */,
 				7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */,
 				75F1AD7A1C6E8CBC005D7FCA /* PerrFuncs.swift in Sources */,
+				75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */,
+				75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */,
+				75F1AD8D1C6F7BB4005D7FCA /* AnimationsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
