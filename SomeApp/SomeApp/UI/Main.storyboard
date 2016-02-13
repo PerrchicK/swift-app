@@ -94,14 +94,14 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hxR-cG-T3W">
-                                <rect key="frame" x="145" y="199" width="30" height="30"/>
+                                <rect key="frame" x="16" y="199" width="288" height="30"/>
                                 <state key="normal" title="Get"/>
                                 <connections>
                                     <action selector="getButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SQz-52-CwA"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xkf-X8-C26">
-                                <rect key="frame" x="145" y="161" width="30" height="30"/>
+                                <rect key="frame" x="16" y="161" width="288" height="30"/>
                                 <state key="normal" title="Set"/>
                                 <connections>
                                     <action selector="setButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HNd-Su-I65"/>
@@ -110,14 +110,24 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="hxR-cG-T3W" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="59P-Fm-7EQ"/>
                             <constraint firstItem="UII-8c-Rin" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="103" id="DUV-Z2-uyN"/>
+                            <constraint firstItem="xkf-X8-C26" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="MbZ-b7-UPQ"/>
                             <constraint firstItem="hxR-cG-T3W" firstAttribute="centerX" secondItem="xkf-X8-C26" secondAttribute="centerX" id="TDj-ju-Rsf"/>
                             <constraint firstItem="xkf-X8-C26" firstAttribute="centerX" secondItem="UII-8c-Rin" secondAttribute="centerX" id="Tbi-Aq-2jE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="hxR-cG-T3W" secondAttribute="trailing" id="VwX-bI-3ME"/>
                             <constraint firstItem="xkf-X8-C26" firstAttribute="top" secondItem="UII-8c-Rin" secondAttribute="bottom" constant="8" id="fCW-1s-qgf"/>
                             <constraint firstItem="UII-8c-Rin" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="fla-L8-uzr"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="xkf-X8-C26" secondAttribute="trailing" id="qJt-2m-Lp3"/>
                             <constraint firstItem="hxR-cG-T3W" firstAttribute="top" secondItem="xkf-X8-C26" secondAttribute="bottom" constant="8" id="tNV-Ol-2K6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UII-8c-Rin" secondAttribute="trailing" id="w7V-Bn-hav"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Tbi-Aq-2jE"/>
+                                <exclude reference="TDj-ju-Rsf"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
