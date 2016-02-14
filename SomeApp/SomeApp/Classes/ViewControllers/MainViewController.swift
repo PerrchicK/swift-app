@@ -15,6 +15,8 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate {
             navigationController?.pushViewController(AnimationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.SwiftStuff.OperatorsOverloading:
             navigationController?.pushViewController(OperatorsViewController.instantiate(), animated: true)
+        case LeftMenuOptions.Concurrency.GCD:
+            navigationController?.pushViewController(ConcurrencyViewController.instantiate(), animated: true)
         default:
             UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
             print("to be continued...")

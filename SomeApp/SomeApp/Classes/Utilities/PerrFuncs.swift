@@ -16,17 +16,6 @@ typealias CompletionClosure = ((AnyObject?) -> Void)?
 func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-func StringFromClass(aClass: AnyClass) -> String {
-    let classNSString = NSStringFromClass(aClass)
-    let components = classNSString.componentsSeparatedByString(".")
-
-    if components.count > 0 {
-        return components.last!
-    } else {
-        return classNSString
-    }
-}
-
 // MARK: - Global Methods
 
 // dispatch block on main queue
@@ -42,8 +31,15 @@ public func runBlockAfterDelay(afterDelay seconds: Double = 0.0,
         dispatch_after(delayTime, dispatch_get_main_queue(), block)
 }
 
-public func className(type: AnyClass) -> String {
-    return NSStringFromClass(type).componentsSeparatedByString(".").last!
+public func className(aClass: AnyClass) -> String {
+    let className = NSStringFromClass(aClass)
+    let components = className.componentsSeparatedByString(".")
+    
+    if components.count > 0 {
+        return components.last!
+    } else {
+        return className
+    }
 }
 
 // MARK: - Class
@@ -72,7 +68,7 @@ public class PerrFuncs: NSObject {
     }
 
     func removeImage() {
-        imageContainer.animateFade(fadeIn: false) { (doneSuccessfully) in
+        imageContainer.animateFade(fadeIn: false, duration: 0.5) { (doneSuccessfully) in
             self.imageContainer.removeAllSubviews()
             self.imageContainer.removeFromSuperview()
         }
@@ -90,9 +86,10 @@ public class PerrFuncs: NSObject {
         loadingSpinner.startAnimating()
         sharedInstance.imageContainer.addSubview(loadingSpinner)
         loadingSpinner.pinToSuperViewCenter()
-        sharedInstance.imageContainer.show(show: true, faded: true)
-
+        sharedInstance.imageContainer.animateFade(fadeIn: true, duration: 0.5)
+        
         window.addSubview(sharedInstance.imageContainer)
+        sharedInstance.imageContainer.stretchToSuperViewEdges()
 
         let screenWidth = WIDTH(window.frame) //UIScreen.mainScreen().bounds.width
         UIImageView(frame: CGRectMake(0.0, 0.0, screenWidth, screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in

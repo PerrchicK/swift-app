@@ -14,12 +14,17 @@ protocol LeftMenuViewControllerDelegate: class {
 
 class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: LeftMenuViewControllerDelegate?
+    let distanceFromTopMargin: CGFloat = 20.0
+    lazy var distanceFromTop: CGFloat = {
+        let distanceFromTop = HEIGHT(UINavigationController().navigationBar.frame) + HEIGHT(UIApplication.sharedApplication().statusBarFrame) + self.distanceFromTopMargin
+        return distanceFromTop
+    }()
 
     @IBOutlet weak var distanceFromTopConstraint: NSLayoutConstraint!
     let menuItems = [LeftMenuOptions.UI.title:[LeftMenuOptions.UI.UIViews,LeftMenuOptions.UI.Animations],
         LeftMenuOptions.SwiftStuff.title:[LeftMenuOptions.SwiftStuff.OperatorsOverloading],
         LeftMenuOptions.Concurrency.title:[LeftMenuOptions.Concurrency.GCD]]
-    let leftMenuCellReuseIdentifier = StringFromClass(LeftMenuCell.self)
+    let leftMenuCellReuseIdentifier = className(LeftMenuCell)
 
     @IBOutlet weak var itemsTableView: UITableView!
 
@@ -31,14 +36,22 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         // Should be called only if you're using a XIB file, not Storyboard
         //self.itemsTableView.registerClass(LeftMenuCell.self, forCellReuseIdentifier: leftMenuCellReuseIdentifier)
 
-        
-        let distanceFromTop = HEIGHT(UINavigationController().navigationBar.frame) + HEIGHT(UIApplication.sharedApplication().statusBarFrame) + 20.0
-        self.distanceFromTopConstraint.constant = distanceFromTop
-
-        self.itemsTableView.scrollEnabled = false
+        self.itemsTableView.alwaysBounceVertical = false
         self.itemsTableView.separatorStyle = .None
     }
-    
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+        self.distanceFromTopConstraint.constant = distanceFromTop
+    }
+
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+
+        distanceFromTop = self.distanceFromTopMargin
+    }
+
     // MARK: - UITableViewDataSource
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return menuItemSectionTitle(section)
