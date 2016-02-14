@@ -14,9 +14,8 @@ class ConcurrencyViewController: UIViewController {
 
     @IBOutlet var progressBars: [UIProgressView]!
     var progressBarsLeftArray = [Int]()
-//    var progressBarsLeft = 0
     var randomProgressBarIndex: Int {
-        NSThread.sleepForTimeInterval(0.00003)
+        NSThread.sleepForTimeInterval(0.003)
         let randomProgressBarIndex = random() % 4
         var found = false
         dispatch_sync(myQueue) {
@@ -44,6 +43,8 @@ class ConcurrencyViewController: UIViewController {
     }
 
     @IBAction func btnGoPressed(sender: AnyObject) {
+        guard progressBarsLeftArray.contains(-1) else { return }
+
         dispatch_group_async(myGroup, myQueue) {
             //Task 1
             self.animateProgressRun(progressIndex: self.randomProgressBarIndex, withInterval: 0.02)
@@ -70,7 +71,6 @@ class ConcurrencyViewController: UIViewController {
 
     func resetProgressBars() {
         progressBarsLeftArray.removeAll()
-//        progressBarsLeft = progressBars.count
 
         for progressBar in progressBars {
             progressBarsLeftArray.append(-1)
@@ -81,7 +81,6 @@ class ConcurrencyViewController: UIViewController {
     func animateProgressRun(progressIndex progressIndex: Int, withInterval interval: NSTimeInterval) {
         for progress in 1...100 {
             NSThread.sleepForTimeInterval(interval)
-//                dispatch_group_notify(myGroup, myQueue, {})
             if progress == 50 {
                 dispatch_group_wait(myGroup, 2)
             }
