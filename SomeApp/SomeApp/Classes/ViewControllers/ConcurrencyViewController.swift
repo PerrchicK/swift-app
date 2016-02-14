@@ -14,20 +14,23 @@ class ConcurrencyViewController: UIViewController {
 
     @IBOutlet var progressBars: [UIProgressView]!
     var progressBarsLeftArray = [Int]()
-    var progressBarsLeft = 0
+//    var progressBarsLeft = 0
     var randomProgressBarIndex: Int {
-//        NSThread.sleepForTimeInterval(0.00003)
-//        var randomProgressBarIndex = random() % 4
-//        dispatch_sync(myQueue) {
-//            if self.progressBarsLeft[randomProgressBarIndex] == -1 {
-//                self.progressBarsLeft[randomProgressBarIndex] = 0
-//            } else {
-//                randomProgressBarIndex = self.randomProgressBarIndex
-//            }
-//        }
-//        print("randomed: \(randomProgressBarIndex)")
-//        return randomProgressBarIndex
-        return --progressBarsLeft
+        NSThread.sleepForTimeInterval(0.00003)
+        let randomProgressBarIndex = random() % 4
+        var found = false
+        dispatch_sync(myQueue) {
+            if self.progressBarsLeftArray[randomProgressBarIndex] == -1 {
+                self.progressBarsLeftArray[randomProgressBarIndex] = 0
+                found = true
+            }
+        }
+        if found {
+            print("randomed: \(randomProgressBarIndex)")
+            return randomProgressBarIndex
+        } else {
+            return self.randomProgressBarIndex
+        }
     }
 
     override func viewDidLoad() {
@@ -66,11 +69,11 @@ class ConcurrencyViewController: UIViewController {
     }
 
     func resetProgressBars() {
-//        progressBarsLeft.removeAll()
-        progressBarsLeft = progressBars.count
+        progressBarsLeftArray.removeAll()
+//        progressBarsLeft = progressBars.count
 
         for progressBar in progressBars {
-//            progressBarsLeft.append(-1)
+            progressBarsLeftArray.append(-1)
             progressBar.setProgress(0.0, animated: false)
         }
     }

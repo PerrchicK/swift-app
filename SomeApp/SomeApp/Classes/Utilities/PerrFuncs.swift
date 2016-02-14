@@ -57,15 +57,12 @@ public class PerrFuncs: NSObject {
         let container = UIView(frame: UIScreen.mainScreen().bounds)
         container.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
         // To be a target, it must be an NSObject instance
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedOnImageContainer:")
-        container.addGestureRecognizer(tapGestureRecognizer)
+        container.onClick() {
+            self.removeImage()
+        }
+
         return container
     }()
-
-    // The UITapGestureRecognizer won't be able to send the selector to the instance if this will be private
-    func tappedOnImageContainer(tapGestureRecognizer: UITapGestureRecognizer) {
-        self.removeImage()
-    }
 
     func removeImage() {
         imageContainer.animateFade(fadeIn: false, duration: 0.5) { (doneSuccessfully) in
@@ -387,10 +384,35 @@ extension UIView {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: view, attribute: attribute, multiplier: multiplier, constant: constant)
     }
 
+    // MARK: - Other cool additions
+
+    // Attaches the closure to the tap event (onClick event)
+    func onClick(onClickClosure: () -> ()) {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onTapRecognized")
+        addGestureRecognizer(tapGestureRecognizer)
+        let attachedClosureWrapper = ClosureWrapper(closure: onClickClosure)
+        objc_setAssociatedObject(self, &ClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
+    }
+    
+    func onTapRecognized() {
+        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &ClosureWrapper.onClickClosureProperty) as? ClosureWrapper else { return }
+        attachedClosureWrapper.closure()
+    }
+}
+
+// Wraps
+class ClosureWrapper {
+    typealias VoidClosure = () -> ()
+    static var onClickClosureProperty = "onClickClosureProperty"
+    
+    let closure: VoidClosure
+    
+    init(closure: VoidClosure) {
+        self.closure = closure
+    }
 }
 
 extension NSURL {
-    
     func queryStringComponents() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         // Check for query string
