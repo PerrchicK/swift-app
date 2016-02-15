@@ -45,21 +45,25 @@ class ConcurrencyViewController: UIViewController {
     @IBAction func btnGoPressed(sender: AnyObject) {
         guard progressBarsLeftArray.contains(-1) else { return }
 
-        dispatch_group_async(myGroup, myQueue) {
+        dispatch_group_async(myGroup, myQueue) { [weak self] in
+            guard let strongSelf = self else { return }
             //Task 1
-            self.animateProgressRun(progressIndex: self.randomProgressBarIndex, withInterval: 0.02)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.02)
         }
-        dispatch_group_async(myGroup, myQueue) {
+        dispatch_group_async(myGroup, myQueue) { [weak self] in
+            guard let strongSelf = self else { return }
             //Task 2
-            self.animateProgressRun(progressIndex: self.randomProgressBarIndex, withInterval: 0.005)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.005)
         }
-        dispatch_group_async(myGroup, myQueue) {
+        dispatch_group_async(myGroup, myQueue) { [weak self] in
+            guard let strongSelf = self else { return }
             //Task 3
-            self.animateProgressRun(progressIndex: self.randomProgressBarIndex, withInterval: 0.05)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.05)
         }
-        dispatch_group_async(myGroup, myQueue) {
+        dispatch_group_async(myGroup, myQueue) { [weak self] in
+            guard let strongSelf = self else { return }
             //Task 4
-            self.animateProgressRun(progressIndex: self.randomProgressBarIndex, withInterval: 0.009)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.009)
         }
         dispatch_group_notify(myGroup, dispatch_get_main_queue()) {
             // Being dispatched on main queue after all group is finished
