@@ -42,9 +42,15 @@ public func className(aClass: AnyClass) -> String {
     }
 }
 
+public func dispatchTime(seconds: Double) -> dispatch_time_t {
+    let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
+    return dispatchTime
+}
+
 // MARK: - Class
 
 public class PerrFuncs: NSObject {
+    // Computed static variables will act as lazy variables
     static var sharedInstance: PerrFuncs = {
         return PerrFuncs()
     }()
@@ -239,8 +245,40 @@ extension UIViewController {
     }
 }
 
+extension UIApplication {
+    static func mostTopViewController() -> UIViewController? {
+        guard let topController = UIApplication.sharedApplication().keyWindow?.rootViewController else { return nil }
+        return topController.mostTopViewController()
+    }
+}
+
 extension UIAlertController {
-    
+
+    /**
+     Dismisses the current alert (if presented) and pops up the new one
+     */
+    func show() {
+        let mostTopViewController = UIApplication.mostTopViewController()!
+        if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
+            // 1. Dismiss the alert
+            mostTopViewController.dismissViewControllerAnimated(true, completion: {
+                // 2. Then present fullscreen
+                UIApplication.mostTopViewController()?.presentViewController(self, animated: true, completion: nil)
+            })
+        } else {
+            mostTopViewController.presentViewController(self, animated: true, completion: nil)
+        }
+    }
+
+    func withAction(action: UIAlertAction) -> UIAlertController {
+        self.addAction(action)
+        return self
+    }
+
+    static func make(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        return alertController
+    }
     /**
      A service method that alerts with title and message in the top view controller
      
@@ -248,19 +286,14 @@ extension UIAlertController {
      - parameter message: The message inside the UIAlertView
      */
     static func alert(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) {
-        guard var topController = UIApplication.sharedApplication().keyWindow?.rootViewController else {
-            return
-        }
+        guard var topController = UIApplication.sharedApplication().keyWindow?.rootViewController else { return }
         
         // topController should now be the most top view controller
         topController = topController.mostTopViewController()
 
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
+        UIAlertController.make(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
             onGone?()
-        }))
-        
-        topController.presentViewController(alertController, animated: true, completion: nil)
+        })).show()
     }
 }
 
@@ -388,6 +421,7 @@ extension UIView {
 
     // Attaches the closure to the tap event (onClick event)
     func onClick(onClickClosure: () -> ()) {
+        self.userInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onTapRecognized")
         addGestureRecognizer(tapGestureRecognizer)
         let attachedClosureWrapper = ClosureWrapper(closure: onClickClosure)
@@ -428,3 +462,29 @@ extension NSURL {
         return dict
     }
 }
+
+
+/*
+private let barrier = dispatch_queue_create("org.promisekit.barrier", DISPATCH_QUEUE_CONCURRENT)
+
+required init(inout resolver: ((R) -> Void)!) {
+    seal = .Pending(Handlers<R>())
+    super.init()
+    resolver = { resolution in
+        var handlers: Handlers<R>?
+        dispatch_barrier_sync(self.barrier) {
+            if case .Pending(let hh) = self.seal {
+                self.seal = .Resolved(resolution)
+                handlers = hh
+            }
+        }
+        if let handlers = handlers {
+            for handler in handlers {
+                handler(resolution)
+            }
+        }
+    }
+}
+
+
+*/

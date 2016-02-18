@@ -10,6 +10,7 @@ import UIKit
 
 class StarterViewController: UIViewController {
 
+    // Lazy variable - will be allocated (and initialized) only once
     lazy var drawer:MMDrawerController = {
         // Configure:
         let mainViewController = MainViewController.instantiate()

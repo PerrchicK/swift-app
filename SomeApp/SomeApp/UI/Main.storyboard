@@ -88,7 +88,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Starting..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yp8-II-DFh">
                                 <rect key="frame" x="123" y="274" width="75" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -205,7 +205,29 @@
                     <view key="view" contentMode="scaleToFill" id="B6p-La-4pS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BgM-B2-0e5" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="207" width="288" height="154"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="BgM-B2-0e5" secondAttribute="height" multiplier="15:8" id="HNf-jz-sP3"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BgM-B2-0e5" firstAttribute="top" secondItem="PRB-Vm-XIR" secondAttribute="bottom" constant="138" id="4Cm-hA-Jrw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BgM-B2-0e5" secondAttribute="trailing" id="IRo-mf-HD1"/>
+                            <constraint firstItem="BgM-B2-0e5" firstAttribute="centerY" secondItem="B6p-La-4pS" secondAttribute="centerY" id="kzn-4t-xM8"/>
+                            <constraint firstItem="BgM-B2-0e5" firstAttribute="centerX" secondItem="B6p-La-4pS" secondAttribute="centerX" id="oZb-7M-1Vw"/>
+                            <constraint firstItem="BgM-B2-0e5" firstAttribute="leading" secondItem="B6p-La-4pS" secondAttribute="leadingMargin" id="ufZ-GZ-C61"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="4Cm-hA-Jrw"/>
+                                <exclude reference="oZb-7M-1Vw"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
@@ -236,25 +258,31 @@
                                 <rect key="frame" x="36" y="100" width="248" height="2"/>
                             </progressView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="w64-ye-J6J">
-                                <rect key="frame" x="36" y="152" width="248" height="2"/>
+                                <rect key="frame" x="36" y="127" width="248" height="2"/>
                             </progressView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Fah-nx-inj">
-                                <rect key="frame" x="36" y="204" width="248" height="2"/>
+                                <rect key="frame" x="36" y="154" width="248" height="2"/>
                             </progressView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fvP-PV-HIj">
-                                <rect key="frame" x="36" y="256" width="248" height="2"/>
+                                <rect key="frame" x="36" y="181" width="248" height="2"/>
+                            </progressView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3mm-np-lyk">
+                                <rect key="frame" x="36" y="263" width="248" height="2"/>
                             </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="3mm-np-lyk" firstAttribute="width" secondItem="fvP-PV-HIj" secondAttribute="width" id="0p8-ko-xCK"/>
+                            <constraint firstItem="3mm-np-lyk" firstAttribute="top" secondItem="fvP-PV-HIj" secondAttribute="bottom" constant="80" id="2I1-TD-2dl"/>
                             <constraint firstItem="Ewc-OT-EGv" firstAttribute="leading" secondItem="vO5-iO-zX6" secondAttribute="leadingMargin" constant="20" id="470-R3-8FC"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="centerX" secondItem="Fah-nx-inj" secondAttribute="centerX" id="LEa-uy-O5c"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ewc-OT-EGv" secondAttribute="trailing" constant="20" id="LWN-qH-kVD"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="height" secondItem="Fah-nx-inj" secondAttribute="height" id="OeR-nN-GUO"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="centerX" secondItem="w64-ye-J6J" secondAttribute="centerX" id="Ogx-4T-7QE"/>
-                            <constraint firstItem="Fah-nx-inj" firstAttribute="top" secondItem="w64-ye-J6J" secondAttribute="bottom" constant="50" id="Txk-xE-q1x"/>
+                            <constraint firstItem="Fah-nx-inj" firstAttribute="top" secondItem="w64-ye-J6J" secondAttribute="bottom" constant="25" id="Txk-xE-q1x"/>
                             <constraint firstAttribute="trailingMargin" secondItem="AlM-TT-4TL" secondAttribute="trailing" constant="20" id="aRO-tU-jwZ"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="centerX" secondItem="Ewc-OT-EGv" secondAttribute="centerX" id="cVp-mW-mah"/>
+                            <constraint firstItem="3mm-np-lyk" firstAttribute="centerX" secondItem="fvP-PV-HIj" secondAttribute="centerX" id="ddC-zJ-QPY"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="width" secondItem="Ewc-OT-EGv" secondAttribute="width" id="fjf-i1-Wty"/>
                             <constraint firstItem="AlM-TT-4TL" firstAttribute="leading" secondItem="vO5-iO-zX6" secondAttribute="leadingMargin" constant="20" id="hK0-99-AB6"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="height" secondItem="w64-ye-J6J" secondAttribute="height" id="iT9-7M-i3H"/>
@@ -262,17 +290,18 @@
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="width" secondItem="Fah-nx-inj" secondAttribute="width" id="qFr-k6-C0R"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="height" secondItem="Ewc-OT-EGv" secondAttribute="height" id="tqr-Ig-vpW"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="width" secondItem="w64-ye-J6J" secondAttribute="width" id="vTW-XU-y7F"/>
-                            <constraint firstItem="w64-ye-J6J" firstAttribute="top" secondItem="Ewc-OT-EGv" secondAttribute="bottom" constant="50" id="zJe-vi-W5T"/>
+                            <constraint firstItem="w64-ye-J6J" firstAttribute="top" secondItem="Ewc-OT-EGv" secondAttribute="bottom" constant="25" id="zJe-vi-W5T"/>
                             <constraint firstItem="AlM-TT-4TL" firstAttribute="top" secondItem="m0g-gg-HH6" secondAttribute="bottom" constant="40" id="zPO-u9-zLT"/>
-                            <constraint firstItem="fvP-PV-HIj" firstAttribute="top" secondItem="Fah-nx-inj" secondAttribute="bottom" constant="50" id="zRe-uH-0K8"/>
+                            <constraint firstItem="fvP-PV-HIj" firstAttribute="top" secondItem="Fah-nx-inj" secondAttribute="bottom" constant="25" id="zRe-uH-0K8"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outletCollection property="progressBars" destination="Ewc-OT-EGv" id="5Gg-TZ-BJa"/>
-                        <outletCollection property="progressBars" destination="w64-ye-J6J" id="DPK-78-A8N"/>
-                        <outletCollection property="progressBars" destination="Fah-nx-inj" id="2kb-cq-zXk"/>
-                        <outletCollection property="progressBars" destination="fvP-PV-HIj" id="2oK-Iu-AYY"/>
+                        <outlet property="ungroupedProgressBar" destination="3mm-np-lyk" id="suL-BV-y82"/>
+                        <outletCollection property="progressBars" destination="Ewc-OT-EGv" collectionClass="NSMutableArray" id="5Gg-TZ-BJa"/>
+                        <outletCollection property="progressBars" destination="w64-ye-J6J" collectionClass="NSMutableArray" id="DPK-78-A8N"/>
+                        <outletCollection property="progressBars" destination="Fah-nx-inj" collectionClass="NSMutableArray" id="2kb-cq-zXk"/>
+                        <outletCollection property="progressBars" destination="fvP-PV-HIj" collectionClass="NSMutableArray" id="2oK-Iu-AYY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LEc-kU-qlj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -320,13 +349,13 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Fg-15-N56" id="Bj3-9X-Nxm">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu option title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-Ab-ka6">
                                                     <rect key="frame" x="75" y="11" width="227" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😃" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zx6-ia-a51">
@@ -336,7 +365,7 @@
                                                         <constraint firstAttribute="width" secondItem="Zx6-ia-a51" secondAttribute="height" multiplier="1:1" id="PWZ-UU-M4b"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
