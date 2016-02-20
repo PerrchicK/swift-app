@@ -28,7 +28,7 @@ class ConcurrencyViewController: UIViewController {
             }
         }
         if found {
-            print("randomed: \(randomProgressBarIndex)")
+            log("randomed: \(randomProgressBarIndex)")
             return randomProgressBarIndex
         } else {
             return self.randomProgressBarIndex
@@ -70,9 +70,11 @@ class ConcurrencyViewController: UIViewController {
         }
         dispatch_group_notify(myGroup, dispatch_get_main_queue()) {
             // Being dispatched on main queue after all group is finished
-            UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
-                self?.resetProgressBars()
-            }
+            runBlockAfterDelay(afterDelay: ToastMessageLength.SHORT.rawValue, block: { () -> Void in
+                UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
+                    self?.resetProgressBars()
+                }
+            })
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
@@ -80,19 +82,25 @@ class ConcurrencyViewController: UIViewController {
                 NSThread.sleepForTimeInterval(0.001)
 
                 if progress == 80 {
-                    runOnUiThread() {
-                        ToastMessage.show(messageText: "dispatch_group_wait: start waiting to group", inView: self.view)//
+                    runOnUiThread() { [weak self] in
+                        guard let strongSelf = self else { return }
+
+                        ToastMessage.show(messageText: "dispatch_group_wait: start waiting to group", inView: strongSelf.view)//
+                        strongSelf.ungroupedProgressBar.animateBump()
                     }
 
                     // 10 Seconds timeout
                     let succeeded = dispatch_group_wait(self.myGroup, dispatchTime(10))
                     if succeeded != 0 {
-                        print("dispatch_group_wait failed!")
+                        log("dispatch_group_wait failed!")
                     }
                     
                     // This code won't run until group is finished / timeout occured
-                    runOnUiThread() {
-                        ToastMessage.show(messageText: "dispatch_group_wait: done waiting, progress may continue...", inView: self.view)//
+                    runOnUiThread() { [weak self] in
+                        guard let strongSelf = self else { return }
+
+                        ToastMessage.show(messageText: "dispatch_group_wait: done waiting, progress may continue...", inView: strongSelf.view)//
+                        strongSelf.ungroupedProgressBar.animateBump()
                     }
                 }
 
@@ -116,14 +124,6 @@ class ConcurrencyViewController: UIViewController {
     func animateProgressRun(progressIndex progressIndex: Int, withInterval interval: NSTimeInterval) {
         for progress in 1...100 {
             NSThread.sleepForTimeInterval(interval)
-//            if progress == 50 {
-//                dispatch_semaphore_wait(myGroupSemaphore, dispatchTime(1))
-//                    var i = 10
-//                    while --i > 0 {
-//                        NSThread.sleepForTimeInterval(10)
-//                    }
-//                dispatch_semaphore_signal(myGroupSemaphore)
-//            }
             runOnUiThread() {
                 self.progressBars[progressIndex].setProgress(Float(progress) / 100, animated: true)
             }

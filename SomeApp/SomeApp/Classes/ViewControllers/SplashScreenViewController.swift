@@ -8,19 +8,25 @@
 
 import UIKit
 
+public func log(log: String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+    print("〈INFO〉\(file.componentsSeparatedByString("/").last!) ➤ \(function.componentsSeparatedByString("(").first!) (\(line)): \(log)")
+}
+
 class SplashScreenViewController : UIViewController {
 
     @IBOutlet weak var swiftLogo: UIImageView!
     @IBOutlet weak var swiftLabel: UILabel!
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-
-        swiftLogo.show(show: false)
-    }
-
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
+
+        log("Segue 👉 \(segue.identifier!)")
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        swiftLogo.show(show: false)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -38,5 +44,19 @@ class SplashScreenViewController : UIViewController {
                 })
             }
         }
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Before segue
+        log(" ... ")
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        // Before segue
+        log(" ... ")
     }
 }

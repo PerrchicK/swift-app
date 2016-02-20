@@ -33,6 +33,13 @@ class StarterViewController: UIViewController {
 
             strongSelf.drawer.closeDrawerAnimated(true, completion: nil)
         }
+        log(" ... ")
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        log(" ... ")
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -42,6 +49,8 @@ class StarterViewController: UIViewController {
         let navigationController = UINavigationController(rootViewController: drawer)
         navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .Done, target: self, action: "openLeftMenu")
         presentViewController(navigationController, animated: true, completion: nil)
+
+        log(" ... ")
     }
 
     override func didReceiveMemoryWarning() {

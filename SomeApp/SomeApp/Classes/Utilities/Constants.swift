@@ -16,8 +16,7 @@ public struct LeftMenuOptions {
     public struct UI {
         public static let title = "UI"
 
-        public static let Animations = "Animations"
-        public static let UIViews = "UIViews"
+        public static let Views_Animations = "Views & Animations"
     }
     public struct SwiftStuff {
         public static let title = "Swift Stuff"

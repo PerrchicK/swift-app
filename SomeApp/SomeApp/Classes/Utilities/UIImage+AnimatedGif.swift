@@ -11,14 +11,14 @@ import ImageIO
 
 extension UIImage {
     
-    public class func gifWithData(data: NSData) -> UIImage? {
+    public class func gifWithData(data: NSData, frameRate: NSTimeInterval = 1000.0) -> UIImage? {
         // Create source from data
         guard let source = CGImageSourceCreateWithData(data, nil) else {
             print("SwiftGif: Source for the image does not exist")
             return nil
         }
         
-        return UIImage.animatedImageWithSource(source)
+        return UIImage.animatedImageWithSource(source, frameRate: frameRate)
     }
     
     public class func gifWithURL(gifUrl:String) -> UIImage? {
@@ -38,7 +38,7 @@ extension UIImage {
         return gifWithData(imageData)
     }
     
-    public class func gifWithName(name: String) -> UIImage? {
+    public class func gifWithName(name: String, frameRate: NSTimeInterval = 1000.0) -> UIImage? {
         // Check for existance of gif
         guard let bundleURL = NSBundle.mainBundle().URLForResource(name, withExtension: "gif") else {
                 print("SwiftGif: This image named \"\(name)\" does not exist")
@@ -51,7 +51,7 @@ extension UIImage {
             return nil
         }
         
-        return gifWithData(imageData)
+        return gifWithData(imageData, frameRate: frameRate)
     }
     
     class func delayForImageAtIndex(index: Int, source: CGImageSource!) -> Double {
@@ -130,7 +130,9 @@ extension UIImage {
         return gcd
     }
     
-    class func animatedImageWithSource(source: CGImageSource) -> UIImage? {
+    class func animatedImageWithSource(source: CGImageSource, frameRate: NSTimeInterval = 1000.0) -> UIImage? {
+        guard frameRate < 10000.0 && frameRate > 0.0 else { return nil }
+
         let count = CGImageSourceGetCount(source)
         var images = [CGImageRef]()
         var delays = [Int]()
@@ -176,7 +178,7 @@ extension UIImage {
         
         // Heyhey
         let animation = UIImage.animatedImageWithImages(frames,
-            duration: Double(duration) / 1000.0)
+            duration: Double(duration) / frameRate)
         
         return animation
     }

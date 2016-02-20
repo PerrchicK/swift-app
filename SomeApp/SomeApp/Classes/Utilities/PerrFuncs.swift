@@ -83,7 +83,7 @@ public class PerrFuncs: NSObject {
             let window = app.window
             else { return }
         
-        print("fetching \(imageUrl)")
+        log("fetching \(imageUrl)")
 
         let loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
         loadingSpinner.startAnimating()
@@ -136,19 +136,17 @@ extension String {
             emoji = "👋🏻"
         case "GCD":
             emoji = "🚦"
-        case "UIViews":
-            emoji = "👀"
-        case "Animations":
-            emoji = "💫"
+        case "Views & Animations":
+            emoji = "👀 & 💫"
         case "Operators Overloading":
             emoji = "🔧"
 
         default:
-            print("Error: Couldn't find emoji for string '\(self)'")
+            log("Error: Couldn't find emoji for string '\(self)'")
             break
         }
         
-        print("string to emoji: \(self) -> \(emoji)")
+        log("string to emoji: \(self) -> \(emoji)")
         
         return emoji
     }
@@ -217,7 +215,7 @@ extension NSObject { // try extending 'AnyObject'...
             return false
         }
         
-        print("loving \(beloved)")
+        log("loving \(beloved)")
         
         // "Hard" guard
         //assert(beloved.length() > 0, "non-empty strings only")
@@ -228,7 +226,7 @@ extension NSObject { // try extending 'AnyObject'...
     }
     
     func 😍() -> String? { // 1
-        //print("loving \(right)")
+        //log("loving \(right)")
         guard let value = objc_getAssociatedObject(self, &SompApplicationBelovedProperty) as? String else {
             return nil
         }
@@ -315,11 +313,35 @@ extension UIView {
     
     // MARK: - Animations
     public func animateBump(completion: ((Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.CurveEaseOut   , animations: { () -> Void in
-            self.transform = CGAffineTransformMakeScale(1.2, 1.2)
-            }, completion: completion)
+        UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.CurveEaseOut   , animations: { [weak self] () -> Void in
+            self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
+            }, completion:nil)
+
+        UIView.animateWithDuration(0.1, delay: 0.3, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> Void in
+            self?.transform = CGAffineTransformMakeScale(1.0, 1.0)
+            }) { (succeeded) -> Void in
+                completion?(succeeded)
+        }
     }
-    
+
+    public func animateNono(completion: ((Bool) -> Void)? = nil) {
+        let originX = self.frame.origin.x
+
+        UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
+            self?.frame.origin.x = originX - 10
+            }, completion: { (done) in
+                UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
+                    self?.frame.origin.x = originX + 10
+                    }, completion: { (done) in
+                        UIView.animateWithDuration(0.05, animations: { [weak self] () -> Void in
+                            self?.frame.origin.x = originX
+                            }, completion: { (done) in
+                                completion?(done)
+                        })
+                })
+            })
+    }
+
     public func animateMoveCenterTo(x x: CGFloat, y: CGFloat, duration: NSTimeInterval = 1.0, completion: ((Bool) -> Void)? = nil) {
         self.center.x = -self.center.x
         self.center.y = -self.center.y
@@ -377,7 +399,7 @@ extension UIView {
             subView.removeAllSubviews()
         }
 
-        print("Removing: \(self), bounds: \(bounds), frame: \(frame):")
+        log("Removing: \(self), bounds: \(bounds), frame: \(frame):")
         self.removeFromSuperview()
     }
     
@@ -462,29 +484,3 @@ extension NSURL {
         return dict
     }
 }
-
-
-/*
-private let barrier = dispatch_queue_create("org.promisekit.barrier", DISPATCH_QUEUE_CONCURRENT)
-
-required init(inout resolver: ((R) -> Void)!) {
-    seal = .Pending(Handlers<R>())
-    super.init()
-    resolver = { resolution in
-        var handlers: Handlers<R>?
-        dispatch_barrier_sync(self.barrier) {
-            if case .Pending(let hh) = self.seal {
-                self.seal = .Resolved(resolution)
-                handlers = hh
-            }
-        }
-        if let handlers = handlers {
-            for handler in handlers {
-                handler(resolution)
-            }
-        }
-    }
-}
-
-
-*/

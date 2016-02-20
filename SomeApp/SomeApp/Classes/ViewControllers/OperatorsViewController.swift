@@ -65,7 +65,7 @@ class OperatorsViewController: UIViewController {
     }
     
     func dismiss(gestureRecognizer: UIGestureRecognizer) {
-        print("Dismissing keyboard due to \(gestureRecognizer)")
+        log("Dismissing keyboard due to \(gestureRecognizer)")
         valueTextField.resignFirstResponder()
     }
     
