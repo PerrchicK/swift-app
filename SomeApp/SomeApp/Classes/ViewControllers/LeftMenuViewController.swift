@@ -21,9 +21,13 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     }()
 
     @IBOutlet weak var distanceFromTopConstraint: NSLayoutConstraint!
-    let menuItems = [LeftMenuOptions.UI.title:[LeftMenuOptions.UI.Views_Animations],
-        LeftMenuOptions.SwiftStuff.title:[LeftMenuOptions.SwiftStuff.OperatorsOverloading],
-        LeftMenuOptions.Concurrency.title:[LeftMenuOptions.Concurrency.GCD]]
+    let menuItems =
+    [LeftMenuOptions.UI.title:
+        [LeftMenuOptions.UI.Views_Animations, LeftMenuOptions.UI.CollectionView],
+    LeftMenuOptions.SwiftStuff.title:
+        [LeftMenuOptions.SwiftStuff.OperatorsOverloading],
+    LeftMenuOptions.Concurrency.title:
+        [LeftMenuOptions.Concurrency.GCD]]
     let leftMenuCellReuseIdentifier = className(LeftMenuCell)
 
     @IBOutlet weak var itemsTableView: UITableView!

@@ -136,10 +136,14 @@ extension String {
             emoji = "👋🏻"
         case "GCD":
             emoji = "🚦"
+        case "Data":
+            emoji = "📂"
         case "Views & Animations":
             emoji = "👀 & 💫"
         case "Operators Overloading":
             emoji = "🔧"
+        case "Collection View":
+            emoji = "📚"
 
         default:
             log("Error: Couldn't find emoji for string '\(self)'")

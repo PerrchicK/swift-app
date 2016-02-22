@@ -13,10 +13,16 @@ public struct Notifications {
 }
 
 public struct LeftMenuOptions {
+    public struct iOS {
+        public static let title = "iOS"
+        
+        public static let Data = "Data"
+    }
     public struct UI {
         public static let title = "UI"
-
+        
         public static let Views_Animations = "Views & Animations"
+        public static let CollectionView = "Collection View"
     }
     public struct SwiftStuff {
         public static let title = "Swift Stuff"

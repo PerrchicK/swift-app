@@ -30,9 +30,13 @@ class ToastMessage: NibView {
         toastMessage.center = CGPoint(x: view.center.x, y: view.center.y * 1.5)
         toastMessage.messageLabel.text = messageText
         toastMessage.backgroundColor = UIColor.grayColor()
-        toastMessage.bumpAndFade()
         toastMessage.layer.cornerRadius = 5
         toastMessage.layer.masksToBounds = true
+        toastMessage.userInteractionEnabled = false
+//        toastMessage.translatesAutoresizingMaskIntoConstraints = false
+//        toastMessage.addConstraint(NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: toastMessage, attribute: .Bottom, multiplier: 1.0, constant: 30.0))
+
+        toastMessage.bumpAndFade()
     }
 
     private func bumpAndFade() {

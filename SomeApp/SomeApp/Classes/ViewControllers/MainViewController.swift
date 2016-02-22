@@ -32,6 +32,8 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate {
             navigationController?.pushViewController(ConcurrencyViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.Views_Animations:
             navigationController?.pushViewController(UIViewsViewController.instantiate(), animated: true)
+        case LeftMenuOptions.UI.CollectionView:
+            navigationController?.pushViewController(CollectionContainerViewController.instantiate(), animated: true)
         default:
             UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
             log("to be continued...")
