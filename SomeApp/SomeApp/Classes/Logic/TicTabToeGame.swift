@@ -34,7 +34,11 @@ class TicTabToeGame {
 
     // Computed property
     private var isGameEnabled: Bool {
+        // Using 'guard' keyword to ensure that the delegate exists (not null):
         guard let delegate = delegate else { return false }
+        // If exists: Make a new (and not optional!) object and continue
+        // If it doesn't exist: do nothing and return 'false'
+
         return delegate.isGameEnabled(self)
     }
 
@@ -47,6 +51,7 @@ class TicTabToeGame {
     
     func playerMadeMove(row: Int, column: Int) -> Bool {
         var didPlay = false
+        // Using 'guard' keyword to ensure conditions
         guard isGameEnabled && matrix[row][column] == nil else { return didPlay }
 
         matrix[row][column] = currentPlayer.intValue()
@@ -73,6 +78,7 @@ class TicTabToeGame {
         var verticalSequenceCounter = Array<Int>(count: Configuration.MaxMovesInSequence, repeatedValue: 0)
 //      Or: var verticalSequenceCounter = [0,0,0]
         for row in 0...Configuration.RowsCount - 1 {
+            // Using 'guard' keyword for optimization in runtime, skips redundant loops
             guard winner == nil else { return winner }
 
             // Count \
