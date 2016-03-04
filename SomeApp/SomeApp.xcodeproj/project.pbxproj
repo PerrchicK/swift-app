@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */; };
+		756AC8D21C7C3AC500369A4C /* TicTabToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */; };
 		756B02621C798621007DC54A /* CollectionContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756B02611C798621007DC54A /* CollectionContainerViewController.swift */; };
 		7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */; };
 		7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */; };
@@ -55,6 +56,7 @@
 /* Begin PBXFileReference section */
 		403511240D2B0B8D83C4B099 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencyViewController.swift; sourceTree = "<group>"; };
+		756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTabToeGame.swift; sourceTree = "<group>"; };
 		756B02611C798621007DC54A /* CollectionContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionContainerViewController.swift; sourceTree = "<group>"; };
 		7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarterViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 				403511240D2B0B8D83C4B099 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		756AC8D01C7C3AC500369A4C /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */,
+			);
+			path = Logic;
 			sourceTree = "<group>";
 		};
 		7570D2D91C600E6A00EA34D3 /* ViewControllers */ = {
@@ -202,6 +212,7 @@
 		75D7A4E81C4E933700CDD88F /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				756AC8D01C7C3AC500369A4C /* Logic */,
 				75F1AD781C6E8CBC005D7FCA /* Utilities */,
 				7570D2D91C600E6A00EA34D3 /* ViewControllers */,
 				7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */,
@@ -442,6 +453,7 @@
 				756B02621C798621007DC54A /* CollectionContainerViewController.swift in Sources */,
 				75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */,
 				7573DE001C7780A700E3C37F /* UIViewsViewController.swift in Sources */,
+				756AC8D21C7C3AC500369A4C /* TicTabToeGame.swift in Sources */,
 				75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */,
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
 				75F1AD811C6F3D5B005D7FCA /* LeftMenuViewController.swift in Sources */,

@@ -40,4 +40,5 @@ class UIViewsViewController: UIViewController, UIScrollViewDelegate, AnimatedGif
     func scrollViewDidScroll(scrollView: UIScrollView) {
         self.scrollViewContentOffsetLabel.text = String(scrollView.contentOffset)
     }
+
 }

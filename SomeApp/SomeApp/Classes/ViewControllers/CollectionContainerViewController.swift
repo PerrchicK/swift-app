@@ -8,17 +8,24 @@
 
 import Foundation
 
-class CollectionContainerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class CollectionContainerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, TicTabToeGameDelegate {
 
-    let RowsCount = 5
-    let ColsCount = 5
+    let NumberOfRows = TicTabToeGame.Configuration.RowsCount // X - number of section
+    let NumberOfColumns = TicTabToeGame.Configuration.ColumnsCount // Y - number of items in section
     let TileMargin = CGFloat(5.0)
+
+    var game: TicTabToeGame!
+    var isGameEnabled = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        game = TicTabToeGame()
+        game.delegate = self
     }
 
     // MARK: - UICollectionViewDataSource
+
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
@@ -31,17 +38,23 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         collectionView.backgroundColor = UIColor.clearColor()
-        return ColsCount
+        return NumberOfColumns
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return RowsCount
+        return NumberOfRows
     }
 
     // MARK: - UICollectionViewDelegate
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        ToastMessage.show(messageText: "(\(indexPath.section),\(indexPath.row))", inView: self.view)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CollectionContainerCell
+
+        let currentPlayerMark = game.currentPlayer.rawValue
+        if game.playerMadeMove(indexPath.section, column: indexPath.row) {
+            // Move confirmed
+            cell.placeMark(currentPlayerMark)
+        }
     }
 
     func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -53,7 +66,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let rowsCount = CGFloat(RowsCount)
+        let rowsCount = CGFloat(NumberOfColumns)
         let dimentions = collectionView.frame.height / rowsCount - (rowsCount * TileMargin * 0.8)
         return CGSize(width: dimentions, height: dimentions) // collectionView.frame.height * 0.9
     }
@@ -61,11 +74,29 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(TileMargin, TileMargin, TileMargin, TileMargin)
     }
+
+    // MARK: - TicTabToeGameDelegate
+
+    func ticTabToeGame(game: TicTabToeGame, finishedWithWinner winner: TicTabToeGame.Player) {
+        ToastMessage.show(messageText: "winner: \(winner)", inView: (UIApplication.mostTopViewController()?.view)!)
+        isGameEnabled = false
+    }
+
+    func isGameEnabled(game: TicTabToeGame) -> Bool {
+        return isGameEnabled
+    }
 }
 
 class CollectionContainerCell: UICollectionViewCell {
 
+    @IBOutlet weak var playerMarkLabel: UILabel!
+
     func configCell() {
         self.backgroundColor = UIColor.redColor()
+        self.playerMarkLabel.text = ""
+    }
+
+    func placeMark(mark: String) {
+        self.playerMarkLabel.text = mark
     }
 }

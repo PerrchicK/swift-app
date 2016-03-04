@@ -16,6 +16,14 @@ typealias CompletionClosure = ((AnyObject?) -> Void)?
 func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
+public func log(log: String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+    let formattter = NSDateFormatter()
+    formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
+    let timesamp = formattter.stringFromDate(NSDate())
+
+    print("〈\(timesamp)〉\(file.componentsSeparatedByString("/").last!) ➤ \(function.componentsSeparatedByString("(").first!) (\(line)): \(log)")
+}
+
 // MARK: - Global Methods
 
 // dispatch block on main queue

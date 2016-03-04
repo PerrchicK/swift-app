@@ -57,6 +57,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     // MARK: - UITableViewDataSource
+
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return menuItemSectionTitle(section)
     }
@@ -84,6 +85,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     // MARK: - UITableViewDelegate
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let selectedOption = menuItems[menuItemSectionTitle(indexPath.section)]![indexPath.row]
         log("selected \(selectedOption)")
@@ -92,6 +94,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     // MARK: - Other helper methods
+
     func menuItemSectionTitle(section: Int) -> String {
         let sectionIndex = menuItems.startIndex.advancedBy(section)
         let sectionTitle = menuItems.keys[sectionIndex]

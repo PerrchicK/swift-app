@@ -8,10 +8,6 @@
 
 import UIKit
 
-public func log(log: String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
-    print("〈INFO〉\(file.componentsSeparatedByString("/").last!) ➤ \(function.componentsSeparatedByString("(").first!) (\(line)): \(log)")
-}
-
 class SplashScreenViewController : UIViewController {
 
     @IBOutlet weak var swiftLogo: UIImageView!
