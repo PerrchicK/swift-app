@@ -22,7 +22,9 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
 
     @IBOutlet weak var distanceFromTopConstraint: NSLayoutConstraint!
     let menuItems =
-    [LeftMenuOptions.UI.title:
+    [LeftMenuOptions.iOS.title:
+        [LeftMenuOptions.iOS.Data, LeftMenuOptions.iOS.Notifications],
+    LeftMenuOptions.UI.title:
         [LeftMenuOptions.UI.Views_Animations, LeftMenuOptions.UI.CollectionView],
     LeftMenuOptions.SwiftStuff.title:
         [LeftMenuOptions.SwiftStuff.OperatorsOverloading],
@@ -69,7 +71,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         if let tuple = menuItemTitle(indexPath) {
             cell.configureCell(tuple.itemTitle, cellIcon: tuple.itemIcon)
         } else {
-            log("Error: damaged tuple returned")
+            📘("Error: damaged tuple returned")
         }
         return cell
     }
@@ -88,7 +90,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let selectedOption = menuItems[menuItemSectionTitle(indexPath.section)]![indexPath.row]
-        log("selected \(selectedOption)")
+        📘("selected \(selectedOption)")
         delegate?.leftMenuViewController(self, selectedOption: selectedOption)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

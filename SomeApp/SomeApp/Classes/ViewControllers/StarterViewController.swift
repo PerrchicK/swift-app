@@ -28,18 +28,18 @@ class StarterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSNotificationCenter.defaultCenter().addObserverForName(Notifications.CloseDrawer, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        NSNotificationCenter.defaultCenter().addObserverForName(InAppNotifications.CloseDrawer, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
             guard let strongSelf = self else { return }
 
             strongSelf.drawer.closeDrawerAnimated(true, completion: nil)
         }
-        log(" ... ")
+        📘(" ... ")
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        log(" ... ")
+        📘(" ... ")
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -50,7 +50,7 @@ class StarterViewController: UIViewController {
         navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .Done, target: self, action: "openLeftMenu")
         presentViewController(navigationController, animated: true, completion: nil)
 
-        log(" ... ")
+        📘(" ... ")
     }
 
     override func didReceiveMemoryWarning() {

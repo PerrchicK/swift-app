@@ -16,7 +16,7 @@ class SplashScreenViewController : UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
 
-        log("Segue 👉 \(segue.identifier!)")
+        📘("Segue 👉 \(segue.identifier!)")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -45,14 +45,14 @@ class SplashScreenViewController : UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // Before segue
-        log(" ... ")
+        // After segue (1)
+        📘(" ... ")
     }
 
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         
-        // Before segue
-        log(" ... ")
+        // After segue (2)
+        📘(" ... ")
     }
 }

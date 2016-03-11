@@ -8,26 +8,28 @@
 
 import Foundation
 
-enum ToastMessageLength: NSTimeInterval {
-    case LONG = 5.0
-    case SHORT = 3.0
-}
-
 class ToastMessage: NibView {
+
+    enum ToastMessageLength: NSTimeInterval {
+        case LONG = 5.0
+        case SHORT = 3.0
+    }
 
     @IBOutlet weak var messageLabel: UILabel!
     private(set) var delay: NSTimeInterval = 1.0
 
-    static func show(messageText messageText: String, inView view: UIView, delay: ToastMessageLength = ToastMessageLength.SHORT) {
-        let width = view.frame.width
+    static func show(messageText messageText: String, delay: ToastMessageLength = ToastMessageLength.SHORT) {
+        guard let appWindow = UIApplication.sharedApplication().keyWindow else { fatalError("cannot use keyWindow") }
+
+        let width = UIScreen.mainScreen().bounds.width
         let frame = CGRectMake(0.0, 0.0, width, width / 2.0)
         let toastMessage = ToastMessage(frame: frame)
 
         toastMessage.delay = delay.rawValue
         toastMessage.show(show: false)
-        view.addSubview(toastMessage)
+        appWindow.addSubview(toastMessage)
+        toastMessage.center = CGPoint(x: appWindow.center.x, y: appWindow.center.y * 1.5)
         toastMessage.animateFade(fadeIn: true, duration: 0.5)
-        toastMessage.center = CGPoint(x: view.center.x, y: view.center.y * 1.5)
         toastMessage.messageLabel.text = messageText
         toastMessage.backgroundColor = UIColor.grayColor()
         toastMessage.layer.cornerRadius = 5

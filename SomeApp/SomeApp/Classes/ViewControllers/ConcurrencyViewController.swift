@@ -28,7 +28,7 @@ class ConcurrencyViewController: UIViewController {
             }
         }
         if found {
-            log("randomed: \(randomProgressBarIndex)")
+            📘("randomed: \(randomProgressBarIndex)")
             return randomProgressBarIndex
         } else {
             return self.randomProgressBarIndex
@@ -70,7 +70,7 @@ class ConcurrencyViewController: UIViewController {
         }
         dispatch_group_notify(myGroup, dispatch_get_main_queue()) {
             // Being dispatched on main queue after all group is finished
-            runBlockAfterDelay(afterDelay: ToastMessageLength.SHORT.rawValue, block: { () -> Void in
+            runBlockAfterDelay(afterDelay: ToastMessage.ToastMessageLength.SHORT.rawValue, block: { () -> Void in
                 UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
                     self?.resetProgressBars()
                 }
@@ -85,21 +85,21 @@ class ConcurrencyViewController: UIViewController {
                     runOnUiThread() { [weak self] in
                         guard let strongSelf = self else { return }
 
-                        ToastMessage.show(messageText: "dispatch_group_wait: start waiting to group", inView: strongSelf.view)//
+                        ToastMessage.show(messageText: "dispatch_group_wait: start waiting to group")
                         strongSelf.ungroupedProgressBar.animateBump()
                     }
 
                     // 10 Seconds timeout
-                    let succeeded = dispatch_group_wait(self.myGroup, dispatchTime(10))
+                    let succeeded = dispatch_group_wait(self.myGroup, dispatch_time_t.timeWithSeconds(10))
                     if succeeded != 0 {
-                        log("dispatch_group_wait failed!")
+                        📘("dispatch_group_wait failed!")
                     }
                     
                     // This code won't run until group is finished / timeout occured
                     runOnUiThread() { [weak self] in
                         guard let strongSelf = self else { return }
 
-                        ToastMessage.show(messageText: "dispatch_group_wait: done waiting, progress may continue...", inView: strongSelf.view)//
+                        ToastMessage.show(messageText: "dispatch_group_wait: done waiting, progress may continue...")
                         strongSelf.ungroupedProgressBar.animateBump()
                     }
                 }

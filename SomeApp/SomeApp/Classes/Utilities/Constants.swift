@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Notifications {
+public struct InAppNotifications {
     public static let CloseDrawer = "CloseDrawer"
 }
 
@@ -16,7 +16,8 @@ public struct LeftMenuOptions {
     public struct iOS {
         public static let title = "iOS"
         
-        public static let Data = "Data"
+        public static let Data = "Persistence & Data"
+        public static let Notifications = "Notifications"
     }
     public struct UI {
         public static let title = "UI"

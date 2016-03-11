@@ -13,14 +13,14 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
 
-        log("Segue 👉 \(segue.identifier!)")
+        📘("Segue 👉 \(segue.identifier!)")
     }
     
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.CloseDrawer, object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName(InAppNotifications.CloseDrawer, object: nil)
     }
 
     // MARK: - LeftMenuViewControllerDelegate
@@ -34,9 +34,11 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate {
             navigationController?.pushViewController(UIViewsViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.CollectionView:
             navigationController?.pushViewController(CollectionContainerViewController.instantiate(), animated: true)
+        case LeftMenuOptions.iOS.Notifications:
+            navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
         default:
             UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
-            log("to be continued...")
+            📘("to be continued...")
         }
     }
 }

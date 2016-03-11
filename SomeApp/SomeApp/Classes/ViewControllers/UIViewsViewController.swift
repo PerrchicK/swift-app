@@ -28,7 +28,7 @@ class UIViewsViewController: UIViewController, UIScrollViewDelegate, AnimatedGif
     }
 
     deinit {
-        log("...")
+        📘("...")
     }
     
     // MARK: - AnimatedGifBoxViewDelegate

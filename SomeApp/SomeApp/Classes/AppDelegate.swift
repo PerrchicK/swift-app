@@ -26,6 +26,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        if  let title = notification.alertTitle,
+            let message = notification.alertBody
+            where application.applicationState == .Active {
+                UIAlertController.make(title: title, message: message).withAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)).show()
+        }
+        📘("Received notification: \(notification)")
+    }
+    
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        📘("Registered: \(notificationSettings)")
+    }
+
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.

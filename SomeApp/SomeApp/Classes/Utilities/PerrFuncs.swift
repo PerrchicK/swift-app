@@ -16,12 +16,12 @@ typealias CompletionClosure = ((AnyObject?) -> Void)?
 func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-public func log(log: String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+public func 📘(logMessage: String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
     let formattter = NSDateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
     let timesamp = formattter.stringFromDate(NSDate())
 
-    print("〈\(timesamp)〉\(file.componentsSeparatedByString("/").last!) ➤ \(function.componentsSeparatedByString("(").first!) (\(line)): \(log)")
+    print("〈\(timesamp)〉\(file.componentsSeparatedByString("/").last!) ➤ \(function.componentsSeparatedByString("(").first!) (\(line)): \(logMessage)")
 }
 
 // MARK: - Global Methods
@@ -48,11 +48,6 @@ public func className(aClass: AnyClass) -> String {
     } else {
         return className
     }
-}
-
-public func dispatchTime(seconds: Double) -> dispatch_time_t {
-    let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
-    return dispatchTime
 }
 
 // MARK: - Class
@@ -91,7 +86,7 @@ public class PerrFuncs: NSObject {
             let window = app.window
             else { return }
         
-        log("fetching \(imageUrl)")
+        📘("fetching \(imageUrl)")
 
         let loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
         loadingSpinner.startAnimating()
@@ -102,7 +97,7 @@ public class PerrFuncs: NSObject {
         window.addSubview(sharedInstance.imageContainer)
         sharedInstance.imageContainer.stretchToSuperViewEdges()
 
-        let screenWidth = WIDTH(window.frame) //UIScreen.mainScreen().bounds.width
+        let screenWidth = WIDTH(window.frame) //Or: UIScreen.mainScreen().bounds.width
         UIImageView(frame: CGRectMake(0.0, 0.0, screenWidth, screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in
             if let imageView = imageView as? UIImageView where imageView.image != nil {
                 sharedInstance.imageContainer.addSubview(imageView)
@@ -144,7 +139,9 @@ extension String {
             emoji = "👋🏻"
         case "GCD":
             emoji = "🚦"
-        case "Data":
+        case "Notifications":
+            emoji = "👻"
+        case "Persistence & Data":
             emoji = "📂"
         case "Views & Animations":
             emoji = "👀 & 💫"
@@ -154,11 +151,11 @@ extension String {
             emoji = "📚"
 
         default:
-            log("Error: Couldn't find emoji for string '\(self)'")
+            📘("Error: Couldn't find emoji for string '\(self)'")
             break
         }
         
-        log("string to emoji: \(self) -> \(emoji)")
+        📘("string to emoji: \(self) -> \(emoji)")
         
         return emoji
     }
@@ -227,7 +224,7 @@ extension NSObject { // try extending 'AnyObject'...
             return false
         }
         
-        log("loving \(beloved)")
+        📘("loving \(beloved)")
         
         // "Hard" guard
         //assert(beloved.length() > 0, "non-empty strings only")
@@ -411,7 +408,7 @@ extension UIView {
             subView.removeAllSubviews()
         }
 
-        log("Removing: \(self), bounds: \(bounds), frame: \(frame):")
+        📘("Removing: \(self), bounds: \(bounds), frame: \(frame):")
         self.removeFromSuperview()
     }
     

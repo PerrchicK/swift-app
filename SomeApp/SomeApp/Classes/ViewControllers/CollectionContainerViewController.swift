@@ -78,7 +78,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     // MARK: - TicTabToeGameDelegate
 
     func ticTabToeGame(game: TicTabToeGame, finishedWithWinner winner: TicTabToeGame.Player) {
-        ToastMessage.show(messageText: "winner: \(winner)", inView: (UIApplication.mostTopViewController()?.view)!)
+        ToastMessage.show(messageText: "winner: \(winner)")
         isGameEnabled = false
     }
 
