@@ -8,13 +8,60 @@
 
 import UIKit
 
+
+class Synchronizer {
+    let raceConditionQueue = NSOperationQueue()
+    let operation1 = NSBlockOperation(block: { () -> Void in
+        // Do something
+        📘("operation 1 is done")
+    })
+    let operation2 = NSBlockOperation(block: { () -> Void in
+        // Do something
+        📘("operation 2 is done")
+    })
+
+    init(finalOperation: () -> Void) {
+        let completionOperation = NSBlockOperation {
+            finalOperation()
+        }
+        completionOperation.addDependency(operation1)
+        completionOperation.addDependency(operation2)
+        raceConditionQueue.addOperation(completionOperation)
+    }
+    
+    func do1() {
+        if !operation1.finished {
+            // Distapch...
+            raceConditionQueue.addOperation(operation1)
+        }
+    }
+
+    func do2() {
+        if !operation2.finished {
+            // Distapch...
+            raceConditionQueue.addOperation(operation2)
+        }
+    }
+}
+
 class ConcurrencyViewController: UIViewController {
+
+    let synchronizer = Synchronizer {
+        // Runs in a background queue
+
+        runOnUiThread { // Without this, you will get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release."
+            ToastMessage.show(messageText: "released")
+        }
+    }
+
     let myQueue = dispatch_queue_create("myQueue", DISPATCH_QUEUE_CONCURRENT)
     let myGroup = dispatch_group_create()
-    let myGroupSemaphore = dispatch_semaphore_create(0)
     
     @IBOutlet var ungroupedProgressBar: UIProgressView!
     @IBOutlet var progressBars: [UIProgressView]!
+    @IBOutlet weak var action1Spinner: UIActivityIndicatorView!
+    @IBOutlet weak var action2Spinner: UIActivityIndicatorView!
+
     var progressBarsLeftArray = [Int]()
     // Computed variable example (this computed var specifically must not run on the main thread due to sleep and synchronized block)
     var randomProgressBarIndex: Int {
@@ -37,12 +84,31 @@ class ConcurrencyViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
 
+        action1Spinner.stopAnimating()
+        action2Spinner.stopAnimating()
+
+        action1Spinner.onClick {
+            self.synchronizer.do1()
+            📘("action 1 dispatched")
+            self.action1Spinner.stopAnimating()
+        }
+        action2Spinner.onClick {
+            self.synchronizer.do2()
+            📘("action 2 dispatched")
+            self.action2Spinner.stopAnimating()
+        }
+    }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
         resetProgressBars()
+    }
+
+    @IBAction func btnStartProgressPressed(sender: UIButton) {
+        sender.animateFade(fadeIn: false)
+        action1Spinner.startAnimating()
+        action2Spinner.startAnimating()
     }
 
     @IBAction func btnGoPressed(sender: AnyObject) {

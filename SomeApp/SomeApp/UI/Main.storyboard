@@ -161,7 +161,7 @@
                                 </connections>
                             </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z81-BL-qXn" userLabel="scrollView">
-                                <rect key="frame" x="0.0" y="145.5" width="320" height="422"/>
+                                <rect key="frame" x="0.0" y="146" width="320" height="422"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLh-y2-ula" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
@@ -180,7 +180,7 @@
                                                 </variation>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--- this is the end ---" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHQ-Ue-3cG">
-                                                <rect key="frame" x="79" y="769" width="162" height="20.5"/>
+                                                <rect key="frame" x="79" y="769" width="162" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -217,7 +217,7 @@
                                 </connections>
                             </scrollView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ScrollView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Px7-O8-3Ox">
-                                <rect key="frame" x="120" y="120" width="80" height="20.5"/>
+                                <rect key="frame" x="120" y="120" width="80" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -371,34 +371,61 @@
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3mm-np-lyk">
                                 <rect key="frame" x="36" y="263" width="248" height="2"/>
                             </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q2y-OV-T1q">
+                                <rect key="frame" x="112" y="280" width="97" height="30"/>
+                                <state key="normal" title="start progress"/>
+                                <connections>
+                                    <action selector="btnStartProgressPressed:" destination="Oj0-pd-GcM" eventType="touchUpInside" id="Sf4-Bz-e2J"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="KQn-md-5ea">
+                                <rect key="frame" x="36" y="285" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sdx-D0-AID">
+                                <rect key="frame" x="264" y="285" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="3mm-np-lyk" firstAttribute="width" secondItem="fvP-PV-HIj" secondAttribute="width" id="0p8-ko-xCK"/>
                             <constraint firstItem="3mm-np-lyk" firstAttribute="top" secondItem="fvP-PV-HIj" secondAttribute="bottom" constant="80" id="2I1-TD-2dl"/>
                             <constraint firstItem="Ewc-OT-EGv" firstAttribute="leading" secondItem="vO5-iO-zX6" secondAttribute="leadingMargin" constant="20" id="470-R3-8FC"/>
+                            <constraint firstItem="KQn-md-5ea" firstAttribute="centerY" secondItem="Q2y-OV-T1q" secondAttribute="centerY" id="5pp-9T-yoJ"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="centerX" secondItem="Fah-nx-inj" secondAttribute="centerX" id="LEa-uy-O5c"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ewc-OT-EGv" secondAttribute="trailing" constant="20" id="LWN-qH-kVD"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="height" secondItem="Fah-nx-inj" secondAttribute="height" id="OeR-nN-GUO"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="centerX" secondItem="w64-ye-J6J" secondAttribute="centerX" id="Ogx-4T-7QE"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="top" secondItem="w64-ye-J6J" secondAttribute="bottom" constant="25" id="Txk-xE-q1x"/>
+                            <constraint firstItem="Q2y-OV-T1q" firstAttribute="top" secondItem="3mm-np-lyk" secondAttribute="bottom" constant="15" id="UWo-Oa-JBS"/>
+                            <constraint firstItem="Q2y-OV-T1q" firstAttribute="trailing" secondItem="3mm-np-lyk" secondAttribute="trailing" id="Upt-jX-m1o"/>
+                            <constraint firstItem="sdx-D0-AID" firstAttribute="trailing" secondItem="3mm-np-lyk" secondAttribute="trailing" id="Wew-Y9-EOC"/>
                             <constraint firstAttribute="trailingMargin" secondItem="AlM-TT-4TL" secondAttribute="trailing" constant="20" id="aRO-tU-jwZ"/>
+                            <constraint firstItem="Q2y-OV-T1q" firstAttribute="centerX" secondItem="3mm-np-lyk" secondAttribute="centerX" id="al8-ms-2hj"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="centerX" secondItem="Ewc-OT-EGv" secondAttribute="centerX" id="cVp-mW-mah"/>
                             <constraint firstItem="3mm-np-lyk" firstAttribute="centerX" secondItem="fvP-PV-HIj" secondAttribute="centerX" id="ddC-zJ-QPY"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="width" secondItem="Ewc-OT-EGv" secondAttribute="width" id="fjf-i1-Wty"/>
                             <constraint firstItem="AlM-TT-4TL" firstAttribute="leading" secondItem="vO5-iO-zX6" secondAttribute="leadingMargin" constant="20" id="hK0-99-AB6"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="height" secondItem="w64-ye-J6J" secondAttribute="height" id="iT9-7M-i3H"/>
                             <constraint firstItem="Ewc-OT-EGv" firstAttribute="top" secondItem="AlM-TT-4TL" secondAttribute="bottom" constant="10" id="mlU-5g-vWB"/>
+                            <constraint firstItem="KQn-md-5ea" firstAttribute="leading" secondItem="3mm-np-lyk" secondAttribute="leading" id="nPF-qC-JJK"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="width" secondItem="Fah-nx-inj" secondAttribute="width" id="qFr-k6-C0R"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="height" secondItem="Ewc-OT-EGv" secondAttribute="height" id="tqr-Ig-vpW"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="width" secondItem="w64-ye-J6J" secondAttribute="width" id="vTW-XU-y7F"/>
+                            <constraint firstItem="sdx-D0-AID" firstAttribute="centerY" secondItem="Q2y-OV-T1q" secondAttribute="centerY" id="xN7-Vf-jNZ"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="top" secondItem="Ewc-OT-EGv" secondAttribute="bottom" constant="25" id="zJe-vi-W5T"/>
                             <constraint firstItem="AlM-TT-4TL" firstAttribute="top" secondItem="m0g-gg-HH6" secondAttribute="bottom" constant="40" id="zPO-u9-zLT"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="top" secondItem="Fah-nx-inj" secondAttribute="bottom" constant="25" id="zRe-uH-0K8"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Upt-jX-m1o"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="action1Spinner" destination="sdx-D0-AID" id="EAJ-07-SpI"/>
+                        <outlet property="action2Spinner" destination="KQn-md-5ea" id="6Yv-FF-VdA"/>
                         <outlet property="ungroupedProgressBar" destination="3mm-np-lyk" id="suL-BV-y82"/>
                         <outletCollection property="progressBars" destination="Ewc-OT-EGv" collectionClass="NSMutableArray" id="5Gg-TZ-BJa"/>
                         <outletCollection property="progressBars" destination="w64-ye-J6J" collectionClass="NSMutableArray" id="DPK-78-A8N"/>
@@ -451,11 +478,11 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Fg-15-N56" id="Bj3-9X-Nxm">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu option title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-Ab-ka6">
-                                                    <rect key="frame" x="83" y="11.5" width="219" height="20.5"/>
+                                                    <rect key="frame" x="83" y="12" width="219" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
