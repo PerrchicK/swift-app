@@ -1,2 +1,4 @@
 # swift-app
-An iOS (Swift) app I'm developing during the classes I'm teaching in Afeka Academic College, TLV.
+An iOS app, written in Swift, that is being developed during the classes I'm teaching in Afeka Academic College, TLV.
+
+![SwiftApp](https://github.com/PerrchicK/swift-app/blob/master/preview.png)
