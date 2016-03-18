@@ -76,9 +76,7 @@ class NotificationsViewController: UIViewController {
 
     func keyboardAppeared(notification: NSNotification) {
         📘("\(notification.object)")
-        UIAlertController.make(title: "✔️", message: "keyboard appeard").withAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: { (alertAction) -> Void in
-            self.keyboardPresenterTextField.resignFirstResponder()
-        })).show()
+        ToastMessage.show(messageText: "keyboard appeard")
     }
     
     func yoOccured(notification: NSNotification) {

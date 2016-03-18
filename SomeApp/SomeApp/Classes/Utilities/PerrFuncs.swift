@@ -461,6 +461,23 @@ extension UIView {
         guard let attachedClosureWrapper = objc_getAssociatedObject(self, &ClosureWrapper.onClickClosureProperty) as? ClosureWrapper else { return }
         attachedClosureWrapper.closure()
     }
+
+    func firstResponder() -> UIView? {
+        var firstResponder: UIView? = self
+        
+        if self.isFirstResponder() {
+            return firstResponder
+        }
+        
+        for subView in subviews {
+            firstResponder = subView.firstResponder()
+            if firstResponder != nil {
+                return firstResponder
+            }
+        }
+        
+        return nil
+    }
 }
 
 // Wraps

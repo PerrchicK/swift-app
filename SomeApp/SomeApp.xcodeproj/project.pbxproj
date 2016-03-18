@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		752583121C9A835500E36E5E /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583111C9A835500E36E5E /* DataManager.swift */; };
+		752583141C9A839800E36E5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583131C9A839800E36E5E /* User.swift */; };
 		753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */; };
 		7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */; };
 		756AC8D21C7C3AC500369A4C /* TicTabToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */; };
@@ -56,6 +58,8 @@
 
 /* Begin PBXFileReference section */
 		403511240D2B0B8D83C4B099 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		752583111C9A835500E36E5E /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		752583131C9A839800E36E5E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencyViewController.swift; sourceTree = "<group>"; };
 		7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTabToeGame.swift; sourceTree = "<group>"; };
@@ -120,6 +124,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7525830E1C9A834600E36E5E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				752583111C9A835500E36E5E /* DataManager.swift */,
+				752583131C9A839800E36E5E /* User.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		754E8107255DB6E0CF6DE17A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +228,7 @@
 		75D7A4E81C4E933700CDD88F /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7525830E1C9A834600E36E5E /* Data */,
 				756AC8D01C7C3AC500369A4C /* Logic */,
 				75F1AD781C6E8CBC005D7FCA /* Utilities */,
 				7570D2D91C600E6A00EA34D3 /* ViewControllers */,
@@ -454,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				756B02621C798621007DC54A /* CollectionContainerViewController.swift in Sources */,
+				752583121C9A835500E36E5E /* DataManager.swift in Sources */,
 				7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */,
 				75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */,
 				7573DE001C7780A700E3C37F /* UIViewsViewController.swift in Sources */,
@@ -472,6 +487,7 @@
 				75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */,
 				75DCE39A1C76381A00FF6F18 /* ToastMessage.swift in Sources */,
 				75F1AD8D1C6F7BB4005D7FCA /* DataViewController.swift in Sources */,
+				752583141C9A839800E36E5E /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
