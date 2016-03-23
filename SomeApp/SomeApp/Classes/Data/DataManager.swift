@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+//import Firebase
 
 class DataManager {
     private static var managedContext: NSManagedObjectContext {
@@ -36,5 +37,9 @@ class DataManager {
         }
         
         return fetchedUsers
+    }
+    
+    static func syncFireBase() {
+//        Fire
     }
 }

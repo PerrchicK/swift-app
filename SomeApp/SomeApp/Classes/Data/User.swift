@@ -38,6 +38,6 @@ class User: NSManagedObject {
     }
     
     override var description: String {
-        return firstName
+        return "First name: \(firstName)\n,Enail: \(email)"
     }
 }

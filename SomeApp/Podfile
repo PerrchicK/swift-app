@@ -1,2 +1,4 @@
 pod 'FLEX', '~> 2.0', :configurations => ['Debug']
 pod 'MMDrawerController', '~> 0.5.7'
+pod 'Firebase', '>= 2.5.0'
+pod 'AFNetworking', '~> 2.5'

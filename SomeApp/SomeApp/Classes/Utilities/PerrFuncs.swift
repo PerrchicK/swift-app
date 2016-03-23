@@ -135,8 +135,10 @@ extension String {
             // Icons for menu titles
         case "UI":
             emoji = "👋🏻"
-        case "GCD":
-            emoji = "🚦"
+        case "Communication":
+        emoji = "🌏"
+        case "GCD & Multithreading":
+        emoji = "🚦"
         case "Notifications":
             emoji = "👻"
         case "Persistence & Data":

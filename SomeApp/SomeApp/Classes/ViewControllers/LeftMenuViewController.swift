@@ -23,7 +23,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var distanceFromTopConstraint: NSLayoutConstraint!
     let menuItems =
     [LeftMenuOptions.iOS.title:
-        [LeftMenuOptions.iOS.Data, LeftMenuOptions.iOS.Notifications],
+        [LeftMenuOptions.iOS.Data, LeftMenuOptions.iOS.Communication, LeftMenuOptions.iOS.Notifications],
     LeftMenuOptions.UI.title:
         [LeftMenuOptions.UI.Views_Animations, LeftMenuOptions.UI.CollectionView],
     LeftMenuOptions.SwiftStuff.title:

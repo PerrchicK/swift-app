@@ -17,6 +17,7 @@ public struct LeftMenuOptions {
         public static let title = "iOS"
         
         public static let Data = "Persistence & Data"
+        public static let Communication = "Communication"
         public static let Notifications = "Notifications"
     }
     public struct UI {
@@ -33,6 +34,6 @@ public struct LeftMenuOptions {
     public struct Concurrency {
         public static let title = "Concurrency"
         
-        public static let GCD = "GCD" // Grand Central Dispatch
+        public static let GCD = "GCD & Multithreading" // Grand Central Dispatch
     }
 }
