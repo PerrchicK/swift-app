@@ -39,9 +39,11 @@ class CommunicationViewController: UIViewController {
                 }
             }
         })
+
+        // Go fetch...
         task.resume()
     }
-
+    
     func requestAddressWithAFNetworking(latitude lat: Double, longitude lng: Double) {
         // Make request
         let urlString = String(format: "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%@", lat, lng ,GoogleMapsUrlApiKey)
@@ -75,11 +77,9 @@ class CommunicationViewController: UIViewController {
         if let results = responseDictionary["results"] as? [AnyObject],
             let firstPlace = results[0] as? [String:AnyObject],
             let firstPlaceName = firstPlace["formatted_address"] as? String {
-                result = "Found address: \(firstPlaceName)"
+            result = "Found address: \(firstPlaceName)"
         }
 
         return result
     }
 }
-
-//https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%@

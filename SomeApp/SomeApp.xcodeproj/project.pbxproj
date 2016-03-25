@@ -21,6 +21,7 @@
 		759F58AA1C75008B009C6E51 /* AnimatedGifBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */; };
 		759F58AC1C7500C5009C6E51 /* UIImage+AnimatedGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */; };
 		759F58AE1C750168009C6E51 /* AnimatedGifBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */; };
+		75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */; };
 		75C2C8E41C7554EA00D42707 /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C2C8E31C7554EA00D42707 /* NibView.swift */; };
 		75D75AFF1C77B4FE0095CE05 /* running_cat_transparent.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */; };
 		75D7A4D01C4E924400CDD88F /* SomeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4CF1C4E924400CDD88F /* SomeAppTests.swift */; };
@@ -73,6 +74,7 @@
 		759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnimatedGifBoxView.xib; sourceTree = "<group>"; };
 		759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+AnimatedGif.swift"; sourceTree = "<group>"; };
 		759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedGifBoxView.swift; sourceTree = "<group>"; };
+		75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizer.swift; sourceTree = "<group>"; };
 		75C2C8E31C7554EA00D42707 /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
 		75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = running_cat_transparent.gif; sourceTree = "<group>"; };
 		75D7A4B41C4E924400CDD88F /* SomeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -272,6 +274,7 @@
 				75F1AD791C6E8CBC005D7FCA /* PerrFuncs.swift */,
 				75F1AD8A1C6F780F005D7FCA /* Constants.swift */,
 				759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */,
+				75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				759F58AE1C750168009C6E51 /* AnimatedGifBoxView.swift in Sources */,
 				75F1AD7A1C6E8CBC005D7FCA /* PerrFuncs.swift in Sources */,
 				75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */,
+				75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */,
 				75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */,
 				75DCE39A1C76381A00FF6F18 /* ToastMessage.swift in Sources */,
 				75F1AD8D1C6F7BB4005D7FCA /* DataViewController.swift in Sources */,

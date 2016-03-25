@@ -8,42 +8,6 @@
 
 import UIKit
 
-
-class Synchronizer {
-    let raceConditionQueue = NSOperationQueue()
-    let operation1 = NSBlockOperation(block: { () -> Void in
-        // Do something
-        📘("operation 1 is done")
-    })
-    let operation2 = NSBlockOperation(block: { () -> Void in
-        // Do something
-        📘("operation 2 is done")
-    })
-
-    init(finalOperation: () -> Void) {
-        let completionOperation = NSBlockOperation {
-            finalOperation()
-        }
-        completionOperation.addDependency(operation1)
-        completionOperation.addDependency(operation2)
-        raceConditionQueue.addOperation(completionOperation)
-    }
-    
-    func do1() {
-        if !operation1.finished {
-            // Distapch...
-            raceConditionQueue.addOperation(operation1)
-        }
-    }
-
-    func do2() {
-        if !operation2.finished {
-            // Distapch...
-            raceConditionQueue.addOperation(operation2)
-        }
-    }
-}
-
 class ConcurrencyViewController: UIViewController {
 
     let synchronizer = Synchronizer {
@@ -56,6 +20,7 @@ class ConcurrencyViewController: UIViewController {
 
     let myQueue = dispatch_queue_create("myQueue", DISPATCH_QUEUE_CONCURRENT)
     let myGroup = dispatch_group_create()
+    var isVisible = false
     
     @IBOutlet var ungroupedProgressBar: UIProgressView!
     @IBOutlet var progressBars: [UIProgressView]!
@@ -98,11 +63,21 @@ class ConcurrencyViewController: UIViewController {
             📘("action 2 dispatched")
             self.action2Spinner.stopAnimating()
         }
+
+        openCountingThread()
     }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        isVisible = true
         resetProgressBars()
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        isVisible = false
     }
 
     @IBAction func btnStartProgressPressed(sender: UIButton) {
@@ -195,5 +170,25 @@ class ConcurrencyViewController: UIViewController {
             }
         }
     }
+
+    func openCountingThread() {
+        let myThread = NSThread(target: self, selector: "countForever", object: nil)
+        myThread.start()  // Actually creates the thread
+    }
+
+    func openCountingThread2() {
+        NSThread(target: self, selector: "countForever", object: nil).start()
+    }
     
+    func openCountingThread3() {
+        NSThread.detachNewThreadSelector("countForever", toTarget: self, withObject: nil)
+    }
+    
+    func countForever() {
+        var time = 0
+        while self.isVisible {
+            NSThread.sleepForTimeInterval(1)
+            print("counting \(++time)")
+        }
+    }
 }

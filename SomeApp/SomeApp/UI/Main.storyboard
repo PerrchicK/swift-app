@@ -803,36 +803,67 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQX-lw-isa">
-                                <rect key="frame" x="111.5" y="351" width="97" height="30"/>
+                                <rect key="frame" x="111" y="488" width="97" height="30"/>
                                 <state key="normal" title="AFNetworking"/>
                                 <connections>
                                     <action selector="afnetworkingRequestButtonPressed:" destination="aXh-g7-93R" eventType="touchUpInside" id="T9v-pt-KYG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q8b-om-ZWC">
-                                <rect key="frame" x="108.5" y="313" width="103" height="30"/>
+                                <rect key="frame" x="108" y="450" width="103" height="30"/>
                                 <state key="normal" title="NSURLSession"/>
                                 <connections>
                                     <action selector="nativeRequestButtonPressed:" destination="aXh-g7-93R" eventType="touchUpInside" id="NT2-M7-5Cd"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="make reverse geocoding request with:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q72-My-Fxn">
-                                <rect key="frame" x="36" y="264" width="248" height="41"/>
+                                <rect key="frame" x="36" y="401" width="248" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="afeka-on-map" translatesAutoresizingMaskIntoConstraints="NO" id="VWE-Ti-kUo">
+                                <rect key="frame" x="56" y="158" width="208" height="224.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="VWE-Ti-kUo" secondAttribute="height" multiplier="308:333" id="0m2-lT-Elc"/>
+                                    <constraint firstAttribute="width" constant="200" id="oZv-ag-gxm"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="oZv-ag-gxm"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Communication Examples" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a5T-yn-vYx">
+                                <rect key="frame" x="62" y="78" width="197" height="45.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="VWE-Ti-kUo" firstAttribute="centerX" secondItem="wFp-rR-LRS" secondAttribute="centerX" id="AGo-lb-4ly"/>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="leading" secondItem="wFp-rR-LRS" secondAttribute="leadingMargin" constant="20" id="FGk-ya-d4K"/>
+                            <constraint firstItem="uJo-xo-mZw" firstAttribute="top" secondItem="PQX-lw-isa" secondAttribute="bottom" constant="50" id="GS0-nN-3Zb"/>
+                            <constraint firstItem="q72-My-Fxn" firstAttribute="top" secondItem="VWE-Ti-kUo" secondAttribute="bottom" constant="18" id="M1F-vv-Ye4"/>
                             <constraint firstItem="Q8b-om-ZWC" firstAttribute="centerX" secondItem="q72-My-Fxn" secondAttribute="centerX" id="MhV-zu-55b"/>
                             <constraint firstItem="Q8b-om-ZWC" firstAttribute="top" secondItem="q72-My-Fxn" secondAttribute="bottom" constant="8" id="SCc-Ht-Wve"/>
+                            <constraint firstItem="VWE-Ti-kUo" firstAttribute="leading" secondItem="wFp-rR-LRS" secondAttribute="leadingMargin" constant="40" id="TCY-P5-Ag2"/>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="centerY" secondItem="wFp-rR-LRS" secondAttribute="centerY" id="Yo1-RL-gfS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="VWE-Ti-kUo" secondAttribute="trailing" constant="40" id="fuA-fJ-eyx"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="a5T-yn-vYx" secondAttribute="trailing" constant="45" id="iaq-vB-w8H"/>
+                            <constraint firstItem="VWE-Ti-kUo" firstAttribute="top" secondItem="a5T-yn-vYx" secondAttribute="bottom" constant="34.5" id="lR9-vk-pHN"/>
                             <constraint firstItem="PQX-lw-isa" firstAttribute="top" secondItem="Q8b-om-ZWC" secondAttribute="bottom" constant="8" id="oGb-ux-Jsz"/>
+                            <constraint firstItem="a5T-yn-vYx" firstAttribute="leading" secondItem="wFp-rR-LRS" secondAttribute="leadingMargin" constant="46" id="pUe-fx-DTh"/>
                             <constraint firstItem="PQX-lw-isa" firstAttribute="centerX" secondItem="Q8b-om-ZWC" secondAttribute="centerX" id="rcp-sV-3vI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="q72-My-Fxn" secondAttribute="trailing" constant="20" id="rkS-Ny-p6U"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Yo1-RL-gfS"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
@@ -842,6 +873,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="afeka-on-map" width="616" height="666"/>
         <image name="database" width="33" height="36"/>
         <image name="swift-logo" width="352" height="352"/>
     </resources>
