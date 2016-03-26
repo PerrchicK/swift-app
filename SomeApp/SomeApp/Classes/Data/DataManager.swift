@@ -22,6 +22,10 @@ class DataManager {
         return User(entity: entity!, insertIntoManagedObjectContext: DataManager.managedContext)
     }
 
+    static func syncedUserDefaults() -> SyncedUserDefaults {
+        return SyncedUserDefaults.sharedInstance
+    }
+
     static func fetchUsers(named: String? = nil) -> [User]? {
         var fetchedUsers: [User]?
         let usersFetchRequest = NSFetchRequest(entityName: className(User))
@@ -37,9 +41,5 @@ class DataManager {
         }
         
         return fetchedUsers
-    }
-    
-    static func syncFireBase() {
-//        Fire
     }
 }

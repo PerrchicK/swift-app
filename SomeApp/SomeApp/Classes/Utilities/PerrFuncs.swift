@@ -282,6 +282,13 @@ extension UIAlertController {
         return self
     }
 
+    func withInputText(inout textFieldToAdd: UITextField) -> UIAlertController {
+        self.addTextFieldWithConfigurationHandler(/*configurationHandler: */ { (textField: UITextField!) -> Void in
+            textFieldToAdd = textField
+        })
+        return self
+    }
+    
     static func make(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         return alertController

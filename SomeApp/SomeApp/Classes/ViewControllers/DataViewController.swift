@@ -8,9 +8,13 @@
 
 import Foundation
 
-class DataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SyncedUserDefaultsDelegate {
     let UserDefaultsKey = "MyKeyToSaveObjectInNSUSerDefaults"
-    
+
+    @IBOutlet weak var firebaseStateTableView: UITableView!
+    var firebaseKeyTextField = UITextField() // Had to allocate an instance so this could be passed by reference
+    var firebaseValueTextField = UITextField()
+
     @IBOutlet weak var dbStateTableView: UITableView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
@@ -52,13 +56,38 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         runBlockAfterDelay(afterDelay: 3.0) {
             self.keyboardObserver = nil
         }
+
+        DataManager.syncedUserDefaults().delegate = self
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         keyboardObserver = nil
+
     }
 
+    @IBAction func showFirebaseButtonPressed(sender: AnyObject) {
+        ToastMessage.show(messageText: "comming soon...")
+    }
+
+    // MARK: - SyncedUserDefaultsDelegate
+    func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType) {
+        ToastMessage.show(messageText: "data changed:\nchange type: \(changeType)\nkey: \(key)\nvalue: \(value)")
+    }
+
+    @IBAction func addKeyValueToFirebaseButtonPressed(sender: AnyObject) {
+        UIAlertController.make(title: "Add value to firebase", message: "put key & value")
+            .withAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+            .withAction(UIAlertAction(title: "Add", style: .Default, handler: { [weak self] (alertAction) -> Void in
+                guard let firebaseKeyTextField = self?.firebaseKeyTextField, firebaseValueTextField = self?.firebaseValueTextField,
+                let key = firebaseKeyTextField.text, value = firebaseValueTextField.text else { return }
+
+                DataManager.syncedUserDefaults().putString(key, value: value)
+            }))
+            .withInputText(&firebaseKeyTextField).withInputText(&firebaseValueTextField)
+            .show()
+    }
+    
     @IBAction func showDbButtonPressed(sender: AnyObject) {
         refreshUsersArray()
 
@@ -168,5 +197,4 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     func refreshUsersArray() {
         users = DataManager.fetchUsers()
     }
-    
 }
