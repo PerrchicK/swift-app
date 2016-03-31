@@ -7,16 +7,50 @@
 //
 
 import Foundation
+import MapKit
 
-class CommunicationViewController: UIViewController {
+class CommunicationViewController: UIViewController, MKMapViewDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
+    let afkeaLatitude: Double = 32.115216
+    let afkeaLongitude: Double = 34.8174598
+
+    @IBOutlet weak var tappedCoordinateLabel: UILabel!
+    var tappedCoordinate: CLLocationCoordinate2D?
+    let MyAnnotationViewIdentifier = "MyAnnotationViewIdentifier"
+
+    @IBOutlet weak var mapView: MKMapView!
+    let regionRadius: CLLocationDistance = 100
+
+    func takeMapToLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // A workaround to get taps on map
+        mapView.onClick { [weak self] (gestureRecognizer) in
+            guard let mapView = self?.mapView else { return }
+
+            let tappedLocationCoordinate = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
+            📘("tapped on location's coordinate:\n\(tappedLocationCoordinate)")
+            self?.mapView(mapView, didFeelTapOnCoordinate: tappedLocationCoordinate)
+        }
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        takeMapToLocation(CLLocation(latitude: afkeaLatitude, longitude: afkeaLongitude))
+    }
 
     @IBAction func nativeRequestButtonPressed(sender: UIButton) {
-        requestAddressWithNSURLSession(latitude: 32.115216, longitude: 34.8174598)
+        requestAddressWithNSURLSession(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
 
     @IBAction func afnetworkingRequestButtonPressed(sender: UIButton) {
-        requestAddressWithAFNetworking(latitude: 32.115216, longitude: 34.8174598)
+        requestAddressWithAFNetworking(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
     
     func requestAddressWithNSURLSession(latitude lat: Double, longitude lng: Double) {
@@ -81,5 +115,31 @@ class CommunicationViewController: UIViewController {
         }
 
         return result
+    }
+    
+    // MARK: - MKMapViewDelegate
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        var annotationView: MKAnnotationView!
+
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(MyAnnotationViewIdentifier) {
+            dequeuedAnnotationView.annotation = annotation
+            annotationView = dequeuedAnnotationView
+        } else {
+            // Dequeued failed
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
+        }
+
+        annotationView.canShowCallout = false
+        return annotationView
+    }
+
+    func mapView(mapView: MKMapView, didFeelTapOnCoordinate tappedCoordinate: CLLocationCoordinate2D) {
+        let annotation = MKPointAnnotation()
+        self.tappedCoordinate = tappedCoordinate
+        self.tappedCoordinateLabel.text = "\((self.tappedCoordinate?.latitude)!),\((self.tappedCoordinate?.longitude)!)"
+        annotation.title = "annotation's callout title"
+        annotation.coordinate = tappedCoordinate
+        
+        mapView.addAnnotation(annotation)
     }
 }

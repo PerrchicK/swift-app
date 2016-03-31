@@ -38,7 +38,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         originalDistanceFromBottomConstraint = distanceFromBottomConstraint.constant
         userDefaultsTextField.text = NSUserDefaults.standardUserDefaults().objectForKey(UserDefaultsKey) as? String
-        self.view.onClick {
+        self.view.onClick {_ in 
             self.view.firstResponder()?.resignFirstResponder()
         }
 
@@ -100,7 +100,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         let prettyFast = 0.3
         bgView.animateFade(fadeIn: true, duration: prettyFast)
         dbStateTableView.animateFade(fadeIn: true, duration: prettyFast)
-        bgView.onClick { () -> () in
+        bgView.onClick { (gestureRecognizer) -> () in
             bgView.animateFade(fadeIn: false, duration: prettyFast, completion: { (done) -> Void in
                 bgView.removeFromSuperview()
             })

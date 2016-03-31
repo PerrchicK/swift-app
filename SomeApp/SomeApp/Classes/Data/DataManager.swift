@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-//import Firebase
 
 class DataManager {
     private static var managedContext: NSManagedObjectContext {

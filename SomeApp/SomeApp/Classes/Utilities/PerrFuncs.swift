@@ -64,7 +64,7 @@ public class PerrFuncs: NSObject {
         let container = UIView(frame: UIScreen.mainScreen().bounds)
         container.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
         // To be a target, it must be an NSObject instance
-        container.onClick() {
+        container.onClick() {_ in 
             self.removeImage()
         }
 
@@ -458,17 +458,17 @@ extension UIView {
     // MARK: - Other cool additions
 
     // Attaches the closure to the tap event (onClick event)
-    func onClick(onClickClosure: () -> ()) {
+    func onClick(onClickClosure: ClosureWrapper.TapRecognizedClosure) {
         self.userInteractionEnabled = true
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onTapRecognized")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onTapRecognized:")
         addGestureRecognizer(tapGestureRecognizer)
         let attachedClosureWrapper = ClosureWrapper(closure: onClickClosure)
         objc_setAssociatedObject(self, &ClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
-    func onTapRecognized() {
+    func onTapRecognized(gestureRecognizer: UIGestureRecognizer) {
         guard let attachedClosureWrapper = objc_getAssociatedObject(self, &ClosureWrapper.onClickClosureProperty) as? ClosureWrapper else { return }
-        attachedClosureWrapper.closure()
+        attachedClosureWrapper.closure(gestureRecognizer: gestureRecognizer)
     }
 
     func firstResponder() -> UIView? {
@@ -491,12 +491,12 @@ extension UIView {
 
 // Wraps
 class ClosureWrapper {
-    typealias VoidClosure = () -> ()
+    typealias TapRecognizedClosure = (gestureRecognizer: UIGestureRecognizer) -> ()
     static var onClickClosureProperty = "onClickClosureProperty"
     
-    let closure: VoidClosure
+    let closure: TapRecognizedClosure
     
-    init(closure: VoidClosure) {
+    init(closure: TapRecognizedClosure) {
         self.closure = closure
     }
 }

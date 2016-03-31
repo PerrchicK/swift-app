@@ -53,12 +53,12 @@ class ConcurrencyViewController: UIViewController {
         action1Spinner.stopAnimating()
         action2Spinner.stopAnimating()
 
-        action1Spinner.onClick {
+        action1Spinner.onClick {_ in 
             self.synchronizer.do1()
             📘("action 1 dispatched")
             self.action1Spinner.stopAnimating()
         }
-        action2Spinner.onClick {
+        action2Spinner.onClick {_ in
             self.synchronizer.do2()
             📘("action 2 dispatched")
             self.action2Spinner.stopAnimating()
