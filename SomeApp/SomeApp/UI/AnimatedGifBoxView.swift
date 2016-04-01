@@ -24,7 +24,7 @@ class AnimatedGifBoxView: NibView {
 
     private var isAnimating = false
 
-    override func viewContentsDidLoadFromNib() {
+    override func viewDidLoadFromNib() {
         animatedGifImageView.contentMode = .ScaleAspectFit
         durationSlider.addTarget(self, action: "durationSliderTouchUp:", forControlEvents: UIControlEvents.TouchUpInside)
         durationSlider.addTarget(self, action: "durationSliderTouchUp:", forControlEvents: UIControlEvents.TouchUpOutside)

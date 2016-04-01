@@ -126,7 +126,8 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
             annotationView = dequeuedAnnotationView
         } else {
             // Dequeued failed
-            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
+            annotationView.addSubview(SomeAnnotationView())
         }
 
         annotationView.canShowCallout = false

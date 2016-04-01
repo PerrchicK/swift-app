@@ -17,7 +17,7 @@ public class NibView: UIView {
         self.loadViewContentsFromNib()
         
         // Notify event
-        viewContentsDidLoadFromNib()
+        viewDidLoadFromNib()
     }
     
     override init(frame: CGRect) {
@@ -25,10 +25,10 @@ public class NibView: UIView {
         self.loadViewContentsFromNib()
 
         // Notify event
-        viewContentsDidLoadFromNib()
+        viewDidLoadFromNib()
     }
     
-    func viewContentsDidLoadFromNib() {
+    func viewDidLoadFromNib() {
         // Override in children to get this event...
     }
     

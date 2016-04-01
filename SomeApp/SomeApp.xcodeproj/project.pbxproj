@@ -18,6 +18,8 @@
 		7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */; };
 		7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */; };
 		7573DE001C7780A700E3C37F /* UIViewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573DDFF1C7780A700E3C37F /* UIViewsViewController.swift */; };
+		7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */; };
+		7582DB8F1CADDBE2001CDC62 /* SomeAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */; };
 		759F58AA1C75008B009C6E51 /* AnimatedGifBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */; };
 		759F58AC1C7500C5009C6E51 /* UIImage+AnimatedGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */; };
 		759F58AE1C750168009C6E51 /* AnimatedGifBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */; };
@@ -72,6 +74,8 @@
 		7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarterViewController.swift; sourceTree = "<group>"; };
 		7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		7573DDFF1C7780A700E3C37F /* UIViewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewsViewController.swift; sourceTree = "<group>"; };
+		7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SomeAnnotationView.xib; sourceTree = "<group>"; };
+		7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomeAnnotationView.swift; sourceTree = "<group>"; };
 		759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnimatedGifBoxView.xib; sourceTree = "<group>"; };
 		759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+AnimatedGif.swift"; sourceTree = "<group>"; };
 		759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedGifBoxView.swift; sourceTree = "<group>"; };
@@ -267,6 +271,8 @@
 				759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */,
 				75DCE3991C76381A00FF6F18 /* ToastMessage.swift */,
 				75DCE39B1C76382900FF6F18 /* ToastMessage.xib */,
+				7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */,
+				7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -402,6 +408,7 @@
 				75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */,
 				75F1AD701C6E8C92005D7FCA /* Assets.xcassets in Resources */,
 				75D75AFF1C77B4FE0095CE05 /* running_cat_transparent.gif in Resources */,
+				7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */,
 				75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
 			);
@@ -483,6 +490,7 @@
 				75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */,
 				7573DE001C7780A700E3C37F /* UIViewsViewController.swift in Sources */,
 				756AC8D21C7C3AC500369A4C /* TicTabToeGame.swift in Sources */,
+				7582DB8F1CADDBE2001CDC62 /* SomeAnnotationView.swift in Sources */,
 				75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */,
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
 				756B96111CA2178700BF308D /* CommunicationViewController.swift in Sources */,
