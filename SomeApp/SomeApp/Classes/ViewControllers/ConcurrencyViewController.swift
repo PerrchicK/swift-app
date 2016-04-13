@@ -172,23 +172,24 @@ class ConcurrencyViewController: UIViewController {
     }
 
     func openCountingThread() {
-        let myThread = NSThread(target: self, selector: "countForever", object: nil)
+        let myThread = NSThread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil)
         myThread.start()  // Actually creates the thread
     }
 
     func openCountingThread2() {
-        NSThread(target: self, selector: "countForever", object: nil).start()
+        NSThread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil).start()
     }
     
     func openCountingThread3() {
-        NSThread.detachNewThreadSelector("countForever", toTarget: self, withObject: nil)
+        NSThread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, withObject: nil)
     }
     
     func countForever() {
         var time = 0
         while self.isVisible {
             NSThread.sleepForTimeInterval(1)
-            print("counting \(++time)")
+            time += 1
+            print("counting \(time)")
         }
     }
 }

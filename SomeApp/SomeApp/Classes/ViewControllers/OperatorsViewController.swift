@@ -19,7 +19,7 @@ class OperatorsViewController: UIViewController {
 
         // Additional setup after loading the view, typically from a nib.
         self.title = "Operators Overloading" // & 'Associated ObjC Objects'
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismiss:"))
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(OperatorsViewController.dismiss(_:))))
 
         valueTextField.placeholder = "value that a String object will love"
     }
@@ -68,14 +68,4 @@ class OperatorsViewController: UIViewController {
         📘("Dismissing keyboard due to \(gestureRecognizer)")
         valueTextField.resignFirstResponder()
     }
-    
-    // MARK: - Other super class methods
-    
-    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
-        if motion == .MotionShake {
-            // Show local UI live debugging tool
-            FLEXManager.sharedManager().showExplorer() // Delete if it doesn't exist
-        }
-    }
-    
 }

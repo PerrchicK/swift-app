@@ -8,7 +8,9 @@
 
 import Foundation
 
-class MainViewController: UIViewController, LeftMenuViewControllerDelegate {
+class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
+    
+    let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
@@ -36,13 +38,24 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate {
             navigationController?.pushViewController(CollectionContainerViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
-        case LeftMenuOptions.iOS.Communication:
+        case LeftMenuOptions.iOS.CommunicationLocation:
             navigationController?.pushViewController(CommunicationViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.Notifications:
             navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
+        case LeftMenuOptions.iOS.ImagesCoreMotion:
+            navigationController?.presentViewController(ImagesAndMotionViewController.instantiate(), animated: true, completion: nil)
         default:
             UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
             📘("to be continued...")
         }
+    }
+    
+    func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
+        📘("interacting with URL: \(URL)")
+        return URL.absoluteString == projectLocationInsideGitHub
+    }
+
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        return false
     }
 }

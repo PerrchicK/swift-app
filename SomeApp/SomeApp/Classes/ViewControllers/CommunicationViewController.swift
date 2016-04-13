@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Alamofire
 
 class CommunicationViewController: UIViewController, MKMapViewDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
@@ -50,7 +51,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     }
 
     @IBAction func afnetworkingRequestButtonPressed(sender: UIButton) {
-        requestAddressWithAFNetworking(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
+        requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
     
     func requestAddressWithNSURLSession(latitude lat: Double, longitude lng: Double) {
@@ -78,26 +79,21 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         task.resume()
     }
     
-    func requestAddressWithAFNetworking(latitude lat: Double, longitude lng: Double) {
+    func requestAddressWithAlamofire(latitude lat: Double, longitude lng: Double) {
         // Make request
         let urlString = String(format: "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%@", lat, lng ,GoogleMapsUrlApiKey)
-        let url = NSURL(string: urlString)
-        let request = NSURLRequest(URL: url!)
         
-        // Make operation of HTTP request
-        let operation = AFHTTPRequestOperation(request: request)
-        operation.responseSerializer = AFJSONResponseSerializer()
+        // Make HTTP request and fetch...
         📘("Calling: \(urlString)")
-        operation.setCompletionBlockWithSuccess({ [weak self] (operation, responseObject) -> Void in
-            // Request succeeded! ... parse response
-            ToastMessage.show(messageText: self?.parseResponse(responseObject) ?? "Parsing failed")
-        }, failure: { (operation, error) -> Void in
-            // Request failed! ... handle failure
-            ToastMessage.show(messageText: "Error retrieving address")
-        })
-        
-        // Go fetch...
-        operation.start()
+        Alamofire.request(.GET, urlString).responseJSON { [weak self] (response) in
+            if let JSON = response.result.value where response.result.error == nil {
+                // Request succeeded! ... parse response
+                ToastMessage.show(messageText: self?.parseResponse(JSON) ?? "Parsing failed")
+            } else {
+                // Request failed! ... handle failure
+                ToastMessage.show(messageText: "Error retrieving address")
+            }
+        }
     }
     
     func parseResponse(responseObject: AnyObject) -> String? {

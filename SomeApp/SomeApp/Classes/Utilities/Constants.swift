@@ -17,8 +17,9 @@ public struct LeftMenuOptions {
         public static let title = "iOS"
         
         public static let Data = "Persistence & Data"
-        public static let Communication = "Communication"
+        public static let CommunicationLocation = "Communication & Location"
         public static let Notifications = "Notifications"
+        public static let ImagesCoreMotion = "Images & Core Motion"
     }
     public struct UI {
         public static let title = "UI"

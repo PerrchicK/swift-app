@@ -16,7 +16,7 @@ typealias CompletionClosure = ((AnyObject?) -> Void)?
 func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-public func 📘(logMessage: String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__) {
+public func 📘(logMessage: String, file:String = #file, function:String = #function, line:Int = #line) {
     let formattter = NSDateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
     let timesamp = formattter.stringFromDate(NSDate())
@@ -135,7 +135,7 @@ extension String {
             // Icons for menu titles
         case "UI":
             emoji = "👋🏻"
-        case "Communication":
+        case "Communication & Location":
         emoji = "🌏"
         case "GCD & Multithreading":
         emoji = "🚦"
@@ -144,11 +144,13 @@ extension String {
         case "Persistence & Data":
             emoji = "📂"
         case "Views & Animations":
-            emoji = "👀 & 💫"
+            emoji = "👀"
         case "Operators Overloading":
             emoji = "🔧"
         case "Collection View":
             emoji = "📚"
+        case "Images & Core Motion":
+            emoji = "📷"
 
         default:
             📘("Error: Couldn't find emoji for string '\(self)'")
@@ -385,6 +387,9 @@ extension UIView {
     }
     
     public func animateFade(fadeIn fadeIn: Bool, duration: NSTimeInterval = 1.0, completion: ((Bool) -> Void)? = nil) {
+        // Skip redundant calls
+        guard (fadeIn == false && (alpha > 0 || hidden == false)) || (fadeIn == true && (alpha == 0 || hidden == true)) else { return }
+
         self.alpha = fadeIn ? 0.0 : 1.0
         self.show(show: true)
         UIView.animateWithDuration(duration, animations: {// () -> Void in
@@ -455,12 +460,51 @@ extension UIView {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: view, attribute: attribute, multiplier: multiplier, constant: constant)
     }
 
+    /**
+     Adds a transparent gradient layer to the view's mask.
+     */
+    func addTransparentGradientLayer() -> CALayer {
+        let gradientLayer = CAGradientLayer()
+        let normalColor = UIColor.whiteColor().colorWithAlphaComponent(1.0).CGColor
+        let fadedColor = UIColor.whiteColor().colorWithAlphaComponent(0.0).CGColor
+        gradientLayer.colors = [normalColor, normalColor, normalColor, fadedColor]
+        
+        // Hoizontal - commenting these two lines will make the gradient veritcal (haven't tried this yet)
+        gradientLayer.startPoint = CGPointMake(0.0, 0.5)
+        gradientLayer.endPoint = CGPointMake(1.0, 0.5)
+        
+        gradientLayer.locations = [0.0, 0.4, 0.6, 1.0]
+        gradientLayer.anchorPoint = CGPointZero
+
+        self.layer.mask = gradientLayer
+/*
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            transparentGradientLayer.bounds = self.bounds
+        }
+*/
+
+        return gradientLayer
+    }
+
+    func addVerticalGradientBackgroundLayer(topColor topColor: UIColor, bottomColor: UIColor) -> CALayer {
+        let gradientLayer = CAGradientLayer()
+        let topCGColor = topColor.CGColor
+        let bottomCGColor = bottomColor.CGColor
+        gradientLayer.colors = [topCGColor, bottomCGColor]
+        gradientLayer.frame = frame
+        layer.insertSublayer(gradientLayer, atIndex: 0)
+
+        return gradientLayer
+    }
+
     // MARK: - Other cool additions
 
     // Attaches the closure to the tap event (onClick event)
     func onClick(onClickClosure: ClosureWrapper.TapRecognizedClosure) {
         self.userInteractionEnabled = true
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onTapRecognized:")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
         addGestureRecognizer(tapGestureRecognizer)
         let attachedClosureWrapper = ClosureWrapper(closure: onClickClosure)
         objc_setAssociatedObject(self, &ClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
@@ -515,5 +559,25 @@ extension NSURL {
         }
         
         return dict
+    }
+}
+
+extension NSUserDefaults {
+    static func save(value value: AnyObject, forKey key: String) -> NSUserDefaults {
+        NSUserDefaults.standardUserDefaults().setObject(value, forKey: key)
+        return NSUserDefaults.standardUserDefaults()
+    }
+    
+    static func remove(key key: String) -> NSUserDefaults {
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: key)
+        return NSUserDefaults.standardUserDefaults()
+    }
+    
+    static func load(key key: String, defaultValue: AnyObject? = "") -> AnyObject? {
+        if let actualValue = NSUserDefaults.standardUserDefaults().objectForKey(key) {
+            return actualValue
+        }
+        
+        return defaultValue
     }
 }

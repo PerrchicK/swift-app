@@ -10,6 +10,8 @@ import Foundation
 
 class CollectionContainerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, TicTabToeGameDelegate {
 
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     let NumberOfRows = TicTabToeGame.Configuration.RowsCount // X - number of section
     let NumberOfColumns = TicTabToeGame.Configuration.ColumnsCount // Y - number of items in section
     let TileMargin = CGFloat(5.0)
@@ -22,6 +24,10 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
 
         game = TicTabToeGame()
         game.delegate = self
+    }
+
+    func reloadGame() {
+        collectionView.reloadData()
     }
 
     // MARK: - UICollectionViewDataSource
@@ -92,6 +98,7 @@ class CollectionContainerCell: UICollectionViewCell {
     @IBOutlet weak var playerMarkLabel: UILabel!
 
     func configCell() {
+        📘("configuring cell")
         self.backgroundColor = UIColor.redColor()
         self.playerMarkLabel.text = ""
     }

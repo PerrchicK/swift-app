@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FLEX
 
 class StarterViewController: UIViewController {
 
@@ -47,7 +48,7 @@ class StarterViewController: UIViewController {
 
         // Will run only once
         let navigationController = UINavigationController(rootViewController: drawer)
-        navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .Done, target: self, action: "openLeftMenu")
+        navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .Done, target: self, action: #selector(openLeftMenu))
         presentViewController(navigationController, animated: true, completion: nil)
 
         📘(" ... ")
@@ -69,7 +70,7 @@ class StarterViewController: UIViewController {
 
     // MARK: - Other super class methods
 
-    private func openLeftMenu () {
+    func openLeftMenu () {
         drawer.openDrawerSide(.Left, animated: true, completion: nil)
     }
 

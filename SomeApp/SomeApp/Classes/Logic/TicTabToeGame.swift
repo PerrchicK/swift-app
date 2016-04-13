@@ -85,7 +85,9 @@ class TicTabToeGame {
             let diagonalIndex = row
             if let moveInDiagonalSequence = matrix[diagonalIndex][diagonalIndex] {
                 if moveInDiagonalSequence == currentPlayer.intValue() {
-                    diagonalSequenceCounter++
+                    // Removed on Swift 3.0:
+//                    diagonalSequenceCounter++
+                    diagonalSequenceCounter += 1
                 }
             }
 
@@ -93,7 +95,9 @@ class TicTabToeGame {
             let reverseDiagonalIndex = Configuration.RowsCount - row - 1
             if let moveInReverseDiagonalSequence = matrix[row][reverseDiagonalIndex] {
                 if moveInReverseDiagonalSequence == currentPlayer.intValue() {
-                    reverseDiagonalSequenceCounter++
+                    // Removed on Swift 3.0:
+//                    reverseDiagonalSequenceCounter++
+                    reverseDiagonalSequenceCounter += 1
                 }
             }
 
@@ -102,7 +106,7 @@ class TicTabToeGame {
                 if let moveInRow = matrix[row][column] {
                     if moveInRow == currentPlayer.intValue() {
                         // Count -
-                        horizontalSequenceCounter++
+                        horizontalSequenceCounter += 1
                         // Count |
                         verticalSequenceCounter[column] += currentPlayer.intValue()
                     }

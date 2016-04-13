@@ -34,9 +34,9 @@ class NotificationsViewController: UIViewController {
             ToastMessage.show(messageText: "yo1 has been posted, 'self' \(self == nil ? "released" : "still exist")")
         }
 
-        notificationCenter.addObserver(self, selector: "yoOccured:", name: "yo2", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.yoOccured(_:)), name: "yo2", object: nil)
 
-        notificationCenter.addObserver(self, selector: "keyboardAppeared:", name: UIKeyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.keyboardAppeared(_:)), name: UIKeyboardDidShowNotification, object: nil)
         
 
         let soon = NSDate(timeIntervalSinceNow: 5)
