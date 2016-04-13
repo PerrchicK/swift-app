@@ -18,12 +18,11 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     let manager = CMMotionManager()
     
     @IBOutlet weak var gyroDataLabel: UILabel!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var pickedImageButton: UIButton!
     @IBOutlet weak var betterSegmentedControl_source_PlaceHolder: UIView!
     @IBOutlet weak var betterSegmentedControl_type_PlaceHolder: UIView!
     @IBOutlet weak var betterSegmentedControl_isEditable_PlaceHolder: UIView!
 
-//    @IBOutlet weak var cameraLensPreviewButtonImagePreviewImageView: UIImageView!
     @IBOutlet weak var cameraLensPreviewButton: UIButton!
     
     // More info at: https://littlebitesofcocoa.com/226-bettersegmentedcontrol
@@ -56,11 +55,11 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         self.cameraLensPreviewButton.layer.cornerRadius = 12
 
         // Initialize picker image view
-        imageView.layer.cornerRadius = 3
-        imageView.layer.borderColor = UIColor.blackColor().colorWithAlphaComponent(0.7).CGColor
-        imageView.layer.borderWidth = 1
+        pickedImageButton.layer.cornerRadius = 3
+        pickedImageButton.layer.borderColor = UIColor.blackColor().colorWithAlphaComponent(0.7).CGColor
+        pickedImageButton.layer.borderWidth = 1
         // More info about 'contentMode' at: http://stackoverflow.com/questions/4895272/difference-between-uiviewcontentmodescaleaspectfit-and-uiviewcontentmodescaletof
-        imageView.contentMode = .ScaleAspectFit
+        pickedImageButton.imageView?.contentMode = .ScaleAspectFit
 
         // MARK: - Load state
         var sourceControlIndex: UInt = 1
@@ -77,7 +76,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         betterSegmentedControl_source_PlaceHolder.addSubview(sourceControl)
         sourceControl.stretchToSuperViewEdges()
 
-        typeControl = BetterSegmentedControl(frame: CGRectZero, titles: [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue], index: typeControlIndex, backgroundColor: UIColor.brownColor(), titleColor: UIColor.blackColor(), indicatorViewBackgroundColor: UIColor.blueColor().colorWithAlphaComponent(0.5), selectedTitleColor: UIColor.blueColor())
+        typeControl = BetterSegmentedControl(frame: CGRectZero, titles: [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue], index: typeControlIndex, backgroundColor: UIColor.yellowColor(), titleColor: UIColor.blackColor(), indicatorViewBackgroundColor: UIColor.greenColor().colorWithAlphaComponent(0.5), selectedTitleColor: UIColor.blueColor())
         betterSegmentedControl_type_PlaceHolder.addSubview(typeControl)
         typeControl.stretchToSuperViewEdges()
 
@@ -121,7 +120,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
                 guard let strongSelf = self, deviceMotion = deviceMotion else { return }
 
                 let rotation = atan2(deviceMotion.gravity.x, deviceMotion.gravity.y) - M_PI
-                strongSelf.imageView.transform = CGAffineTransformMakeRotation(CGFloat(rotation))
+                strongSelf.pickedImageButton.transform = CGAffineTransformMakeRotation(CGFloat(rotation))
             }
         }
     }
@@ -141,6 +140,14 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     func segmentedControlValueChanged(sender: BetterSegmentedControl) {
         // Just for fun:
         📘("Selected: \(sender.titles[Int(sender.index)])")
+    }
+
+    @IBAction func pickedImageButtonPressed(sender: UIButton) {
+        if let image = sender.imageView?.image {
+            PerrFuncs.shareImage(image, completionClosure: { (activityType, isCompleted, returnedItems, activityError) in
+                📘("\(isCompleted ? "shared" : "canceled") via \(activityType)")
+            })
+        }
     }
 
     @IBAction func backButtonPressed(sender: AnyObject) {
@@ -180,7 +187,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
     func takeSnapshot() {
         if let capturedImage = cameraLensImage {
-            self.imageView.image = capturedImage
+            self.cameraLensPreviewButton.setImage(capturedImage, forState: .Normal)
             UIImageWriteToSavedPhotosAlbum(capturedImage,
                                            nil,//id completionTarget
                 nil,//SEL completionSelector
@@ -286,7 +293,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         }
         
         if let image = info[isEditable ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage] as? UIImage {
-            imageView.image = image
+            pickedImageButton.setImage(image, forState: .Normal)
         }
         
         picker.dismissViewControllerAnimated(true, completion: nil)
