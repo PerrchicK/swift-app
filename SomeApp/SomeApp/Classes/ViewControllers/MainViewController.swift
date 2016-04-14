@@ -9,8 +9,7 @@
 import Foundation
 
 class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
-    
-    let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
+    static let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
@@ -52,7 +51,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     
     func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
         📘("interacting with URL: \(URL)")
-        return URL.absoluteString == projectLocationInsideGitHub
+        return URL.absoluteString == MainViewController.projectLocationInsideGitHub
     }
 
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {

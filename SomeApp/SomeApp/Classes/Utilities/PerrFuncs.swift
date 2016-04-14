@@ -79,7 +79,7 @@ public class PerrFuncs: NSObject {
     }
 
     class func shareImage(sharedImage: UIImage, completionClosure: UIActivityViewControllerCompletionWithItemsHandler) {
-        let activityViewController = UIActivityViewController.init(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
+        let activityViewController = UIActivityViewController(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
         activityViewController.completionWithItemsHandler = completionClosure
         activityViewController.excludedActivityTypes = [UIActivityTypeAirDrop]
         
