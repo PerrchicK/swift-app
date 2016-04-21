@@ -10,12 +10,42 @@ import Foundation
 import CoreData
 
 class DataManager {
+    private static var applicationDirectoryPath: String = {
+        if let libraryDirectoryPath = NSSearchPathForDirectoriesInDomains(.LibraryDirectory, .UserDomainMask, true).last {
+            return libraryDirectoryPath
+        }
+
+        📘("ERROR!! Library directory not found 😱")
+        return ""
+    }()
+
     private static var managedContext: NSManagedObjectContext {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         return appDelegate.managedObjectContext
     }
 
+    static func saveImage(imageToSave: UIImage, toFile filename: String) -> Bool {
+        if let data = UIImagePNGRepresentation(imageToSave) {
+            do {
+                try data.writeToFile(applicationDirectoryPath + "/" + filename, options: .AtomicWrite)
+                return true
+            } catch {
+                📘("Failed to save image!")
+            }
+        }
+
+        return false
+    }
+    
+    static func loadImage(fromFile filename: String) -> UIImage? {
+        if let data = NSData(contentsOfFile: applicationDirectoryPath + "/" + filename) {
+            return UIImage(data: data)
+        }
+
+        return nil
+    }
+    
     static func createUser() -> User {
         let entity = NSEntityDescription.entityForName(className(User), inManagedObjectContext: DataManager.managedContext)
         return User(entity: entity!, insertIntoManagedObjectContext: DataManager.managedContext)

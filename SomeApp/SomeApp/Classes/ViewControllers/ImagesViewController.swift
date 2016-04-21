@@ -123,6 +123,10 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
                 strongSelf.pickedImageButton.transform = CGAffineTransformMakeRotation(CGFloat(rotation))
             }
         }
+
+        if pickedImageButton.imageView?.image == nil, let savedImage = DataManager.loadImage(fromFile: "tempSavedImage") {
+            pickedImageButton.setImage(savedImage, forState: .Normal)
+        }
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -294,6 +298,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         
         if let image = info[isEditable ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage] as? UIImage {
             pickedImageButton.setImage(image, forState: .Normal)
+            DataManager.saveImage(image, toFile: "tempSavedImage")
         }
         
         picker.dismissViewControllerAnimated(true, completion: nil)

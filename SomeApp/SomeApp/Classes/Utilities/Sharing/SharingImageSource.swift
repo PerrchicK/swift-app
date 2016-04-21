@@ -8,10 +8,12 @@
 
 class SharingImageSource: NSObject, UIActivityItemSource {
     private var image: UIImage
-    
+
+    let UIActivityTypeMyApp = "com.perrchick.SomeApp.SomeExtension"
+
     init(image: UIImage) {
         self.image = image
-        super.init()
+        super.init() // AFTER assignment, only because the image is not optional
     }
 
     func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
@@ -26,6 +28,8 @@ class SharingImageSource: NSObject, UIActivityItemSource {
         case UIActivityTypeSaveToCameraRoll:
             fallthrough
         case UIActivityTypeMail:
+            fallthrough
+        case UIActivityTypeMyApp:
             return self.image
         default:
             return nil

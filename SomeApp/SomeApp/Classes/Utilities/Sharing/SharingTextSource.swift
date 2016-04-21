@@ -11,10 +11,6 @@ class SharingTextSource: NSObject, UIActivityItemSource {
     // Don’t rely on that so easily, this might change at any version WhatsApp are distributing
     let UIActivityTypeWhatsApp = "net.whatsapp.WhatsApp.ShareExtension"
 
-//    init(image: UIImage) {
-//        super.init()
-//    }
-
     func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
         return ""
     }
@@ -33,7 +29,7 @@ class SharingTextSource: NSObject, UIActivityItemSource {
         case UIActivityTypePostToFacebook:
             fallthrough // Consider taking a sharing URL in facebook
         default:
-            shareText = MainViewController.projectLocationInsideGitHub // Consider taking a sharing URL in facebook
+            shareText = MainViewController.projectLocationInsideGitHub
         }
 
         return shareText
