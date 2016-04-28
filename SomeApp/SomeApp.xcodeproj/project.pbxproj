@@ -96,6 +96,9 @@
 		752583111C9A835500E36E5E /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		752583131C9A839800E36E5E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencyViewController.swift; sourceTree = "<group>"; };
+		755284EB1CD2C01E0066D209 /* FLEX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLEX.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/FLEX.framework"; sourceTree = "<group>"; };
+		755284ED1CD2C0360066D209 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/Firebase.framework"; sourceTree = "<group>"; };
+		755284EF1CD2C03F0066D209 /* MMDrawerController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MMDrawerController.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/MMDrawerController.framework"; sourceTree = "<group>"; };
 		755DB9671CB3029A0092BBC7 /* ImagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
 		7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		756790FB1CC66CF900EC507D /* SomeExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SomeExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -361,6 +364,9 @@
 		CFB2A2C6277F3C8FB18AD242 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				755284EF1CD2C03F0066D209 /* MMDrawerController.framework */,
+				755284ED1CD2C0360066D209 /* Firebase.framework */,
+				755284EB1CD2C01E0066D209 /* FLEX.framework */,
 				721AF761DCD35B339255EB37 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -563,7 +569,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		9B2B74A52AB4CF8788CD2115 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -677,7 +682,7 @@
 		756791061CC66CF900EC507D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppExtensionIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -687,13 +692,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeApp.SomeExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Debug;
 		};
 		756791071CC66CF900EC507D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppExtensionIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -703,6 +709,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeApp.SomeExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
@@ -745,6 +752,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -782,6 +790,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -830,6 +839,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SomeApp.app/SomeApp";
 			};
 			name = Debug;
@@ -842,6 +852,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SomeApp.app/SomeApp";
 			};
 			name = Release;
@@ -853,6 +864,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
 				TEST_TARGET_NAME = SomeApp;
 				USES_XCTRUNNER = YES;
 			};
@@ -865,6 +877,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
 				TEST_TARGET_NAME = SomeApp;
 				USES_XCTRUNNER = YES;
 			};
@@ -880,6 +893,7 @@
 				756791071CC66CF900EC507D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		75D7A4AF1C4E924400CDD88F /* Build configuration list for PBXProject "SomeApp" */ = {
 			isa = XCConfigurationList;

@@ -341,7 +341,7 @@ extension UIView {
     public func animateBump(completion: ((Bool) -> Void)? = nil) {
         UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.CurveEaseOut   , animations: { [weak self] () -> Void in
             self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
-            }, completion:nil)
+        }, completion:nil)
 
         UIView.animateWithDuration(0.1, delay: 0.3, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> Void in
             self?.transform = CGAffineTransformMakeScale(1.0, 1.0)
