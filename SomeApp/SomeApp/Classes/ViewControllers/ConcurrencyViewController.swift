@@ -31,7 +31,7 @@ class ConcurrencyViewController: UIViewController {
     // Computed variable example (this computed var specifically must not run on the main thread due to sleep and synchronized block)
     var randomProgressBarIndex: Int {
         NSThread.sleepForTimeInterval(0.003)
-        let randomProgressBarIndex = random() % 4
+        var randomProgressBarIndex = random() % 4
         var found = false
         dispatch_sync(myQueue) {
             if self.progressBarsLeftArray[randomProgressBarIndex] == -1 {
@@ -43,7 +43,16 @@ class ConcurrencyViewController: UIViewController {
             📘("randomed: \(randomProgressBarIndex)")
             return randomProgressBarIndex
         } else {
-            return self.randomProgressBarIndex
+            if self.progressBarsLeftArray.filter({ return $0 == -1 }).count == 1 {
+                for idx in 0...self.progressBarsLeftArray.count {
+                    if self.progressBarsLeftArray[idx] == -1 {
+                        randomProgressBarIndex = idx
+                    }
+                }
+            } else {
+                randomProgressBarIndex = self.randomProgressBarIndex
+            }
+            return randomProgressBarIndex
         }
     }
 

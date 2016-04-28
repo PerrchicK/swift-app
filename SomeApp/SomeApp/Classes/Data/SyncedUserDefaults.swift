@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 protocol SyncedUserDefaultsDelegate: class {
     func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType)
