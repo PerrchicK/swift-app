@@ -22,6 +22,7 @@ class ConcurrencyViewController: UIViewController {
     let myGroup = dispatch_group_create()
     var isVisible = false
     
+    @IBOutlet weak var goButton: UIButton!
     @IBOutlet var ungroupedProgressBar: UIProgressView!
     @IBOutlet var progressBars: [UIProgressView]!
     @IBOutlet weak var action1Spinner: UIActivityIndicatorView!
@@ -32,21 +33,17 @@ class ConcurrencyViewController: UIViewController {
     var randomProgressBarIndex: Int {
         NSThread.sleepForTimeInterval(0.003)
         var randomProgressBarIndex = random() % 4
-        var found = false
-        dispatch_sync(myQueue) {
-            if self.progressBarsLeftArray[randomProgressBarIndex] == -1 {
-                self.progressBarsLeftArray[randomProgressBarIndex] = 0
-                found = true
-            }
-        }
-        if found {
+
+        if self.progressBarsLeftArray[randomProgressBarIndex] == -1 {
+            self.progressBarsLeftArray[randomProgressBarIndex] = 0
             📘("randomed: \(randomProgressBarIndex)")
             return randomProgressBarIndex
         } else {
             if self.progressBarsLeftArray.filter({ return $0 == -1 }).count == 1 {
-                for idx in 0...self.progressBarsLeftArray.count {
+                for idx in 0...self.progressBarsLeftArray.count - 1 {
                     if self.progressBarsLeftArray[idx] == -1 {
                         randomProgressBarIndex = idx
+                        break
                     }
                 }
             } else {
@@ -95,7 +92,8 @@ class ConcurrencyViewController: UIViewController {
         action2Spinner.startAnimating()
     }
 
-    @IBAction func btnGoPressed(sender: AnyObject) {
+    @IBAction func btnGoPressed(sender: UIButton) {
+        sender.enabled = false
         guard progressBarsLeftArray.contains(-1) else { return }
 
         dispatch_group_async(myGroup, myQueue) { [weak self] in
@@ -123,6 +121,7 @@ class ConcurrencyViewController: UIViewController {
             runBlockAfterDelay(afterDelay: ToastMessage.ToastMessageLength.SHORT.rawValue, block: { () -> Void in
                 UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
                     self?.resetProgressBars()
+                    self?.goButton.enabled = true
                 }
             })
         }
