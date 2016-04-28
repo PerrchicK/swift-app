@@ -30,7 +30,7 @@ class AnimatedGifBoxView: NibView {
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), forControlEvents: UIControlEvents.TouchUpOutside)
 
         durationLabel.onClick {_ in 
-            UIAlertController.make(title: "onClick Message", message: "tapped")
+            UIAlertController.makeAlert(title: "onClick Message", message: "tapped")
                 .withAction(UIAlertAction(title: "Cool", style: .Cancel, handler: nil))
                 .show()
         }

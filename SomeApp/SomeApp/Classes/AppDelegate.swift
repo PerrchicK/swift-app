@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if  let title = notification.alertTitle,
             let message = notification.alertBody
             where application.applicationState == .Active {
-                UIAlertController.make(title: title, message: message).withAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)).show()
+                UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)).show()
         }
         📘("Received notification: \(notification)")
     }

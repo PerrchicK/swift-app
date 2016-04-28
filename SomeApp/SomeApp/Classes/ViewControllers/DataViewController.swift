@@ -76,7 +76,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     @IBAction func addKeyValueToFirebaseButtonPressed(sender: AnyObject) {
-        UIAlertController.make(title: "Add value to firebase", message: "put key & value")
+        UIAlertController.makeAlert(title: "Add value to firebase", message: "put key & value")
             .withAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
             .withAction(UIAlertAction(title: "Add", style: .Default, handler: { [weak self] (alertAction) -> Void in
                 guard let firebaseKeyTextField = self?.firebaseKeyTextField, firebaseValueTextField = self?.firebaseValueTextField,

@@ -299,7 +299,7 @@ extension UIAlertController {
         return self
     }
     
-    static func make(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) -> UIAlertController {
+    static func makeAlert(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         return alertController
     }
@@ -315,7 +315,7 @@ extension UIAlertController {
         // topController should now be the most top view controller
         topController = topController.mostTopViewController()
 
-        UIAlertController.make(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
+        UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
             onGone?()
         })).show()
     }
