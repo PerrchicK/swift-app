@@ -42,7 +42,7 @@ class AnimatedGifBoxView: NibView {
         isAnimating = true
         // Refresh image with the new frame rate
         animatedGifImageView.image = UIImage(named: ANIMATED_GIF_FILENAME.stringByAppendingString(".gif"))
-        animatedGifImageView.animateBump() { [weak self] (finished) in
+        animatedGifImageView.animateBounce() { [weak self] (finished) in
             guard let strongSelf = self else { return }
 
             strongSelf.isAnimating = false

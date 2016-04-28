@@ -31,7 +31,7 @@ class SplashScreenViewController : UIViewController {
         swiftLogo.animateFade(fadeIn: true)
         swiftLogo.animateMoveCenterTo(x: self.view.center.x, y: self.view.center.y)
         swiftLogo.animateZoom(zoomIn: true) { (finished) -> Void in
-            self.swiftLabel.animateBump { [weak self] (finished) -> Void in
+            self.swiftLabel.animateBounce { [weak self] (finished) -> Void in
                 guard let strongSelf = self else { return }
                 
                 //strongSelf.pushViewController(StarterViewController.instantiate(), animated: true)

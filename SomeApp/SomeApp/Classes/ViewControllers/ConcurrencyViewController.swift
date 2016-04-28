@@ -136,7 +136,7 @@ class ConcurrencyViewController: UIViewController {
                         guard let strongSelf = self else { return }
 
                         ToastMessage.show(messageText: "dispatch_group_wait: start waiting to group")
-                        strongSelf.ungroupedProgressBar.animateBump()
+                        strongSelf.ungroupedProgressBar.animateBounce()
                     }
 
                     // 10 Seconds timeout
@@ -150,7 +150,7 @@ class ConcurrencyViewController: UIViewController {
                         guard let strongSelf = self else { return }
 
                         ToastMessage.show(messageText: "dispatch_group_wait: done waiting, progress may continue...")
-                        strongSelf.ungroupedProgressBar.animateBump()
+                        strongSelf.ungroupedProgressBar.animateBounce()
                     }
                 }
 
