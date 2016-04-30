@@ -117,24 +117,22 @@ class ConcurrencyViewController: UIViewController {
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.009)
         }
         dispatch_group_notify(myGroup, dispatch_get_main_queue()) {
-            // Being dispatched on main queue after all group is finished
-            runBlockAfterDelay(afterDelay: ToastMessage.ToastMessageLength.SHORT.rawValue, block: { () -> Void in
-                UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
-                    self?.resetProgressBars()
-                    self?.goButton.enabled = true
-                }
-            })
+            // Will be dispatched on the main queue after all group is finished
+            UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
+                self?.resetProgressBars()
+                self?.goButton.enabled = true
+            }
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             for progress in 1...100 {
                 NSThread.sleepForTimeInterval(0.001)
 
-                if progress == 80 {
+                if progress == 20 {
                     runOnUiThread() { [weak self] in
                         guard let strongSelf = self else { return }
 
-                        ToastMessage.show(messageText: "dispatch_group_wait: start waiting to group")
+                        ToastMessage.show(messageText: "dispatch_group_wait: started")
                         strongSelf.ungroupedProgressBar.animateBounce()
                     }
 
@@ -148,7 +146,7 @@ class ConcurrencyViewController: UIViewController {
                     runOnUiThread() { [weak self] in
                         guard let strongSelf = self else { return }
 
-                        ToastMessage.show(messageText: "dispatch_group_wait: done waiting, progress may continue...")
+                        ToastMessage.show(messageText: "dispatch_group_wait: finished...")
                         strongSelf.ungroupedProgressBar.animateBounce()
                     }
                 }
@@ -197,7 +195,7 @@ class ConcurrencyViewController: UIViewController {
         while self.isVisible {
             NSThread.sleepForTimeInterval(1)
             time += 1
-            print("counting \(time)")
+            📘("counting \(time)")
         }
     }
 }
