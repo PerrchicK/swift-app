@@ -31,10 +31,10 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
 
         // A workaround to get taps on map
-        mapView.onClick { [weak self] (gestureRecognizer) in
+        mapView.onClick { [weak self] (tapGestureRecognizer) in
             guard let mapView = self?.mapView else { return }
 
-            let tappedLocationCoordinate = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
+            let tappedLocationCoordinate = mapView.convertPoint(tapGestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
             📘("tapped on location's coordinate:\n\(tappedLocationCoordinate)")
             self?.mapView(mapView, didFeelTapOnCoordinate: tappedLocationCoordinate)
         }

@@ -94,7 +94,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         isEditableControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), forControlEvents: .ValueChanged)
         
         self.setupCamera()
-        cameraLensPreviewButton.onClick { (gestureRecognizer) in
+        cameraLensPreviewButton.onClick { (tapGestureRecognizer) in
             self.takeSnapshot()
         }
     }

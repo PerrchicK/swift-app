@@ -17,7 +17,6 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         📘("Segue 👉 \(segue.identifier!)")
     }
     
-    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -32,7 +31,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         case LeftMenuOptions.Concurrency.GCD:
             navigationController?.pushViewController(ConcurrencyViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.Views_Animations:
-            navigationController?.pushViewController(UIViewsViewController.instantiate(), animated: true)
+            navigationController?.pushViewController(AnimationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.CollectionView:
             navigationController?.pushViewController(CollectionContainerViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.Data:

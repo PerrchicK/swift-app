@@ -29,6 +29,9 @@ class SplashScreenViewController : UIViewController {
         super.viewDidAppear(animated)
 
         swiftLogo.animateFade(fadeIn: true)
+        // Place the logo outside the container
+        swiftLogo.center.x = -swiftLogo.center.x
+        swiftLogo.center.y = -swiftLogo.center.y
         swiftLogo.animateMoveCenterTo(x: self.view.center.x, y: self.view.center.y)
         swiftLogo.animateZoom(zoomIn: true) { (finished) -> Void in
             self.swiftLabel.animateBounce { [weak self] (finished) -> Void in

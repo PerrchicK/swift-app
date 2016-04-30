@@ -100,7 +100,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         let prettyFast = 0.3
         bgView.animateFade(fadeIn: true, duration: prettyFast)
         dbStateTableView.animateFade(fadeIn: true, duration: prettyFast)
-        bgView.onClick { (gestureRecognizer) -> () in
+        bgView.onClick { (tapGestureRecognizer) -> () in
             bgView.animateFade(fadeIn: false, duration: prettyFast, completion: { (done) -> Void in
                 bgView.removeFromSuperview()
             })

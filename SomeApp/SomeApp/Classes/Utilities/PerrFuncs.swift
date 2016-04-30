@@ -335,8 +335,16 @@ extension UIViewController {
     }
 }
 
+let DEFAULT_ANIMATION_DURATION = NSTimeInterval(1)
 extension UIView {
-    
+    /**
+     Hides the view if it's shown.
+     Shows the view if it's hidden.
+     */
+    func toggleVisibility() {
+        self.show(show: !self.shown)
+    }
+
     // MARK: - Animations
     public func animateBounce(completion: ((Bool) -> Void)? = nil) {
         UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> Void in
@@ -370,17 +378,14 @@ extension UIView {
             })
     }
 
-    public func animateMoveCenterTo(x x: CGFloat, y: CGFloat, duration: NSTimeInterval = 1.0, completion: ((Bool) -> Void)? = nil) {
-        self.center.x = -self.center.x
-        self.center.y = -self.center.y
-        
+    public func animateMoveCenterTo(x x: CGFloat, y: CGFloat, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         UIView.animateWithDuration(duration, animations: {
             self.center.x = x
             self.center.y = y
-            }, completion: completion)
+        }, completion: completion)
     }
     
-    public func animateZoom(zoomIn zoomIn: Bool, duration: NSTimeInterval = 1.0, completion: ((Bool) -> Void)? = nil) {
+    public func animateZoom(zoomIn zoomIn: Bool, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         if zoomIn {
             self.transform = CGAffineTransformMakeScale(0.0, 0.0)
         }
@@ -396,7 +401,7 @@ extension UIView {
         }
     }
     
-    public func animateFade(fadeIn fadeIn: Bool, duration: NSTimeInterval = 1.0, completion: ((Bool) -> Void)? = nil) {
+    public func animateFade(fadeIn fadeIn: Bool, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         // Skip redundant calls
         guard (fadeIn == false && (alpha > 0 || hidden == false)) || (fadeIn == true && (alpha == 0 || hidden == true)) else { return }
 
@@ -411,6 +416,11 @@ extension UIView {
     }
     
     // MARK: - Property setters-like methods
+
+    // Computed variable
+    var shown: Bool {
+        return !self.hidden
+    }
 
     public func show(show show: Bool, faded: Bool = false) {
         if faded {
@@ -511,18 +521,22 @@ extension UIView {
 
     // MARK: - Other cool additions
 
-    // Attaches the closure to the tap event (onClick event)
-    func onClick(onClickClosure: ClosureWrapper.TapRecognizedClosure) {
+    /**
+     Attaches the closure to the tap event (onClick event)
+
+     - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
+     */
+    func onClick(onClickClosure: OnClickClosureWrapper.TapRecognizedClosure) {
         self.userInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
         addGestureRecognizer(tapGestureRecognizer)
-        let attachedClosureWrapper = ClosureWrapper(closure: onClickClosure)
-        objc_setAssociatedObject(self, &ClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
+        let attachedClosureWrapper = OnClickClosureWrapper(closure: onClickClosure)
+        objc_setAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
-    func onTapRecognized(gestureRecognizer: UIGestureRecognizer) {
-        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &ClosureWrapper.onClickClosureProperty) as? ClosureWrapper else { return }
-        attachedClosureWrapper.closure(gestureRecognizer: gestureRecognizer)
+    func onTapRecognized(tapGestureRecognizer: UITapGestureRecognizer) {
+        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty) as? OnClickClosureWrapper else { return }
+        attachedClosureWrapper.closure(tapGestureRecognizer: tapGestureRecognizer)
     }
 
     func firstResponder() -> UIView? {
@@ -544,8 +558,8 @@ extension UIView {
 }
 
 // Wraps
-class ClosureWrapper {
-    typealias TapRecognizedClosure = (gestureRecognizer: UIGestureRecognizer) -> ()
+class OnClickClosureWrapper {
+    typealias TapRecognizedClosure = (tapGestureRecognizer: UITapGestureRecognizer) -> ()
     static var onClickClosureProperty = "onClickClosureProperty"
     
     let closure: TapRecognizedClosure
