@@ -310,11 +310,6 @@ extension UIAlertController {
      - parameter message: The message inside the UIAlertView
      */
     static func alert(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) {
-        guard var topController = UIApplication.sharedApplication().keyWindow?.rootViewController else { return }
-        
-        // topController should now be the most top view controller
-        topController = topController.mostTopViewController()
-
         UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
             onGone?()
         })).show()
