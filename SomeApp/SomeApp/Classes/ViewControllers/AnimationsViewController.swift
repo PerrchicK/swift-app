@@ -21,7 +21,9 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     @IBOutlet weak var animatedGifBoxView: AnimatedGifBoxView!
     @IBOutlet weak var fetchImageButton: UIButton!
     @IBOutlet weak var fetchedImageUrlTextField: UITextField!
-    
+
+    var autoScrollTimer: NSTimer?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,12 +37,14 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        scrollView.setContentOffset(CGPointMake(0, -50), animated: true)
-        NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(afterContentOffsetChanged(_:)), userInfo: nil, repeats: false)
+        autoScrollTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
     }
 
-    func afterContentOffsetChanged(timer:NSTimer) {
-        scrollView.setContentOffset(CGPointMake(0, 0), animated: true)
+    func teaseUserToScroll(timer: NSTimer) {
+        scrollView.setContentOffset(CGPointMake(0, -50), animated: true)
+        runBlockAfterDelay(afterDelay: 0.3) {
+            self.scrollView.setContentOffset(CGPointMake(0, 0), animated: true)
+        }
     }
 
     func configureAnimations() {
@@ -142,6 +146,9 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
 
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollView.gestureRecognizers?.filter ({ [.Began, .Changed].contains($0.state) } ).count > 0 {
+            autoScrollTimer?.invalidate()
+        }
         self.scrollViewContentOffsetLabel.text = String(scrollView.contentOffset)
     }
 }

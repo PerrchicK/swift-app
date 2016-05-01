@@ -343,9 +343,9 @@ extension UIView {
 
     // MARK: - Animations
     func animateScaleAndFadeOut(completion: ((Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+        UIView.animateWithDuration(0.5, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             // Core Graphics Affine Transformation: https://en.wikipedia.org/wiki/Affine_transformation
-            self.transform = CGAffineTransformIdentity
+            self.transform = CGAffineTransformMakeScale(1.2, 1.2)
             self.alpha = 0.0
         }, completion: { (completed) -> Void in
             completion?(completed)
@@ -353,13 +353,11 @@ extension UIView {
     }
 
     public func animateBounce(completion: ((Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> Void in
+        UIView.animateWithDuration(0.1, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> () in
             self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
-            self?.layoutIfNeeded()
         }) { (succeeded) -> Void in
-            UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.CurveEaseOut   , animations: { [weak self] () -> Void in
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.CurveEaseOut   , animations: { [weak self] () -> Void in
                 self?.transform = CGAffineTransformMakeScale(1.0, 1.0)
-                self?.layoutIfNeeded()
             }) { (succeeded) -> Void in
                 completion?(succeeded)
             }
