@@ -55,8 +55,10 @@ class AnimatedGifBoxView: NibView {
 
         isAnimating = true
         // Refresh image with the new frame rate
-        durationLabel.animateNono() { [weak self] (finished) in
-            self?.isAnimating = false
+        durationLabel.animateNo() { [weak self] (isDone) in
+            if let isDone = isDone as? Bool {
+                self?.isAnimating = !isDone // not done <==> animating || done <==> not animating
+            }
         }
     }
     

@@ -28,29 +28,29 @@ class ToastMessage: NibView {
         toastMessage.delay = delay.rawValue
         toastMessage.show(show: false)
         appWindow.addSubview(toastMessage)
-        toastMessage.center = CGPoint(x: appWindow.center.x, y: appWindow.center.y * 1.5)
-        toastMessage.animateFade(fadeIn: true, duration: 0.5)
         toastMessage.messageLabel.text = messageText
-        toastMessage.backgroundColor = UIColor.grayColor()
+        toastMessage.backgroundColor = UIColor.grayColor().colorWithAlphaComponent(0.8)
         toastMessage.layer.cornerRadius = 5
         toastMessage.layer.masksToBounds = true
         toastMessage.userInteractionEnabled = false
-//        toastMessage.translatesAutoresizingMaskIntoConstraints = false
-//        toastMessage.addConstraint(NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: toastMessage, attribute: .Bottom, multiplier: 1.0, constant: 30.0))
+        // Irrelevant due to the following constraints
+//        toastMessage.center = CGPoint(x: appWindow.center.x, y: appWindow.center.y * 1.5)
+        toastMessage.translatesAutoresizingMaskIntoConstraints = false
+        let bottomConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Bottom, relatedBy: .Equal, toItem: toastMessage.superview, attribute: .Bottom, multiplier: 1, constant: -30.0)
+        let leftConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Left, relatedBy: .Equal, toItem: toastMessage.superview, attribute: .Left, multiplier: 1, constant: 10.0)
+        let rightConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Right, relatedBy: .Equal, toItem: toastMessage.superview, attribute: .Right, multiplier: 1, constant: -10.0)
+        appWindow/* which is: toastMessage.superview */.addConstraints([bottomConstraint, leftConstraint, rightConstraint])
 
-        toastMessage.bumpAndFade()
-    }
+        let heightConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 0.3 * max(appWindow.frame.height, appWindow.frame.width))
+        toastMessage.addConstraint(heightConstraint)
+        toastMessage.animateBounce()
+        toastMessage.animateFade(fadeIn: true, duration: 0.5)
 
-    private func bumpAndFade() {
-        self.transform = CGAffineTransformMakeScale(0.8, 0.8)
-        self.alpha = 0.8
-        
-        UIView.animateWithDuration(0.5, delay: self.delay, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
-            self.transform = CGAffineTransformIdentity
-            self.alpha = 0.0
-            }, completion: { [weak self] (completed) -> Void in
-                self?.messageLabel.text = ""
-                self?.removeFromSuperview()
-        })
+        runBlockAfterDelay(afterDelay: toastMessage.delay) {
+            toastMessage.animateScaleAndFadeOut { [weak toastMessage] (completed) in
+                toastMessage?.messageLabel.text = ""
+                toastMessage?.removeFromSuperview()
+            }
+        }
     }
 }

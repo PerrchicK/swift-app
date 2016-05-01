@@ -32,6 +32,17 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
         configureUi()
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        scrollView.setContentOffset(CGPointMake(0, -50), animated: true)
+        NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(afterContentOffsetChanged(_:)), userInfo: nil, repeats: false)
+    }
+
+    func afterContentOffsetChanged(timer:NSTimer) {
+        scrollView.setContentOffset(CGPointMake(0, 0), animated: true)
+    }
+
     func configureAnimations() {
         animatedOutTransitionView.onClick { (tapGestureRecognizer) in
             let transition = CATransition() // A subclass of CAAnimation
@@ -95,7 +106,14 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             UIView.animateWithDuration(0.8, delay: 0.2, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
                 self.shootedViewRightMarginConstraint.constant += 70
                 self.view.layoutIfNeeded()
-            }, completion: nil)
+            }, completion: { (done) in
+                if self.shootedViewRightMarginConstraint.constant > self.view.frame.width {
+                    UIView.animateWithDuration(0.5, animations: {
+                        self.shootedViewRightMarginConstraint.constant = 10
+                        self.view.layoutIfNeeded()
+                    })
+                }
+            })
         }
     }
     
@@ -118,7 +136,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     
     // MARK: - AnimatedGifBoxViewDelegate
     func animatedGifBoxView(animatedGiBoxView: AnimatedGifBoxView, durationSliderChanged newValue: Float) {
-        self.view.backgroundColor = UIColor.redColor().colorWithAlphaComponent(CGFloat(newValue))
+        let cgFloatValue = CGFloat(newValue)
+        self.view.backgroundColor = UIColor(hue: cgFloatValue, saturation: cgFloatValue, brightness: 0.5, alpha: 1)
     }
 
     // MARK: - UIScrollViewDelegate

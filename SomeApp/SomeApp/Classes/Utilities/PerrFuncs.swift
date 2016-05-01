@@ -11,7 +11,7 @@ import ObjectiveC
 
 // MARK: - "macros"
 
-typealias CompletionClosure = ((AnyObject?) -> Void)?
+public typealias CompletionClosure = ((AnyObject?) -> Void)
 
 func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
@@ -172,7 +172,7 @@ extension String {
 }
 
 extension UIImage {
-    static func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure) {
+    static func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
         guard let url = NSURL(string: urlString) else { completionClosure?(nil); return }
         
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
@@ -197,7 +197,7 @@ extension UIImage {
 }
 
 extension UIImageView {
-    func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure) {
+    func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
         guard urlString.length() > 0 else { completionClosure?(nil); return }
 
         UIImage.fetchImage(withUrl: urlString) { (image) in
@@ -336,6 +336,7 @@ extension UIViewController {
 }
 
 let DEFAULT_ANIMATION_DURATION = NSTimeInterval(1)
+let ANIMATION_NO_KEY = "noAnimation"
 extension UIView {
     /**
      Hides the view if it's shown.
@@ -346,6 +347,16 @@ extension UIView {
     }
 
     // MARK: - Animations
+    func animateScaleAndFadeOut(completion: ((Bool) -> Void)? = nil) {
+        UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            // Core Graphics Affine Transformation: https://en.wikipedia.org/wiki/Affine_transformation
+            self.transform = CGAffineTransformIdentity
+            self.alpha = 0.0
+        }, completion: { (completed) -> Void in
+            completion?(completed)
+        })
+    }
+
     public func animateBounce(completion: ((Bool) -> Void)? = nil) {
         UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> Void in
             self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
@@ -360,22 +371,50 @@ extension UIView {
         }
     }
 
-    public func animateNono(completion: ((Bool) -> Void)? = nil) {
+    public func animateNo(completion: CompletionClosure? = nil) {
+        let noAnimation = CAKeyframeAnimation()
+        noAnimation.keyPath = "position.x"
+        noAnimation.values = [0, 10, -10, 10, 0]
+        noAnimation.keyTimes = [0, 1 / 6.0, 3 / 6.0, 5 / 6.0, 1]
+        noAnimation.duration = 0.4
+        
+        noAnimation.additive = true
+        noAnimation.delegate = self
+        noAnimation.removedOnCompletion = false
+
+        if completion != nil {
+            let attachedClosureWrapper = CompletionClosureWrapper(closure: completion!)
+            objc_setAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
+        }
+
+        self.layer.addAnimation(noAnimation, forKey: ANIMATION_NO_KEY) // shake animation
+
+        // another implementation without using CAKeyframeAnimation:
+        /*
         let originX = self.frame.origin.x
 
         UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
             self?.frame.origin.x = originX - 10
+        }, completion: { (done) in
+            UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
+                self?.frame.origin.x = originX + 10
             }, completion: { (done) in
-                UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
-                    self?.frame.origin.x = originX + 10
-                    }, completion: { (done) in
-                        UIView.animateWithDuration(0.05, animations: { [weak self] () -> Void in
-                            self?.frame.origin.x = originX
-                            }, completion: { (done) in
-                                completion?(done)
-                        })
+                UIView.animateWithDuration(0.05, animations: { [weak self] () -> Void in
+                    self?.frame.origin.x = originX
+                }, completion: { (done) in
+                    completion?(done)
                 })
             })
+        })
+         */
+    }
+
+    public override func animationDidStop(animation: CAAnimation, finished flag: Bool) {
+        if self.layer.animationForKey(ANIMATION_NO_KEY) == animation {
+            guard let attachedClosureWrapper = objc_getAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty) as? CompletionClosureWrapper else { return }
+            attachedClosureWrapper.closure(flag)
+            self.layer.removeAnimationForKey(ANIMATION_NO_KEY)
+        }
     }
 
     public func animateMoveCenterTo(x x: CGFloat, y: CGFloat, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
@@ -557,7 +596,7 @@ extension UIView {
     }
 }
 
-// Wraps
+// Wrapper to save closure into a property
 class OnClickClosureWrapper {
     typealias TapRecognizedClosure = (tapGestureRecognizer: UITapGestureRecognizer) -> ()
     static var onClickClosureProperty = "onClickClosureProperty"
@@ -565,6 +604,17 @@ class OnClickClosureWrapper {
     let closure: TapRecognizedClosure
     
     init(closure: TapRecognizedClosure) {
+        self.closure = closure
+    }
+}
+
+// Wrapper to save closure into a property
+class CompletionClosureWrapper {
+    static var completionClosureProperty = "completionClosureProperty"
+    
+    let closure: CompletionClosure
+    
+    init(closure: CompletionClosure) {
         self.closure = closure
     }
 }
