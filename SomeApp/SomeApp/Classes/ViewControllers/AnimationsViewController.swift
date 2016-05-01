@@ -146,9 +146,12 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
 
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollView.gestureRecognizers?.filter ({ [.Began, .Changed].contains($0.state) } ).count > 0 {
+        let isOperatedByUser = scrollView.gestureRecognizers?.filter ({ [.Began, .Changed].contains($0.state) } ).count > 0
+        if isOperatedByUser {
+            // Disable "teasing"
             autoScrollTimer?.invalidate()
         }
+
         self.scrollViewContentOffsetLabel.text = String(scrollView.contentOffset)
     }
 }
