@@ -116,12 +116,9 @@ class ConcurrencyViewController: UIViewController {
             //Task 4
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.009)
         }
-        dispatch_group_notify(myGroup, dispatch_get_main_queue()) {
+        dispatch_group_notify(myGroup, dispatch_get_main_queue()) { [weak self] in
             // Will be dispatched on the main queue after all group is finished
-            UIAlertController.alert(title: "dispatch_group_notify", message: "GCD Notified: All GCD group is done working.") { [weak self] in
-                self?.resetProgressBars()
-                self?.goButton.enabled = true
-            }
+            self?.goButton.enabled = true
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
@@ -146,7 +143,9 @@ class ConcurrencyViewController: UIViewController {
                     runOnUiThread() { [weak self] in
                         guard let strongSelf = self else { return }
 
-                        ToastMessage.show(messageText: "dispatch_group_wait: finished...")
+                        ToastMessage.show(messageText: "dispatch_group_wait: finished...") { [weak self] in
+                            self?.resetProgressBars()
+                        }
                         strongSelf.ungroupedProgressBar.animateBounce()
                     }
                 }

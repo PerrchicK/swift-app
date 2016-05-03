@@ -18,7 +18,7 @@ class ToastMessage: NibView {
     @IBOutlet weak var messageLabel: UILabel!
     private(set) var delay: NSTimeInterval = 1.0
 
-    static func show(messageText messageText: String, delay: ToastMessageLength = ToastMessageLength.SHORT) {
+    static func show(messageText messageText: String, delay: ToastMessageLength = ToastMessageLength.SHORT, onGone: (() -> ())? = nil) {
         guard let appWindow = UIApplication.sharedApplication().keyWindow else { fatalError("cannot use keyWindow") }
 
         let width = UIScreen.mainScreen().bounds.width
@@ -43,13 +43,16 @@ class ToastMessage: NibView {
 
         let heightConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 0.3 * max(appWindow.frame.height, appWindow.frame.width))
         toastMessage.addConstraint(heightConstraint)
-        toastMessage.animateBounce()
         toastMessage.animateFade(fadeIn: true, duration: 0.5)
+//        toastMessage.animateZoom(zoomIn: true, duration: 0.3) { (done) in
+            toastMessage.animateBounce()
+//        }
 
         runBlockAfterDelay(afterDelay: toastMessage.delay) {
             toastMessage.animateScaleAndFadeOut { [weak toastMessage] (completed) in
                 toastMessage?.messageLabel.text = ""
                 toastMessage?.removeFromSuperview()
+                onGone?()
             }
         }
     }

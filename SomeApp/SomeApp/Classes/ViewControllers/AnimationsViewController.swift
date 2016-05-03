@@ -19,6 +19,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     @IBOutlet weak var scrollViewContentOffsetLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var animatedGifBoxView: AnimatedGifBoxView!
+    @IBOutlet weak var animatedImageView: UIImageView!
     @IBOutlet weak var fetchImageButton: UIButton!
     @IBOutlet weak var fetchedImageUrlTextField: UITextField!
 
@@ -112,6 +113,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
                 self.view.layoutIfNeeded()
             }, completion: { (done) in
                 if self.shootedViewRightMarginConstraint.constant > self.view.frame.width {
+//                    self.shootedViewRightMarginConstraint.addObserver(self, forKeyPath: "constant", options: .New, context: nil)
+                    // key value observation?
                     UIView.animateWithDuration(0.5, animations: {
                         self.shootedViewRightMarginConstraint.constant = 10
                         self.view.layoutIfNeeded()
@@ -119,8 +122,27 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
                 }
             })
         }
+
+        animatedImageView.onClick { (tapGestureRecognizer) in
+            if self.animatedImageView.animationImages == nil {
+                var frames = [UIImage]()
+                for imageIndex in 0...13 {
+                    let frame = UIImage(named: "hulk-punches-thor-frame-\(imageIndex).gif")!
+                    frames.append(frame)
+                }
+                // Original picture from: http://www.mtv.com/news/2148698/avengers-age-of-ultron-easter-eggs/
+                self.animatedImageView.animationImages = frames
+                self.animatedImageView.animationDuration = 0.9
+                self.animatedImageView.startAnimating()
+                self.animatedImageView.animationRepeatCount = 1
+            } else if self.animatedImageView.isAnimating() {
+                self.animatedImageView.stopAnimating()
+            } else {
+                self.animatedImageView.startAnimating()
+            }
+        }
     }
-    
+
     func configureUi() {
         animatedJumpView.layer.cornerRadius = animatedJumpView.frame.width / 2
         animatedShootedView.layer.cornerRadius = animatedShootedView.frame.width / 2
