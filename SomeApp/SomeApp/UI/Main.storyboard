@@ -181,6 +181,12 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLh-y2-ula" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
                                         <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hulk-punches-thor-frame-0.gif" translatesAutoresizingMaskIntoConstraints="NO" id="OmT-qr-uC0">
+                                                <rect key="frame" x="40" y="179" width="240" height="110"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="OmT-qr-uC0" secondAttribute="height" multiplier="50:23" id="IOO-Za-oRu"/>
+                                                </constraints>
+                                            </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVd-sU-JZL" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="510" width="280" height="280"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -243,31 +249,24 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
+                                            <constraint firstItem="OmT-qr-uC0" firstAttribute="top" secondItem="6DX-Z5-H40" secondAttribute="bottom" constant="80" id="AZU-11-RoB"/>
                                             <constraint firstItem="HVd-sU-JZL" firstAttribute="leading" secondItem="vLh-y2-ula" secondAttribute="leading" constant="20" id="Dfe-f7-MDn"/>
                                             <constraint firstItem="BKn-QA-fbX" firstAttribute="top" secondItem="bJZ-VT-cMy" secondAttribute="bottom" constant="8" id="FD5-3j-o38"/>
-                                            <constraint firstItem="6DX-Z5-H40" firstAttribute="width" secondItem="6DX-Z5-H40" secondAttribute="height" multiplier="1:1" id="FwJ-8C-7Af"/>
                                             <constraint firstAttribute="trailing" secondItem="HVd-sU-JZL" secondAttribute="trailing" constant="20" id="Lht-MH-ZNz"/>
                                             <constraint firstAttribute="trailing" secondItem="6DX-Z5-H40" secondAttribute="trailing" constant="10" id="MMv-DS-oF2"/>
+                                            <constraint firstItem="OmT-qr-uC0" firstAttribute="leading" secondItem="vLh-y2-ula" secondAttribute="leading" constant="40" id="T3E-n5-Aw5"/>
                                             <constraint firstAttribute="trailing" secondItem="bJZ-VT-cMy" secondAttribute="trailing" constant="10" id="VAR-Bx-xZ9"/>
                                             <constraint firstItem="FsO-8k-cSq" firstAttribute="height" secondItem="bJZ-VT-cMy" secondAttribute="height" id="cBv-vm-XVE"/>
                                             <constraint firstItem="bJZ-VT-cMy" firstAttribute="top" secondItem="vLh-y2-ula" secondAttribute="top" constant="8" id="dKP-G6-04y"/>
                                             <constraint firstItem="FsO-8k-cSq" firstAttribute="centerY" secondItem="bJZ-VT-cMy" secondAttribute="centerY" id="dLd-wt-fiB"/>
                                             <constraint firstItem="FsO-8k-cSq" firstAttribute="leading" secondItem="vLh-y2-ula" secondAttribute="leading" constant="8" id="h7q-xh-PmK"/>
                                             <constraint firstItem="FsO-8k-cSq" firstAttribute="width" secondItem="bJZ-VT-cMy" secondAttribute="width" id="hE2-wj-oXQ"/>
-                                            <constraint firstItem="FsO-8k-cSq" firstAttribute="centerX" secondItem="bJZ-VT-cMy" secondAttribute="centerX" id="hLT-Uy-nPq"/>
                                             <constraint firstItem="6DX-Z5-H40" firstAttribute="top" secondItem="BKn-QA-fbX" secondAttribute="bottom" constant="8" id="luI-sQ-3hk"/>
                                             <constraint firstItem="HVd-sU-JZL" firstAttribute="bottom" secondItem="vLh-y2-ula" secondAttribute="bottom" constant="-10" id="mhP-Am-o9f"/>
+                                            <constraint firstAttribute="trailing" secondItem="OmT-qr-uC0" secondAttribute="trailing" constant="40" id="rfE-nK-nwu"/>
                                             <constraint firstItem="BKn-QA-fbX" firstAttribute="centerX" secondItem="bJZ-VT-cMy" secondAttribute="centerX" id="sja-Us-fdM"/>
                                             <constraint firstAttribute="height" constant="800" id="tld-n9-qS1"/>
-                                            <constraint firstItem="BKn-QA-fbX" firstAttribute="width" secondItem="BKn-QA-fbX" secondAttribute="height" multiplier="1:1" id="uE9-Ny-SkG"/>
                                         </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="hLT-Uy-nPq"/>
-                                                <exclude reference="uE9-Ny-SkG"/>
-                                                <exclude reference="FwJ-8C-7Af"/>
-                                            </mask>
-                                        </variation>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -281,8 +280,8 @@
                                     <outlet property="delegate" destination="a8b-K1-aD0" id="6Zf-LC-2lD"/>
                                 </connections>
                             </scrollView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ScrollView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Px7-O8-3Ox">
-                                <rect key="frame" x="120" y="120" width="80" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ScrollView Offset" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Px7-O8-3Ox">
+                                <rect key="frame" x="94.5" y="120" width="132" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -314,6 +313,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="animatedGifBoxView" destination="HVd-sU-JZL" id="ipJ-If-uUP"/>
+                        <outlet property="animatedImageView" destination="OmT-qr-uC0" id="4o1-Iu-Mg3"/>
                         <outlet property="animatedInTransitionView" destination="FsO-8k-cSq" id="Nu2-0W-Oel"/>
                         <outlet property="animatedJumpView" destination="BKn-QA-fbX" id="BVa-Ja-aLx"/>
                         <outlet property="animatedOutTransitionView" destination="bJZ-VT-cMy" id="bs7-39-Cyw"/>
@@ -1143,6 +1143,7 @@
     <resources>
         <image name="database" width="33" height="36"/>
         <image name="firebase-logo" width="73" height="91"/>
+        <image name="hulk-punches-thor-frame-0.gif" width="500" height="230"/>
         <image name="swift-logo" width="352" height="352"/>
     </resources>
 </document>

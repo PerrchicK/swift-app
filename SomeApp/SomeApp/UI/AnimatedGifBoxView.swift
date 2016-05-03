@@ -28,12 +28,6 @@ class AnimatedGifBoxView: NibView {
         animatedGifImageView.contentMode = .ScaleAspectFit
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), forControlEvents: UIControlEvents.TouchUpOutside)
-
-        durationLabel.onClick {_ in 
-            UIAlertController.makeAlert(title: "onClick Message", message: "tapped")
-                .withAction(UIAlertAction(title: "Cool", style: .Cancel, handler: nil))
-                .show()
-        }
     }
  
     func durationSliderTouchUp(sender: UISlider) {
