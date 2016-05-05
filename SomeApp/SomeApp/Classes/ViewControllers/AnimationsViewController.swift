@@ -43,10 +43,10 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        scheduledAutoScrollTimer()
+        scheduleAutoScrollTimer()
     }
 
-    func scheduledAutoScrollTimer() {
+    func scheduleAutoScrollTimer() {
         if !(autoScrollTimer?.valid ?? false) {
             autoScrollTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
         }
@@ -229,7 +229,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
 
         self.scrollViewContentOffsetLabel.text = String(format: "(%.1f,%.1f)", scrollView.contentOffset.x, scrollView.contentOffset.y)
         if scrollView.contentOffset.y == 0 {
-            scheduledAutoScrollTimer()
+            scheduleAutoScrollTimer()
         }
     }
 }
