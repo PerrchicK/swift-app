@@ -563,6 +563,7 @@ extension UIView {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
         addGestureRecognizer(tapGestureRecognizer)
         let attachedClosureWrapper = OnClickClosureWrapper(closure: onClickClosure)
+        tapGestureRecognizer.delegate = attachedClosureWrapper
         objc_setAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
@@ -570,7 +571,26 @@ extension UIView {
         guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty) as? OnClickClosureWrapper else { return }
         attachedClosureWrapper.closure(tapGestureRecognizer: tapGestureRecognizer)
     }
-
+    
+    /**
+     Attaches the closure to the tap event (onClick event)
+     
+     - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
+     */
+    func onLongPress(onLongPressClosure: OnLongPressClosureWrapper.LongPressRecognizedClosure) {
+        self.userInteractionEnabled = true
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressRecognized(_:)))
+        addGestureRecognizer(longPressRecognizer)
+        let attachedClosureWrapper = OnLongPressClosureWrapper(closure: onLongPressClosure)
+        longPressRecognizer.delegate = attachedClosureWrapper
+        objc_setAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
+    }
+    
+    func longPressRecognized(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty) as? OnLongPressClosureWrapper else { return }
+        attachedClosureWrapper.closure(longPressGestureRecognizer: longPressGestureRecognizer)
+    }
+    
     func firstResponder() -> UIView? {
         var firstResponder: UIView? = self
         
@@ -590,7 +610,7 @@ extension UIView {
 }
 
 // Wrapper to save closure into a property
-class OnClickClosureWrapper {
+class OnClickClosureWrapper: NSObject, UIGestureRecognizerDelegate {
     typealias TapRecognizedClosure = (tapGestureRecognizer: UITapGestureRecognizer) -> ()
     static var onClickClosureProperty = "onClickClosureProperty"
     
@@ -598,6 +618,26 @@ class OnClickClosureWrapper {
     
     init(closure: TapRecognizedClosure) {
         self.closure = closure
+    }
+
+    @objc func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+}
+
+// Wrapper to save closure into a property
+class OnLongPressClosureWrapper: NSObject, UIGestureRecognizerDelegate {
+    typealias LongPressRecognizedClosure = (longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
+    static var longPressClosureProperty = "longPressClosureProperty"
+    
+    let closure: LongPressRecognizedClosure
+    
+    init(closure: LongPressRecognizedClosure) {
+        self.closure = closure
+    }
+    
+    @objc func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
 
