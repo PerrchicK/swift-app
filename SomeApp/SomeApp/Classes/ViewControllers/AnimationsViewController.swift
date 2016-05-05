@@ -9,11 +9,12 @@
 import Foundation
 
 class AnimationsViewController: UIViewController, UIScrollViewDelegate, AnimatedGifBoxViewDelegate {
-
+    
     @IBOutlet weak var animatedOutTransitionView: UIView!
     @IBOutlet weak var animatedInTransitionView: UIView!
     @IBOutlet weak var animatedJumpView: UIView!
     @IBOutlet weak var animatedShootedView: UIView!
+    @IBOutlet weak var theWallView: UIView!
     // Margin vs. Padding: http://stackoverflow.com/questions/2189452/when-to-use-margin-vs-padding-in-css
     @IBOutlet weak var shootedViewRightMarginConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollViewContentOffsetLabel: UILabel!
@@ -22,6 +23,10 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     @IBOutlet weak var animatedImageView: UIImageView!
     @IBOutlet weak var fetchImageButton: UIButton!
     @IBOutlet weak var fetchedImageUrlTextField: UITextField!
+    // https://www.raywenderlich.com/50197/uikit-dynamics-tutorial
+    var wallGravityAnimator: UIDynamicAnimator!
+    var wallGravityBehavior: UIGravityBehavior!
+    var wallCollision: UICollisionBehavior!
 
     var autoScrollTimer: NSTimer?
 
@@ -42,7 +47,9 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     }
 
     func scheduledAutoScrollTimer() {
-        autoScrollTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
+        if !(autoScrollTimer?.valid ?? false) {
+            autoScrollTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
+        }
     }
 
     func teaseUserToScroll(timer: NSTimer) {
@@ -54,7 +61,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
 
     func configureAnimations() {
         animatedOutTransitionView.onClick { (tapGestureRecognizer) in
-            let transition = CATransition() // A subclass of CAAnimation
+            let transition = CATransition()
             transition.startProgress = 0
             transition.endProgress = 1
             transition.type = kCATransitionPush
@@ -69,6 +76,12 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             self.animatedOutTransitionView.toggleVisibility()
             self.animatedInTransitionView.toggleVisibility()
         }
+
+        animatedOutTransitionView.onLongPress({ (longPressGestureRecognizer) in
+            if longPressGestureRecognizer.state == .Began {
+                self.flipViews(true)
+            }
+        })
 
         animatedInTransitionView.onClick { (tapGestureRecognizer) in
             let transition = CATransition()
@@ -87,6 +100,12 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             self.animatedInTransitionView.toggleVisibility()
         }
 
+        animatedInTransitionView.onLongPress({ (longPressGestureRecognizer) in
+            if longPressGestureRecognizer.state == .Began {
+                self.flipViews(true)
+            }
+        })
+        
         animatedJumpView.onClick { (tapGestureRecognizer) in
             let upAndDownAnimation = CAKeyframeAnimation(keyPath: "transform.translation.y")
             upAndDownAnimation.values = [0, 100]
@@ -115,26 +134,16 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             UIView.animateWithDuration(0.8, delay: 0.2, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
                 self.shootedViewRightMarginConstraint.constant += 70
                 self.view.layoutIfNeeded()
-            }, completion: { (done) in
-                if self.shootedViewRightMarginConstraint.constant > self.view.frame.width {
-//                    self.shootedViewRightMarginConstraint.addObserver(self, forKeyPath: "constant", options: .New, context: nil)
-                    // key value observation?
-                    UIView.animateWithDuration(0.5, animations: {
-                        self.shootedViewRightMarginConstraint.constant = 10
-                        self.view.layoutIfNeeded()
-                    })
-                }
-            })
+            }, completion: nil)
         }
 
         animatedImageView.onClick { (tapGestureRecognizer) in
             if self.animatedImageView.animationImages == nil {
                 var frames = [UIImage]()
-                for imageIndex in 0...13 {
-                    let frame = UIImage(named: "hulk-punches-thor-frame-\(imageIndex).gif")!
+                for imageIndex in 0...9 {
+                    let frame = UIImage(named: "hulk-and-thor-frame-\(imageIndex).gif")!
                     frames.append(frame)
                 }
-                // Original picture from: http://www.mtv.com/news/2148698/avengers-age-of-ultron-easter-eggs/
                 self.animatedImageView.animationImages = frames
                 self.animatedImageView.animationDuration = 0.9
                 self.animatedImageView.startAnimating()
@@ -143,6 +152,46 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
                 self.animatedImageView.stopAnimating()
             } else {
                 self.animatedImageView.startAnimating()
+            }
+        }
+
+        animatedImageView.onLongPress { (longPressGestureRecognizer) in
+            self.animatedImageView.animateFade(fadeIn: false)
+        }
+        theWallView.onLongPress { (longPressGestureRecognizer) in
+            self.theWallView.animateFade(fadeIn: false)
+        }
+
+        shootedViewRightMarginConstraint.addObserver(self, forKeyPath: "constant", options: .New, context: nil)
+
+        theWallView.onClick { (tapGestureRecognizer) in
+            self.wallGravityAnimator = UIDynamicAnimator(referenceView: self.scrollView) // Must be the top reference view
+            self.wallGravityBehavior = UIGravityBehavior(items: [self.theWallView])
+            self.wallGravityAnimator.addBehavior(self.wallGravityBehavior)
+            self.wallCollision = UICollisionBehavior(items: [self.theWallView, self.animatedImageView])
+            self.wallCollision.translatesReferenceBoundsIntoBoundary = true
+            self.wallGravityAnimator.addBehavior(self.wallCollision)
+        }
+    }
+
+    func flipViews(fromRight: Bool) {
+        UIView.transitionWithView(self.animatedOutTransitionView, duration: 0.5, options: fromRight ? .TransitionFlipFromRight : .TransitionFlipFromLeft, animations: {
+            self.animatedOutTransitionView.toggleVisibility()
+            }, completion: nil)
+        
+        UIView.transitionWithView(self.animatedInTransitionView, duration: 0.5, options: fromRight ? .TransitionFlipFromRight : .TransitionFlipFromLeft, animations: {
+            self.animatedInTransitionView.toggleVisibility()
+            }, completion: nil)
+    }
+    
+    // KVO (key value observation)
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if let change = change, newValue = change["new"] as? CGFloat, changedObject = object as? NSLayoutConstraint where changedObject == shootedViewRightMarginConstraint && keyPath == "constant" {
+            if newValue > self.view.frame.width {
+                UIView.animateWithDuration(0.5) {
+                    self.shootedViewRightMarginConstraint.constant = 10
+                    self.view.layoutIfNeeded()
+                }
             }
         }
     }
@@ -178,8 +227,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             autoScrollTimer?.invalidate()
         }
 
-        self.scrollViewContentOffsetLabel.text = String(scrollView.contentOffset)
-        if scrollView.contentOffset.y == 0 && !(autoScrollTimer?.valid ?? false) {
+        self.scrollViewContentOffsetLabel.text = String(format: "(%.1f,%.1f)", scrollView.contentOffset.x, scrollView.contentOffset.y)
+        if scrollView.contentOffset.y == 0 {
             scheduledAutoScrollTimer()
         }
     }

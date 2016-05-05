@@ -31,6 +31,16 @@
 		759F58AA1C75008B009C6E51 /* AnimatedGifBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */; };
 		759F58AC1C7500C5009C6E51 /* UIImage+AnimatedGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */; };
 		759F58AE1C750168009C6E51 /* AnimatedGifBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */; };
+		75A484811CDAB4A500F897A9 /* hulk-and-thor-frame-0.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A484771CDAB4A500F897A9 /* hulk-and-thor-frame-0.gif */; };
+		75A484821CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A484781CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif */; };
+		75A484831CDAB4A500F897A9 /* hulk-and-thor-frame-2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A484791CDAB4A500F897A9 /* hulk-and-thor-frame-2.gif */; };
+		75A484841CDAB4A500F897A9 /* hulk-and-thor-frame-3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847A1CDAB4A500F897A9 /* hulk-and-thor-frame-3.gif */; };
+		75A484851CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847B1CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif */; };
+		75A484861CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847C1CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif */; };
+		75A484871CDAB4A500F897A9 /* hulk-and-thor-frame-6.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847D1CDAB4A500F897A9 /* hulk-and-thor-frame-6.gif */; };
+		75A484881CDAB4A500F897A9 /* hulk-and-thor-frame-7.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847E1CDAB4A500F897A9 /* hulk-and-thor-frame-7.gif */; };
+		75A484891CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847F1CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif */; };
+		75A4848A1CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A484801CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif */; };
 		75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */; };
 		75A575811CA6BC3900BAE35B /* SyncedUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A575801CA6BC3900BAE35B /* SyncedUserDefaults.swift */; };
 		75C2C8E41C7554EA00D42707 /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C2C8E31C7554EA00D42707 /* NibView.swift */; };
@@ -49,20 +59,6 @@
 		75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD841C6F42BC005D7FCA /* MainViewController.swift */; };
 		75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD8A1C6F780F005D7FCA /* Constants.swift */; };
 		75F1AD8D1C6F7BB4005D7FCA /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD8C1C6F7BB4005D7FCA /* DataViewController.swift */; };
-		75F6BED51CD66E00006DFEC8 /* hulk-punches-thor-frame-0.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BEC71CD66E00006DFEC8 /* hulk-punches-thor-frame-0.gif */; };
-		75F6BED61CD66E00006DFEC8 /* hulk-punches-thor-frame-1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BEC81CD66E00006DFEC8 /* hulk-punches-thor-frame-1.gif */; };
-		75F6BED71CD66E00006DFEC8 /* hulk-punches-thor-frame-10.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BEC91CD66E00006DFEC8 /* hulk-punches-thor-frame-10.gif */; };
-		75F6BED81CD66E00006DFEC8 /* hulk-punches-thor-frame-11.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BECA1CD66E00006DFEC8 /* hulk-punches-thor-frame-11.gif */; };
-		75F6BED91CD66E00006DFEC8 /* hulk-punches-thor-frame-12.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BECB1CD66E00006DFEC8 /* hulk-punches-thor-frame-12.gif */; };
-		75F6BEDA1CD66E00006DFEC8 /* hulk-punches-thor-frame-13.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BECC1CD66E00006DFEC8 /* hulk-punches-thor-frame-13.gif */; };
-		75F6BEDB1CD66E00006DFEC8 /* hulk-punches-thor-frame-2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BECD1CD66E00006DFEC8 /* hulk-punches-thor-frame-2.gif */; };
-		75F6BEDC1CD66E00006DFEC8 /* hulk-punches-thor-frame-3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BECE1CD66E00006DFEC8 /* hulk-punches-thor-frame-3.gif */; };
-		75F6BEDD1CD66E00006DFEC8 /* hulk-punches-thor-frame-4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BECF1CD66E00006DFEC8 /* hulk-punches-thor-frame-4.gif */; };
-		75F6BEDE1CD66E00006DFEC8 /* hulk-punches-thor-frame-5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BED01CD66E00006DFEC8 /* hulk-punches-thor-frame-5.gif */; };
-		75F6BEDF1CD66E00006DFEC8 /* hulk-punches-thor-frame-6.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BED11CD66E00006DFEC8 /* hulk-punches-thor-frame-6.gif */; };
-		75F6BEE01CD66E00006DFEC8 /* hulk-punches-thor-frame-7.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BED21CD66E00006DFEC8 /* hulk-punches-thor-frame-7.gif */; };
-		75F6BEE11CD66E00006DFEC8 /* hulk-punches-thor-frame-8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BED31CD66E00006DFEC8 /* hulk-punches-thor-frame-8.gif */; };
-		75F6BEE21CD66E00006DFEC8 /* hulk-punches-thor-frame-9.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75F6BED41CD66E00006DFEC8 /* hulk-punches-thor-frame-9.gif */; };
 		FA6218AD5970946087DD1E04 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 721AF761DCD35B339255EB37 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -136,6 +132,16 @@
 		759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnimatedGifBoxView.xib; sourceTree = "<group>"; };
 		759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+AnimatedGif.swift"; sourceTree = "<group>"; };
 		759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedGifBoxView.swift; sourceTree = "<group>"; };
+		75A484771CDAB4A500F897A9 /* hulk-and-thor-frame-0.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-0.gif"; sourceTree = "<group>"; };
+		75A484781CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-1.gif"; sourceTree = "<group>"; };
+		75A484791CDAB4A500F897A9 /* hulk-and-thor-frame-2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-2.gif"; sourceTree = "<group>"; };
+		75A4847A1CDAB4A500F897A9 /* hulk-and-thor-frame-3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-3.gif"; sourceTree = "<group>"; };
+		75A4847B1CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-4.gif"; sourceTree = "<group>"; };
+		75A4847C1CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-5.gif"; sourceTree = "<group>"; };
+		75A4847D1CDAB4A500F897A9 /* hulk-and-thor-frame-6.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-6.gif"; sourceTree = "<group>"; };
+		75A4847E1CDAB4A500F897A9 /* hulk-and-thor-frame-7.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-7.gif"; sourceTree = "<group>"; };
+		75A4847F1CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-8.gif"; sourceTree = "<group>"; };
+		75A484801CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-9.gif"; sourceTree = "<group>"; };
 		75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronizer.swift; sourceTree = "<group>"; };
 		75A575801CA6BC3900BAE35B /* SyncedUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncedUserDefaults.swift; sourceTree = "<group>"; };
 		75C2C8E31C7554EA00D42707 /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
@@ -161,20 +167,6 @@
 		75F1AD861C6F4B8A005D7FCA /* SomeApp-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SomeApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		75F1AD8A1C6F780F005D7FCA /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		75F1AD8C1C6F7BB4005D7FCA /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
-		75F6BEC71CD66E00006DFEC8 /* hulk-punches-thor-frame-0.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-0.gif"; sourceTree = "<group>"; };
-		75F6BEC81CD66E00006DFEC8 /* hulk-punches-thor-frame-1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-1.gif"; sourceTree = "<group>"; };
-		75F6BEC91CD66E00006DFEC8 /* hulk-punches-thor-frame-10.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-10.gif"; sourceTree = "<group>"; };
-		75F6BECA1CD66E00006DFEC8 /* hulk-punches-thor-frame-11.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-11.gif"; sourceTree = "<group>"; };
-		75F6BECB1CD66E00006DFEC8 /* hulk-punches-thor-frame-12.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-12.gif"; sourceTree = "<group>"; };
-		75F6BECC1CD66E00006DFEC8 /* hulk-punches-thor-frame-13.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-13.gif"; sourceTree = "<group>"; };
-		75F6BECD1CD66E00006DFEC8 /* hulk-punches-thor-frame-2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-2.gif"; sourceTree = "<group>"; };
-		75F6BECE1CD66E00006DFEC8 /* hulk-punches-thor-frame-3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-3.gif"; sourceTree = "<group>"; };
-		75F6BECF1CD66E00006DFEC8 /* hulk-punches-thor-frame-4.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-4.gif"; sourceTree = "<group>"; };
-		75F6BED01CD66E00006DFEC8 /* hulk-punches-thor-frame-5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-5.gif"; sourceTree = "<group>"; };
-		75F6BED11CD66E00006DFEC8 /* hulk-punches-thor-frame-6.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-6.gif"; sourceTree = "<group>"; };
-		75F6BED21CD66E00006DFEC8 /* hulk-punches-thor-frame-7.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-7.gif"; sourceTree = "<group>"; };
-		75F6BED31CD66E00006DFEC8 /* hulk-punches-thor-frame-8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-8.gif"; sourceTree = "<group>"; };
-		75F6BED41CD66E00006DFEC8 /* hulk-punches-thor-frame-9.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-punches-thor-frame-9.gif"; sourceTree = "<group>"; };
 		DB0C033BF3BDE91234F4F6BC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -281,10 +273,27 @@
 		759F58AF1C75069C009C6E51 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				75F6BEC61CD66E00006DFEC8 /* hulk-punches-thor */,
+				75A484761CDAB4A500F897A9 /* hulk-and-thor */,
 				75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		75A484761CDAB4A500F897A9 /* hulk-and-thor */ = {
+			isa = PBXGroup;
+			children = (
+				75A484771CDAB4A500F897A9 /* hulk-and-thor-frame-0.gif */,
+				75A484781CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif */,
+				75A484791CDAB4A500F897A9 /* hulk-and-thor-frame-2.gif */,
+				75A4847A1CDAB4A500F897A9 /* hulk-and-thor-frame-3.gif */,
+				75A4847B1CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif */,
+				75A4847C1CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif */,
+				75A4847D1CDAB4A500F897A9 /* hulk-and-thor-frame-6.gif */,
+				75A4847E1CDAB4A500F897A9 /* hulk-and-thor-frame-7.gif */,
+				75A4847F1CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif */,
+				75A484801CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif */,
+			);
+			path = "hulk-and-thor";
 			sourceTree = "<group>";
 		};
 		75D7A4AB1C4E924400CDD88F = {
@@ -389,27 +398,6 @@
 				75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		75F6BEC61CD66E00006DFEC8 /* hulk-punches-thor */ = {
-			isa = PBXGroup;
-			children = (
-				75F6BEC71CD66E00006DFEC8 /* hulk-punches-thor-frame-0.gif */,
-				75F6BEC81CD66E00006DFEC8 /* hulk-punches-thor-frame-1.gif */,
-				75F6BEC91CD66E00006DFEC8 /* hulk-punches-thor-frame-10.gif */,
-				75F6BECA1CD66E00006DFEC8 /* hulk-punches-thor-frame-11.gif */,
-				75F6BECB1CD66E00006DFEC8 /* hulk-punches-thor-frame-12.gif */,
-				75F6BECC1CD66E00006DFEC8 /* hulk-punches-thor-frame-13.gif */,
-				75F6BECD1CD66E00006DFEC8 /* hulk-punches-thor-frame-2.gif */,
-				75F6BECE1CD66E00006DFEC8 /* hulk-punches-thor-frame-3.gif */,
-				75F6BECF1CD66E00006DFEC8 /* hulk-punches-thor-frame-4.gif */,
-				75F6BED01CD66E00006DFEC8 /* hulk-punches-thor-frame-5.gif */,
-				75F6BED11CD66E00006DFEC8 /* hulk-punches-thor-frame-6.gif */,
-				75F6BED21CD66E00006DFEC8 /* hulk-punches-thor-frame-7.gif */,
-				75F6BED31CD66E00006DFEC8 /* hulk-punches-thor-frame-8.gif */,
-				75F6BED41CD66E00006DFEC8 /* hulk-punches-thor-frame-9.gif */,
-			);
-			path = "hulk-punches-thor";
 			sourceTree = "<group>";
 		};
 		CFB2A2C6277F3C8FB18AD242 /* Frameworks */ = {
@@ -566,27 +554,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75F6BEDA1CD66E00006DFEC8 /* hulk-punches-thor-frame-13.gif in Resources */,
+				75A484811CDAB4A500F897A9 /* hulk-and-thor-frame-0.gif in Resources */,
 				759F58AA1C75008B009C6E51 /* AnimatedGifBoxView.xib in Resources */,
 				75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */,
-				75F6BEDB1CD66E00006DFEC8 /* hulk-punches-thor-frame-2.gif in Resources */,
-				75F6BEDE1CD66E00006DFEC8 /* hulk-punches-thor-frame-5.gif in Resources */,
 				75F1AD701C6E8C92005D7FCA /* Assets.xcassets in Resources */,
-				75F6BED71CD66E00006DFEC8 /* hulk-punches-thor-frame-10.gif in Resources */,
+				75A484831CDAB4A500F897A9 /* hulk-and-thor-frame-2.gif in Resources */,
 				75D75AFF1C77B4FE0095CE05 /* running_cat_transparent.gif in Resources */,
-				75F6BED81CD66E00006DFEC8 /* hulk-punches-thor-frame-11.gif in Resources */,
+				75A484871CDAB4A500F897A9 /* hulk-and-thor-frame-6.gif in Resources */,
+				75A484841CDAB4A500F897A9 /* hulk-and-thor-frame-3.gif in Resources */,
+				75A484891CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif in Resources */,
 				7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */,
-				75F6BEE21CD66E00006DFEC8 /* hulk-punches-thor-frame-9.gif in Resources */,
+				75A484851CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif in Resources */,
 				75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */,
-				75F6BEDC1CD66E00006DFEC8 /* hulk-punches-thor-frame-3.gif in Resources */,
-				75F6BEE01CD66E00006DFEC8 /* hulk-punches-thor-frame-7.gif in Resources */,
-				75F6BEDD1CD66E00006DFEC8 /* hulk-punches-thor-frame-4.gif in Resources */,
-				75F6BEDF1CD66E00006DFEC8 /* hulk-punches-thor-frame-6.gif in Resources */,
-				75F6BEE11CD66E00006DFEC8 /* hulk-punches-thor-frame-8.gif in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
-				75F6BED51CD66E00006DFEC8 /* hulk-punches-thor-frame-0.gif in Resources */,
-				75F6BED61CD66E00006DFEC8 /* hulk-punches-thor-frame-1.gif in Resources */,
-				75F6BED91CD66E00006DFEC8 /* hulk-punches-thor-frame-12.gif in Resources */,
+				75A484861CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif in Resources */,
+				75A484821CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif in Resources */,
+				75A4848A1CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif in Resources */,
+				75A484881CDAB4A500F897A9 /* hulk-and-thor-frame-7.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
