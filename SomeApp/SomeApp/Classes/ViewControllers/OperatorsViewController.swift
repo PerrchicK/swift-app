@@ -41,7 +41,7 @@ class OperatorsViewController: UIViewController {
         var lovingResult : AnyObject?
         
         do {
-            lovingResult = try valueTextField.😘(beloved: valueTextField.text!)
+            lovingResult = try valueTextField.😘(belovedObject: valueTextField.text!)
         } catch {
         }
         
@@ -59,7 +59,7 @@ class OperatorsViewController: UIViewController {
     @IBAction func getButtonPressed(sender: AnyObject) {
         valueTextField.resignFirstResponder()
 
-        if let beloved = valueTextField.😍() {
+        if let beloved = valueTextField.😍() as? String {
             UIAlertController.alert(title: "beloved string", message: beloved)
         }
     }

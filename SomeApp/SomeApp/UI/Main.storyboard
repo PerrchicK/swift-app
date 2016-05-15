@@ -472,7 +472,7 @@
                                 </constraints>
                                 <state key="normal" image="database"/>
                                 <connections>
-                                    <action selector="showDbButtonPressed:" destination="7SB-GE-wZr" eventType="touchUpInside" id="BAv-nv-EzU"/>
+                                    <action selector="showCoreDataButtonPressed:" destination="7SB-GE-wZr" eventType="touchUpInside" id="xwc-i0-Fmr"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2qf-M3-7HM">
@@ -482,20 +482,20 @@
                                     <action selector="saveButtonPressed:" destination="7SB-GE-wZr" eventType="touchUpInside" id="7nl-c2-u0p"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lQR-OC-cbF">
-                                <rect key="frame" x="26" y="174" width="268" height="345"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="7SB-GE-wZr" id="xud-fs-VzU"/>
-                                    <outlet property="delegate" destination="7SB-GE-wZr" id="2eN-iC-5MS"/>
-                                </connections>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cKB-G5-UPC" userLabel="addKeyValueToFirebaseButton">
                                 <rect key="frame" x="149" y="111" width="22" height="22"/>
                                 <connections>
                                     <action selector="addKeyValueToFirebaseButtonPressed:" destination="7SB-GE-wZr" eventType="touchUpInside" id="aYO-5s-g0b"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lQR-OC-cbF">
+                                <rect key="frame" x="26" y="70" width="268" height="448"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="7SB-GE-wZr" id="xud-fs-VzU"/>
+                                    <outlet property="delegate" destination="7SB-GE-wZr" id="2eN-iC-5MS"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -522,8 +522,6 @@
                             <constraint firstItem="v5P-qC-wyY" firstAttribute="leading" secondItem="B6p-La-4pS" secondAttribute="leadingMargin" constant="10" id="Nxc-1X-FUo"/>
                             <constraint firstItem="Go5-Ud-zIw" firstAttribute="top" secondItem="KYW-tg-fjq" secondAttribute="bottom" constant="10" id="O5Z-ci-yR6"/>
                             <constraint firstItem="2oQ-o6-3N5" firstAttribute="top" secondItem="cKB-G5-UPC" secondAttribute="bottom" constant="20" id="PIj-w4-fDO"/>
-                            <constraint firstItem="2qf-M3-7HM" firstAttribute="bottom" secondItem="lQR-OC-cbF" secondAttribute="bottom" id="Qfw-JQ-ne5"/>
-                            <constraint firstItem="uKa-J8-hDA" firstAttribute="top" secondItem="2qf-M3-7HM" secondAttribute="bottom" constant="40" id="RDN-Ue-klA"/>
                             <constraint firstItem="Mv3-VS-f6M" firstAttribute="top" secondItem="PRB-Vm-XIR" secondAttribute="bottom" constant="25" id="RjL-wo-Opx"/>
                             <constraint firstItem="dSv-K5-Wyb" firstAttribute="width" secondItem="eGi-ge-0VM" secondAttribute="width" id="Rzy-7d-rhO"/>
                             <constraint firstItem="KYW-tg-fjq" firstAttribute="centerX" secondItem="v5P-qC-wyY" secondAttribute="centerX" id="S0U-Fp-oyI"/>
@@ -531,28 +529,25 @@
                             <constraint firstItem="lQR-OC-cbF" firstAttribute="width" secondItem="v5P-qC-wyY" secondAttribute="width" id="WKa-u0-x1V"/>
                             <constraint firstItem="dSv-K5-Wyb" firstAttribute="top" secondItem="eGi-ge-0VM" secondAttribute="bottom" constant="8" id="Xyv-KW-OcY"/>
                             <constraint firstItem="KYW-tg-fjq" firstAttribute="width" secondItem="v5P-qC-wyY" secondAttribute="width" id="bDD-Zh-Rfg"/>
-                            <constraint firstItem="2oQ-o6-3N5" firstAttribute="top" secondItem="N3R-Sa-VSv" secondAttribute="bottom" constant="40" id="eg4-MV-67f"/>
+                            <constraint firstItem="lQR-OC-cbF" firstAttribute="top" secondItem="PRB-Vm-XIR" secondAttribute="bottom" constant="50" id="bSg-cJ-drb"/>
                             <constraint firstItem="KYW-tg-fjq" firstAttribute="top" secondItem="2oQ-o6-3N5" secondAttribute="bottom" id="eiG-NP-MAk"/>
                             <constraint firstItem="cKB-G5-UPC" firstAttribute="top" secondItem="N3R-Sa-VSv" secondAttribute="bottom" constant="2" id="exn-Jl-f4U"/>
-                            <constraint firstItem="Mv3-VS-f6M" firstAttribute="width" secondItem="Mv3-VS-f6M" secondAttribute="height" multiplier="1:1" id="fXC-4D-42d"/>
                             <constraint firstItem="dSv-K5-Wyb" firstAttribute="centerX" secondItem="eGi-ge-0VM" secondAttribute="centerX" id="hKn-vM-D2z"/>
                             <constraint firstItem="yN5-Yd-dTO" firstAttribute="width" secondItem="v5P-qC-wyY" secondAttribute="width" id="m4e-G7-7W1"/>
+                            <constraint firstItem="uKa-J8-hDA" firstAttribute="top" secondItem="lQR-OC-cbF" secondAttribute="bottom" constant="50" id="rYa-Sa-l6d"/>
                             <constraint firstItem="QZW-zd-kvt" firstAttribute="top" secondItem="v5P-qC-wyY" secondAttribute="bottom" constant="8" id="s4b-CG-iX3"/>
                             <constraint firstItem="lQR-OC-cbF" firstAttribute="top" secondItem="2oQ-o6-3N5" secondAttribute="bottom" id="wnC-xa-BXD"/>
                             <constraint firstItem="yN5-Yd-dTO" firstAttribute="top" secondItem="SJG-cD-xJr" secondAttribute="bottom" id="xdv-b6-9ps"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="fXC-4D-42d"/>
-                                <exclude reference="eg4-MV-67f"/>
-                                <exclude reference="RDN-Ue-klA"/>
+                                <exclude reference="wnC-xa-BXD"/>
                             </mask>
                         </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="dbStateTableView" destination="lQR-OC-cbF" id="bic-xR-MYm"/>
-                        <outlet property="distanceFromBottomConstraint" destination="RDN-Ue-klA" id="diM-z7-3uj"/>
                         <outlet property="emailTextField" destination="dSv-K5-Wyb" id="Z3D-Pv-xAE"/>
                         <outlet property="firstNameTextField" destination="v5P-qC-wyY" id="v8E-QC-elo"/>
                         <outlet property="lastNameTextField" destination="QZW-zd-kvt" id="NpW-jK-qMw"/>
@@ -700,7 +695,7 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Fg-15-N56" id="Bj3-9X-Nxm">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu option title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-Ab-ka6">

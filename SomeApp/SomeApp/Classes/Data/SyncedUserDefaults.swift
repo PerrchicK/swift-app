@@ -8,9 +8,15 @@
 
 import Foundation
 import Firebase
+import Alamofire
 
 protocol SyncedUserDefaultsDelegate: class {
     func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType)
+}
+
+class GameResult {
+    var score = 0
+    var name = ""
 }
 
 // Inspired from: https://www.raywenderlich.com/109706/firebase-tutorial-getting-started
@@ -24,6 +30,7 @@ class SyncedUserDefaults {
 
     weak var delegate: SyncedUserDefaultsDelegate?
 
+    private(set) var currentDictionary = ["111":"yo"]//[String:String]()
     private static let FIREBASE_APP_URL = "https://boiling-inferno-8318.firebaseio.com/"
     private static let bundleIdentifier  = NSBundle.mainBundle().bundleIdentifier
     var syncedDbRef: Firebase?
@@ -32,6 +39,16 @@ class SyncedUserDefaults {
     
     private func databaseChangedEvent(firebaseChangeType: FEventType, dataSnapshot: FDataSnapshot?) {
         guard let key = dataSnapshot?.key, let value = dataSnapshot?.value as? String else { return }
+        var arr = [GameResult]()
+        let minResult = arr.minElement { (result1, result2) -> Bool in
+            result1.score < result2.score
+        }
+
+        let smaller = minResult?.score < 10
+        if smaller {
+            arr = arr.filter( { $0.score != minResult!.score } )
+        }
+        
         var changeType: ChangeType?
 
         switch firebaseChangeType {
@@ -46,6 +63,14 @@ class SyncedUserDefaults {
         default:
             print("\(className(SyncedUserDefaults)) Error: unhandled firebase change type: \(firebaseChangeType)")
         }
+
+        // Update current state
+        if firebaseChangeType == .ChildRemoved {
+            currentDictionary.removeValueForKey(key)
+        } else {
+            currentDictionary[key] = value
+        }
+
         delegate?.syncedUserDefaults(self, dbKey: key, dbValue: value, changed: changeType!)
     }
 
@@ -86,8 +111,13 @@ class SyncedUserDefaults {
         })
     }
 
-    func putString(key: String, value: String) -> SyncedUserDefaults {
+    func putString(key key: String, value: String) -> SyncedUserDefaults {
         syncedDbRef?.childByAppendingPath(key).setValue(value)
+        return self
+    }
+
+    func removeString(key key: String) -> SyncedUserDefaults {
+        syncedDbRef?.childByAppendingPath(key).removeValue()
         return self
     }
 }
