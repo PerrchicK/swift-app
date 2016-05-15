@@ -14,11 +14,6 @@ protocol SyncedUserDefaultsDelegate: class {
     func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType)
 }
 
-class GameResult {
-    var score = 0
-    var name = ""
-}
-
 // Inspired from: https://www.raywenderlich.com/109706/firebase-tutorial-getting-started
 // Many thanks, Ray :)
 class SyncedUserDefaults {
@@ -39,15 +34,6 @@ class SyncedUserDefaults {
     
     private func databaseChangedEvent(firebaseChangeType: FEventType, dataSnapshot: FDataSnapshot?) {
         guard let key = dataSnapshot?.key, let value = dataSnapshot?.value as? String else { return }
-        var arr = [GameResult]()
-        let minResult = arr.minElement { (result1, result2) -> Bool in
-            result1.score < result2.score
-        }
-
-        let smaller = minResult?.score < 10
-        if smaller {
-            arr = arr.filter( { $0.score != minResult!.score } )
-        }
         
         var changeType: ChangeType?
 
