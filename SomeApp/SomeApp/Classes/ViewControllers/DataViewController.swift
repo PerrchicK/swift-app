@@ -28,7 +28,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
-    var users:[User]!
+    private var users:[User]!
+    private var firebaseKeys = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +80,16 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - SyncedUserDefaultsDelegate
     func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType) {
         ToastMessage.show(messageText: "data changed:\nchange type: \(changeType)\nkey: \(key)\nvalue: \(value)")
+        switch changeType {
+        case .Added:
+            firebaseKeys.append(key)
+        case .Removed:
+            if let idx = firebaseKeys.indexOf({ return $0 == key }) {
+                firebaseKeys.removeAtIndex(idx)
+            }
+        default:
+            break
+        }
     }
 
     @IBAction func addKeyValueToFirebaseButtonPressed(sender: AnyObject) {
@@ -186,7 +197,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let belovedString = tableView.😍() as? String {
             switch belovedString {
             case "firebase":
-                cell.textLabel?.text = "111"//DataManager.syncedUserDefaults().currentDictionary.keyAtIndex(index)
+                cell.textLabel?.text = firebaseKeys[index]
             case "core-data":
                 cell.textLabel?.text = users[index].nickname
             default:
@@ -248,12 +259,15 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let belovedString = tableView.😍() as? String {
             switch belovedString {
             case "firebase":
-                let key = "key"
+                let key = firebaseKeys[longTappedIndex]
                 UIAlertController.makeAlert(title: "Edit '\(key)'", message: "enter a new string:")
-                    .withInputText(&coreDataNewNicknameTextField) { (textField) in
-                        textField.placeholder = "value"
-                    }.withAction(UIAlertAction(title: "Change", style: .Destructive, handler: { (alertAction) in
-                        self.refreshUsersArray()
+                    .withInputText(&firebaseValueTextField) { (textField) in
+                        textField.placeholder = "new value"
+                        textField.text = SyncedUserDefaults.sharedInstance.currentDictionary[key]
+                    }.withAction(UIAlertAction(title: "Change", style: .Destructive, handler: { [weak self] (alertAction) in
+                        guard let newValue = self?.firebaseValueTextField.text else { return }
+                        SyncedUserDefaults.sharedInstance.putString(key: key, value: newValue)
+                        self?.refreshUsersArray()
                         tableView.reloadData()
                     }))
                     .withAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
