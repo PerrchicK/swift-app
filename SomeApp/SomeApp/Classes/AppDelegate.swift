@@ -17,7 +17,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let rootViewController : UIViewController = SplashScreenViewController.instantiate()
         self.window?.rootViewController = rootViewController
+
         // Override point for customization after application launch.
+        NSSetUncaughtExceptionHandler { (exception) in
+            NSUserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
+        }
+
+        if let lastCrashCallStack = NSUserDefaults.load(key: "last crash") as? [String] {
+            UIAlertController.makeAlert(title: "last crash", message: "\(lastCrashCallStack)")
+                .withAction(UIAlertAction(title: "fine", style: .Cancel, handler: nil))
+                .withAction(UIAlertAction(title: "delete", style: .Default, handler: { (alertAction) in
+                    NSUserDefaults.remove(key: "last crash").synchronize()
+                }))
+                .show()
+        }
+
         return true
     }
 
