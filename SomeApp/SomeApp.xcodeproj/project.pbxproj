@@ -10,6 +10,7 @@
 		752583121C9A835500E36E5E /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583111C9A835500E36E5E /* DataManager.swift */; };
 		752583141C9A839800E36E5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583131C9A839800E36E5E /* User.swift */; };
 		753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */; };
+		755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */; };
 		755DB9681CB3029A0092BBC7 /* ImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755DB9671CB3029A0092BBC7 /* ImagesViewController.swift */; };
 		7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */; };
 		756790FE1CC66CF900EC507D /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756790FD1CC66CF900EC507D /* ActionViewController.swift */; };
@@ -110,6 +111,7 @@
 		755284EB1CD2C01E0066D209 /* FLEX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLEX.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/FLEX.framework"; sourceTree = "<group>"; };
 		755284ED1CD2C0360066D209 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/Firebase.framework"; sourceTree = "<group>"; };
 		755284EF1CD2C03F0066D209 /* MMDrawerController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MMDrawerController.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/MMDrawerController.framework"; sourceTree = "<group>"; };
+		755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		755DB9671CB3029A0092BBC7 /* ImagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
 		7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		756790FB1CC66CF900EC507D /* SomeExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SomeExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -366,6 +368,7 @@
 				759F58AF1C75069C009C6E51 /* Images */,
 				75F1AD861C6F4B8A005D7FCA /* SomeApp-Bridging-Header.h */,
 				75F1AD691C6E8C92005D7FCA /* Assets.xcassets */,
+				755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */,
 				75F1AD6A1C6E8C92005D7FCA /* Info.plist */,
 				75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */,
 			);
@@ -565,6 +568,7 @@
 				75A484891CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif in Resources */,
 				7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */,
 				75A484851CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif in Resources */,
+				755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */,
 				75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
 				75A484861CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif in Resources */,
