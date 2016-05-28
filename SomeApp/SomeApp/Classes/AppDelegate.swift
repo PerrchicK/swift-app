@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let rootViewController = SplashScreenViewController.instantiate()
         self.window?.rootViewController = rootViewController
+
+        FIRApp.configure()
 
         return true
     }
