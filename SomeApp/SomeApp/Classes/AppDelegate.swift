@@ -28,15 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSUserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
         }
 
-        if let lastCrashCallStack = NSUserDefaults.load(key: "last crash") as? [String] {
-            UIAlertController.makeAlert(title: "last crash", message: "\(lastCrashCallStack)")
-                .withAction(UIAlertAction(title: "fine", style: .Cancel, handler: nil))
-                .withAction(UIAlertAction(title: "delete", style: .Default, handler: { (alertAction) in
-                    NSUserDefaults.remove(key: "last crash").synchronize()
-                }))
-                .show()
-        }
-
+        FIRApp.configure()
+        
         return true
     }
 

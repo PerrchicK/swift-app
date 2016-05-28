@@ -268,7 +268,7 @@ extension UIAlertController {
      Dismisses the current alert (if presented) and pops up the new one
      */
     func show() {
-        let mostTopViewController = UIApplication.mostTopViewController()!
+        guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(self.title), message: \(self.message)]"); return }
         if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
             // 1. Dismiss the alert
             mostTopViewController.dismissViewControllerAnimated(true, completion: {

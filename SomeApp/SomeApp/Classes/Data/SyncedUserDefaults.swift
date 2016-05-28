@@ -99,12 +99,12 @@ class SyncedUserDefaults {
     }
 
     func putString(key key: String, value: String) -> SyncedUserDefaults {
-        syncedDbRef?.childByAppendingPath(key).setValue(value)
+        syncedDbRef?.child(key).setValue(value)
         return self
     }
 
     func removeString(key key: String) -> SyncedUserDefaults {
-        syncedDbRef?.childByAppendingPath(key).removeValue()
+        syncedDbRef?.child(key).removeValue()
         return self
     }
 }
