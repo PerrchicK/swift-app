@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import Alamofire
 
 class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
     static let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
+    var reachabilityManager: NetworkReachabilityManager?
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
@@ -17,6 +19,25 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         📘("Segue 👉 \(segue.identifier!)")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        reachabilityManager = NetworkReachabilityManager()
+        reachabilityManager?.listener = { [weak self] (status: NetworkReachabilityManager.NetworkReachabilityStatus) -> () in
+            📘("Network reachability status changed: \(status)")
+            switch status {
+            case .NotReachable:
+                self?.navigationController?.navigationBar.barTintColor = UIColor.redColor()
+            case .Reachable(NetworkReachabilityManager.ConnectionType.EthernetOrWiFi): fallthrough
+            case .Reachable(NetworkReachabilityManager.ConnectionType.WWAN):
+                self?.navigationController?.navigationBar.barTintColor = nil
+            default:
+                break
+            }
+        }
+        reachabilityManager?.startListening()
+    }
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
