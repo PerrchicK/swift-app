@@ -38,6 +38,19 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         reachabilityManager?.startListening()
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if let lastCrashCallStack = NSUserDefaults.load(key: "last crash") as? [String] {
+            UIAlertController.makeAlert(title: "last crash", message: "\(lastCrashCallStack)")
+                .withAction(UIAlertAction(title: "fine", style: .Cancel, handler: nil))
+                .withAction(UIAlertAction(title: "delete", style: .Default, handler: { (alertAction) in
+                    NSUserDefaults.remove(key: "last crash").synchronize()
+                }))
+                .show()
+        }
+    }
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         

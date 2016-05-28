@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootViewController = SplashScreenViewController.instantiate()
         self.window?.rootViewController = rootViewController
 
-        // Override point for customization after application launch.
         NSSetUncaughtExceptionHandler { (exception) in
             NSUserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
         }
