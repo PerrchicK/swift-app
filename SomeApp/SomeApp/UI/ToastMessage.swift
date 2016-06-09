@@ -33,7 +33,7 @@ class ToastMessage: NibView {
         toastMessage.layer.cornerRadius = 5
         toastMessage.layer.masksToBounds = true
         toastMessage.userInteractionEnabled = false
-        // Irrelevant due to the following constraints
+        // Irrelevant due to the following constraints...
 //        toastMessage.center = CGPoint(x: appWindow.center.x, y: appWindow.center.y * 1.5)
         toastMessage.translatesAutoresizingMaskIntoConstraints = false
         let bottomConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Bottom, relatedBy: .Equal, toItem: toastMessage.superview, attribute: .Bottom, multiplier: 1, constant: -30.0)
@@ -44,9 +44,7 @@ class ToastMessage: NibView {
         let heightConstraint = NSLayoutConstraint(item: toastMessage, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 0.3 * max(appWindow.frame.height, appWindow.frame.width))
         toastMessage.addConstraint(heightConstraint)
         toastMessage.animateFade(fadeIn: true, duration: 0.5)
-//        toastMessage.animateZoom(zoomIn: true, duration: 0.3) { (done) in
-            toastMessage.animateBounce()
-//        }
+        toastMessage.animateBounce()
 
         runBlockAfterDelay(afterDelay: toastMessage.delay) {
             toastMessage.animateScaleAndFadeOut { [weak toastMessage] (completed) in

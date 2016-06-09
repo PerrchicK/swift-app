@@ -293,7 +293,7 @@ extension UIAlertController {
         return self
     }
     
-    static func makeAlert(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) -> UIAlertController {
+    static func makeAlert(title title: String, message: String, dismissButtonTitle:String = "OK") -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         return alertController
     }
