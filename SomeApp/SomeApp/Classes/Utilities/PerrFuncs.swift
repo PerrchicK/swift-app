@@ -297,6 +297,7 @@ extension UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         return alertController
     }
+
     /**
      A service method that alerts with title and message in the top view controller
      

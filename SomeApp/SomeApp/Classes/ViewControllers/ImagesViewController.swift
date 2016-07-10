@@ -35,7 +35,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     var previewLayer: AVCaptureVideoPreviewLayer?
     var cameraLensImage: UIImage?
 
-    // Computed variable
+    // Computed variable example
     var isEditable: Bool {
         return isEditableControl.index == 0
     }

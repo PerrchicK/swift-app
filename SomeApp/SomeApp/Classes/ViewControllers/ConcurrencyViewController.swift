@@ -10,47 +10,66 @@ import UIKit
 
 class ConcurrencyViewController: UIViewController {
 
-    let synchronizer = Synchronizer {
-        // Runs in a background queue
-
-        runOnUiThread { // Without this, you will get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release."
-            ToastMessage.show(messageText: "released")
-        }
-    }
-
     let myQueue = dispatch_queue_create("myQueue", DISPATCH_QUEUE_CONCURRENT)
     let myGroup = dispatch_group_create()
     var isVisible = false
     
+    @IBOutlet weak var progressButton: UIButton!
     @IBOutlet weak var goButton: UIButton!
     @IBOutlet var ungroupedProgressBar: UIProgressView!
     @IBOutlet var progressBars: [UIProgressView]!
     @IBOutlet weak var action1Spinner: UIActivityIndicatorView!
     @IBOutlet weak var action2Spinner: UIActivityIndicatorView!
 
-    var progressBarsLeftArray = [Int]()
-    // Computed variable example (this computed var specifically must not run on the main thread due to sleep and synchronized block)
-    var randomProgressBarIndex: Int {
-        NSThread.sleepForTimeInterval(0.003)
-        var randomProgressBarIndex = random() % 4
-
-        if self.progressBarsLeftArray[randomProgressBarIndex] == -1 {
-            self.progressBarsLeftArray[randomProgressBarIndex] = 0
-            📘("randomed: \(randomProgressBarIndex)")
-            return randomProgressBarIndex
-        } else {
-            if self.progressBarsLeftArray.filter({ return $0 == -1 }).count == 1 {
-                for idx in 0...self.progressBarsLeftArray.count - 1 {
-                    if self.progressBarsLeftArray[idx] == -1 {
-                        randomProgressBarIndex = idx
-                        break
-                    }
-                }
-            } else {
-                randomProgressBarIndex = self.randomProgressBarIndex
+    let synchronizer = Synchronizer(operation1: {
+        // Do something
+        📘("operation 1 is done")
+        }, operation2: {
+            // Do something
+            📘("operation 2 is done")
+        }, finalOperation: {
+            // Runs in a background queue
+            
+            runOnUiThread { // Without this, you will get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release."
+                ToastMessage.show(messageText: "released")
             }
-            return randomProgressBarIndex
-        }
+    })
+    
+    var randomProgressBarIndexes: [Int]!
+
+    func findNextRandomNumber() -> Int {
+        repeat {
+            let randomProgressBarIndex = random() % 4
+            if self.randomProgressBarIndexes.contains(randomProgressBarIndex) {
+                NSThread.sleepForTimeInterval(0.003)
+            } else {
+                return randomProgressBarIndex
+            }
+        } while true
+    }
+
+    func fillRandomProgressBarIndexes(onDone: () -> Void) {
+        randomProgressBarIndexes = [-1,-1,-1,-1]
+
+        Synchronizer.syncOperations({
+            let rand = self.findNextRandomNumber()
+            self.randomProgressBarIndexes[0] = rand
+            📘("Random 0: \(rand)")
+        },{
+            let rand = self.findNextRandomNumber()
+            self.randomProgressBarIndexes[1] = rand
+            📘("Random 1: \(rand)")
+        },{
+            let rand = self.findNextRandomNumber()
+            self.randomProgressBarIndexes[2] = rand
+            📘("Random 2: \(rand)")
+        },{
+            let rand = self.findNextRandomNumber()
+            self.randomProgressBarIndexes[3] = rand
+            📘("Random 3: \(rand)")
+        }, withFinalOperation: {
+            onDone()
+        })
     }
 
     override func viewDidLoad() {
@@ -93,32 +112,33 @@ class ConcurrencyViewController: UIViewController {
     }
 
     @IBAction func btnGoPressed(sender: UIButton) {
+        guard randomProgressBarIndexes.contains(-1) == false else { return }
+
         sender.enabled = false
-        guard progressBarsLeftArray.contains(-1) else { return }
 
         dispatch_group_async(myGroup, myQueue) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 1
-            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.02)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[0], withInterval: 0.02)
         }
         dispatch_group_async(myGroup, myQueue) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 2
-            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.005)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[1], withInterval: 0.005)
         }
         dispatch_group_async(myGroup, myQueue) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 3
-            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.05)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[2], withInterval: 0.05)
         }
         dispatch_group_async(myGroup, myQueue) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 4
-            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndex, withInterval: 0.009)
+            strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[3], withInterval: 0.009)
         }
         dispatch_group_notify(myGroup, dispatch_get_main_queue()) { [weak self] in
             // Will be dispatched on the main queue after all group is finished
-            self?.goButton.enabled = true
+            self?.ungroupedProgressBar.animateBounce()
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
@@ -141,12 +161,9 @@ class ConcurrencyViewController: UIViewController {
                     
                     // This code won't run until group is finished / timeout occured
                     runOnUiThread() { [weak self] in
-                        guard let strongSelf = self else { return }
-
                         ToastMessage.show(messageText: "dispatch_group_wait: finished...") { [weak self] in
                             self?.resetProgressBars()
                         }
-                        strongSelf.ungroupedProgressBar.animateBounce()
                     }
                 }
 
@@ -158,10 +175,12 @@ class ConcurrencyViewController: UIViewController {
     }
 
     func resetProgressBars() {
-        progressBarsLeftArray.removeAll()
+        goButton.enabled = false
+        fillRandomProgressBarIndexes { [weak self] in
+            self?.goButton.enabled = true
+        }
 
         for progressBar in progressBars {
-            progressBarsLeftArray.append(-1)
             progressBar.setProgress(0.0, animated: false)
         }
         ungroupedProgressBar.setProgress(0.0, animated: false)

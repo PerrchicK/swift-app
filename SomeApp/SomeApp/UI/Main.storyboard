@@ -643,6 +643,7 @@
                         <outlet property="action1Spinner" destination="sdx-D0-AID" id="EAJ-07-SpI"/>
                         <outlet property="action2Spinner" destination="KQn-md-5ea" id="6Yv-FF-VdA"/>
                         <outlet property="goButton" destination="AlM-TT-4TL" id="tZD-A1-ddU"/>
+                        <outlet property="progressButton" destination="Q2y-OV-T1q" id="bmF-Ln-FaG"/>
                         <outlet property="ungroupedProgressBar" destination="3mm-np-lyk" id="suL-BV-y82"/>
                         <outletCollection property="progressBars" destination="Ewc-OT-EGv" collectionClass="NSMutableArray" id="5Gg-TZ-BJa"/>
                         <outletCollection property="progressBars" destination="w64-ye-J6J" collectionClass="NSMutableArray" id="DPK-78-A8N"/>
