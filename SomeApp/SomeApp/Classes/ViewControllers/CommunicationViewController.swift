@@ -54,8 +54,17 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
     
+    /**
+     Makes a request for Reverse Geocoding:
+     https://developers.google.com/maps/documentation/geocoding/start#reverse
+     
+     ... And prints the result out to a toast message.
+     
+     - parameter latitude: Double for latitude value
+     - parameter longitude: Double for longitude value
+     */
     func requestAddressWithNSURLSession(latitude lat: Double, longitude lng: Double) {
-        // Make request
+        
         let urlString = String(format: "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%@", lat, lng ,GoogleMapsUrlApiKey)
         let url = NSURL(string: urlString)
         let request = NSURLRequest(URL: url!)
