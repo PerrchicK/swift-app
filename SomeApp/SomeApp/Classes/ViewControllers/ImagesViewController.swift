@@ -102,7 +102,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(cameBackFromBackground), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(cameBackFromBackground(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
 
         // MARK: - Core Motion
         if manager.gyroAvailable {
@@ -185,7 +185,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         presentViewController(imagePickerController, animated: true, completion: nil)
     }
 
-    func cameBackFromBackground(not: NSNotification) {
+    func cameBackFromBackground(notification: NSNotification) {
         self.takeSnapshot()
     }
 
