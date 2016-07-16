@@ -5,6 +5,7 @@
 //  Referenced from: https://github.com/n-b/UIView-NibLoading/blob/c67ca6a96c9b0cb9aad81a5bd019c493951cc6f1/UIView+NibLoading.m
 
 import Foundation
+import UIKit
 
 public class NibView: UIView {
 

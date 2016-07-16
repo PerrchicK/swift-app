@@ -6,7 +6,7 @@
 //  Copyright © 2016 PerrchicK. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol LeftMenuViewControllerDelegate: class {
     func leftMenuViewController(leftMenuViewController: LeftMenuViewController, selectedOption: String)

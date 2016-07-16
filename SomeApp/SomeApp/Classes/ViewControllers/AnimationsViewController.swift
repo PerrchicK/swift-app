@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class AnimationsViewController: UIViewController, UIScrollViewDelegate, AnimatedGifBoxViewDelegate {
     

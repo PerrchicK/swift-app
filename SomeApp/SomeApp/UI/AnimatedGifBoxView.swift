@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol AnimatedGifBoxViewDelegate: class {
     func animatedGifBoxView(animatedGifBoxView: AnimatedGifBoxView, durationSliderChanged newValue:Float)

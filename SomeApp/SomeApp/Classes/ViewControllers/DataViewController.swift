@@ -6,7 +6,7 @@
 //  Copyright © 2016 PerrchicK. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class DataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SyncedUserDefaultsDelegate, UITextFieldDelegate {
     let UserDefaultsKey = "MyKeyToSaveObjectInNSUSerDefaults"

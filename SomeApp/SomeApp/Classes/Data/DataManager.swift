@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 class DataManager {
     private static var applicationDirectoryPath: String = {

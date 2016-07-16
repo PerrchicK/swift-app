@@ -6,6 +6,8 @@
 //  Copyright © 2016 PerrchicK. All rights reserved.
 //
 
+import UIKit
+
 class SharingImageSource: NSObject, UIActivityItemSource {
     private var image: UIImage
 

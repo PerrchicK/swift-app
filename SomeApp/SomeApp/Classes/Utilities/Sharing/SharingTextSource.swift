@@ -6,6 +6,8 @@
 //  Copyright © 2016 PerrchicK. All rights reserved.
 //
 
+import UIKit
+
 class SharingTextSource: NSObject, UIActivityItemSource {
 
     // Don’t rely on that so easily, this might change at any version WhatsApp are distributing
