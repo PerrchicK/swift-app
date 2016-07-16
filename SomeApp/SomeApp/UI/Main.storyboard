@@ -181,7 +181,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLh-y2-ula" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVd-sU-JZL" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HVd-sU-JZL" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="341" width="280" height="280"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -194,7 +194,7 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hulk-and-thor-frame-0.gif" translatesAutoresizingMaskIntoConstraints="NO" id="OmT-qr-uC0">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="hulk-and-thor-frame-0.gif" translatesAutoresizingMaskIntoConstraints="NO" id="OmT-qr-uC0">
                                                 <rect key="frame" x="40" y="191" width="240" height="135"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="OmT-qr-uC0" secondAttribute="height" multiplier="50:28" id="IOO-Za-oRu"/>
@@ -606,6 +606,9 @@
                                     <action selector="btnStartProgressPressed:" destination="Oj0-pd-GcM" eventType="touchUpInside" id="Sf4-Bz-e2J"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="4OV-Ye-X71">
+                                <rect key="frame" x="150" y="523" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -619,6 +622,7 @@
                             <constraint firstItem="Fah-nx-inj" firstAttribute="centerX" secondItem="w64-ye-J6J" secondAttribute="centerX" id="Ogx-4T-7QE"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="top" secondItem="w64-ye-J6J" secondAttribute="bottom" constant="25" id="Txk-xE-q1x"/>
                             <constraint firstItem="sdx-D0-AID" firstAttribute="trailing" secondItem="3mm-np-lyk" secondAttribute="trailing" id="Wew-Y9-EOC"/>
+                            <constraint firstItem="4OV-Ye-X71" firstAttribute="centerX" secondItem="Q2y-OV-T1q" secondAttribute="centerX" id="aBN-pW-34P"/>
                             <constraint firstAttribute="trailingMargin" secondItem="AlM-TT-4TL" secondAttribute="trailing" constant="20" id="aRO-tU-jwZ"/>
                             <constraint firstItem="Q2y-OV-T1q" firstAttribute="centerX" secondItem="3mm-np-lyk" secondAttribute="centerX" id="al8-ms-2hj"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="centerX" secondItem="Ewc-OT-EGv" secondAttribute="centerX" id="cVp-mW-mah"/>
@@ -630,6 +634,7 @@
                             <constraint firstItem="KQn-md-5ea" firstAttribute="leading" secondItem="3mm-np-lyk" secondAttribute="leading" id="nPF-qC-JJK"/>
                             <constraint firstItem="ATp-LM-0IH" firstAttribute="top" secondItem="Q2y-OV-T1q" secondAttribute="bottom" constant="20" id="nvh-fa-0uY"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="width" secondItem="Fah-nx-inj" secondAttribute="width" id="qFr-k6-C0R"/>
+                            <constraint firstItem="4OV-Ye-X71" firstAttribute="centerY" secondItem="sdx-D0-AID" secondAttribute="centerY" id="tWy-AZ-gOl"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="height" secondItem="Ewc-OT-EGv" secondAttribute="height" id="tqr-Ig-vpW"/>
                             <constraint firstItem="Fah-nx-inj" firstAttribute="width" secondItem="w64-ye-J6J" secondAttribute="width" id="vTW-XU-y7F"/>
                             <constraint firstItem="sdx-D0-AID" firstAttribute="centerY" secondItem="Q2y-OV-T1q" secondAttribute="centerY" id="xN7-Vf-jNZ"/>
@@ -642,6 +647,7 @@
                     <connections>
                         <outlet property="action1Spinner" destination="sdx-D0-AID" id="EAJ-07-SpI"/>
                         <outlet property="action2Spinner" destination="KQn-md-5ea" id="6Yv-FF-VdA"/>
+                        <outlet property="action3Spinner" destination="4OV-Ye-X71" id="9t1-fH-ZRD"/>
                         <outlet property="goButton" destination="AlM-TT-4TL" id="tZD-A1-ddU"/>
                         <outlet property="progressButton" destination="Q2y-OV-T1q" id="bmF-Ln-FaG"/>
                         <outlet property="ungroupedProgressBar" destination="3mm-np-lyk" id="suL-BV-y82"/>
@@ -696,7 +702,7 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Fg-15-N56" id="Bj3-9X-Nxm">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu option title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-Ab-ka6">

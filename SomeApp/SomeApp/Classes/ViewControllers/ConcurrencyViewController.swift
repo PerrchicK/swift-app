@@ -20,20 +20,13 @@ class ConcurrencyViewController: UIViewController {
     @IBOutlet var progressBars: [UIProgressView]!
     @IBOutlet weak var action1Spinner: UIActivityIndicatorView!
     @IBOutlet weak var action2Spinner: UIActivityIndicatorView!
+    @IBOutlet weak var action3Spinner: UIActivityIndicatorView!
 
-    let synchronizer = Synchronizer(operation1: {
-        // Do something
-        📘("operation 1 is done")
-        }, operation2: {
-            // Do something
-            📘("operation 2 is done")
-        }, finalOperation: {
-            // Runs in a background queue
-            
-            runOnUiThread { // Without this, you will get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release."
-                ToastMessage.show(messageText: "released")
-            }
-    })
+    let synchronizer = Synchronizer {
+        runOnUiThread { // Without this, if the block will run on a background thread, you may get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release."
+            ToastMessage.show(messageText: "released")
+        }
+    }
     
     var randomProgressBarIndexes: [Int]!
 
@@ -77,16 +70,25 @@ class ConcurrencyViewController: UIViewController {
 
         action1Spinner.stopAnimating()
         action2Spinner.stopAnimating()
+        action3Spinner.stopAnimating()
 
+        let holder1 = synchronizer.createHolder()
         action1Spinner.onClick {_ in 
-            self.synchronizer.do1()
+            holder1.release()
             📘("action 1 dispatched")
             self.action1Spinner.stopAnimating()
         }
+        let holder2 = synchronizer.createHolder()
         action2Spinner.onClick {_ in
-            self.synchronizer.do2()
+            holder2.release()
             📘("action 2 dispatched")
             self.action2Spinner.stopAnimating()
+        }
+        let holder3 = synchronizer.createHolder()
+        action3Spinner.onClick {_ in
+            holder3.release()
+            📘("action 2 dispatched")
+            self.action3Spinner.stopAnimating()
         }
 
         openCountingThread()
@@ -109,6 +111,7 @@ class ConcurrencyViewController: UIViewController {
         sender.animateFade(fadeIn: false)
         action1Spinner.startAnimating()
         action2Spinner.startAnimating()
+        action3Spinner.startAnimating()
     }
 
     @IBAction func btnGoPressed(sender: UIButton) {

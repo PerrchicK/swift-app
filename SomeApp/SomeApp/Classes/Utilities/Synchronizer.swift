@@ -9,10 +9,37 @@
 import Foundation
 
 class Synchronizer {
-    let raceConditionQueue = NSOperationQueue()
-    let blockOperation1: NSBlockOperation
-    let blockOperation2: NSBlockOperation
+    internal class HolderTicket {
+        let blockOperation: NSBlockOperation
+        let raceConditionQueue: NSOperationQueue
 
+        init(raceConditionQueue: NSOperationQueue, block: (() -> Void)? = nil) {
+            self.raceConditionQueue = raceConditionQueue
+            if let block = block {
+                blockOperation = NSBlockOperation(block: block)
+            } else {
+                blockOperation = NSBlockOperation(block: {
+                    // Do nothing...
+                    📘("operation is done")
+                })
+            }
+        }
+
+        func release() -> Bool {
+            if !blockOperation.finished {
+                // Dispatch...
+                raceConditionQueue.addOperation(blockOperation)
+                return true
+            }
+
+            return false
+        }
+    }
+
+    let raceConditionQueue = NSOperationQueue()
+
+    let completionOperation: NSBlockOperation
+    private var shouldAddCompletionOperation = true
     /**
      Initializes an atomic synchronization between two operations
      
@@ -20,35 +47,29 @@ class Synchronizer {
      - parameter operation2: An operation to do, regardless the time to end
      - parameter finalOperation: The completion operation to do, only after the first two are finished. It shall be invoked on the main thread.
      */
-    init(operation1: () -> Void, operation2: () -> Void, finalOperation: () -> Void) {
+    init(finalOperation: () -> Void) {
         let completionOperation = NSBlockOperation {
             dispatch_async(dispatch_get_main_queue(), { 
                 finalOperation()
             })
         }
 
-        blockOperation1 = NSBlockOperation(block: operation1)
-        blockOperation2 = NSBlockOperation(block: operation2)
-
-        completionOperation.addDependency(blockOperation1)
-        completionOperation.addDependency(blockOperation2)
-        raceConditionQueue.addOperation(completionOperation)
+        self.completionOperation = completionOperation
     }
     
-    func do1() {
-        if !blockOperation1.finished {
-            // Distapch...
-            raceConditionQueue.addOperation(blockOperation1)
+    func createHolder(onReleaseBlock onReleaseBlock: (() -> Void)? = nil) -> HolderTicket {
+        let blocker = HolderTicket(raceConditionQueue: self.raceConditionQueue, block: onReleaseBlock)
+        self.completionOperation.addDependency(blocker.blockOperation)
+
+        // Will occur only once
+        if shouldAddCompletionOperation {
+            shouldAddCompletionOperation = false
+            self.raceConditionQueue.addOperation(completionOperation)
         }
+
+        return blocker
     }
     
-    func do2() {
-        if !blockOperation2.finished {
-            // Distapch...
-            raceConditionQueue.addOperation(blockOperation2)
-        }
-    }
-
     static func syncOperations(operations: (() -> Void)..., withFinalOperation finalOperation: () -> Void) {
         guard operations.count > 0 else { finalOperation(); return }
 
