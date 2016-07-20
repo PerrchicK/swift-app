@@ -556,6 +556,8 @@ extension UIView {
     func onClick(onClickClosure: OnClickClosureWrapper.TapRecognizedClosure) {
         self.userInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
+        // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        tapGestureRecognizer.cancelsTouchesInView = false
         addGestureRecognizer(tapGestureRecognizer)
         let attachedClosureWrapper = OnClickClosureWrapper(closure: onClickClosure)
         tapGestureRecognizer.delegate = attachedClosureWrapper
@@ -591,7 +593,7 @@ extension UIView {
     func firstResponder() -> UIView? {
         var firstResponder: UIView? = self
         
-        if self.isFirstResponder() {
+        if isFirstResponder() {
             return firstResponder
         }
         
