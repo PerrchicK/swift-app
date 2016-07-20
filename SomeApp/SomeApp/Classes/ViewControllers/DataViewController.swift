@@ -41,7 +41,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         userDefaultsTextField.text = NSUserDefaults.standardUserDefaults().objectForKey(UserDefaultsKey) as? String
         self.view.onClick {_ in 
-            self.view.firstResponder()?.resignFirstResponder()
+            self.view.endEditing(true)
         }
 
         dbStateTableView.layer.cornerRadius = 5
@@ -65,7 +65,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
 
-        self.view.firstResponder()?.resignFirstResponder()
+        self.view.endEditing(true)
     }
 
     @IBAction func showFirebaseButtonPressed(sender: AnyObject) {
@@ -159,7 +159,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         lastNameTextField.text = ""
         nicknameTextField.text = ""
         emailTextField.text = ""
-        view.firstResponder()?.resignFirstResponder()
+        view.endEditing(true)
 
         refreshUsersArray()
         dbStateTableView.reloadData()
@@ -205,9 +205,6 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         
-        cell.onClick { [weak self] (tapGestureRecognizer) in
-            self?.tableView(tableView, didTapOnRowAtIndex: index)
-        }
         cell.onLongPress({ [weak self] (longPressGestureRecognizer) in
             self?.tableView(tableView, didLongTapOnRowAtIndex: index)
         })
@@ -231,8 +228,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // MARK: - UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // Perry: Somehow, this shitty tableview won't response to user interactions on its cells.
-        // So this time I've made this method: (-tableView:didSelectRowAtIndex:)
+        self.tableView(tableView, didTapOnRowAtIndex: indexPath.row)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
