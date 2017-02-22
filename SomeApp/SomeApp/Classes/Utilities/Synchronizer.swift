@@ -10,15 +10,15 @@ import Foundation
 
 class Synchronizer {
     internal class HolderTicket {
-        let blockOperation: NSBlockOperation
-        let raceConditionQueue: NSOperationQueue
+        let blockOperation: BlockOperation
+        let raceConditionQueue: OperationQueue
 
-        init(raceConditionQueue: NSOperationQueue, block: (() -> Void)? = nil) {
+        init(raceConditionQueue: OperationQueue, block: (() -> Void)? = nil) {
             self.raceConditionQueue = raceConditionQueue
             if let block = block {
-                blockOperation = NSBlockOperation(block: block)
+                blockOperation = BlockOperation(block: block)
             } else {
-                blockOperation = NSBlockOperation(block: {
+                blockOperation = BlockOperation(block: {
                     // Do nothing...
                     📘("operation is done")
                 })
@@ -26,7 +26,7 @@ class Synchronizer {
         }
 
         func release() -> Bool {
-            if !blockOperation.finished {
+            if !blockOperation.isFinished {
                 // Dispatch...
                 raceConditionQueue.addOperation(blockOperation)
                 return true
@@ -36,10 +36,10 @@ class Synchronizer {
         }
     }
 
-    let raceConditionQueue = NSOperationQueue()
+    let raceConditionQueue = OperationQueue()
 
-    let completionOperation: NSBlockOperation
-    private var shouldAddCompletionOperation = true
+    let completionOperation: BlockOperation
+    fileprivate var shouldAddCompletionOperation = true
     /**
      Initializes an atomic synchronization between two operations
      
@@ -47,9 +47,9 @@ class Synchronizer {
      - parameter operation2: An operation to do, regardless the time to end
      - parameter finalOperation: The completion operation to do, only after the first two are finished. It shall be invoked on the main thread.
      */
-    init(finalOperation: () -> Void) {
-        let completionOperation = NSBlockOperation {
-            dispatch_async(dispatch_get_main_queue(), { 
+    init(finalOperation: @escaping () -> Void) {
+        let completionOperation = BlockOperation {
+            DispatchQueue.main.async(execute: { 
                 finalOperation()
             })
         }
@@ -57,7 +57,7 @@ class Synchronizer {
         self.completionOperation = completionOperation
     }
     
-    func createHolder(onReleaseBlock onReleaseBlock: (() -> Void)? = nil) -> HolderTicket {
+    func createHolder(onReleaseBlock: (() -> Void)? = nil) -> HolderTicket {
         let blocker = HolderTicket(raceConditionQueue: self.raceConditionQueue, block: onReleaseBlock)
         self.completionOperation.addDependency(blocker.blockOperation)
 
@@ -70,7 +70,7 @@ class Synchronizer {
         return blocker
     }
     
-    static func syncOperations(operations: (() -> Void)..., withFinalOperation finalOperation: () -> Void) {
+    static func syncOperations(_ operations: (() -> Void)..., withFinalOperation finalOperation: @escaping () -> Void) {
         guard operations.count > 0 else { finalOperation(); return }
 
         guard operations.count > 1 else {
@@ -79,16 +79,16 @@ class Synchronizer {
             return
         }
 
-        let raceConditionQueue = NSOperationQueue()
-        let completionOperation = NSBlockOperation {
-            dispatch_async(dispatch_get_main_queue(), {
+        let raceConditionQueue = OperationQueue()
+        let completionOperation = BlockOperation {
+            DispatchQueue.main.async(execute: {
                 finalOperation()
             })
         }
 
-        var blockOperations = [NSBlockOperation]()
+        var blockOperations = [BlockOperation]()
         for operation in operations {
-            let blockOperation = NSBlockOperation(block: operation)
+            let blockOperation = BlockOperation(block: operation)
             blockOperations.append(blockOperation)
            
             completionOperation.addDependency(blockOperation)

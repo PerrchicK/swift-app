@@ -13,33 +13,33 @@ import ObjectiveC
 
 public typealias CompletionClosure = ((AnyObject?) -> Void)
 
-func WIDTH(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
-func HEIGHT(frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
+func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
+func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-public func 📘(logMessage: String, file:String = #file, function:String = #function, line:Int = #line) {
-    let formattter = NSDateFormatter()
+public func 📘(_ logMessage: String, file:String = #file, function:String = #function, line:Int = #line) {
+    let formattter = DateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
-    let timesamp = formattter.stringFromDate(NSDate())
+    let timesamp = formattter.string(from: Date())
 
-    print("〈\(timesamp)〉\(file.componentsSeparatedByString("/").last!) ➤ \(function.componentsSeparatedByString("(").first!) (\(line)): \(logMessage)")
+    print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(logMessage)")
 }
 
 // MARK: - Global Methods
 
 // dispatch block on main queue
-public func runOnUiThread(afterDelay seconds: Double = 0.0, block: dispatch_block_t) {
+public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()->()) {
     runBlockAfterDelay(afterDelay: seconds, block: block)
 }
 
 // runClosureAfterDelay
-public func runBlockAfterDelay(afterDelay seconds: Double = 0.0, onQueue: dispatch_queue_t = dispatch_get_main_queue(), block: dispatch_block_t) {
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC))) // 2 seconds delay before retry
-        dispatch_after(delayTime, onQueue, block)
+public func runBlockAfterDelay(afterDelay seconds: Double = 0.0, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
+        let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
+        onQueue.asyncAfter(deadline: delayTime, execute: block)
 }
 
-public func className(aClass: AnyClass) -> String {
+public func className(_ aClass: AnyClass) -> String {
     let className = NSStringFromClass(aClass)
-    let components = className.componentsSeparatedByString(".")
+    let components = className.components(separatedBy: ".")
     
     if components.count > 0 {
         return components.last!
@@ -50,19 +50,19 @@ public func className(aClass: AnyClass) -> String {
 
 // MARK: - Class
 
-public class PerrFuncs: NSObject {
+open class PerrFuncs: NSObject {
     // Computed static variables will act as lazy variables
     static var sharedInstance: PerrFuncs = {
         return PerrFuncs()
     }()
 
-    private override init() {
+    fileprivate override init() {
         super.init()
     }
     
     lazy var imageContainer: UIView = {
-        let container = UIView(frame: UIScreen.mainScreen().bounds)
-        container.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
+        let container = UIView(frame: UIScreen.main.bounds)
+        container.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         // To be a target, it must be an NSObject instance
         container.onClick() {_ in 
             self.removeImage()
@@ -78,23 +78,23 @@ public class PerrFuncs: NSObject {
         }
     }
 
-    class func shareImage(sharedImage: UIImage, completionClosure: UIActivityViewControllerCompletionWithItemsHandler) {
+    class func shareImage(_ sharedImage: UIImage, completionClosure: @escaping UIActivityViewControllerCompletionWithItemsHandler) {
         let activityViewController = UIActivityViewController(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
         activityViewController.completionWithItemsHandler = completionClosure
-        activityViewController.excludedActivityTypes = [UIActivityTypeAirDrop]
+        activityViewController.excludedActivityTypes = [UIActivityType.airDrop]
         
-        UIApplication.mostTopViewController()?.presentViewController(activityViewController, animated: true, completion: nil)
+        UIApplication.mostTopViewController()?.present(activityViewController, animated: true, completion: nil)
     }
 
-    class func fetchAndPresentImage(imageUrl: String?) {
-        guard let imageUrl = imageUrl where imageUrl.length() > 0,
-            let app = UIApplication.sharedApplication().delegate as? AppDelegate,
+    class func fetchAndPresentImage(_ imageUrl: String?) {
+        guard let imageUrl = imageUrl, imageUrl.length() > 0,
+            let app = UIApplication.shared.delegate as? AppDelegate,
             let window = app.window
             else { return }
         
         📘("fetching \(imageUrl)")
 
-        let loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        let loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         loadingSpinner.startAnimating()
         sharedInstance.imageContainer.addSubview(loadingSpinner)
         loadingSpinner.pinToSuperViewCenter()
@@ -104,10 +104,10 @@ public class PerrFuncs: NSObject {
         sharedInstance.imageContainer.stretchToSuperViewEdges()
 
         let screenWidth = WIDTH(window.frame) //Or: UIScreen.mainScreen().bounds.width
-        UIImageView(frame: CGRectMake(0.0, 0.0, screenWidth, screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in
-            if let imageView = imageView as? UIImageView where imageView.image != nil {
+        UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: screenWidth, height: screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in
+            if let imageView = imageView as? UIImageView, imageView.image != nil {
                 sharedInstance.imageContainer.addSubview(imageView)
-                imageView.userInteractionEnabled = false
+                imageView.isUserInteractionEnabled = false
                 imageView.pinToSuperViewCenter()
             } else {
                 sharedInstance.removeImage()
@@ -175,24 +175,27 @@ extension String {
 
 extension UIImage {
     static func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
-        guard let url = NSURL(string: urlString) else { completionClosure?(nil); return }
+        guard let url = URL(string: urlString) else { completionClosure?(nil); return }
         
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        let backgroundQueue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
         // Run on background thread:
-        dispatch_async(backgroundQueue) {
+        backgroundQueue.async {
             var image: UIImage? = nil
             
             // No matter what, make the callback call on the main thread:
             defer {
                 // Run on UI thread:
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     completionClosure?(image)
                 }
             }
 
             // The most (and inefficient) simple way to download a photo from the web (no timeout, error handling etc.)
-            if let data = NSData(contentsOfURL: url) {
+            do {
+                let data = try Data(contentsOf: url)
                 image = UIImage(data: data)
+            } catch let error {
+                print("Failed to fetch image from url: \(url)\nwith error: \(error)")
             }
         }
     }
@@ -204,7 +207,7 @@ extension UIImageView {
 
         UIImage.fetchImage(withUrl: urlString) { (image) in
             defer {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     completionClosure?(self)
                 }
             }
@@ -212,7 +215,7 @@ extension UIImageView {
             guard let image = image as? UIImage else { return }
 
             self.image = image
-            self.contentMode = .ScaleAspectFit
+            self.contentMode = .scaleAspectFit
         }
     }
 }
@@ -229,7 +232,7 @@ extension NSObject { // try extending 'AnyObject'...
      Attaches any object to this NSObject.
      This enables the same idea of user info, to every object that inherits from NSObject.
      */
-    func 😘(belovedObject belovedObject: AnyObject) throws -> Bool {
+    func 😘(belovedObject: AnyObject) throws -> Bool {
         //infix operator 😘 { associativity left precedence 140 }
         📘("loving \(belovedObject)")
         
@@ -243,7 +246,7 @@ extension NSObject { // try extending 'AnyObject'...
             return nil
         }
         
-        return value
+        return value as AnyObject?
     }
 }
 
@@ -257,7 +260,7 @@ extension UIViewController {
 
 extension UIApplication {
     static func mostTopViewController() -> UIViewController? {
-        guard let topController = UIApplication.sharedApplication().keyWindow?.rootViewController else { return nil }
+        guard let topController = UIApplication.shared.keyWindow?.rootViewController else { return nil }
         return topController.mostTopViewController()
     }
 }
@@ -271,30 +274,30 @@ extension UIAlertController {
         guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(self.title), message: \(self.message)]"); return }
         if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
             // 1. Dismiss the alert
-            mostTopViewController.dismissViewControllerAnimated(true, completion: {
+            mostTopViewController.dismiss(animated: true, completion: {
                 // 2. Then present fullscreen
-                UIApplication.mostTopViewController()?.presentViewController(self, animated: true, completion: nil)
+                UIApplication.mostTopViewController()?.present(self, animated: true, completion: nil)
             })
         } else {
-            mostTopViewController.presentViewController(self, animated: true, completion: nil)
+            mostTopViewController.present(self, animated: true, completion: nil)
         }
     }
 
-    func withAction(action: UIAlertAction) -> UIAlertController {
+    func withAction(_ action: UIAlertAction) -> UIAlertController {
         self.addAction(action)
         return self
     }
 
-    func withInputText(inout textFieldToAdd: UITextField, configurationBlock: ((inout textField: UITextField) -> Void)) -> UIAlertController {
-        self.addTextFieldWithConfigurationHandler(/*configurationHandler: */ { (textField: UITextField!) -> Void in
-            textFieldToAdd = textField
-            configurationBlock(textField: &textFieldToAdd)
+    func withInputText(_ textFieldToAdd: inout UITextField, configurationBlock: @escaping ((_ textField: inout UITextField) -> Void)) -> UIAlertController {
+        self.addTextField(/*configurationHandler: */ configurationHandler: { (textField: UITextField!) -> Void in
+//            textFieldToAdd = textField
+//            configurationBlock(&textFieldToAdd)
         })
         return self
     }
     
-    static func makeAlert(title title: String, message: String, dismissButtonTitle:String = "OK") -> UIAlertController {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+    static func makeAlert(title: String, message: String, dismissButtonTitle:String = "OK") -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         return alertController
     }
 
@@ -304,8 +307,8 @@ extension UIAlertController {
      - parameter title: The title of the UIAlertView
      - parameter message: The message inside the UIAlertView
      */
-    static func alert(title title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) {
-        UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.Cancel, handler: { (alertAction) -> Void in
+    static func alert(title: String, message: String, dismissButtonTitle:String = "OK", onGone: (() -> Void)? = nil) {
+        UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.cancel, handler: { (alertAction) -> Void in
             onGone?()
         })).show()
     }
@@ -313,21 +316,21 @@ extension UIAlertController {
 
 extension UIViewController {
     
-    class func instantiate(storyboardName storyboardName: String? = nil) -> Self {
+    class func instantiate(storyboardName: String? = nil) -> Self {
         return instantiateFromStoryboardHelper(storyboardName)
     }
     
-    private class func instantiateFromStoryboardHelper<T: UIViewController>(storyboardName: String?) -> T {
+    fileprivate class func instantiateFromStoryboardHelper<T: UIViewController>(_ storyboardName: String?) -> T {
         let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
-        let identifier = NSStringFromClass(T).componentsSeparatedByString(".").last!
-        let controller = storyboard.instantiateViewControllerWithIdentifier(identifier) as! T
+        let identifier = NSStringFromClass(T).components(separatedBy: ".").last!
+        let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! T
         return controller
     }
 }
 
-let DEFAULT_ANIMATION_DURATION = NSTimeInterval(1)
+let DEFAULT_ANIMATION_DURATION = TimeInterval(1)
 let ANIMATION_NO_KEY = "noAnimation"
-extension UIView {
+extension UIView: CAAnimationDelegate {
     /**
      Hides the view if it's shown.
      Shows the view if it's hidden.
@@ -337,45 +340,47 @@ extension UIView {
     }
 
     // MARK: - Animations
-    func animateScaleAndFadeOut(completion: ((Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(0.5, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+    func animateScaleAndFadeOut(_ completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions(), animations: {
             // Core Graphics Affine Transformation: https://en.wikipedia.org/wiki/Affine_transformation
-            self.transform = CGAffineTransformMakeScale(1.2, 1.2)
+            self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
             self.alpha = 0.0
         }, completion: { (completed) -> Void in
             completion?(completed)
         })
     }
 
-    public func animateBounce(completion: ((Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(0.1, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: { [weak self] () -> () in
-            self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
+    public func animateBounce(_ completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: 0.1, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: { [weak self] () -> () in
+            self?.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }) { (succeeded) -> Void in
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.CurveEaseOut   , animations: { [weak self] () -> Void in
-                self?.transform = CGAffineTransformMakeScale(1.0, 1.0)
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: UIViewAnimationOptions.curveEaseOut   , animations: { [weak self] () -> Void in
+                self?.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             }) { (succeeded) -> Void in
                 completion?(succeeded)
             }
         }
     }
 
-    public func animateNo(completion: CompletionClosure? = nil) {
+    public func animateNo(_ completion: CompletionClosure? = nil) {
         let noAnimation = CAKeyframeAnimation()
         noAnimation.keyPath = "position.x"
+        
         noAnimation.values = [0, 10, -10, 10, 0]
-        noAnimation.keyTimes = [0, 1 / 6.0, 3 / 6.0, 5 / 6.0, 1]
+        let keyTimes: [NSNumber] = [0, NSNumber(value: Float(1.0 / 6.0)), NSNumber(value: Float(3.0 / 6.0)), NSNumber(value: Float(5.0 / 6.0)), 1]
+        noAnimation.keyTimes = keyTimes
         noAnimation.duration = 0.4
         
-        noAnimation.additive = true
+        noAnimation.isAdditive = true
         noAnimation.delegate = self
-        noAnimation.removedOnCompletion = false
+        noAnimation.isRemovedOnCompletion = false
 
         if completion != nil {
             let attachedClosureWrapper = CompletionClosureWrapper(closure: completion!)
             objc_setAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
         }
 
-        self.layer.addAnimation(noAnimation, forKey: ANIMATION_NO_KEY) // shake animation
+        self.layer.add(noAnimation, forKey: ANIMATION_NO_KEY) // shake animation
 
         // another implementation without using CAKeyframeAnimation:
         /*
@@ -397,63 +402,63 @@ extension UIView {
          */
     }
 
-    public override func animationDidStop(animation: CAAnimation, finished flag: Bool) {
-        if self.layer.animationForKey(ANIMATION_NO_KEY) == animation {
+    public func animationDidStop(_ animation: CAAnimation, finished flag: Bool) {
+        if self.layer.animation(forKey: ANIMATION_NO_KEY) == animation {
             guard let attachedClosureWrapper = objc_getAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty) as? CompletionClosureWrapper else { return }
-            attachedClosureWrapper.closure(flag)
-            self.layer.removeAnimationForKey(ANIMATION_NO_KEY)
+            attachedClosureWrapper.closure(flag as AnyObject?)
+            self.layer.removeAnimation(forKey: ANIMATION_NO_KEY)
         }
     }
 
-    public func animateMoveCenterTo(x x: CGFloat, y: CGFloat, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(duration, animations: {
+    public func animateMoveCenterTo(x: CGFloat, y: CGFloat, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: duration, animations: {
             self.center.x = x
             self.center.y = y
         }, completion: completion)
     }
     
-    public func animateZoom(zoomIn zoomIn: Bool, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
+    public func animateZoom(zoomIn: Bool, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         if zoomIn {
-            self.transform = CGAffineTransformMakeScale(0.0, 0.0)
+            self.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }
-        UIView.animateWithDuration(duration, animations: { () -> Void in
+        UIView.animate(withDuration: duration, animations: { () -> Void in
             if zoomIn {
-                self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             } else {
-                self.frame.size = CGSizeMake(0.0, 0.0)
+                self.frame.size = CGSize(width: 0.0, height: 0.0)
             }
-            }) { (finished) in
+            }, completion: { (finished) in
                 self.show(show: zoomIn)
                 completion?(finished)
-        }
+        }) 
     }
     
-    public func animateFade(fadeIn fadeIn: Bool, duration: NSTimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
+    public func animateFade(fadeIn: Bool, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         // Skip redundant calls
-        guard (fadeIn == false && (alpha > 0 || hidden == false)) || (fadeIn == true && (alpha == 0 || hidden == true)) else { return }
+        guard (fadeIn == false && (alpha > 0 || isHidden == false)) || (fadeIn == true && (alpha == 0 || isHidden == true)) else { return }
 
         self.alpha = fadeIn ? 0.0 : 1.0
         self.show(show: true)
-        UIView.animateWithDuration(duration, animations: {// () -> Void in
+        UIView.animate(withDuration: duration, animations: {// () -> Void in
             self.alpha = fadeIn ? 1.0 : 0.0
-            }) { (finished) in
+            }, completion: { (finished) in
                 self.show(show: fadeIn)
                 completion?(finished)
-        }
+        }) 
     }
     
     // MARK: - Property setters-like methods
 
     // Computed variable
     var shown: Bool {
-        return !self.hidden
+        return !self.isHidden
     }
 
-    public func show(show show: Bool, faded: Bool = false) {
+    public func show(show: Bool, faded: Bool = false) {
         if faded {
             animateFade(fadeIn: show)
         } else {
-            self.hidden = !show
+            self.isHidden = !show
         }
     }
     
@@ -473,14 +478,14 @@ extension UIView {
     
     // MARK: - Constraints methods
     
-    func stretchToSuperViewEdges(insets: UIEdgeInsets = UIEdgeInsetsZero) {
+    func stretchToSuperViewEdges(_ insets: UIEdgeInsets = UIEdgeInsets.zero) {
         // Validate
         guard let superview = superview else { fatalError("superview not set") }
         
-        let leftConstraint = constraintWithItem(superview, attribute: .Left, multiplier: 1, constant: insets.left)
-        let topConstraint = constraintWithItem(superview, attribute: .Top, multiplier: 1, constant: insets.top)
-        let rightConstraint = constraintWithItem(superview, attribute: .Right, multiplier: 1, constant: insets.right)
-        let bottomConstraint = constraintWithItem(superview, attribute: .Bottom, multiplier: 1, constant: insets.bottom)
+        let leftConstraint = constraintWithItem(superview, attribute: .left, multiplier: 1, constant: insets.left)
+        let topConstraint = constraintWithItem(superview, attribute: .top, multiplier: 1, constant: insets.top)
+        let rightConstraint = constraintWithItem(superview, attribute: .right, multiplier: 1, constant: insets.right)
+        let bottomConstraint = constraintWithItem(superview, attribute: .bottom, multiplier: 1, constant: insets.bottom)
         
         let edgeConstraints = [leftConstraint, rightConstraint, topConstraint, bottomConstraint]
         
@@ -489,13 +494,13 @@ extension UIView {
         superview.addConstraints(edgeConstraints)
     }
     
-    func pinToSuperViewCenter(offset: CGPoint = CGPointZero) {
+    func pinToSuperViewCenter(_ offset: CGPoint = CGPoint.zero) {
         // Validate
         assert(self.superview != nil, "superview not set")
         let superview = self.superview!
         
-        let centerX = constraintWithItem(superview, attribute: .CenterX, multiplier: 1, constant: offset.x)
-        let centerY = constraintWithItem(superview, attribute: .CenterY, multiplier: 1, constant: offset.y)
+        let centerX = constraintWithItem(superview, attribute: .centerX, multiplier: 1, constant: offset.x)
+        let centerY = constraintWithItem(superview, attribute: .centerY, multiplier: 1, constant: offset.y)
         
         let centerConstraints = [centerX, centerY]
         
@@ -503,8 +508,8 @@ extension UIView {
         superview.addConstraints(centerConstraints)
     }
     
-    func constraintWithItem(view: UIView, attribute: NSLayoutAttribute, multiplier: CGFloat, constant: CGFloat) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: view, attribute: attribute, multiplier: multiplier, constant: constant)
+    func constraintWithItem(_ view: UIView, attribute: NSLayoutAttribute, multiplier: CGFloat, constant: CGFloat) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: view, attribute: attribute, multiplier: multiplier, constant: constant)
     }
 
     /**
@@ -512,16 +517,16 @@ extension UIView {
      */
     func addTransparentGradientLayer() -> CALayer {
         let gradientLayer = CAGradientLayer()
-        let normalColor = UIColor.whiteColor().colorWithAlphaComponent(1.0).CGColor
-        let fadedColor = UIColor.whiteColor().colorWithAlphaComponent(0.0).CGColor
+        let normalColor = UIColor.white.withAlphaComponent(1.0).cgColor
+        let fadedColor = UIColor.white.withAlphaComponent(0.0).cgColor
         gradientLayer.colors = [normalColor, normalColor, normalColor, fadedColor]
         
         // Hoizontal - commenting these two lines will make the gradient veritcal (haven't tried this yet)
-        gradientLayer.startPoint = CGPointMake(0.0, 0.5)
-        gradientLayer.endPoint = CGPointMake(1.0, 0.5)
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         
         gradientLayer.locations = [0.0, 0.4, 0.6, 1.0]
-        gradientLayer.anchorPoint = CGPointZero
+        gradientLayer.anchorPoint = CGPoint.zero
 
         self.layer.mask = gradientLayer
 /*
@@ -535,13 +540,13 @@ extension UIView {
         return gradientLayer
     }
 
-    func addVerticalGradientBackgroundLayer(topColor topColor: UIColor, bottomColor: UIColor) -> CALayer {
+    func addVerticalGradientBackgroundLayer(topColor: UIColor, bottomColor: UIColor) -> CALayer {
         let gradientLayer = CAGradientLayer()
-        let topCGColor = topColor.CGColor
-        let bottomCGColor = bottomColor.CGColor
+        let topCGColor = topColor.cgColor
+        let bottomCGColor = bottomColor.cgColor
         gradientLayer.colors = [topCGColor, bottomCGColor]
         gradientLayer.frame = frame
-        layer.insertSublayer(gradientLayer, atIndex: 0)
+        layer.insertSublayer(gradientLayer, at: 0)
 
         return gradientLayer
     }
@@ -553,8 +558,8 @@ extension UIView {
 
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onClick(onClickClosure: OnClickClosureWrapper.TapRecognizedClosure) {
-        self.userInteractionEnabled = true
+    func onClick(_ onClickClosure: @escaping OnClickClosureWrapper.TapRecognizedClosure) {
+        self.isUserInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
         tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
         addGestureRecognizer(tapGestureRecognizer)
@@ -563,9 +568,9 @@ extension UIView {
         objc_setAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
-    func onTapRecognized(tapGestureRecognizer: UITapGestureRecognizer) {
+    func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
         guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty) as? OnClickClosureWrapper else { return }
-        attachedClosureWrapper.closure(tapGestureRecognizer: tapGestureRecognizer)
+        attachedClosureWrapper.closure(tapGestureRecognizer)
     }
     
     /**
@@ -573,8 +578,8 @@ extension UIView {
      
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onLongPress(onLongPressClosure: OnLongPressClosureWrapper.LongPressRecognizedClosure) {
-        self.userInteractionEnabled = true
+    func onLongPress(_ onLongPressClosure: @escaping OnLongPressClosureWrapper.LongPressRecognizedClosure) {
+        self.isUserInteractionEnabled = true
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressRecognized(_:)))
         addGestureRecognizer(longPressRecognizer)
         let attachedClosureWrapper = OnLongPressClosureWrapper(closure: onLongPressClosure)
@@ -582,17 +587,17 @@ extension UIView {
         objc_setAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
-    func longPressRecognized(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty) as? OnLongPressClosureWrapper else { return }
-        if longPressGestureRecognizer.state == .Began {
-            attachedClosureWrapper.closure(longPressGestureRecognizer: longPressGestureRecognizer)
+        if longPressGestureRecognizer.state == .began {
+            attachedClosureWrapper.closure(longPressGestureRecognizer)
         }
     }
     
     func firstResponder() -> UIView? {
         var firstResponder: UIView? = self
         
-        if isFirstResponder() {
+        if isFirstResponder {
             return firstResponder
         }
         
@@ -609,32 +614,32 @@ extension UIView {
 
 // Wrapper to save closure into a property
 class OnClickClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias TapRecognizedClosure = (tapGestureRecognizer: UITapGestureRecognizer) -> ()
+    typealias TapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
     static var onClickClosureProperty = "onClickClosureProperty"
     
     let closure: TapRecognizedClosure
     
-    init(closure: TapRecognizedClosure) {
+    init(closure: @escaping TapRecognizedClosure) {
         self.closure = closure
     }
 
-    @objc func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
 }
 
 // Wrapper to save closure into a property
 class OnLongPressClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias LongPressRecognizedClosure = (longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
+    typealias LongPressRecognizedClosure = (_ longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
     static var longPressClosureProperty = "longPressClosureProperty"
     
     let closure: LongPressRecognizedClosure
     
-    init(closure: LongPressRecognizedClosure) {
+    init(closure: @escaping LongPressRecognizedClosure) {
         self.closure = closure
     }
     
-    @objc func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
 }
@@ -645,21 +650,21 @@ class CompletionClosureWrapper {
     
     let closure: CompletionClosure
     
-    init(closure: CompletionClosure) {
+    init(closure: @escaping CompletionClosure) {
         self.closure = closure
     }
 }
 
-extension NSURL {
+extension URL {
     func queryStringComponents() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         // Check for query string
         if let query = self.query {
             // Loop through pairings (separated by &)
-            for pair in query.componentsSeparatedByString("&") {
+            for pair in query.components(separatedBy: "&") {
                 // Pull key, val from from pair parts (separated by =) and set dict[key] = value
-                let components = pair.componentsSeparatedByString("=")
-                dict[components[0]] = components[1]
+                let components = pair.components(separatedBy: "=")
+                dict[components[0]] = components[1] as AnyObject?
             }
         }
         
@@ -667,19 +672,19 @@ extension NSURL {
     }
 }
 
-extension NSUserDefaults {
-    static func save(value value: AnyObject, forKey key: String) -> NSUserDefaults {
-        NSUserDefaults.standardUserDefaults().setObject(value, forKey: key)
-        return NSUserDefaults.standardUserDefaults()
+extension UserDefaults {
+    static func save(value: AnyObject, forKey key: String) -> UserDefaults {
+        UserDefaults.standard.set(value, forKey: key)
+        return UserDefaults.standard
     }
     
-    static func remove(key key: String) -> NSUserDefaults {
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: key)
-        return NSUserDefaults.standardUserDefaults()
+    static func remove(key: String) -> UserDefaults {
+        UserDefaults.standard.set(nil, forKey: key)
+        return UserDefaults.standard
     }
     
-    static func load(key key: String, defaultValue: AnyObject? = "") -> AnyObject? {
-        if let actualValue = NSUserDefaults.standardUserDefaults().objectForKey(key) {
+    static func load(key: String, defaultValue: AnyObject? = nil) -> AnyObject? {
+        if let actualValue = UserDefaults.standard.object(forKey: key) as? AnyObject {
             return actualValue
         }
         

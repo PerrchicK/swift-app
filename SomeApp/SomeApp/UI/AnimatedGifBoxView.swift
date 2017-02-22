@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol AnimatedGifBoxViewDelegate: class {
-    func animatedGifBoxView(animatedGifBoxView: AnimatedGifBoxView, durationSliderChanged newValue:Float)
+    func animatedGifBoxView(_ animatedGifBoxView: AnimatedGifBoxView, durationSliderChanged newValue:Float)
 }
 
 class AnimatedGifBoxView: NibView {
@@ -23,25 +23,25 @@ class AnimatedGifBoxView: NibView {
     @IBOutlet weak var durationSlider: UISlider!
     @IBOutlet weak var animatedGifImageView: UIImageView!
 
-    private var isAnimating = false
+    fileprivate var isAnimating = false
 
     override func viewDidLoadFromNib() {
-        animatedGifImageView.contentMode = .ScaleAspectFit
-        durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), forControlEvents: UIControlEvents.TouchUpOutside)
+        animatedGifImageView.contentMode = .scaleAspectFit
+        durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), for: UIControlEvents.touchUpInside)
+        durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), for: UIControlEvents.touchUpOutside)
     }
  
-    func durationSliderTouchUp(sender: UISlider) {
+    func durationSliderTouchUp(_ sender: UISlider) {
         guard !isAnimating else { return }
 
         isAnimating = true
         // Refresh image with the new frame rate
-        animatedGifImageView.image = UIImage(named: ANIMATED_GIF_FILENAME.stringByAppendingString(".gif"))
+        animatedGifImageView.image = UIImage(named: ANIMATED_GIF_FILENAME + ".gif")
         animatedGifImageView.animateBounce() { [weak self] (finished) in
             guard let strongSelf = self else { return }
 
             strongSelf.isAnimating = false
-            strongSelf.animatedGifImageView.image = UIImage.gifWithName(strongSelf.ANIMATED_GIF_FILENAME, frameRate: NSTimeInterval(strongSelf.durationSlider.value) * 10000.0)
+            strongSelf.animatedGifImageView.image = UIImage.gifWithName(strongSelf.ANIMATED_GIF_FILENAME, frameRate: TimeInterval(strongSelf.durationSlider.value) * 10000.0)
         }
     }
     
@@ -57,7 +57,7 @@ class AnimatedGifBoxView: NibView {
         }
     }
     
-    @IBAction func sliderValueChanged(sender: UISlider) {
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
         guard durationSlider.value > 0.0 && durationSlider.value < 1.0 else { self.animateNope(); return }
 
         durationLabel.text = String(format: "%.02f", durationSlider.value)

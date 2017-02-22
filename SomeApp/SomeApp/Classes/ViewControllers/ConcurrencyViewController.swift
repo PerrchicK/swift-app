@@ -10,8 +10,8 @@ import UIKit
 
 class ConcurrencyViewController: UIViewController {
 
-    let myQueue = dispatch_queue_create("myQueue", DISPATCH_QUEUE_CONCURRENT)
-    let myGroup = dispatch_group_create()
+    let myQueue = DispatchQueue(label: "myQueue", attributes: DispatchQueue.Attributes.concurrent)
+    let myGroup = DispatchGroup()
     var isVisible = false
     
     @IBOutlet weak var progressButton: UIButton!
@@ -32,16 +32,16 @@ class ConcurrencyViewController: UIViewController {
 
     func findNextRandomNumber() -> Int {
         repeat {
-            let randomProgressBarIndex = random() % 4
+            let randomProgressBarIndex = Int(arc4random() % 4)
             if self.randomProgressBarIndexes.contains(randomProgressBarIndex) {
-                NSThread.sleepForTimeInterval(0.003)
+                Thread.sleep(forTimeInterval: 0.003)
             } else {
                 return randomProgressBarIndex
             }
         } while true
     }
 
-    func fillRandomProgressBarIndexes(onDone: () -> Void) {
+    func fillRandomProgressBarIndexes(_ onDone: @escaping () -> Void) {
         randomProgressBarIndexes = [-1,-1,-1,-1]
 
         Synchronizer.syncOperations({
@@ -94,59 +94,59 @@ class ConcurrencyViewController: UIViewController {
         openCountingThread()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         isVisible = true
         resetProgressBars()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         isVisible = false
     }
 
-    @IBAction func btnStartProgressPressed(sender: UIButton) {
+    @IBAction func btnStartProgressPressed(_ sender: UIButton) {
         sender.animateFade(fadeIn: false)
         action1Spinner.startAnimating()
         action2Spinner.startAnimating()
         action3Spinner.startAnimating()
     }
 
-    @IBAction func btnGoPressed(sender: UIButton) {
+    @IBAction func btnGoPressed(_ sender: UIButton) {
         guard randomProgressBarIndexes.contains(-1) == false else { return }
 
-        sender.enabled = false
+        sender.isEnabled = false
 
-        dispatch_group_async(myGroup, myQueue) { [weak self] in
+        myQueue.async(group: myGroup) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 1
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[0], withInterval: 0.02)
         }
-        dispatch_group_async(myGroup, myQueue) { [weak self] in
+        myQueue.async(group: myGroup) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 2
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[1], withInterval: 0.005)
         }
-        dispatch_group_async(myGroup, myQueue) { [weak self] in
+        myQueue.async(group: myGroup) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 3
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[2], withInterval: 0.05)
         }
-        dispatch_group_async(myGroup, myQueue) { [weak self] in
+        myQueue.async(group: myGroup) { [weak self] in
             guard let strongSelf = self else { return }
             //Task 4
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[3], withInterval: 0.009)
         }
-        dispatch_group_notify(myGroup, dispatch_get_main_queue()) { [weak self] in
+        myGroup.notify(queue: DispatchQueue.main) { [weak self] in
             // Will be dispatched on the main queue after all group is finished
             self?.ungroupedProgressBar.animateBounce()
         }
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
             for progress in 1...100 {
-                NSThread.sleepForTimeInterval(0.001)
+                Thread.sleep(forTimeInterval: 0.001)
 
                 if progress == 20 {
                     runOnUiThread() { [weak self] in
@@ -157,8 +157,8 @@ class ConcurrencyViewController: UIViewController {
                     }
 
                     // 10 Seconds timeout
-                    let succeeded = dispatch_group_wait(self.myGroup, dispatch_time_t.timeWithSeconds(10))
-                    if succeeded != 0 {
+                    let succeeded = self.myGroup.wait(timeout: DispatchTime.timeWithSeconds(10))
+                    if succeeded == DispatchTimeoutResult.timedOut {
                         📘("dispatch_group_wait failed!")
                     }
                     
@@ -178,9 +178,9 @@ class ConcurrencyViewController: UIViewController {
     }
 
     func resetProgressBars() {
-        goButton.enabled = false
+        goButton.isEnabled = false
         fillRandomProgressBarIndexes { [weak self] in
-            self?.goButton.enabled = true
+            self?.goButton.isEnabled = true
         }
 
         for progressBar in progressBars {
@@ -189,9 +189,9 @@ class ConcurrencyViewController: UIViewController {
         ungroupedProgressBar.setProgress(0.0, animated: false)
     }
     
-    func animateProgressRun(progressIndex progressIndex: Int, withInterval interval: NSTimeInterval) {
+    func animateProgressRun(progressIndex: Int, withInterval interval: TimeInterval) {
         for progress in 1...100 {
-            NSThread.sleepForTimeInterval(interval)
+            Thread.sleep(forTimeInterval: interval)
             runOnUiThread() {
                 self.progressBars[progressIndex].setProgress(Float(progress) / 100, animated: true)
             }
@@ -199,22 +199,22 @@ class ConcurrencyViewController: UIViewController {
     }
 
     func openCountingThread() {
-        let myThread = NSThread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil)
+        let myThread = Thread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil)
         myThread.start()  // Actually creates the thread
     }
 
     func openCountingThread2() {
-        NSThread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil).start()
+        Thread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil).start()
     }
     
     func openCountingThread3() {
-        NSThread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, withObject: nil)
+        Thread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, with: nil)
     }
     
     func countForever() {
         var time = 0
         while self.isVisible {
-            NSThread.sleepForTimeInterval(1)
+            Thread.sleep(forTimeInterval: 1)
             time += 1
             📘("counting \(time)")
         }

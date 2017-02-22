@@ -8,52 +8,51 @@
 
 import Foundation
 import Firebase
-import Alamofire
 
 protocol SyncedUserDefaultsDelegate: class {
-    func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType)
+    func syncedUserDefaults(_ syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType)
 }
 
 // Inspired from: https://www.raywenderlich.com/109706/firebase-tutorial-getting-started
 // Many thanks, Ray :)
 class SyncedUserDefaults {
     enum ChangeType {
-        case Added
-        case Removed
-        case Modified
+        case added
+        case removed
+        case modified
     }
 
     weak var delegate: SyncedUserDefaultsDelegate?
 
-    private(set) var currentDictionary = [String:String]()
-    private static let FIREBASE_APP_URL = "https://boiling-inferno-8318.firebaseio.com/"
-    private static let bundleIdentifier  = NSBundle.mainBundle().bundleIdentifier
+    fileprivate(set) var currentDictionary = [String:String]()
+    fileprivate static let FIREBASE_APP_URL = "https://boiling-inferno-8318.firebaseio.com/"
+    fileprivate static let bundleIdentifier  = Bundle.main.bundleIdentifier
     // https://firebase.google.com/support/guides/firebase-ios
     var syncedDbRef: FIRDatabaseReference?
 
     static let sharedInstance = SyncedUserDefaults()
     
-    private func databaseChangedEvent(firebaseChangeType: FIRDataEventType, dataSnapshot: FIRDataSnapshot?) {
+    fileprivate func databaseChangedEvent(_ firebaseChangeType: FIRDataEventType, dataSnapshot: FIRDataSnapshot?) {
         guard let key = dataSnapshot?.key, let value = dataSnapshot?.value as? String else { return }
         
         var changeType: ChangeType?
 
         switch firebaseChangeType {
-        case .ChildAdded:
-            changeType = .Added
-        case .ChildRemoved:
-            changeType = .Removed
-        case .ChildChanged:
-            changeType = .Modified
-        case .ChildMoved:
-            changeType = .Modified
+        case .childAdded:
+            changeType = .added
+        case .childRemoved:
+            changeType = .removed
+        case .childChanged:
+            changeType = .modified
+        case .childMoved:
+            changeType = .modified
         default:
             print("\(className(SyncedUserDefaults)) Error: unhandled firebase change type: \(firebaseChangeType)")
         }
 
         // Update current state
-        if firebaseChangeType == .ChildRemoved {
-            currentDictionary.removeValueForKey(key)
+        if firebaseChangeType == .childRemoved {
+            currentDictionary.removeValue(forKey: key)
         } else {
             currentDictionary[key] = value
         }
@@ -61,49 +60,49 @@ class SyncedUserDefaults {
         delegate?.syncedUserDefaults(self, dbKey: key, dbValue: value, changed: changeType!)
     }
 
-    private init() {
+    fileprivate init() {
         syncFireBase()
     }
 
-    func syncFireBase(appUrl: String? = nil) {
-        guard let bundleIdentifier = SyncedUserDefaults.bundleIdentifier where syncedDbRef == nil else { return }
+    func syncFireBase(_ appUrl: String? = nil) {
+        guard let bundleIdentifier = SyncedUserDefaults.bundleIdentifier, syncedDbRef == nil else { return }
 
-        let rootRef = FIRDatabase.database().referenceFromURL(String(format: "%@", appUrl ?? SyncedUserDefaults.FIREBASE_APP_URL))
-        syncedDbRef = rootRef.child(bundleIdentifier.stringByReplacingOccurrencesOfString(".", withString: "-"))
+        let rootRef = FIRDatabase.database().reference(fromURL: String(format: "%@", appUrl ?? SyncedUserDefaults.FIREBASE_APP_URL))
+        syncedDbRef = rootRef.child(bundleIdentifier.replacingOccurrences(of: ".", with: "-"))
 
         // Listen to "add" events
-        syncedDbRef?.observeEventType(FIRDataEventType.ChildAdded, withBlock: { [weak self] (dataSnapshot) -> Void in
-            self?.databaseChangedEvent(.ChildAdded, dataSnapshot: dataSnapshot)
-            }, withCancelBlock: { (error) -> Void in
+        syncedDbRef?.observe(FIRDataEventType.childAdded, with: { [weak self] (dataSnapshot) -> Void in
+            self?.databaseChangedEvent(.childAdded, dataSnapshot: dataSnapshot)
+            }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
 
         // Listen to "changed" events
-        syncedDbRef?.observeEventType(FIRDataEventType.ChildChanged, withBlock: { [weak self] (dataSnapshot) -> Void in
-            self?.databaseChangedEvent(.ChildChanged, dataSnapshot: dataSnapshot)
-            }, withCancelBlock: { (error) -> Void in
+        syncedDbRef?.observe(FIRDataEventType.childChanged, with: { [weak self] (dataSnapshot) -> Void in
+            self?.databaseChangedEvent(.childChanged, dataSnapshot: dataSnapshot)
+            }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
         // Listen to "moved" (?) events
-        syncedDbRef?.observeEventType(FIRDataEventType.ChildMoved, withBlock: { [weak self] (dataSnapshot) -> Void in
-            self?.databaseChangedEvent(.ChildMoved, dataSnapshot: dataSnapshot)
-            }, withCancelBlock: { (error) -> Void in
+        syncedDbRef?.observe(FIRDataEventType.childMoved, with: { [weak self] (dataSnapshot) -> Void in
+            self?.databaseChangedEvent(.childMoved, dataSnapshot: dataSnapshot)
+            }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
         // Listen to "delete" events
-        syncedDbRef?.observeEventType(FIRDataEventType.ChildRemoved, withBlock: { [weak self] (dataSnapshot) -> Void in
-            self?.databaseChangedEvent(.ChildRemoved, dataSnapshot: dataSnapshot)
-            }, withCancelBlock: { (error) -> Void in
+        syncedDbRef?.observe(FIRDataEventType.childRemoved, with: { [weak self] (dataSnapshot) -> Void in
+            self?.databaseChangedEvent(.childRemoved, dataSnapshot: dataSnapshot)
+            }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
     }
 
-    func putString(key key: String, value: String) -> SyncedUserDefaults {
+    func putString(key: String, value: String) -> SyncedUserDefaults {
         syncedDbRef?.child(key).setValue(value)
         return self
     }
 
-    func removeString(key key: String) -> SyncedUserDefaults {
+    func removeString(key: String) -> SyncedUserDefaults {
         syncedDbRef?.child(key).removeValue()
         return self
     }

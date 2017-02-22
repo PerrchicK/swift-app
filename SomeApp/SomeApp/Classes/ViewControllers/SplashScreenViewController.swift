@@ -13,19 +13,19 @@ class SplashScreenViewController : UIViewController {
     @IBOutlet weak var swiftLogo: UIImageView!
     @IBOutlet weak var swiftLabel: UILabel!
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
 
         📘("Segue 👉 \(segue.identifier!)")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         swiftLogo.show(show: false)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         swiftLogo.animateFade(fadeIn: true)
@@ -39,20 +39,20 @@ class SplashScreenViewController : UIViewController {
                 
                 //strongSelf.pushViewController(StarterViewController.instantiate(), animated: true)
                 runBlockAfterDelay(afterDelay: 1.0, block: { () -> Void in
-                    strongSelf.performSegueWithIdentifier(className(StarterViewController), sender: self)
+                    strongSelf.performSegue(withIdentifier: className(StarterViewController), sender: self)
                 })
             }
         }
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // After segue (1)
         📘(" ... ")
     }
 
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         // After segue (2)

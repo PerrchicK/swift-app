@@ -9,14 +9,14 @@
 import UIKit
 
 protocol LeftMenuViewControllerDelegate: class {
-    func leftMenuViewController(leftMenuViewController: LeftMenuViewController, selectedOption: String)
+    func leftMenuViewController(_ leftMenuViewController: LeftMenuViewController, selectedOption: String)
 }
 
 class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: LeftMenuViewControllerDelegate?
     let distanceFromTopMargin: CGFloat = 20.0
     lazy var distanceFromTop: CGFloat = {
-        let distanceFromTop = HEIGHT(UINavigationController().navigationBar.frame) + HEIGHT(UIApplication.sharedApplication().statusBarFrame) + self.distanceFromTopMargin
+        let distanceFromTop = HEIGHT(UINavigationController().navigationBar.frame) + HEIGHT(UIApplication.shared.statusBarFrame) + self.distanceFromTopMargin
         return distanceFromTop
     }()
 
@@ -43,7 +43,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         //self.itemsTableView.registerClass(LeftMenuCell.self, forCellReuseIdentifier: leftMenuCellReuseIdentifier)
 
         self.itemsTableView.alwaysBounceVertical = false
-        self.itemsTableView.separatorStyle = .None
+        self.itemsTableView.separatorStyle = .none
     }
 
     override func viewWillLayoutSubviews() {
@@ -52,21 +52,21 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         self.distanceFromTopConstraint.constant = distanceFromTop
     }
 
-    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
 
         distanceFromTop = self.distanceFromTopMargin
     }
 
     // MARK: - UITableViewDataSource
 
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return menuItemSectionTitle(section)
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // http://stackoverflow.com/questions/25826383/when-to-use-dequeuereusablecellwithidentifier-vs-dequeuereusablecellwithidentifi
-        let cell = tableView.dequeueReusableCellWithIdentifier(leftMenuCellReuseIdentifier, forIndexPath: indexPath) as! LeftMenuCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: leftMenuCellReuseIdentifier, for: indexPath) as! LeftMenuCell
 
         if let tuple = menuItemTitle(indexPath) {
             cell.configureCell(tuple.itemTitle, cellIcon: tuple.itemIcon)
@@ -76,11 +76,11 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return menuItems.keys.count
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sectionRows = menuItems[menuItemSectionTitle(section)] else { return 0 }
 
         return sectionRows.count
@@ -88,17 +88,17 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
 
     // MARK: - UITableViewDelegate
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedOption = menuItems[menuItemSectionTitle(indexPath.section)]![indexPath.row]
         📘("selected \(selectedOption)")
         delegate?.leftMenuViewController(self, selectedOption: selectedOption)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: - Other helper methods
 
-    func menuItemSectionTitle(section: Int) -> String {
-        let sectionIndex = menuItems.startIndex.advancedBy(section)
+    func menuItemSectionTitle(_ section: Int) -> String {
+        let sectionIndex = menuItems.index(menuItems.startIndex, offsetBy: section)
         let sectionTitle = menuItems.keys[sectionIndex]
 
         return sectionTitle
@@ -107,11 +107,11 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     /**
      Returns a tuple of 2 strings as (title, icon) for a gicen index path
      */
-    func menuItemTitle(indexPath: NSIndexPath) -> (itemTitle: String, itemIcon: String)? {
-        let sectionIndex = menuItems.startIndex.advancedBy(indexPath.section)
+    func menuItemTitle(_ indexPath: IndexPath) -> (itemTitle: String, itemIcon: String)? {
+        let sectionIndex = menuItems.index(menuItems.startIndex, offsetBy: indexPath.section)
         let sectionTitle = menuItems.keys[sectionIndex]
 
-        guard let itemsArray = menuItems[sectionTitle] where itemsArray.count > 0 else {
+        guard let itemsArray = menuItems[sectionTitle], itemsArray.count > 0 else {
             return nil
         }
 
@@ -139,7 +139,7 @@ class LeftMenuCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configureCell(cellTitle: String, cellIcon: String) {
+    func configureCell(_ cellTitle: String, cellIcon: String) {
         self.cellTitle.text = cellTitle
         self.cellIcon.text = cellIcon
     }

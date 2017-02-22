@@ -11,8 +11,8 @@ import CoreData
 import UIKit
 
 class DataManager {
-    private static var applicationDirectoryPath: String = {
-        if let libraryDirectoryPath = NSSearchPathForDirectoriesInDomains(.LibraryDirectory, .UserDomainMask, true).last {
+    fileprivate static var applicationDirectoryPath: String = {
+        if let libraryDirectoryPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).last {
             return libraryDirectoryPath
         }
 
@@ -20,16 +20,16 @@ class DataManager {
         return ""
     }()
 
-    private static var managedContext: NSManagedObjectContext {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    fileprivate static var managedContext: NSManagedObjectContext {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         return appDelegate.managedObjectContext
     }
 
-    static func saveImage(imageToSave: UIImage, toFile filename: String) -> Bool {
+    static func saveImage(_ imageToSave: UIImage, toFile filename: String) -> Bool {
         if let data = UIImagePNGRepresentation(imageToSave) {
             do {
-                try data.writeToFile(applicationDirectoryPath + "/" + filename, options: .AtomicWrite)
+                try data.write(to: URL(fileURLWithPath: applicationDirectoryPath + "/" + filename), options: .atomicWrite)
                 return true
             } catch {
                 📘("Failed to save image!")
@@ -40,7 +40,7 @@ class DataManager {
     }
     
     static func loadImage(fromFile filename: String) -> UIImage? {
-        if let data = NSData(contentsOfFile: applicationDirectoryPath + "/" + filename) {
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: applicationDirectoryPath + "/" + filename)) {
             return UIImage(data: data)
         }
 
@@ -48,24 +48,24 @@ class DataManager {
     }
     
     static func createUser() -> User {
-        let entity = NSEntityDescription.entityForName(className(User), inManagedObjectContext: DataManager.managedContext)
-        return User(entity: entity!, insertIntoManagedObjectContext: DataManager.managedContext)
+        let entity = NSEntityDescription.entity(forEntityName: className(User), in: DataManager.managedContext)
+        return User(entity: entity!, insertInto: DataManager.managedContext)
     }
 
     static func syncedUserDefaults() -> SyncedUserDefaults {
         return SyncedUserDefaults.sharedInstance
     }
 
-    static func fetchUsers(named: String? = nil) -> [User]? {
+    static func fetchUsers(_ named: String? = nil) -> [User]? {
         var fetchedUsers: [User]?
-        let usersFetchRequest = NSFetchRequest(entityName: className(User))
+        let usersFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: className(User))
         
         if named != nil {
             usersFetchRequest.predicate = NSPredicate(format: "firstName == %@", named!)
         }
         
         do {
-            fetchedUsers = try managedContext.executeFetchRequest(usersFetchRequest) as? [User]
+            fetchedUsers = try managedContext.fetch(usersFetchRequest) as? [User]
         } catch {
             ToastMessage.show(messageText: "Error fetching from Core Data: \(error)")
         }

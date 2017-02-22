@@ -9,7 +9,32 @@
 import Foundation
 import UIKit
 
-class AnimationsViewController: UIViewController, UIScrollViewDelegate, AnimatedGifBoxViewDelegate {
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
+
+class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimationDelegate, AnimatedGifBoxViewDelegate {
     
     @IBOutlet weak var animatedOutTransitionView: UIView!
     @IBOutlet weak var animatedInTransitionView: UIView!
@@ -29,7 +54,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     var wallGravityBehavior: UIGravityBehavior!
     var wallCollision: UICollisionBehavior!
 
-    var autoScrollTimer: NSTimer?
+    var autoScrollTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,22 +66,22 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
         configureUi()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         scheduleAutoScrollTimer()
     }
 
     func scheduleAutoScrollTimer() {
-        if !(autoScrollTimer?.valid ?? false) {
-            autoScrollTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
+        if !(autoScrollTimer?.isValid ?? false) {
+            autoScrollTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
         }
     }
 
-    func teaseUserToScroll(timer: NSTimer) {
-        scrollView.setContentOffset(CGPointMake(0, -50), animated: true)
+    func teaseUserToScroll(_ timer: Timer) {
+        scrollView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
         runBlockAfterDelay(afterDelay: 0.3) {
-            self.scrollView.setContentOffset(CGPointMake(0, 0), animated: true)
+            self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         }
     }
 
@@ -70,8 +95,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             transition.duration = 0.5
             
             // Add the transition animation to both layers
-            self.animatedOutTransitionView.layer.addAnimation(transition, forKey: "transition")
-            self.animatedInTransitionView.layer.addAnimation(transition, forKey: "transition")
+            self.animatedOutTransitionView.layer.add(transition, forKey: "transition")
+            self.animatedInTransitionView.layer.add(transition, forKey: "transition")
             
             // Finally, change the visibility of the layers.
             self.animatedOutTransitionView.toggleVisibility()
@@ -79,7 +104,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
         }
 
         animatedOutTransitionView.onLongPress({ (longPressGestureRecognizer) in
-            if longPressGestureRecognizer.state == .Began {
+            if longPressGestureRecognizer.state == .began {
                 self.flipViews(true)
             }
         })
@@ -93,8 +118,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             transition.duration = 0.5
             
             // Add the transition animation to both layers
-            self.animatedOutTransitionView.layer.addAnimation(transition, forKey: "transition")
-            self.animatedInTransitionView.layer.addAnimation(transition, forKey: "transition")
+            self.animatedOutTransitionView.layer.add(transition, forKey: "transition")
+            self.animatedInTransitionView.layer.add(transition, forKey: "transition")
             
             // Finally, change the visibility of the layers.
             self.animatedOutTransitionView.toggleVisibility()
@@ -102,7 +127,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
         }
 
         animatedInTransitionView.onLongPress({ (longPressGestureRecognizer) in
-            if longPressGestureRecognizer.state == .Began {
+            if longPressGestureRecognizer.state == .began {
                 self.flipViews(true)
             }
         })
@@ -113,7 +138,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             upAndDownAnimation.autoreverses = true
             upAndDownAnimation.duration = 1 // it doesn't matter because it will soon be grouped
             upAndDownAnimation.repeatCount = 2
-            upAndDownAnimation.cumulative = true // Continue from the current point
+            upAndDownAnimation.isCumulative = true // Continue from the current point
             upAndDownAnimation.timingFunctions = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)]
 
             let rightToLeftAnimation = CABasicAnimation(keyPath: "position.x")
@@ -128,11 +153,11 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             animationGroup.duration = 4
             animationGroup.delegate = self
 
-            self.animatedJumpView.layer.addAnimation(animationGroup, forKey: "jumpAnimation")
+            self.animatedJumpView.layer.add(animationGroup, forKey: "jumpAnimation")
         }
 
         animatedShootedView.onClick { (tapGestureRecognizer) in
-            UIView.animateWithDuration(0.8, delay: 0.2, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.8, delay: 0.2, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
                 self.shootedViewRightMarginConstraint.constant += 70
                 self.view.layoutIfNeeded()
             }, completion: nil)
@@ -149,7 +174,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
                 self.animatedImageView.animationDuration = 0.9
                 self.animatedImageView.startAnimating()
                 self.animatedImageView.animationRepeatCount = 1
-            } else if self.animatedImageView.isAnimating() {
+            } else if self.animatedImageView.isAnimating {
                 self.animatedImageView.stopAnimating()
             } else {
                 self.animatedImageView.startAnimating()
@@ -163,7 +188,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
             self.theWallView.animateFade(fadeIn: false)
         }
 
-        shootedViewRightMarginConstraint.addObserver(self, forKeyPath: "constant", options: .New, context: nil)
+        shootedViewRightMarginConstraint.addObserver(self, forKeyPath: "constant", options: .new, context: nil)
 
         theWallView.onClick { (tapGestureRecognizer) in
             self.wallGravityAnimator = UIDynamicAnimator(referenceView: self.scrollView) // Must be the top reference view
@@ -175,24 +200,24 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
         }
     }
 
-    func flipViews(fromRight: Bool) {
-        UIView.transitionWithView(self.animatedOutTransitionView, duration: 0.5, options: fromRight ? .TransitionFlipFromRight : .TransitionFlipFromLeft, animations: {
+    func flipViews(_ fromRight: Bool) {
+        UIView.transition(with: self.animatedOutTransitionView, duration: 0.5, options: fromRight ? .transitionFlipFromRight : .transitionFlipFromLeft, animations: {
             self.animatedOutTransitionView.toggleVisibility()
             }, completion: nil)
         
-        UIView.transitionWithView(self.animatedInTransitionView, duration: 0.5, options: fromRight ? .TransitionFlipFromRight : .TransitionFlipFromLeft, animations: {
+        UIView.transition(with: self.animatedInTransitionView, duration: 0.5, options: fromRight ? .transitionFlipFromRight : .transitionFlipFromLeft, animations: {
             self.animatedInTransitionView.toggleVisibility()
             }, completion: nil)
     }
     
     // KVO (key value observation)
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if let change = change, newValue = change["new"] as? CGFloat, changedObject = object as? NSLayoutConstraint where changedObject == shootedViewRightMarginConstraint && keyPath == "constant" {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? CGFloat, let changedObject = object as? NSLayoutConstraint, changedObject == shootedViewRightMarginConstraint && keyPath == "constant" {
             if newValue > self.view.frame.width {
-                UIView.animateWithDuration(0.5) {
+                UIView.animate(withDuration: 0.5, animations: {
                     self.shootedViewRightMarginConstraint.constant = 10
                     self.view.layoutIfNeeded()
-                }
+                }) 
             }
         }
     }
@@ -203,10 +228,10 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
 
         animatedOutTransitionView.layer.cornerRadius = 5
         animatedInTransitionView.layer.cornerRadius = 5
-        animatedInTransitionView.hidden = true
+        animatedInTransitionView.isHidden = true
     }
     
-    @IBAction func fetchImageButtonPressed(sender: UIButton) {
+    @IBAction func fetchImageButtonPressed(_ sender: UIButton) {
         PerrFuncs.fetchAndPresentImage(fetchedImageUrlTextField.text)
     }
 
@@ -215,14 +240,14 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, Animated
     }
     
     // MARK: - AnimatedGifBoxViewDelegate
-    func animatedGifBoxView(animatedGiBoxView: AnimatedGifBoxView, durationSliderChanged newValue: Float) {
+    func animatedGifBoxView(_ animatedGiBoxView: AnimatedGifBoxView, durationSliderChanged newValue: Float) {
         let cgFloatValue = CGFloat(newValue)
         self.view.backgroundColor = UIColor(hue: cgFloatValue, saturation: cgFloatValue, brightness: 0.5, alpha: 1)
     }
 
     // MARK: - UIScrollViewDelegate
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        let isOperatedByUser = scrollView.gestureRecognizers?.filter ({ [.Began, .Changed].contains($0.state) } ).count > 0
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let isOperatedByUser = scrollView.gestureRecognizers?.filter ({ [.began, .changed].contains($0.state) } ).count > 0
         if isOperatedByUser {
             // Disable "teasing"
             autoScrollTimer?.invalidate()

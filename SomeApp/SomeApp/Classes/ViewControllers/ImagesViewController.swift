@@ -50,48 +50,48 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         super.viewDidLoad()
 
         // Initialize snapshot image view
-        self.cameraLensPreviewButton.contentMode = .ScaleAspectFill
+        self.cameraLensPreviewButton.contentMode = .scaleAspectFill
         self.cameraLensPreviewButton.clipsToBounds = true
         self.cameraLensPreviewButton.layer.cornerRadius = 12
 
         // Initialize picker image view
         pickedImageButton.layer.cornerRadius = 3
-        pickedImageButton.layer.borderColor = UIColor.blackColor().colorWithAlphaComponent(0.7).CGColor
+        pickedImageButton.layer.borderColor = UIColor.black.withAlphaComponent(0.7).cgColor
         pickedImageButton.layer.borderWidth = 1
         // More info about 'contentMode' at: http://stackoverflow.com/questions/4895272/difference-between-uiviewcontentmodescaleaspectfit-and-uiviewcontentmodescaletof
-        pickedImageButton.imageView?.contentMode = .ScaleAspectFit
+        pickedImageButton.imageView?.contentMode = .scaleAspectFit
 
         // MARK: - Load state
         var sourceControlIndex: UInt = 1
         var typeControlIndex: UInt = 1
         var isEditableControlIndex: UInt = 0
-        if let selectedIndexesDictionary = NSUserDefaults.load(key: "selected settings") as? [String: UInt] {
+        if let selectedIndexesDictionary = UserDefaults.load(key: "selected settings") as? [String: UInt] {
             print(selectedIndexesDictionary)
             sourceControlIndex = selectedIndexesDictionary["sourceControl"] ?? 1
             typeControlIndex = selectedIndexesDictionary["typeControl"] ?? 1
             isEditableControlIndex = selectedIndexesDictionary["isEditableControl"] ?? 0
         }
 
-        sourceControl = BetterSegmentedControl(frame: CGRectZero, titles: ["Library", "Camera", "Moments"], index: sourceControlIndex, backgroundColor: UIColor.brownColor(), titleColor: UIColor.blackColor(), indicatorViewBackgroundColor: UIColor.redColor(), selectedTitleColor: UIColor.whiteColor())
+        sourceControl = BetterSegmentedControl(frame: CGRect.zero, titles: ["Library", "Camera", "Moments"], index: sourceControlIndex, backgroundColor: UIColor.brown, titleColor: UIColor.black, indicatorViewBackgroundColor: UIColor.red, selectedTitleColor: UIColor.white)
         betterSegmentedControl_source_PlaceHolder.addSubview(sourceControl)
         sourceControl.stretchToSuperViewEdges()
 
-        typeControl = BetterSegmentedControl(frame: CGRectZero, titles: [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue], index: typeControlIndex, backgroundColor: UIColor.yellowColor(), titleColor: UIColor.blackColor(), indicatorViewBackgroundColor: UIColor.greenColor().colorWithAlphaComponent(0.5), selectedTitleColor: UIColor.blueColor())
+        typeControl = BetterSegmentedControl(frame: CGRect.zero, titles: [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue], index: typeControlIndex, backgroundColor: UIColor.yellow, titleColor: UIColor.black, indicatorViewBackgroundColor: UIColor.green.withAlphaComponent(0.5), selectedTitleColor: UIColor.blue)
         betterSegmentedControl_type_PlaceHolder.addSubview(typeControl)
         typeControl.stretchToSuperViewEdges()
 
-        isEditableControl = BetterSegmentedControl(frame: CGRectZero, titles: ["editable","not editable"], index: isEditableControlIndex, backgroundColor: UIColor.brownColor(), titleColor: UIColor.grayColor(), indicatorViewBackgroundColor: UIColor.greenColor().colorWithAlphaComponent(0.5), selectedTitleColor: UIColor.greenColor())
+        isEditableControl = BetterSegmentedControl(frame: CGRect.zero, titles: ["editable","not editable"], index: isEditableControlIndex, backgroundColor: UIColor.brown, titleColor: UIColor.gray, indicatorViewBackgroundColor: UIColor.green.withAlphaComponent(0.5), selectedTitleColor: UIColor.green)
         isEditableControl.layer.cornerRadius = 5
         betterSegmentedControl_isEditable_PlaceHolder.addSubview(isEditableControl)
         isEditableControl.stretchToSuperViewEdges()
 
-        betterSegmentedControl_source_PlaceHolder.backgroundColor  = UIColor.clearColor()
-        betterSegmentedControl_type_PlaceHolder.backgroundColor  = UIColor.clearColor()
-        betterSegmentedControl_isEditable_PlaceHolder.backgroundColor  = UIColor.clearColor()
+        betterSegmentedControl_source_PlaceHolder.backgroundColor  = UIColor.clear
+        betterSegmentedControl_type_PlaceHolder.backgroundColor  = UIColor.clear
+        betterSegmentedControl_isEditable_PlaceHolder.backgroundColor  = UIColor.clear
 
-        sourceControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), forControlEvents: .ValueChanged)
-        typeControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), forControlEvents: .ValueChanged)
-        isEditableControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), forControlEvents: .ValueChanged)
+        sourceControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+        typeControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+        isEditableControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         
         self.setupCamera()
         cameraLensPreviewButton.onClick { (tapGestureRecognizer) in
@@ -99,54 +99,54 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(cameBackFromBackground(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(cameBackFromBackground(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
 
         // MARK: - Core Motion
-        if manager.gyroAvailable {
+        if manager.isGyroAvailable {
             manager.gyroUpdateInterval = 0.5
-            manager.startGyroUpdatesToQueue(NSOperationQueue.mainQueue()) { [weak self] (gyroData, error) in
+            manager.startGyroUpdates(to: OperationQueue.main) { [weak self] (gyroData, error) in
                 guard let gyroData = gyroData else { return }
 
                 self?.gyroDataLabel.text = "\(gyroData)"
             }
         }
 
-        if manager.deviceMotionAvailable {
+        if manager.isDeviceMotionAvailable {
             manager.deviceMotionUpdateInterval = 0.01
-            manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) { [weak self] (deviceMotion, error) in
-                guard let strongSelf = self, deviceMotion = deviceMotion else { return }
+            manager.startDeviceMotionUpdates(to: OperationQueue.main) { [weak self] (deviceMotion, error) in
+                guard let strongSelf = self, let deviceMotion = deviceMotion else { return }
 
                 let rotation = atan2(deviceMotion.gravity.x, deviceMotion.gravity.y) - M_PI
-                strongSelf.pickedImageButton.transform = CGAffineTransformMakeRotation(CGFloat(rotation))
+                strongSelf.pickedImageButton.transform = CGAffineTransform(rotationAngle: CGFloat(rotation))
             }
         }
 
         if pickedImageButton.imageView?.image == nil, let savedImage = DataManager.loadImage(fromFile: "tempSavedImage") {
-            pickedImageButton.setImage(savedImage, forState: .Normal)
+            pickedImageButton.setImage(savedImage, for: .normal)
         }
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         manager.stopGyroUpdates()
         manager.stopDeviceMotionUpdates()
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
 
         // MARK: - Save state
         let selectedIndexesDictionary = ["isEditableControl":isEditableControl.index,"sourceControl":sourceControl.index,"typeControl":typeControl.index]
-        NSUserDefaults.save(value: selectedIndexesDictionary, forKey: "selected settings").synchronize()
+        UserDefaults.save(value: selectedIndexesDictionary as AnyObject, forKey: "selected settings").synchronize()
     }
 
-    func segmentedControlValueChanged(sender: BetterSegmentedControl) {
+    func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
         // Just for fun:
         📘("Selected: \(sender.titles[Int(sender.index)])")
     }
 
-    @IBAction func pickedImageButtonPressed(sender: UIButton) {
+    @IBAction func pickedImageButtonPressed(_ sender: UIButton) {
         if let image = sender.imageView?.image {
             PerrFuncs.shareImage(image, completionClosure: { (activityType, isCompleted, returnedItems, activityError) in
                 📘("\(isCompleted ? "shared" : "canceled") via \(activityType)")
@@ -154,17 +154,17 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         }
     }
 
-    @IBAction func backButtonPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backButtonPressed(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
 
-    @IBAction func cameraLensPreviewButtonPressed(sender: AnyObject) {
+    @IBAction func cameraLensPreviewButtonPressed(_ sender: AnyObject) {
         takeSnapshot()
     }
 
-    @IBAction func cameraButtonPressed(sender: AnyObject) {
+    @IBAction func cameraButtonPressed(_ sender: AnyObject) {
         guard let selectedMediaType = MediaType(rawValue: typeControl.titles[Int(typeControl.index)]),
-            let selectedSourceType = UIImagePickerControllerSourceType(rawValue: Int(sourceControl.index)) where UIImagePickerController.isSourceTypeAvailable(selectedSourceType) else { 📘("😱 Selected input types aren't available"); return }
+            let selectedSourceType = UIImagePickerControllerSourceType(rawValue: Int(sourceControl.index)), UIImagePickerController.isSourceTypeAvailable(selectedSourceType) else { 📘("😱 Selected input types aren't available"); return }
 
         imagePickerController.delegate = self
         imagePickerController.sourceType = selectedSourceType
@@ -182,16 +182,16 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
         imagePickerController.allowsEditing = self.isEditable
 
-        presentViewController(imagePickerController, animated: true, completion: nil)
+        present(imagePickerController, animated: true, completion: nil)
     }
 
-    func cameBackFromBackground(notification: NSNotification) {
+    func cameBackFromBackground(_ notification: Notification) {
         self.takeSnapshot()
     }
 
     func takeSnapshot() {
         if let capturedImage = cameraLensImage {
-            self.cameraLensPreviewButton.setImage(capturedImage, forState: .Normal)
+            self.cameraLensPreviewButton.setImage(capturedImage, for: .normal)
             UIImageWriteToSavedPhotosAlbum(capturedImage,
                                            nil,//id completionTarget
                 nil,//SEL completionSelector
@@ -202,9 +202,9 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     func setupCamera() {
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for device in devices {
-            if device.position == .Front {
+        let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
+        for device in devices! {
+            if (device as AnyObject).position == .front {
                 self.device = device as? AVCaptureDevice
             }
         }
@@ -214,7 +214,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             let output = AVCaptureVideoDataOutput()
             output.alwaysDiscardsLateVideoFrames = true
             
-            let cameraQueue = dispatch_queue_create("cameraQueue", nil)
+            let cameraQueue = DispatchQueue(label: "cameraQueue", attributes: [])
             output.setSampleBufferDelegate(self, queue: cameraQueue)
             
             let key = kCVPixelBufferPixelFormatTypeKey as String
@@ -224,7 +224,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
             captureSession = AVCaptureSession()
             previewLayer = AVCaptureVideoPreviewLayer()
-            if let captureSession = captureSession, previewLayer = previewLayer {
+            if let captureSession = captureSession, let previewLayer = previewLayer {
                 captureSession.addInput(input)
                 captureSession.addOutput(output)
                 captureSession.sessionPreset = AVCaptureSessionPresetPhoto
@@ -233,10 +233,10 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
                 previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 
                 // CHECK FOR YOUR APP
-                previewLayer.frame = CGRectMake(0.0, 0.0, cameraLensPreviewButton.frame.size.width, cameraLensPreviewButton.frame.size.height)
+                previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: cameraLensPreviewButton.frame.size.width, height: cameraLensPreviewButton.frame.size.height)
                 // CHECK FOR YOUR APP
                 
-                cameraLensPreviewButton.layer.insertSublayer(previewLayer, atIndex:0)   // Comment-out to hide preview layer
+                cameraLensPreviewButton.layer.insertSublayer(previewLayer, at:0)   // Comment-out to hide preview layer
                 
                 captureSession.startRunning()
             }
@@ -247,10 +247,10 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     
     // MARK:- AVCaptureVideoDataOutputSampleBufferDelegate
 
-    func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-        CVPixelBufferLockBaseAddress(imageBuffer,0)
+        CVPixelBufferLockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0))
         let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)// as? UInt8  else { return }
         // size_t:
         let bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer)
@@ -258,38 +258,38 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         let height = CVPixelBufferGetHeight(imageBuffer)
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let newContext = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, CGBitmapInfo.ByteOrder32Little.rawValue | CGImageAlphaInfo.PremultipliedLast.rawValue)
+        let newContext = CGContext(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue)
 
-        if let newImage = CGBitmapContextCreateImage(newContext) {
+        if let newImage = newContext?.makeImage() {
             
             //        CGContextRelease(newContext)
             //        CGColorSpaceRelease(colorSpace)
             
-            var imageOrientation = UIImageOrientation.DownMirrored
-            switch UIDevice.currentDevice().orientation {
-            case .Portrait:
-                imageOrientation = .LeftMirrored
-            case .PortraitUpsideDown:
-                imageOrientation = .RightMirrored
-            case .LandscapeLeft:
-                imageOrientation = .DownMirrored
-            case .LandscapeRight:
-                imageOrientation = .UpMirrored
+            var imageOrientation = UIImageOrientation.downMirrored
+            switch UIDevice.current.orientation {
+            case .portrait:
+                imageOrientation = .leftMirrored
+            case .portraitUpsideDown:
+                imageOrientation = .rightMirrored
+            case .landscapeLeft:
+                imageOrientation = .downMirrored
+            case .landscapeRight:
+                imageOrientation = .upMirrored
             default:
                 break
             }
             
-            self.cameraLensImage = UIImage(CGImage: newImage, scale:1.0, orientation:imageOrientation)
+            self.cameraLensImage = UIImage(cgImage: newImage, scale:1.0, orientation:imageOrientation)
             
             // No need to release on Swift
             //        CGImageRelease(newImage)
         }
-        CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+        CVPixelBufferUnlockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0));
     }
 
     // MARK: - UIImagePickerControllerDelegate
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         📘("picked image, location on disk: \(info[UIImagePickerControllerReferenceURL])")
         
         if let pickedMediaType = info[UIImagePickerControllerMediaType] {
@@ -297,15 +297,15 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         }
         
         if let image = info[isEditable ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage] as? UIImage {
-            pickedImageButton.setImage(image, forState: .Normal)
+            pickedImageButton.setImage(image, for: .normal)
             DataManager.saveImage(image, toFile: "tempSavedImage")
         }
         
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
 
     // Prevent interruptions with core motion exercise
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return .Portrait
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait        
     }
 }

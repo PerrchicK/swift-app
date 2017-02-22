@@ -13,53 +13,52 @@ class NotificationsViewController: UIViewController {
 
     @IBOutlet weak var keyboardPresenterTextField: UITextField!
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         //MARK:- dispach delayed notifications
-        let shortLength = dispatch_time_t.timeWithSeconds(ToastMessage.ToastMessageLength.SHORT.rawValue)
+        let shortLength = DispatchTime.timeWithSeconds(ToastMessage.ToastMessageLength.short.rawValue)
 
-        dispatch_after(shortLength, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) { () -> Void in
-            NSNotificationCenter.defaultCenter().postNotificationName("yo1", object: nil)
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).asyncAfter(deadline: shortLength) { () -> Void in
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "yo1"), object: nil)
 
-            dispatch_after(shortLength, dispatch_get_main_queue()) { () -> Void in
-                NSNotificationCenter.defaultCenter().postNotificationName("yo2", object: self.keyboardPresenterTextField, userInfo: ["msgKey":"PSST..."])
+            DispatchQueue.main.asyncAfter(deadline: shortLength) { () -> Void in
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "yo2"), object: self.keyboardPresenterTextField, userInfo: ["msgKey":"PSST..."])
             }
         }
 
         //MARK:- create observers
-        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserverForName("yo1", object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        notificationCenter.addObserver(forName: NSNotification.Name(rawValue: "yo1"), object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
             
             ToastMessage.show(messageText: "yo1 has been posted, 'self' \(self == nil ? "released" : "still exist")")
         }
 
-        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.yoOccured(_:)), name: "yo2", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.yoOccured(_:)), name: NSNotification.Name(rawValue: "yo2"), object: nil)
 
-        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.keyboardAppeared(_:)), name: UIKeyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.keyboardAppeared(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         
 
-        let soon = NSDate(timeIntervalSinceNow: 5)
+        let soon = Date(timeIntervalSinceNow: 5)
         if !startLocalNotification("Local notification example", title: "yo3", popTime: soon) {
             ToastMessage.show(messageText: "confirm user notification first")
         }
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func startLocalNotification(message: String,
+    func startLocalNotification(_ message: String,
         title: String,
-        popTime: NSDate,
+        popTime: Date,
         sound: String? = nil,
         additionalInfo: [String:String]? = nil) -> Bool {
-        guard let settings = UIApplication.sharedApplication().currentUserNotificationSettings()
-            where settings.types != .None else {
-            UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories: nil))
+        guard let settings = UIApplication.shared.currentUserNotificationSettings, settings.types != UIUserNotificationType() else {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [UIUserNotificationType.alert, UIUserNotificationType.badge, UIUserNotificationType.sound], categories: nil))
 
             return false
         }
@@ -70,17 +69,17 @@ class NotificationsViewController: UIViewController {
         notification.fireDate = popTime
         notification.soundName = UILocalNotificationDefaultSoundName // play default sound
         notification.userInfo = additionalInfo
-        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+        UIApplication.shared.scheduleLocalNotification(notification)
 
         return true
     }
 
-    func keyboardAppeared(notification: NSNotification) {
+    func keyboardAppeared(_ notification: Notification) {
         📘("\(notification.object)")
         ToastMessage.show(messageText: "keyboard appeard")
     }
     
-    func yoOccured(notification: NSNotification) {
+    func yoOccured(_ notification: Notification) {
         📘("notification posted: \(notification)\nassociated object:\(notification.object)\nuser info:\(notification.userInfo)")
         if let textField = notification.object as? UITextField {
             textField.text = "yo2 has been posted"
@@ -88,9 +87,9 @@ class NotificationsViewController: UIViewController {
     }
 }
 
-extension dispatch_time_t {
-    static func timeWithSeconds(seconds: Double) -> dispatch_time_t {
-        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
+extension DispatchTime {
+    static func timeWithSeconds(_ seconds: Double) -> DispatchTime {
+        let dispatchTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         return dispatchTime
     }
 }

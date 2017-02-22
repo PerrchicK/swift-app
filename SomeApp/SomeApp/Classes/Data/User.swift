@@ -15,8 +15,8 @@ class User: NSManagedObject {
     @NSManaged var lastName: String!
     @NSManaged var nickname: String!
 
-    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
 
     func save() -> Bool {
@@ -32,7 +32,7 @@ class User: NSManagedObject {
     }
     
     func remove() -> Bool {
-        self.managedObjectContext?.deleteObject(self)
+        self.managedObjectContext?.delete(self)
 
         return true
     }

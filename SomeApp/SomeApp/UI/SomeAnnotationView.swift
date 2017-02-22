@@ -11,13 +11,13 @@ import MapKit
 
 class SomeAnnotationView: NibView {
     @IBOutlet weak var annotationIconLabel: UILabel!
-    let possibleIcons = ["😏", "😍", "😜", "😟"]
+    let possibleIcons: [String] = ["😏", "😍", "😜", "😟"]
 
     override func viewDidLoadFromNib() {
         annotationIconLabel.text = generateIcon()
     }
 
     func generateIcon() -> String {
-        return possibleIcons[random() % possibleIcons.count]
+        return possibleIcons[Int(arc4random()) % possibleIcons.count]
     }
 }

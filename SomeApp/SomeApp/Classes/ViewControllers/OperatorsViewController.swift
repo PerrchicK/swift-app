@@ -25,7 +25,7 @@ class OperatorsViewController: UIViewController {
         valueTextField.placeholder = "value that a String object will love"
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         valueTextField.resignFirstResponder()
@@ -36,13 +36,13 @@ class OperatorsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func setButtonPressed(sender: AnyObject) {
+    @IBAction func setButtonPressed(_ sender: AnyObject) {
         valueTextField.resignFirstResponder()
 
         var lovingResult : AnyObject?
         
         do {
-            lovingResult = try valueTextField.😘(belovedObject: valueTextField.text!)
+            lovingResult = try valueTextField.😘(belovedObject: valueTextField.text! as AnyObject) as AnyObject?
         } catch {
         }
         
@@ -57,7 +57,7 @@ class OperatorsViewController: UIViewController {
         }
     }
     
-    @IBAction func getButtonPressed(sender: AnyObject) {
+    @IBAction func getButtonPressed(_ sender: AnyObject) {
         valueTextField.resignFirstResponder()
 
         if let beloved = valueTextField.😍() as? String {
@@ -65,7 +65,7 @@ class OperatorsViewController: UIViewController {
         }
     }
     
-    func dismiss(tapGestureRecognizer: UIGestureRecognizer) {
+    func dismiss(_ tapGestureRecognizer: UIGestureRecognizer) {
         📘("Dismissing keyboard due to \(tapGestureRecognizer)")
         valueTextField.resignFirstResponder()
     }

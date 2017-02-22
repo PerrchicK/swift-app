@@ -508,17 +508,21 @@
 					756790FA1CC66CF900EC507D = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = BYQ4J9BT99;
+						LastSwiftMigration = 0820;
 					};
 					75D7A4B31C4E924400CDD88F = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = BYQ4J9BT99;
+						LastSwiftMigration = 0820;
 					};
 					75D7A4CA1C4E924400CDD88F = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0820;
 						TestTargetID = 75D7A4B31C4E924400CDD88F;
 					};
 					75D7A4D51C4E924400CDD88F = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0820;
 						TestTargetID = 75D7A4B31C4E924400CDD88F;
 					};
 				};
@@ -750,6 +754,7 @@
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -768,6 +773,7 @@
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -868,6 +874,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -885,6 +892,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -897,6 +905,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SomeApp.app/SomeApp";
 			};
 			name = Debug;
@@ -910,6 +919,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SomeApp.app/SomeApp";
 			};
 			name = Release;
@@ -922,6 +932,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = SomeApp;
 				USES_XCTRUNNER = YES;
 			};
@@ -935,6 +946,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = SomeApp;
 				USES_XCTRUNNER = YES;
 			};

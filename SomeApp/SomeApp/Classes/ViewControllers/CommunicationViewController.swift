@@ -8,7 +8,6 @@
 
 import Foundation
 import MapKit
-import Alamofire
 
 class CommunicationViewController: UIViewController, MKMapViewDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
@@ -22,7 +21,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     let regionRadius: CLLocationDistance = 100
 
-    func takeMapToLocation(location: CLLocation) {
+    func takeMapToLocation(_ location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }
@@ -34,24 +33,24 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         mapView.onClick { [weak self] (tapGestureRecognizer) in
             guard let mapView = self?.mapView else { return }
 
-            let tappedLocationCoordinate = mapView.convertPoint(tapGestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
+            let tappedLocationCoordinate = mapView.convert(tapGestureRecognizer.location(in: mapView), toCoordinateFrom: mapView)
             📘("tapped on location's coordinate:\n\(tappedLocationCoordinate)")
             self?.mapView(mapView, didFeelTapOnCoordinate: tappedLocationCoordinate)
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         takeMapToLocation(CLLocation(latitude: afkeaLatitude, longitude: afkeaLongitude))
     }
 
-    @IBAction func nativeRequestButtonPressed(sender: UIButton) {
+    @IBAction func nativeRequestButtonPressed(_ sender: UIButton) {
         requestAddressWithNSURLSession(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
 
-    @IBAction func afnetworkingRequestButtonPressed(sender: UIButton) {
-        requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
+    @IBAction func afnetworkingRequestButtonPressed(_ sender: UIButton) {
+//        requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
     
     /**
@@ -66,17 +65,17 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     func requestAddressWithNSURLSession(latitude lat: Double, longitude lng: Double) {
         
         let urlString = String(format: "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%@", lat, lng ,GoogleMapsUrlApiKey)
-        let url = NSURL(string: urlString)
-        let request = NSURLRequest(URL: url!)
+        let url = URL(string: urlString)
+        let request = URLRequest(url: url!)
 
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { [weak self] (data, response, connectionError) -> Void in
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { [weak self] (data, response, connectionError) -> Void in
             guard let data = data else { return }
             if connectionError == nil {
                 do {
-                    let innerJson = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers)
+                    let innerJson = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
 
                     runOnUiThread(block: { () -> Void in
-                        ToastMessage.show(messageText: self?.parseResponse(innerJson) ?? "Parsing failed")
+                        ToastMessage.show(messageText: self?.parseResponse(innerJson as AnyObject) ?? "Parsing failed")
                     })
                 } catch {
                     📘("Error: (\(error))")
@@ -94,23 +93,22 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         
         // Make HTTP request and fetch...
         📘("Calling: \(urlString)")
-        Alamofire.request(.GET, urlString).responseJSON { [weak self] (response) in
-            if let JSON = response.result.value where response.result.error == nil {
-                // Request succeeded! ... parse response
-                ToastMessage.show(messageText: self?.parseResponse(JSON) ?? "Parsing failed")
-            } else {
-                // Request failed! ... handle failure
-                ToastMessage.show(messageText: "Error retrieving address")
-            }
-        }
+//        Alamofire.request(.GET, urlString).responseJSON { [weak self] (response) in
+//            if let JSON = response.result.value, response.result.error == nil {
+//                // Request succeeded! ... parse response
+//                ToastMessage.show(messageText: self?.parseResponse(JSON) ?? "Parsing failed")
+//            } else {
+//                // Request failed! ... handle failure
+//                ToastMessage.show(messageText: "Error retrieving address")
+//            }
+//        }
     }
     
-    func parseResponse(responseObject: AnyObject) -> String? {
+    func parseResponse(_ responseObject: AnyObject) -> String? {
         var result :String?
 
         guard let responseDictionary = responseObject as? [String:AnyObject],
-            status = responseDictionary["status"] as? String
-            where status == "OK" else { return result }
+            let status = responseDictionary["status"] as? String, status == "OK" else { return result }
 
         📘("Parsing JSON dictionary:\n\(responseDictionary)")
         if let results = responseDictionary["results"] as? [AnyObject],
@@ -123,10 +121,10 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     }
     
     // MARK: - MKMapViewDelegate
-    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var annotationView: MKAnnotationView!
 
-        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(MyAnnotationViewIdentifier) {
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: MyAnnotationViewIdentifier) {
             dequeuedAnnotationView.annotation = annotation
             annotationView = dequeuedAnnotationView
         } else {
@@ -139,7 +137,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         return annotationView
     }
 
-    func mapView(mapView: MKMapView, didFeelTapOnCoordinate tappedCoordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: MKMapView, didFeelTapOnCoordinate tappedCoordinate: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
         self.tappedCoordinate = tappedCoordinate
         self.tappedCoordinateLabel.text = "\((self.tappedCoordinate?.latitude)!),\((self.tappedCoordinate?.longitude)!)"

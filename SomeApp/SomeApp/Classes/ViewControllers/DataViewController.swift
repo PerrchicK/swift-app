@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class DataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SyncedUserDefaultsDelegate, UITextFieldDelegate {
     let UserDefaultsKey = "MyKeyToSaveObjectInNSUSerDefaults"
@@ -24,22 +48,22 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var nicknameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     /* Saved in Core Data */
-    private var isScreenUp = false
+    fileprivate var isScreenUp = false
 
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
-    private var users:[User]!
-    private var firebaseKeys = [String]()
+    fileprivate var users:[User]!
+    fileprivate var firebaseKeys = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         refreshUsersArray()
 
-        self.dbStateTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CellReuseIdentifier")
-        self.dbStateTableView.hidden = true
+        self.dbStateTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellReuseIdentifier")
+        self.dbStateTableView.isHidden = true
 
-        userDefaultsTextField.text = NSUserDefaults.standardUserDefaults().objectForKey(UserDefaultsKey) as? String
+        userDefaultsTextField.text = UserDefaults.standard.object(forKey: UserDefaultsKey) as? String
         self.view.onClick {_ in 
             self.view.endEditing(true)
         }
@@ -52,25 +76,25 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         emailTextField.delegate = self
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         DataManager.syncedUserDefaults().delegate = self
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.view.endEditing(true)
     }
 
-    @IBAction func showFirebaseButtonPressed(sender: AnyObject) {
+    @IBAction func showFirebaseButtonPressed(_ sender: AnyObject) {
         do {
-            try dbStateTableView.😘(belovedObject: "firebase")
+            try dbStateTableView.😘(belovedObject: "firebase" as AnyObject)
         } catch {
             📘("Failed to attach extra data to table view")
         }
@@ -78,43 +102,43 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     // MARK: - SyncedUserDefaultsDelegate
-    func syncedUserDefaults(syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType) {
+    func syncedUserDefaults(_ syncedUserDefaults: SyncedUserDefaults, dbKey key: String, dbValue value: String, changed changeType: SyncedUserDefaults.ChangeType) {
         ToastMessage.show(messageText: "data changed:\nchange type: \(changeType)\nkey: \(key)\nvalue: \(value)")
         switch changeType {
-        case .Added:
+        case .added:
             firebaseKeys.append(key)
-        case .Removed:
-            if let idx = firebaseKeys.indexOf({ return $0 == key }) {
-                firebaseKeys.removeAtIndex(idx)
+        case .removed:
+            if let idx = firebaseKeys.index(where: { return $0 == key }) {
+                firebaseKeys.remove(at: idx)
             }
         default:
             break
         }
     }
 
-    @IBAction func addKeyValueToFirebaseButtonPressed(sender: AnyObject) {
+    @IBAction func addKeyValueToFirebaseButtonPressed(_ sender: AnyObject) {
         UIAlertController.makeAlert(title: "Add value to firebase", message: "put key & value")
-            .withAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-            .withAction(UIAlertAction(title: "Add", style: .Default, handler: { [weak self] (alertAction) -> Void in
-                guard let firebaseKeyTextField = self?.firebaseKeyTextField, firebaseValueTextField = self?.firebaseValueTextField,
-                let key = firebaseKeyTextField.text, value = firebaseValueTextField.text else { return }
+            .withAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            .withAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] (alertAction) -> Void in
+                guard let firebaseKeyTextField = self?.firebaseKeyTextField, let firebaseValueTextField = self?.firebaseValueTextField,
+                let key = firebaseKeyTextField.text, let value = firebaseValueTextField.text else { return }
 
                 DataManager.syncedUserDefaults().putString(key: key, value: value)
             }))
             .withInputText(&firebaseKeyTextField, configurationBlock: { (textField) in
                 textField.placeholder = "key"
-                textField.textAlignment = .Center
+                textField.textAlignment = .center
             })
             .withInputText(&firebaseValueTextField, configurationBlock: { (textField) in
                 textField.placeholder = "value"
-                textField.textAlignment = .Center
+                textField.textAlignment = .center
             })
             .show()
     }
     
-    @IBAction func showCoreDataButtonPressed(sender: AnyObject) {
+    @IBAction func showCoreDataButtonPressed(_ sender: AnyObject) {
         do {
-            try dbStateTableView.😘(belovedObject: "core-data")
+            try dbStateTableView.😘(belovedObject: "core-data" as AnyObject)
         } catch {
             📘("Failed to attach extra data to table view")
         }
@@ -122,9 +146,9 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     func presentTableView() {
-        let bgView = UIView(frame: UIScreen.mainScreen().bounds)
+        let bgView = UIView(frame: UIScreen.main.bounds)
         bgView.alpha = 0.0
-        bgView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+        bgView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         dbStateTableView.superview?.insertSubview(bgView, belowSubview: dbStateTableView)
         dbStateTableView.reloadData()
         bgView.stretchToSuperViewEdges()
@@ -140,7 +164,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
 
-    @IBAction func saveButtonPressed(sender: AnyObject) {
+    @IBAction func saveButtonPressed(_ sender: AnyObject) {
         guard emailTextField.text?.length() > 0 &&
             firstNameTextField.text?.length() > 0 &&
             lastNameTextField.text?.length() > 0 &&
@@ -165,33 +189,32 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         dbStateTableView.reloadData()
     }
 
-    @IBAction func synchronizeButtonPressed(sender: AnyObject) {
-        NSUserDefaults.standardUserDefaults().setObject(userDefaultsTextField.text, forKey: UserDefaultsKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
+    @IBAction func synchronizeButtonPressed(_ sender: AnyObject) {
+        UserDefaults.standard.set(userDefaultsTextField.text, forKey: UserDefaultsKey)
+        UserDefaults.standard.synchronize()
     }
 
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-            let firstResponder = view.firstResponder()
-            where firstResponder != userDefaultsTextField &&
+            let firstResponder = view.firstResponder(), firstResponder != userDefaultsTextField &&
             firstResponder != firebaseKeyTextField else { return }
 
         if /*let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,*/
             let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardFrame = keyboardFrameValue.CGRectValue()
+            let keyboardFrame = keyboardFrameValue.cgRectValue
             let keyboardSize = keyboardFrame.size
             self.view.frame.origin.y = -keyboardSize.height
         }
     }
 
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         self.view.frame.origin.y = 0
     }
 
     // MARK: - UITableViewDataSource
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("CellReuseIdentifier", forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellReuseIdentifier", for: indexPath)
 
         let index = indexPath.row
         if let belovedString = tableView.😍() as? String {
@@ -211,7 +234,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let belovedString = tableView.😍() as? String {
             switch belovedString {
             case "firebase":
@@ -227,17 +250,17 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // MARK: - UITableViewDelegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView(tableView, didTapOnRowAtIndex: indexPath.row)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(tableView: UITableView, didTapOnRowAtIndex tappedIndex: Int) {
+    func tableView(_ tableView: UITableView, didTapOnRowAtIndex tappedIndex: Int) {
         var toastMessage = ""
         if let belovedString = tableView.😍() as? String {
             switch belovedString {
             case "firebase":
-                if let key = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: tappedIndex, inSection: 0))?.textLabel?.text,
+                if let key = tableView.cellForRow(at: IndexPath(row: tappedIndex, section: 0))?.textLabel?.text,
                     let value = DataManager.syncedUserDefaults().currentDictionary[key] {
                     toastMessage = value
                 }
@@ -251,7 +274,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         ToastMessage.show(messageText: toastMessage)
     }
     
-    func tableView(tableView: UITableView, didLongTapOnRowAtIndex longTappedIndex: Int) {
+    func tableView(_ tableView: UITableView, didLongTapOnRowAtIndex longTappedIndex: Int) {
         if let belovedString = tableView.😍() as? String {
             switch belovedString {
             case "firebase":
@@ -260,26 +283,26 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
                     .withInputText(&firebaseValueTextField) { (textField) in
                         textField.placeholder = "new value"
                         textField.text = SyncedUserDefaults.sharedInstance.currentDictionary[key]
-                    }.withAction(UIAlertAction(title: "Change", style: .Destructive, handler: { [weak self] (alertAction) in
+                    }.withAction(UIAlertAction(title: "Change", style: .destructive, handler: { [weak self] (alertAction) in
                         guard let newValue = self?.firebaseValueTextField.text else { return }
                         SyncedUserDefaults.sharedInstance.putString(key: key, value: newValue)
                         self?.refreshUsersArray()
                         tableView.reloadData()
                     }))
-                    .withAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    .withAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                     .show()
             case "core-data":
                 let modifiedUser = self.users[longTappedIndex]
                 UIAlertController.makeAlert(title: "Edit '\(modifiedUser.nickname)'", message: "enter a new nickname:")
                     .withInputText(&coreDataNewNicknameTextField) { (textField) in
                         textField.placeholder = "nickname"
-                    }.withAction(UIAlertAction(title: "Change", style: .Destructive, handler: { (alertAction) in
+                    }.withAction(UIAlertAction(title: "Change", style: .destructive, handler: { (alertAction) in
                         modifiedUser.nickname = self.coreDataNewNicknameTextField.text
                         modifiedUser.save()
                         self.refreshUsersArray()
                         tableView.reloadData()
                     }))
-                    .withAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    .withAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                     .show()
             default:
                 break
@@ -287,15 +310,15 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if let belovedString = tableView.😍() as? String {
             switch belovedString {
             case "firebase":
-                if let key = tableView.cellForRowAtIndexPath(indexPath)?.textLabel?.text {
+                if let key = tableView.cellForRow(at: indexPath)?.textLabel?.text {
                     DataManager.syncedUserDefaults().removeString(key: key)
                 }
             case "core-data":
@@ -313,7 +336,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
 
         tableView.beginUpdates()
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+        tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
         tableView.endUpdates()
     }
 

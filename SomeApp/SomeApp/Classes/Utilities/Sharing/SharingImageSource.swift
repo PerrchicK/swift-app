@@ -9,29 +9,29 @@
 import UIKit
 
 class SharingImageSource: NSObject, UIActivityItemSource {
-    private var image: UIImage
+    fileprivate var image: UIImage
 
-    let UIActivityTypeMyApp = "com.perrchick.SomeApp.SomeExtension"
+    let activityTypeMyApp = "com.perrchick.SomeApp.SomeExtension"
 
     init(image: UIImage) {
         self.image = image
         super.init() // AFTER assignment, only because the image is not optional
     }
 
-    func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return UIImage()
     }
     
-    func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
         
-        switch activityType {
-        case UIActivityTypeMessage:
+        switch activityType.rawValue {
+        case UIActivityType.message.rawValue:
             fallthrough
-        case UIActivityTypeSaveToCameraRoll:
+        case UIActivityType.saveToCameraRoll.rawValue:
             fallthrough
-        case UIActivityTypeMail:
+        case UIActivityType.mail.rawValue:
             fallthrough
-        case UIActivityTypeMyApp:
+        case activityTypeMyApp:
             return self.image
         default:
             return nil

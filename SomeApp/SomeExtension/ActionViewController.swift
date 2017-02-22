@@ -23,15 +23,15 @@ class ActionViewController: UIViewController {
         // For example, look for an image and place it into an image view.
         // Replace this with something appropriate for the type[s] your extension supports.
         var imageFound = false
-        for item: AnyObject in self.extensionContext!.inputItems {
+        for item: Any in self.extensionContext!.inputItems {
             let inputItem = item as! NSExtensionItem
-            for provider: AnyObject in inputItem.attachments! {
+            for provider: Any in inputItem.attachments! {
                 let itemProvider = provider as! NSItemProvider
                 if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeImage as String) {
                     // This is an image! We'll load it, then place it in our image view.
                     weak var weakImageView = self.imageView
-                    itemProvider.loadItemForTypeIdentifier(kUTTypeImage as String, options: nil, completionHandler: { (sharedImage, error) in
-                        NSOperationQueue.mainQueue().addOperationWithBlock {
+                    itemProvider.loadItem(forTypeIdentifier: kUTTypeImage as String, options: nil, completionHandler: { (sharedImage, error) in
+                        OperationQueue.main.addOperation {
                             if let strongImageView = weakImageView {
                                 if let image = sharedImage as? UIImage { // Modified by Perry
                                     strongImageView.image = image
@@ -46,8 +46,8 @@ class ActionViewController: UIViewController {
                 } else if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeText as String) { // Added by Perry
                     // This is a text!
                     weak var weakTextView = self.textView
-                    itemProvider.loadItemForTypeIdentifier(kUTTypeText as String, options: nil, completionHandler: { (sharedText, error) in
-                        NSOperationQueue.mainQueue().addOperationWithBlock {
+                    itemProvider.loadItem(forTypeIdentifier: kUTTypeText as String, options: nil, completionHandler: { (sharedText, error) in
+                        OperationQueue.main.addOperation {
                             if let strongTextView = weakTextView {
                                 if let someText = sharedText as? String {
                                     strongTextView.text = someText
@@ -76,6 +76,6 @@ class ActionViewController: UIViewController {
     @IBAction func done() {
         // Return any edited content to the host app.
         // This template doesn't do anything, so we just echo the passed in items.
-        self.extensionContext!.completeRequestReturningItems(self.extensionContext!.inputItems, completionHandler: nil)
+        self.extensionContext!.completeRequest(returningItems: self.extensionContext!.inputItems, completionHandler: nil)
     }
 }

@@ -7,9 +7,9 @@
 import Foundation
 import UIKit
 
-public class NibView: UIView {
+open class NibView: UIView {
 
-    private struct AssociatedKeys {
+    fileprivate struct AssociatedKeys {
         static var NibsKey = "nibViewNibsAssociatedKeys"
     }
 
@@ -33,45 +33,45 @@ public class NibView: UIView {
         // Override in children to get this event...
     }
     
-    private static func _nibLoadingAssociatedNibWithName(nibName: String) -> UINib? {
+    fileprivate static func _nibLoadingAssociatedNibWithName(_ nibName: String) -> UINib? {
         
         let associatedNibs = objc_getAssociatedObject(self, &AssociatedKeys.NibsKey) as? NSDictionary
-        var nib: UINib? = associatedNibs?.objectForKey(nibName) as? UINib
+        var nib: UINib? = associatedNibs?.object(forKey: nibName) as? UINib
         
         if (nib == nil) {
             nib = UINib(nibName: nibName, bundle: nil)
             
             let updatedAssociatedNibs = NSMutableDictionary()
             if (associatedNibs != nil) {
-                updatedAssociatedNibs.addEntriesFromDictionary(associatedNibs! as! [String:UINib])
+                updatedAssociatedNibs.addEntries(from: associatedNibs! as! [String:UINib])
             }
             
-            updatedAssociatedNibs.setObject(nib!, forKey: nibName)
+            updatedAssociatedNibs.setObject(nib!, forKey: nibName as NSCopying)
             objc_setAssociatedObject(self, &AssociatedKeys.NibsKey, updatedAssociatedNibs, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         
         return nib
     }
     
-    public func loadViewContentsFromNib() {
-        loadViewContentsFromNibNamed(className(self.dynamicType))
+    open func loadViewContentsFromNib() {
+        loadViewContentsFromNibNamed(className(type(of: self)))
     }
     
-    public func loadViewContentsFromNibNamed(nibName:String) {
+    open func loadViewContentsFromNibNamed(_ nibName:String) {
         
-        let nib = self.dynamicType._nibLoadingAssociatedNibWithName(nibName)
+        let nib = type(of: self)._nibLoadingAssociatedNibWithName(nibName)
         
         if let nib = nib {
             
-            let views = nib.instantiateWithOwner(self, options: nil) as NSArray
+            let views = nib.instantiate(withOwner: self, options: nil) as NSArray
             assert(views.count == 1, "There must be exactly one root container view in \(nibName)")
             
             let containerView = views.firstObject as! UIView
             
-            assert(containerView.isKindOfClass(UIView.self) || containerView.isKindOfClass(self.dynamicType), "UIView+NibLoading: The container view in nib \(nibName) should be a UIView instead of \(className(containerView.dynamicType)). (It's only a container, and it's discarded after loading.")
+            assert(containerView.isKind(of: UIView.self) || containerView.isKind(of: type(of: self)), "UIView+NibLoading: The container view in nib \(nibName) should be a UIView instead of \(className(type(of: containerView))). (It's only a container, and it's discarded after loading.")
             
             containerView.translatesAutoresizingMaskIntoConstraints = false
-            if CGRectEqualToRect(self.bounds, CGRectZero) {
+            if self.bounds.equalTo(CGRect.zero) {
                 //`self` has no size : use the containerView's size, from the nib file
                 self.bounds = containerView.bounds
             }

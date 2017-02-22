@@ -5,6 +5,6 @@ target "SomeApp" do
   pod 'MMDrawerController', '~> 0.5.7'
   pod 'Firebase/Core'
   pod 'Firebase/Database'
-  pod 'Alamofire', '~> 3.0'
-  pod 'BetterSegmentedControl', '~> 0.1'
+  pod 'Alamofire', '~> 4.3'
+  pod 'BetterSegmentedControl', '~> 0.7'
 end

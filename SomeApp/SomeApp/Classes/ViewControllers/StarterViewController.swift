@@ -18,11 +18,12 @@ class StarterViewController: UIViewController {
         let mainViewController = MainViewController.instantiate()
         let leftMenuViewController = LeftMenuViewController.instantiate()
         leftMenuViewController.delegate = mainViewController
-        let drawerController = MMDrawerController(centerViewController: mainViewController, leftDrawerViewController: leftMenuViewController)
-        drawerController.openDrawerGestureModeMask = .All
-        drawerController.closeDrawerGestureModeMask = .All
-        drawerController.title = "Swift Course"
-        return drawerController
+        let drawerController = MMDrawerController(center: mainViewController, leftDrawerViewController: leftMenuViewController)
+        drawerController?.openDrawerGestureModeMask = .all
+        drawerController?.closeDrawerGestureModeMask = .all
+        drawerController?.title = "Swift Course"
+
+        return drawerController!
     }()
 
     // MARK: - Lifcycle
@@ -30,27 +31,27 @@ class StarterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSNotificationCenter.defaultCenter().addObserverForName(InAppNotifications.CloseDrawer, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: InAppNotifications.CloseDrawer), object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
             guard let strongSelf = self else { return }
 
-            strongSelf.drawer.closeDrawerAnimated(true, completion: nil)
+            strongSelf.drawer.closeDrawer(animated: true, completion: nil)
         }
         📘(" ... ")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         📘(" ... ")
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         // Will run only once
         let navigationController = UINavigationController(rootViewController: drawer)
-        navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .Done, target: self, action: #selector(openLeftMenu))
-        presentViewController(navigationController, animated: true, completion: nil)
+        navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .done, target: self, action: #selector(openLeftMenu))
+        present(navigationController, animated: true, completion: nil)
 
         📘(" ... ")
     }
@@ -62,17 +63,17 @@ class StarterViewController: UIViewController {
     
     // MARK: - Other super class methods
     
-    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
-        if motion == .MotionShake {
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
             // Show local UI live debugging tool
-            FLEXManager.sharedManager().showExplorer() // Delete if it doesn't exist
+            FLEXManager.shared().showExplorer() // Delete if it doesn't exist
         }
     }
 
     // MARK: - Other super class methods
 
     func openLeftMenu () {
-        drawer.openDrawerSide(.Left, animated: true, completion: nil)
+        drawer.open(.left, animated: true, completion: nil)
     }
 
 }

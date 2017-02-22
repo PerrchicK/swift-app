@@ -9,8 +9,8 @@
 import Foundation
 
 protocol TicTabToeGameDelegate: class {
-    func ticTabToeGame(game: TicTabToeGame, finishedWithWinner winner: TicTabToeGame.Player)
-    func isGameEnabled(game: TicTabToeGame) -> Bool
+    func ticTabToeGame(_ game: TicTabToeGame, finishedWithWinner winner: TicTabToeGame.Player)
+    func isGameEnabled(_ game: TicTabToeGame) -> Bool
 }
 
 class TicTabToeGame {
@@ -33,7 +33,7 @@ class TicTabToeGame {
     }
 
     // Computed property
-    private var isGameEnabled: Bool {
+    fileprivate var isGameEnabled: Bool {
         // Using 'guard' keyword to ensure that the delegate exists (not null):
         guard let delegate = delegate else { return false }
         // If exists: Make a new (and not optional!) object and continue
@@ -42,14 +42,14 @@ class TicTabToeGame {
         return delegate.isGameEnabled(self)
     }
 
-    private var matrix = Array<[Int?]>(count: Configuration.ColumnsCount, repeatedValue: Array<Int?>(count: Configuration.RowsCount, repeatedValue: nil))
-    private(set) var currentPlayer: Player
+    fileprivate var matrix = Array<[Int?]>(repeating: Array<Int?>(repeating: nil, count: Configuration.RowsCount), count: Configuration.ColumnsCount)
+    fileprivate(set) var currentPlayer: Player
     
     init() {
         currentPlayer = Player.X
     }
     
-    func playerMadeMove(row: Int, column: Int) -> Bool {
+    func playerMadeMove(_ row: Int, column: Int) -> Bool {
         var didPlay = false
         // Using 'guard' keyword to ensure conditions
         guard isGameEnabled && matrix[row][column] == nil else { return didPlay }
@@ -66,16 +66,16 @@ class TicTabToeGame {
         return didPlay
     }
 
-    private func switchTurns() {
+    fileprivate func switchTurns() {
         currentPlayer = currentPlayer == Player.X ? Player.O : Player.X
     }
 
-    private func checkWinner() -> Player? {
+    fileprivate func checkWinner() -> Player? {
         var winner: Player? = nil
         var diagonalSequenceCounter = 0
         var reverseDiagonalSequenceCounter = 0
 
-        var verticalSequenceCounter = Array<Int>(count: Configuration.MaxMovesInSequence, repeatedValue: 0)
+        var verticalSequenceCounter = Array<Int>(repeating: 0, count: Configuration.MaxMovesInSequence)
 //      Or: var verticalSequenceCounter = [0,0,0]
         for row in 0...Configuration.RowsCount - 1 {
             // Using 'guard' keyword for optimization in runtime, skips redundant loops
