@@ -57,6 +57,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To show images from your library on the screen</string>
+	<string>To demonstrate image picking from your library to the screen</string>
 </dict>
 </plist>
