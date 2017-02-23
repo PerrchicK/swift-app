@@ -19,16 +19,12 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     
     @IBOutlet weak var gyroDataLabel: UILabel!
     @IBOutlet weak var pickedImageButton: UIButton!
-    @IBOutlet weak var betterSegmentedControl_source_PlaceHolder: UIView!
-    @IBOutlet weak var betterSegmentedControl_type_PlaceHolder: UIView!
-    @IBOutlet weak var betterSegmentedControl_isEditable_PlaceHolder: UIView!
+    // More info at: https://littlebitesofcocoa.com/226-bettersegmentedcontrol
+    @IBOutlet weak var sourceControl: BetterSegmentedControl!
+    @IBOutlet weak var typeControl: BetterSegmentedControl!
+    @IBOutlet weak var isEditableControl: BetterSegmentedControl!
 
     @IBOutlet weak var cameraLensPreviewButton: UIButton!
-    
-    // More info at: https://littlebitesofcocoa.com/226-bettersegmentedcontrol
-    var sourceControl: BetterSegmentedControl!
-    var typeControl: BetterSegmentedControl!
-    var isEditableControl: BetterSegmentedControl!
 
     var device: AVCaptureDevice?
     var captureSession: AVCaptureSession?
@@ -72,22 +68,27 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             isEditableControlIndex = selectedIndexesDictionary["isEditableControl"] ?? 0
         }
 
-        sourceControl = BetterSegmentedControl(frame: CGRect.zero, titles: ["Library", "Camera", "Moments"], index: sourceControlIndex, backgroundColor: UIColor.brown, titleColor: UIColor.black, indicatorViewBackgroundColor: UIColor.red, selectedTitleColor: UIColor.white)
-        betterSegmentedControl_source_PlaceHolder.addSubview(sourceControl)
-        sourceControl.stretchToSuperViewEdges()
+        sourceControl.titles = ["Library", "Camera", "Moments"]
+        try? sourceControl.setIndex(sourceControlIndex)
+        sourceControl.backgroundColor = UIColor.brown
+        sourceControl.titleColor = UIColor.black
+        sourceControl.indicatorViewBackgroundColor = UIColor.red
+        sourceControl.selectedTitleColor = UIColor.white
 
-        typeControl = BetterSegmentedControl(frame: CGRect.zero, titles: [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue], index: typeControlIndex, backgroundColor: UIColor.yellow, titleColor: UIColor.black, indicatorViewBackgroundColor: UIColor.green.withAlphaComponent(0.5), selectedTitleColor: UIColor.blue)
-        betterSegmentedControl_type_PlaceHolder.addSubview(typeControl)
-        typeControl.stretchToSuperViewEdges()
+        typeControl.titles = [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue]
+        try? typeControl.setIndex(typeControlIndex)
+        typeControl.backgroundColor = UIColor.yellow
+        typeControl.titleColor = UIColor.black
+        typeControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
+        typeControl.selectedTitleColor = UIColor.blue
 
-        isEditableControl = BetterSegmentedControl(frame: CGRect.zero, titles: ["editable","not editable"], index: isEditableControlIndex, backgroundColor: UIColor.brown, titleColor: UIColor.gray, indicatorViewBackgroundColor: UIColor.green.withAlphaComponent(0.5), selectedTitleColor: UIColor.green)
+        isEditableControl.titles = ["editable","not editable"]
+        try? isEditableControl.setIndex(isEditableControlIndex)
+        isEditableControl.backgroundColor = UIColor.brown
+        isEditableControl.titleColor = UIColor.gray
+        isEditableControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
+        isEditableControl.selectedTitleColor = UIColor.green
         isEditableControl.layer.cornerRadius = 5
-        betterSegmentedControl_isEditable_PlaceHolder.addSubview(isEditableControl)
-        isEditableControl.stretchToSuperViewEdges()
-
-        betterSegmentedControl_source_PlaceHolder.backgroundColor  = UIColor.clear
-        betterSegmentedControl_type_PlaceHolder.backgroundColor  = UIColor.clear
-        betterSegmentedControl_isEditable_PlaceHolder.backgroundColor  = UIColor.clear
 
         sourceControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         typeControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
