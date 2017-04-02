@@ -74,7 +74,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
 
     func scheduleAutoScrollTimer() {
         if !(autoScrollTimer?.isValid ?? false) {
-            autoScrollTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
+            // Turned off for now
+            //autoScrollTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(teaseUserToScroll(_:)), userInfo: nil, repeats: true)
         }
     }
 
