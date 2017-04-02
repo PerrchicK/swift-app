@@ -18,7 +18,6 @@
 		756791051CC66CF900EC507D /* SomeExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 756790FB1CC66CF900EC507D /* SomeExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7567910D1CC6741F00EC507D /* swift-logo-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 7567910C1CC6741F00EC507D /* swift-logo-placeholder.png */; };
 		7567910F1CC67EFA00EC507D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7567910E1CC67EFA00EC507D /* Images.xcassets */; };
-		756AC8D21C7C3AC500369A4C /* TicTabToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */; };
 		756B02621C798621007DC54A /* CollectionContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756B02611C798621007DC54A /* CollectionContainerViewController.swift */; };
 		756B96111CA2178700BF308D /* CommunicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756B96101CA2178700BF308D /* CommunicationViewController.swift */; };
 		7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */; };
@@ -122,7 +121,6 @@
 		756791021CC66CF900EC507D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7567910C1CC6741F00EC507D /* swift-logo-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swift-logo-placeholder.png"; sourceTree = "<group>"; };
 		7567910E1CC67EFA00EC507D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTabToeGame.swift; sourceTree = "<group>"; };
 		756B02611C798621007DC54A /* CollectionContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionContainerViewController.swift; sourceTree = "<group>"; };
 		756B96101CA2178700BF308D /* CommunicationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationViewController.swift; sourceTree = "<group>"; };
 		7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 		756AC8D01C7C3AC500369A4C /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				756AC8D11C7C3AC500369A4C /* TicTabToeGame.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -666,7 +663,6 @@
 				7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */,
 				75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */,
 				7573DE001C7780A700E3C37F /* AnimationsViewController.swift in Sources */,
-				756AC8D21C7C3AC500369A4C /* TicTabToeGame.swift in Sources */,
 				7582DB8F1CADDBE2001CDC62 /* SomeAnnotationView.swift in Sources */,
 				75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */,
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
