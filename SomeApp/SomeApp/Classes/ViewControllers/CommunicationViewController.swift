@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Alamofire
 
 class CommunicationViewController: UIViewController, MKMapViewDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
@@ -50,7 +51,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     }
 
     @IBAction func afnetworkingRequestButtonPressed(_ sender: UIButton) {
-//        requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
+        requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
     
     /**
@@ -63,19 +64,19 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
      - parameter longitude: Double for longitude value
      */
     func requestAddressWithNSURLSession(latitude lat: Double, longitude lng: Double) {
-        
         let urlString = String(format: "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%@", lat, lng ,GoogleMapsUrlApiKey)
-        let url = URL(string: urlString)
-        let request = URLRequest(url: url!)
+        guard let url = URL(string: urlString) else { return }
+        let request = URLRequest(url: url)
 
-        let task = URLSession.shared.dataTask(with: request, completionHandler: { [weak self] (data, response, connectionError) -> Void in
+        let dataTask = URLSession.shared.dataTask(with: request, completionHandler: { [weak self] (data, response, connectionError) -> Void in
             guard let data = data else { return }
             if connectionError == nil {
                 do {
                     let innerJson = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-
+                    let toastText = self?.parseResponse(innerJson) ?? "Parsing failed"
                     runOnUiThread(block: { () -> Void in
-                        ToastMessage.show(messageText: self?.parseResponse(innerJson as AnyObject) ?? "Parsing failed")
+                        
+                        ToastMessage.show(messageText: toastText)
                     })
                 } catch {
                     📘("Error: (\(error))")
@@ -84,7 +85,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         })
 
         // Go fetch...
-        task.resume()
+        dataTask.resume()
     }
     
     func requestAddressWithAlamofire(latitude lat: Double, longitude lng: Double) {
@@ -93,18 +94,18 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         
         // Make HTTP request and fetch...
         📘("Calling: \(urlString)")
-//        Alamofire.request(.GET, urlString).responseJSON { [weak self] (response) in
-//            if let JSON = response.result.value, response.result.error == nil {
-//                // Request succeeded! ... parse response
-//                ToastMessage.show(messageText: self?.parseResponse(JSON) ?? "Parsing failed")
-//            } else {
-//                // Request failed! ... handle failure
-//                ToastMessage.show(messageText: "Error retrieving address")
-//            }
-//        }
+        Alamofire.request(urlString).responseJSON { [weak self] (response) in
+            if let JSON = response.result.value, response.result.error == nil {
+                // Request succeeded! ... parse response
+                ToastMessage.show(messageText: self?.parseResponse(JSON) ?? "Parsing failed")
+            } else {
+                // Request failed! ... handle failure
+                ToastMessage.show(messageText: "Error retrieving address")
+            }
+        }
     }
     
-    func parseResponse(_ responseObject: AnyObject) -> String? {
+    func parseResponse(_ responseObject: Any) -> String? {
         var result :String?
 
         guard let responseDictionary = responseObject as? [String:AnyObject],
