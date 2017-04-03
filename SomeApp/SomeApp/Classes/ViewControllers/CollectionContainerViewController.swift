@@ -36,7 +36,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: className(CollectionContainerCell), for: indexPath) as! CollectionContainerCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: className(CollectionContainerCell.self), for: indexPath) as! CollectionContainerCell
 
         cell.configCell()
 
