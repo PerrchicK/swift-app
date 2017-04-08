@@ -8,14 +8,13 @@
 
 import Foundation
 
-protocol TicTabToeGameDelegate: class {
-    func ticTabToeGame(_ game: TicTabToeGame, finishedWithWinner winner: TicTabToeGame.Player)
-    func isGameEnabled(_ game: TicTabToeGame) -> Bool
+protocol TicTabToeGameDelegate: GameDelegate {
 }
 
-class TicTabToeGame {
+class TicTabToeGame: Game {
 
-    weak var delegate: TicTabToeGameDelegate?
+    internal var player: Player?
+    weak internal var delegate: GameDelegate?
 
     struct Configuration {
         static let RowsCount = 3
@@ -23,14 +22,19 @@ class TicTabToeGame {
         static let MaxMovesInSequence = Configuration.RowsCount
     }
 
-    enum Player: String { // Enums don't must to inherit from anywhere, but it's helpful
-        case X = "X"
-        case O = "O"
-
+    enum TicTabToePlayer: Player { // Enums don't must to inherit from anywhere, but it's helpful
+        case X
+        case O
+        
         func intValue() -> Int {
-            return Player.X == self ? 1 : -1
+            return TicTabToePlayer.X == self ? 1 : -1
+        }
+        
+        func stringValue() -> String {
+            return TicTabToePlayer.X == self ? "X" : "O"
         }
     }
+
 
     // Computed property
     fileprivate var isGameEnabled: Bool {
@@ -43,10 +47,10 @@ class TicTabToeGame {
     }
 
     fileprivate var matrix = Array<[Int?]>(repeating: Array<Int?>(repeating: nil, count: Configuration.RowsCount), count: Configuration.ColumnsCount)
-    fileprivate(set) var currentPlayer: Player
+    fileprivate(set) var currentPlayer: TicTabToePlayer
     
     init() {
-        currentPlayer = Player.X
+        currentPlayer = TicTabToePlayer.X
     }
     
     func playerMadeMove(_ row: Int, column: Int) -> Bool {
@@ -58,7 +62,7 @@ class TicTabToeGame {
         didPlay = true
 
         if let winner = checkWinner() {
-            delegate?.ticTabToeGame(self, finishedWithWinner: winner)
+            delegate?.game(self, finishedWithWinner: winner)
         } else {
             switchTurns()
         }
@@ -67,7 +71,7 @@ class TicTabToeGame {
     }
 
     fileprivate func switchTurns() {
-        currentPlayer = currentPlayer == Player.X ? Player.O : Player.X
+        currentPlayer = currentPlayer == TicTabToePlayer.X ? TicTabToePlayer.O : TicTabToePlayer.X
     }
 
     fileprivate func checkWinner() -> Player? {

@@ -144,7 +144,7 @@ class ConcurrencyViewController: UIViewController {
             self?.ungroupedProgressBar.animateBounce()
         }
 
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             for progress in 1...100 {
                 Thread.sleep(forTimeInterval: 0.001)
 

@@ -9,31 +9,6 @@
 import Foundation
 import UIKit
 
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
-
 class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimationDelegate, AnimatedGifBoxViewDelegate {
     
     @IBOutlet weak var animatedOutTransitionView: UIView!
@@ -247,7 +222,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
 
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let isOperatedByUser = scrollView.gestureRecognizers?.filter ({ [.began, .changed].contains($0.state) } ).count > 0
+        let currentlyActiveGestureRecognizersCount = scrollView.gestureRecognizers?.filter({ [.began, .changed].contains($0.state) }).count ?? 0
+        let isOperatedByUser = currentlyActiveGestureRecognizersCount > 0
         if isOperatedByUser {
             // Disable "teasing"
             autoScrollTimer?.invalidate()

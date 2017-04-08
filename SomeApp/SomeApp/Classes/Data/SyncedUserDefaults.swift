@@ -47,7 +47,7 @@ class SyncedUserDefaults {
         case .childMoved:
             changeType = .modified
         default:
-            print("\(className(SyncedUserDefaults)) Error: unhandled firebase change type: \(firebaseChangeType)")
+            print("\(className(SyncedUserDefaults.self)) Error: unhandled firebase change type: \(firebaseChangeType)")
         }
 
         // Update current state
@@ -97,11 +97,13 @@ class SyncedUserDefaults {
         })
     }
 
+    @discardableResult
     func putString(key: String, value: String) -> SyncedUserDefaults {
         syncedDbRef?.child(key).setValue(value)
         return self
     }
 
+    @discardableResult
     func removeString(key: String) -> SyncedUserDefaults {
         syncedDbRef?.child(key).removeValue()
         return self

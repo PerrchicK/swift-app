@@ -25,6 +25,7 @@ class Synchronizer {
             }
         }
 
+        @discardableResult
         func release() -> Bool {
             if !blockOperation.isFinished {
                 // Dispatch...
@@ -56,7 +57,7 @@ class Synchronizer {
 
         self.completionOperation = completionOperation
     }
-    
+
     func createHolder(onReleaseBlock: (() -> Void)? = nil) -> HolderTicket {
         let blocker = HolderTicket(raceConditionQueue: self.raceConditionQueue, block: onReleaseBlock)
         self.completionOperation.addDependency(blocker.blockOperation)

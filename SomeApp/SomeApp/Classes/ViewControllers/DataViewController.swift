@@ -7,30 +7,6 @@
 //
 
 import UIKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 class DataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SyncedUserDefaultsDelegate, UITextFieldDelegate {
     let UserDefaultsKey = "MyKeyToSaveObjectInNSUSerDefaults"
@@ -165,10 +141,10 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     @IBAction func saveButtonPressed(_ sender: AnyObject) {
-        guard emailTextField.text?.length() > 0 &&
-            firstNameTextField.text?.length() > 0 &&
-            lastNameTextField.text?.length() > 0 &&
-            nicknameTextField.text?.length() > 0 else { return }
+        guard (emailTextField.text?.length() ?? 0) > 0 &&
+            (firstNameTextField.text?.length() ?? 0) > 0 &&
+            (lastNameTextField.text?.length() ?? 0) > 0 &&
+            (nicknameTextField.text?.length() ?? 0) > 0 else { return }
 
         let user = DataManager.createUser()
 

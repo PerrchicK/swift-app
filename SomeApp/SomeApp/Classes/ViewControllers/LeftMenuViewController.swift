@@ -30,7 +30,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         [LeftMenuOptions.SwiftStuff.OperatorsOverloading],
     LeftMenuOptions.Concurrency.title:
         [LeftMenuOptions.Concurrency.GCD]]
-    let leftMenuCellReuseIdentifier = className(LeftMenuCell)
+    let leftMenuCellReuseIdentifier = className(LeftMenuCell.self)
 
     @IBOutlet weak var itemsTableView: UITableView!
 

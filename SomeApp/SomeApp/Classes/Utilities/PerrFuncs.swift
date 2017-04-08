@@ -176,8 +176,8 @@ extension String {
 extension UIImage {
     static func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
         guard let url = URL(string: urlString) else { completionClosure?(nil); return }
-        
-        let backgroundQueue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
+
+        let backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         // Run on background thread:
         backgroundQueue.async {
             var image: UIImage? = nil

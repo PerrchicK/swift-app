@@ -19,7 +19,7 @@ class NotificationsViewController: UIViewController {
         //MARK:- dispach delayed notifications
         let shortLength = DispatchTime.timeWithSeconds(ToastMessage.ToastMessageLength.short.rawValue)
 
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).asyncAfter(deadline: shortLength) { () -> Void in
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).asyncAfter(deadline: shortLength) { () -> Void in
             NotificationCenter.default.post(name: Notification.Name(rawValue: "yo1"), object: nil)
 
             DispatchQueue.main.asyncAfter(deadline: shortLength) { () -> Void in

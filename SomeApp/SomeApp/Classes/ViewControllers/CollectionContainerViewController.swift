@@ -57,7 +57,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! CollectionContainerCell
 
-        let currentPlayerMark = game.currentPlayer.rawValue
+        let currentPlayerMark = game.currentPlayer.stringValue()
         if game.playerMadeMove(indexPath.section, column: indexPath.row) {
             // Move confirmed
             cell.placeMark(currentPlayerMark)
@@ -84,12 +84,12 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
 
     // MARK: - TicTabToeGameDelegate
 
-    func ticTabToeGame(_ game: TicTabToeGame, finishedWithWinner winner: TicTabToeGame.Player) {
+    func game(_ game: Game, finishedWithWinner winner: Player) {
         ToastMessage.show(messageText: "winner: \(winner)")
         isGameEnabled = false
     }
 
-    func isGameEnabled(_ game: TicTabToeGame) -> Bool {
+    func isGameEnabled(_ game: Game) -> Bool {
         return isGameEnabled
     }
 }

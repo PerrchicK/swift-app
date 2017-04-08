@@ -48,7 +48,7 @@ class DataManager {
     }
     
     static func createUser() -> User {
-        let entity = NSEntityDescription.entity(forEntityName: className(User), in: DataManager.managedContext)
+        let entity = NSEntityDescription.entity(forEntityName: className(User.self), in: DataManager.managedContext)
         return User(entity: entity!, insertInto: DataManager.managedContext)
     }
 
@@ -58,7 +58,7 @@ class DataManager {
 
     static func fetchUsers(_ named: String? = nil) -> [User]? {
         var fetchedUsers: [User]?
-        let usersFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: className(User))
+        let usersFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: className(User.self))
         
         if named != nil {
             usersFetchRequest.predicate = NSPredicate(format: "firstName == %@", named!)

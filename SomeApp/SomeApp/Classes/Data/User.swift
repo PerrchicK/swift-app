@@ -19,6 +19,7 @@ class User: NSManagedObject {
         super.init(entity: entity, insertInto: context)
     }
 
+    @discardableResult
     func save() -> Bool {
         var isSaved = false
         do {
