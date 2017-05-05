@@ -26,19 +26,20 @@ class User: NSManagedObject {
             try self.managedObjectContext?.save()
             isSaved = true
         } catch {
-            📘("Error: failed to save user in Core Data: \(error)")
+            📘("Error: failed to save user (\(self)) in Core Data: \(error)")
         }
         
         return isSaved
     }
-    
+
     func remove() -> Bool {
         self.managedObjectContext?.delete(self)
 
         return true
     }
-    
+
+    // We have this method thanks to the NSObject inheritance
     override var description: String {
-        return "First name: \(firstName)\n,Enail: \(email)"
+        return "first name: \(firstName ?? "none"), email: \(email ?? "none")"
     }
 }

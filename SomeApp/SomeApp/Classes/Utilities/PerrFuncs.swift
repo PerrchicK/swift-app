@@ -16,7 +16,7 @@ public typealias CompletionClosure = ((AnyObject?) -> Void)
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-public func 📘(_ logMessage: String, file:String = #file, function:String = #function, line:Int = #line) {
+public func 📘(_ logMessage: Any, file:String = #file, function:String = #function, line:Int = #line) {
     let formattter = DateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
     let timesamp = formattter.string(from: Date())
@@ -223,7 +223,7 @@ extension UIImageView {
 //MARK: - Global Extensions
 
 // Declare a global var to produce a unique address as the assoc object handle
-var SompApplicationBelovedProperty: UInt8 = 0
+var SompApplicationHuggedProperty: UInt8 = 0
 
 infix operator &* { associativity left precedence 140 }
 
@@ -232,17 +232,18 @@ extension NSObject { // try extending 'AnyObject'...
      Attaches any object to this NSObject.
      This enables the same idea of user info, to every object that inherits from NSObject.
      */
-    func 😘(belovedObject: AnyObject) throws -> Bool {
+    @discardableResult
+    func 😘(huggedObject: Any) -> Bool {
         //infix operator 😘 { associativity left precedence 140 }
-        📘("loving \(belovedObject)")
+        📘("hugging \(huggedObject)")
         
-        objc_setAssociatedObject(self, &SompApplicationBelovedProperty, belovedObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &SompApplicationHuggedProperty, huggedObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
         return true
     }
     
     func 😍() -> AnyObject? { // 1
-        guard let value = objc_getAssociatedObject(self, &SompApplicationBelovedProperty) else {
+        guard let value = objc_getAssociatedObject(self, &SompApplicationHuggedProperty) else {
             return nil
         }
         
@@ -270,8 +271,8 @@ extension UIAlertController {
     /**
      Dismisses the current alert (if presented) and pops up the new one
      */
-    func show() {
-        guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(self.title), message: \(self.message)]"); return }
+    func show() -> UIAlertController? {
+        guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(String(describing: self.title)), message: \(String(describing: self.message))]"); return nil }
         if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
             // 1. Dismiss the alert
             mostTopViewController.dismiss(animated: true, completion: {
@@ -281,6 +282,8 @@ extension UIAlertController {
         } else {
             mostTopViewController.present(self, animated: true, completion: nil)
         }
+
+        return self
     }
 
     func withAction(_ action: UIAlertAction) -> UIAlertController {
@@ -288,10 +291,9 @@ extension UIAlertController {
         return self
     }
 
-    func withInputText(_ textFieldToAdd: inout UITextField, configurationBlock: @escaping ((_ textField: inout UITextField) -> Void)) -> UIAlertController {
-        self.addTextField(/*configurationHandler: */ configurationHandler: { (textField: UITextField!) -> Void in
-//            textFieldToAdd = textField
-//            configurationBlock(&textFieldToAdd)
+    func withInputText(configurationBlock: @escaping ((_ textField: UITextField) -> Void)) -> UIAlertController {
+        self.addTextField(configurationHandler: { (textField: UITextField!) -> () in
+            configurationBlock(textField)
         })
         return self
     }
@@ -322,7 +324,7 @@ extension UIViewController {
     
     fileprivate class func instantiateFromStoryboardHelper<T: UIViewController>(_ storyboardName: String?) -> T {
         let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
-        let identifier = NSStringFromClass(T).components(separatedBy: ".").last!
+        let identifier = NSStringFromClass(T.self).components(separatedBy: ".").last!
         let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! T
         return controller
     }

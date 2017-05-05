@@ -42,7 +42,7 @@ class OperatorsViewController: UIViewController {
         var lovingResult : AnyObject?
         
         do {
-            lovingResult = try valueTextField.😘(belovedObject: valueTextField.text! as AnyObject) as AnyObject?
+            lovingResult = try valueTextField.😘(huggedObject: valueTextField.text! as AnyObject) as AnyObject?
         } catch {
         }
         

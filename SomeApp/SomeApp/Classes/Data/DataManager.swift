@@ -26,6 +26,7 @@ class DataManager {
         return appDelegate.managedObjectContext
     }
 
+    @discardableResult
     static func saveImage(_ imageToSave: UIImage, toFile filename: String) -> Bool {
         if let data = UIImagePNGRepresentation(imageToSave) {
             do {
