@@ -11,9 +11,18 @@ import CoreData
 import UIKit
 
 class DataManager {
-    fileprivate static var applicationDirectoryPath: String = {
+    static var applicationLibraryPath: NSString = {
         if let libraryDirectoryPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).last {
-            return libraryDirectoryPath
+            return libraryDirectoryPath as NSString
+        }
+        
+        📘("ERROR!! Library directory not found 😱")
+        return ""
+    }()
+
+    static var applicationDocumentsPath: String = {
+        if let libraryDocumentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last {
+            return libraryDocumentsPath
         }
 
         📘("ERROR!! Library directory not found 😱")
@@ -30,7 +39,8 @@ class DataManager {
     static func saveImage(_ imageToSave: UIImage, toFile filename: String) -> Bool {
         if let data = UIImagePNGRepresentation(imageToSave) {
             do {
-                try data.write(to: URL(fileURLWithPath: applicationDirectoryPath + "/" + filename), options: .atomicWrite)
+                let applicationLibraryPathString = (applicationLibraryPath as String)
+                try data.write(to: URL(fileURLWithPath: applicationLibraryPathString + "/" + filename), options: .atomicWrite)
                 return true
             } catch {
                 📘("Failed to save image!")
@@ -41,7 +51,8 @@ class DataManager {
     }
     
     static func loadImage(fromFile filename: String) -> UIImage? {
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: applicationDirectoryPath + "/" + filename)) {
+        let applicationLibraryPathString = (applicationLibraryPath as String)
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: applicationLibraryPathString + "/" + filename)) {
             return UIImage(data: data)
         }
 

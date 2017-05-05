@@ -6,7 +6,7 @@ target "SomeApp" do
     pod 'Firebase/Core'
     pod 'Firebase/Database'
     pod 'Alamofire', '~> 4.0.1'
-    pod 'BetterSegmentedControl', '~> 0.5'
+    pod 'BetterSegmentedControl', '~> 0.7'
     
     post_install do |installer|
         installer.pods_project.targets.each do |target|

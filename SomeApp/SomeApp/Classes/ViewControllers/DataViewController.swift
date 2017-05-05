@@ -54,7 +54,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         nicknameTextField.delegate = self
         emailTextField.delegate = self
         
-        if let encodedUser = UserDefaults.standard.object(forKey: UserDefaultsUserKey) as? PersistableUser {
+        let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent("PersistableUser"))
+        if let encodedUserData = try? Data(contentsOf: encodedUserFilePath), let encodedUser = NSKeyedUnarchiver.unarchiveObject(with: encodedUserData) as? PersistableUser {
             📘(encodedUser)
         }
     }
@@ -72,17 +73,15 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        if let encodedUser = UserDefaults.standard.object(forKey: UserDefaultsUserKey) as? PersistableUser {
-            📘(encodedUser)
-        }
-
         guard (emailTextField.text?.length() ?? 0) > 0 &&
             (firstNameTextField.text?.length() ?? 0) > 0 &&
             (lastNameTextField.text?.length() ?? 0) > 0 &&
             (nicknameTextField.text?.length() ?? 0) > 0 else { return }
         
-        //let user = PersistableUser(email: emailTextField.text!, firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, nickname: nicknameTextField.text!)
-        //NSKeyedArchiver.archivedData(withRootObject: user).
+        let user = PersistableUser(email: emailTextField.text!, firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, nickname: nicknameTextField.text!)
+        let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent("PersistableUser"))
+
+        NSKeyedArchiver.archivedData(withRootObject: user)//encodedUserFilePath
         self.view.endEditing(true)
     }
 
