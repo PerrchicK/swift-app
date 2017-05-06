@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PersistableUser: NSCoding, CustomStringConvertible {
+class PersistableUser: NSObject, NSCoding {
     var email: String
     var firstName: String
     var lastName: String
@@ -33,10 +33,13 @@ class PersistableUser: NSCoding, CustomStringConvertible {
     }
 
     func encode(with aCoder: NSCoder) {
+        aCoder.encode(email, forKey: "email")
+        aCoder.encode(firstName, forKey: "firstName")
+        aCoder.encode(lastName, forKey: "lastName")
+        aCoder.encode(nickname, forKey: "nickname")
     }
 
-    // We have this method thanks to the CustomStringConvertible implementarion
-    var description: String {
+    override var description: String {
         return "first name: \(firstName), email: \(email)"
     }
 }

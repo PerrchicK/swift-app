@@ -10,7 +10,7 @@ import UIKit
 
 class DataViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SyncedUserDefaultsDelegate, UITextFieldDelegate {
     let UserDefaultsStringKey = "MyKeyToSaveObjectInUSerDefaults"
-    let UserDefaultsUserKey = "MyKeyToSaveEncodedObjectInUSerDefaults"
+    let PersistableUserFileName = "PersistableUserFileName"
     enum TableViewType: String {
         case firebase
         case coreData
@@ -54,7 +54,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         nicknameTextField.delegate = self
         emailTextField.delegate = self
         
-        let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent("PersistableUser"))
+        let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent(PersistableUserFileName))
         if let encodedUserData = try? Data(contentsOf: encodedUserFilePath), let encodedUser = NSKeyedUnarchiver.unarchiveObject(with: encodedUserData) as? PersistableUser {
             📘(encodedUser)
         }
@@ -79,9 +79,9 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             (nicknameTextField.text?.length() ?? 0) > 0 else { return }
         
         let user = PersistableUser(email: emailTextField.text!, firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, nickname: nicknameTextField.text!)
-        let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent("PersistableUser"))
+        let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent(PersistableUserFileName))
 
-        NSKeyedArchiver.archivedData(withRootObject: user)//encodedUserFilePath
+        try? NSKeyedArchiver.archivedData(withRootObject: user).write(to: encodedUserFilePath)
         self.view.endEditing(true)
     }
 
