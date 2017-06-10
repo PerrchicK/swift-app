@@ -11,7 +11,7 @@
 		752583141C9A839800E36E5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583131C9A839800E36E5E /* User.swift */; };
 		753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */; };
 		755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */; };
-		755DB9681CB3029A0092BBC7 /* ImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755DB9671CB3029A0092BBC7 /* ImagesViewController.swift */; };
+		755DB9681CB3029A0092BBC7 /* ImagesAndMotionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755DB9671CB3029A0092BBC7 /* ImagesAndMotionViewController.swift */; };
 		7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */; };
 		756790FE1CC66CF900EC507D /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756790FD1CC66CF900EC507D /* ActionViewController.swift */; };
 		756791011CC66CF900EC507D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 756790FF1CC66CF900EC507D /* MainInterface.storyboard */; };
@@ -25,6 +25,8 @@
 		7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */; };
 		7572206C1E98FBB4000E2B62 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206A1E98FBB4000E2B62 /* Game.swift */; };
 		7572206D1E98FBB4000E2B62 /* TicTabToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */; };
+		7572FD9F1E99259E005A9E9F /* WhackGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572FD9E1E99259E005A9E9F /* WhackGame.swift */; };
+		7572FDA11E9946B3005A9E9F /* GameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7572FDA01E9946B3005A9E9F /* GameCell.xib */; };
 		7573DE001C7780A700E3C37F /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */; };
 		7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */; };
 		7582DB8F1CADDBE2001CDC62 /* SomeAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */; };
@@ -116,7 +118,7 @@
 		755284ED1CD2C0360066D209 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/Firebase.framework"; sourceTree = "<group>"; };
 		755284EF1CD2C03F0066D209 /* MMDrawerController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MMDrawerController.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/MMDrawerController.framework"; sourceTree = "<group>"; };
 		755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		755DB9671CB3029A0092BBC7 /* ImagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
+		755DB9671CB3029A0092BBC7 /* ImagesAndMotionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesAndMotionViewController.swift; sourceTree = "<group>"; };
 		7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		756790FB1CC66CF900EC507D /* SomeExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SomeExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		756790FD1CC66CF900EC507D /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,8 @@
 		7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		7572206A1E98FBB4000E2B62 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTabToeGame.swift; sourceTree = "<group>"; };
+		7572FD9E1E99259E005A9E9F /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
+		7572FDA01E9946B3005A9E9F /* GameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameCell.xib; sourceTree = "<group>"; };
 		7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SomeAnnotationView.xib; sourceTree = "<group>"; };
 		7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomeAnnotationView.swift; sourceTree = "<group>"; };
@@ -255,7 +259,7 @@
 				756B02611C798621007DC54A /* CollectionContainerViewController.swift */,
 				7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */,
 				756B96101CA2178700BF308D /* CommunicationViewController.swift */,
-				755DB9671CB3029A0092BBC7 /* ImagesViewController.swift */,
+				755DB9671CB3029A0092BBC7 /* ImagesAndMotionViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -263,6 +267,7 @@
 		757220691E98FBB4000E2B62 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				7572FD9E1E99259E005A9E9F /* WhackGame.swift */,
 				7572206A1E98FBB4000E2B62 /* Game.swift */,
 				7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */,
 			);
@@ -390,6 +395,7 @@
 				759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */,
 				759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */,
 				75DCE3991C76381A00FF6F18 /* ToastMessage.swift */,
+				7572FDA01E9946B3005A9E9F /* GameCell.xib */,
 				75DCE39B1C76382900FF6F18 /* ToastMessage.xib */,
 				7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */,
 				7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */,
@@ -516,7 +522,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = PerrchicK;
 				TargetAttributes = {
 					756790FA1CC66CF900EC507D = {
@@ -591,6 +597,7 @@
 				755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */,
 				75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
+				7572FDA11E9946B3005A9E9F /* GameCell.xib in Resources */,
 				75A484861CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif in Resources */,
 				75A484821CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif in Resources */,
 				75A4848A1CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif in Resources */,
@@ -698,11 +705,12 @@
 				75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */,
 				75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */,
 				75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */,
-				755DB9681CB3029A0092BBC7 /* ImagesViewController.swift in Sources */,
+				755DB9681CB3029A0092BBC7 /* ImagesAndMotionViewController.swift in Sources */,
 				7572206C1E98FBB4000E2B62 /* Game.swift in Sources */,
 				75DCE39A1C76381A00FF6F18 /* ToastMessage.swift in Sources */,
 				758EB5AB1CBEF56900401625 /* SharingImageSource.swift in Sources */,
 				75F1AD8D1C6F7BB4005D7FCA /* DataViewController.swift in Sources */,
+				7572FD9F1E99259E005A9E9F /* WhackGame.swift in Sources */,
 				752583141C9A839800E36E5E /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -806,8 +814,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -850,8 +860,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -870,6 +882,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -878,11 +891,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 13D73DF6E7281390CC48F4C4 /* Pods-SomeApp.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "SomeApp/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.iOSApp;
@@ -898,10 +911,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 44F4244C711DA98F2A726E1F /* Pods-SomeApp.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "SomeApp/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.iOSApp;
