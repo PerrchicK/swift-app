@@ -137,7 +137,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
                 self.view.layoutIfNeeded()
             }, completion: nil)
         }
-
+        
         animatedImageView.onClick { (tapGestureRecognizer) in
             if self.animatedImageView.animationImages == nil {
                 var frames = [UIImage]()

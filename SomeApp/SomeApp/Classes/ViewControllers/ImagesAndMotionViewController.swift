@@ -246,7 +246,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         }
     }
     
-    // MARK:- AVCaptureVideoDataOutputSampleBufferDelegate
+    // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
     func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }

@@ -1,5 +1,5 @@
 //
-//  TicTabToe.swift
+//  TicTabToeGame.swift
 //  SomeApp
 //
 //  Created by Perry on 2/23/16.
@@ -12,8 +12,7 @@ protocol TicTabToeGameDelegate: GameDelegate {
 }
 
 class TicTabToeGame: Game {
-
-    internal var player: Player?
+    internal var currentPlayer: Player
     weak internal var delegate: GameDelegate?
 
     struct Configuration {
@@ -46,20 +45,17 @@ class TicTabToeGame: Game {
         return delegate.isGameEnabled(self)
     }
 
-    fileprivate var matrix = Array<[Int?]>(repeating: Array<Int?>(repeating: nil, count: Configuration.RowsCount), count: Configuration.ColumnsCount)
-    fileprivate(set) var currentPlayer: TicTabToePlayer
+    fileprivate lazy var matrix = Array<[Int?]>(repeating: Array<Int?>(repeating: nil, count: Configuration.RowsCount), count: Configuration.ColumnsCount)
     
     init() {
         currentPlayer = TicTabToePlayer.X
     }
-    
-    func playerMadeMove(_ row: Int, column: Int) -> Bool {
-        var didPlay = false
-        // Using 'guard' keyword to ensure conditions
-        guard isGameEnabled && matrix[row][column] == nil else { return didPlay }
 
-        matrix[row][column] = currentPlayer.intValue()
-        didPlay = true
+    internal func playMove(player: Player, row: Int, column: Int) {
+        // Using 'guard' statement to ensure conditions
+        guard isGameEnabled && matrix[row][column] == nil else { return }
+
+        matrix[row][column] = player.intValue()
 
         if let winner = checkWinner() {
             delegate?.game(self, finishedWithWinner: winner)
@@ -67,11 +63,12 @@ class TicTabToeGame: Game {
             switchTurns()
         }
 
-        return didPlay
+        delegate?.game(self, playerMadeMove: player, row: row, column: column)
     }
 
     fileprivate func switchTurns() {
-        currentPlayer = currentPlayer == TicTabToePlayer.X ? TicTabToePlayer.O : TicTabToePlayer.X
+        guard let _currentPlayer = currentPlayer as? TicTabToePlayer else { return }
+        currentPlayer = _currentPlayer == TicTabToePlayer.X ? TicTabToePlayer.O : TicTabToePlayer.X
     }
 
     fileprivate func checkWinner() -> Player? {
@@ -127,5 +124,8 @@ class TicTabToeGame: Game {
         }
 
         return winner
+    }
+    
+    func restart() {
     }
 }

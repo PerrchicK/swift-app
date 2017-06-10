@@ -11,24 +11,40 @@ import UIKit
 
 class CollectionContainerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, TicTabToeGameDelegate {
 
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
     
     let NumberOfRows = TicTabToeGame.Configuration.RowsCount // X - number of section
     let NumberOfColumns = TicTabToeGame.Configuration.ColumnsCount // Y - number of items in section
     let TileMargin = CGFloat(5.0)
 
-    var game: TicTabToeGame!
+    static let PLAYER_NAME = "user"
+    lazy var game: Game = {
+//        let game = TicTabToeGame()
+        let game = WhackGame(playerName: CollectionContainerViewController.PLAYER_NAME)
+        game.delegate = self
+
+        return game
+    }()
+
+//    var game: Game
     var isGameEnabled = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        game = TicTabToeGame()
-        game.delegate = self
+        //collectionView.register(GameCell.self, forCellWithReuseIdentifier: className(GameCell.self))
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        reloadGame()
+    }
+    
     func reloadGame() {
         collectionView.reloadData()
+        game.restart()
     }
 
     // MARK: - UICollectionViewDataSource
@@ -36,7 +52,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: className(CollectionContainerCell.self), for: indexPath) as! CollectionContainerCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: className(GameCell.self), for: indexPath) as! GameCell
 
         cell.configCell()
 
@@ -55,13 +71,8 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     // MARK: - UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! CollectionContainerCell
-
-        let currentPlayerMark = game.currentPlayer.stringValue()
-        if game.playerMadeMove(indexPath.section, column: indexPath.row) {
-            // Move confirmed
-            cell.placeMark(currentPlayerMark)
-        }
+        // If the move is confirmed, the delegate will be called
+        game.playMove(player: game.currentPlayer, row: indexPath.section, column: indexPath.item)
     }
 
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
@@ -84,6 +95,14 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
 
     // MARK: - TicTabToeGameDelegate
 
+    func game(_ game: Game, playerMadeMove player: Player, row: Int, column: Int) {
+        guard let cell = collectionView.cellForItem(at: IndexPath(item: column, section: row)) as? GameCell else {
+            📘("Error: failed to get the cell")
+            return
+        }
+        cell.placeMark(player.stringValue())
+    }
+
     func game(_ game: Game, finishedWithWinner winner: Player) {
         ToastMessage.show(messageText: "winner: \(winner)")
         isGameEnabled = false
@@ -94,17 +113,25 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     }
 }
 
-class CollectionContainerCell: UICollectionViewCell {
+class GameCell: UICollectionViewCell {
 
     @IBOutlet weak var playerMarkLabel: UILabel!
 
     func configCell() {
-        📘("configuring cell")
         self.backgroundColor = UIColor.red
         self.playerMarkLabel.text = ""
     }
 
     func placeMark(_ mark: String) {
-        self.playerMarkLabel.text = mark
+        if playerMarkLabel.text?.length() ?? 0 > 0 {
+            playerMarkLabel.animateZoom(zoomIn: false, duration: 0.4, completion: { _ in
+                self.playerMarkLabel.text = ""
+                self.playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            })
+        } else {
+            playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            playerMarkLabel.text = mark
+        }
+        
     }
 }

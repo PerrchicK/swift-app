@@ -69,7 +69,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         DataManager.syncedUserDefaults().delegate = self
         
-        if let persistableUserDataFromDefaults = UserDefaults.standard.object(forKey: "user") as? Data,
+        if let persistableUserDataFromDefaults = UserDefaults.standard.object(forKey: className(PersistableUser.self)) as? Data,
             let persistableUserFromDefaults = NSKeyedUnarchiver.unarchiveObject(with: persistableUserDataFromDefaults) as? PersistableUser {
             📘(persistableUserFromDefaults)
         }
@@ -186,7 +186,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         let user = PersistableUser(email: "user@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty")
         let userData = NSKeyedArchiver.archivedData(withRootObject: user)
-        UserDefaults.standard.set(userData, forKey: "user")
+        UserDefaults.standard.set(userData, forKey: className(PersistableUser.self))
         UserDefaults.standard.synchronize()
     }
 
