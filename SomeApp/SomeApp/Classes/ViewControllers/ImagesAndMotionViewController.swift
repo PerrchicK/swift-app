@@ -32,7 +32,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     var cameraLensImage: UIImage?
 
     // Computed variable example
-    var isEditable: Bool {
+    var isEditableSelected: Bool {
         return isEditableControl.index == 0
     }
 
@@ -76,14 +76,14 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         sourceControl.selectedTitleColor = UIColor.white
 
         typeControl.titles = [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue]
-        try? sourceControl.set(typeControlIndex)
+        try? typeControl.set(typeControlIndex)
         typeControl.backgroundColor = UIColor.yellow
         typeControl.titleColor = UIColor.black
         typeControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
         typeControl.selectedTitleColor = UIColor.blue
 
         isEditableControl.titles = ["editable","not editable"]
-        try? sourceControl.set(isEditableControlIndex)
+        try? isEditableControl.set(isEditableControlIndex)
         isEditableControl.backgroundColor = UIColor.brown
         isEditableControl.titleColor = UIColor.gray
         isEditableControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
@@ -165,7 +165,12 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
     @IBAction func cameraButtonPressed(_ sender: AnyObject) {
         guard let selectedMediaType = MediaType(rawValue: typeControl.titles[Int(typeControl.index)]),
-            let selectedSourceType = UIImagePickerControllerSourceType(rawValue: Int(sourceControl.index)), UIImagePickerController.isSourceTypeAvailable(selectedSourceType) else { 📘("😱 Selected input types aren't available"); return }
+            let selectedSourceType = UIImagePickerControllerSourceType(rawValue: Int(sourceControl.index)), UIImagePickerController.isSourceTypeAvailable(selectedSourceType) else {
+                let errorString: String = "😱 Selected input types aren't available"
+                ToastMessage.show(messageText: errorString)
+                📘(errorString)
+                return
+        }
 
         imagePickerController.delegate = self
         imagePickerController.sourceType = selectedSourceType
@@ -181,7 +186,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             imagePickerController.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
         }
 
-        imagePickerController.allowsEditing = self.isEditable
+        imagePickerController.allowsEditing = self.isEditableSelected
 
         present(imagePickerController, animated: true, completion: nil)
     }
@@ -304,7 +309,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             ToastMessage.show(messageText: "Picked a \(pickedMediaType)")
         }
         
-        if let image = info[isEditable ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage] as? UIImage {
+        let uiImageImageKey = isEditableSelected ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage
+        if let image = info[uiImageImageKey] as? UIImage {
             pickedImageButton.setImage(image, for: .normal)
             DataManager.saveImage(image, toFile: "tempSavedImage")
         }
