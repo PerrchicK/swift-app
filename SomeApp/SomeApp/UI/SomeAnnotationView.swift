@@ -18,6 +18,7 @@ class SomeAnnotationView: NibView {
     }
 
     func generateIcon() -> String {
-        return possibleIcons[Int(arc4random()) % possibleIcons.count]
+        let randomIndex = Int(PerrFuncs.random(to: UInt32(possibleIcons.count)))
+        return possibleIcons[randomIndex]
     }
 }

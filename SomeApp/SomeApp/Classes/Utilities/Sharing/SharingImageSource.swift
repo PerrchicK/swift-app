@@ -31,6 +31,8 @@ class SharingImageSource: NSObject, UIActivityItemSource {
             fallthrough
         case UIActivityType.mail.rawValue:
             fallthrough
+        case "net.whatsapp.WhatsApp.ShareExtension":
+            fallthrough
         case activityTypeMyApp:
             return self.image
         default:

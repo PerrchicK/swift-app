@@ -32,7 +32,7 @@ class ConcurrencyViewController: UIViewController {
 
     func findNextRandomNumber() -> Int {
         repeat {
-            let randomProgressBarIndex = Int(arc4random() % 4)
+            let randomProgressBarIndex = Int(PerrFuncs.random(to: 4))
             if self.randomProgressBarIndexes.contains(randomProgressBarIndex) {
                 Thread.sleep(forTimeInterval: 0.003)
             } else {
@@ -45,18 +45,22 @@ class ConcurrencyViewController: UIViewController {
         randomProgressBarIndexes = [-1,-1,-1,-1]
 
         Synchronizer.syncOperations({
+            Thread.sleep(forTimeInterval: 0.001)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[0] = rand
             📘("Random 0: \(rand)")
         },{
+            Thread.sleep(forTimeInterval: 0.002)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[1] = rand
             📘("Random 1: \(rand)")
         },{
+            Thread.sleep(forTimeInterval: 0.003)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[2] = rand
             📘("Random 2: \(rand)")
         },{
+            Thread.sleep(forTimeInterval: 0.004)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[3] = rand
             📘("Random 3: \(rand)")
@@ -183,8 +187,8 @@ class ConcurrencyViewController: UIViewController {
             self?.goButton.isEnabled = true
         }
 
-        for progressBar in progressBars {
-            progressBar.setProgress(0.0, animated: false)
+        progressBars.forEach { (progressView) in
+            progressView.setProgress(0.0, animated: false)
         }
         ungroupedProgressBar.setProgress(0.0, animated: false)
     }
@@ -192,9 +196,9 @@ class ConcurrencyViewController: UIViewController {
     func animateProgressRun(progressIndex: Int, withInterval interval: TimeInterval) {
         for progress in 1...100 {
             Thread.sleep(forTimeInterval: interval)
-            runOnUiThread() {
+            DispatchQueue.main.sync(execute: { 
                 self.progressBars[progressIndex].setProgress(Float(progress) / 100, animated: true)
-            }
+            })
         }
     }
 

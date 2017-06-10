@@ -68,6 +68,11 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         DataManager.syncedUserDefaults().delegate = self
+        
+        if let persistableUserDataFromDefaults = UserDefaults.standard.object(forKey: "user") as? Data,
+            let persistableUserFromDefaults = NSKeyedUnarchiver.unarchiveObject(with: persistableUserDataFromDefaults) as? PersistableUser {
+            📘(persistableUserFromDefaults)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -82,13 +87,12 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent(PersistableUserFileName))
 
         try? NSKeyedArchiver.archivedData(withRootObject: user).write(to: encodedUserFilePath)
+
         self.view.endEditing(true)
     }
 
     @IBAction func showFirebaseButtonPressed(_ sender: AnyObject) {
-        if !dbStateTableView.😘(huggedObject: TableViewType.firebase as AnyObject) {
-            📘("Failed to attach extra data to table view")
-        }
+        dbStateTableView.😘(huggedObject: TableViewType.firebase as AnyObject)
         presentTableView()
     }
 
@@ -129,9 +133,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func showCoreDataButtonPressed(_ sender: AnyObject) {
-        if !dbStateTableView.😘(huggedObject: TableViewType.coreData) {
-            📘("Failed to attach extra data to table view")
-        }
+        dbStateTableView.😘(huggedObject: TableViewType.coreData)
         presentTableView()
     }
 
@@ -167,7 +169,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         user.nickname = nicknameTextField.text
         user.email = emailTextField.text
 
-        ToastMessage.show(messageText: "Managed object (User \(user.nickname)) \(user.save() ? "saved" : "failed to be saved") in Core Data.")
+        ToastMessage.show(messageText: "Managed object (User \(user)) \(user.save() ? "saved" : "failed to be saved") in Core Data.")
 
         firstNameTextField.text = ""
         lastNameTextField.text = ""
@@ -181,6 +183,10 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBAction func synchronizeButtonPressed(_ sender: AnyObject) {
         UserDefaults.standard.set(userDefaultsTextField.text, forKey: UserDefaultsStringKey)
+
+        let user = PersistableUser(email: "user@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty")
+        let userData = NSKeyedArchiver.archivedData(withRootObject: user)
+        UserDefaults.standard.set(userData, forKey: "user")
         UserDefaults.standard.synchronize()
     }
 

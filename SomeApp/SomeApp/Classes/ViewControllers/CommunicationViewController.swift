@@ -122,6 +122,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     }
     
     // MARK: - MKMapViewDelegate
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var annotationView: MKAnnotationView!
 

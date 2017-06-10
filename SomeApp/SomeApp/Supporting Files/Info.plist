@@ -58,5 +58,7 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To demonstrate image picking from your library to the screen</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To demonstrate camera capture</string>
 </dict>
 </plist>

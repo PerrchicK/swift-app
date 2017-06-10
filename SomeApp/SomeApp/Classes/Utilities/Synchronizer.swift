@@ -13,7 +13,7 @@ class Synchronizer {
         let blockOperation: BlockOperation
         let raceConditionQueue: OperationQueue
 
-        init(raceConditionQueue: OperationQueue, block: (() -> Void)? = nil) {
+        init(raceConditionQueue: OperationQueue, block: (() -> ())? = nil) {
             self.raceConditionQueue = raceConditionQueue
             if let block = block {
                 blockOperation = BlockOperation(block: block)
@@ -48,7 +48,7 @@ class Synchronizer {
      - parameter operation2: An operation to do, regardless the time to end
      - parameter finalOperation: The completion operation to do, only after the first two are finished. It shall be invoked on the main thread.
      */
-    init(finalOperation: @escaping () -> Void) {
+    init(finalOperation: @escaping () -> ()) {
         let completionOperation = BlockOperation {
             DispatchQueue.main.async(execute: { 
                 finalOperation()

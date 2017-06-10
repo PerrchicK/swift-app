@@ -12,7 +12,7 @@ import AVFoundation
 import MobileCoreServices
 import BetterSegmentedControl
 
-class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
+class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
 
     let imagePickerController = UIImagePickerController()
     let manager = CMMotionManager()
@@ -120,7 +120,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             manager.startDeviceMotionUpdates(to: OperationQueue.main) { [weak self] (deviceMotion, error) in
                 guard let strongSelf = self, let deviceMotion = deviceMotion else { return }
 
-                let rotation = atan2(deviceMotion.gravity.x, deviceMotion.gravity.y) - M_PI
+                let rotation = atan2(deviceMotion.gravity.x, deviceMotion.gravity.y) - Double.pi
                 strongSelf.pickedImageButton.transform = CGAffineTransform(rotationAngle: CGFloat(rotation))
             }
         }
@@ -150,7 +150,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     @IBAction func pickedImageButtonPressed(_ sender: UIButton) {
         if let image = sender.imageView?.image {
             PerrFuncs.shareImage(image, completionClosure: { (activityType, isCompleted, returnedItems, activityError) in
-                📘("\(isCompleted ? "shared" : "canceled") via \(activityType)")
+                📘("\(isCompleted ? "shared" : "canceled") via \(activityType.debugDescription)")
             })
         }
     }
@@ -288,10 +288,17 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         CVPixelBufferUnlockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0));
     }
 
+    // MARK: - UIDocumentInteractionControllerDelegate
+
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+
     // MARK: - UIImagePickerControllerDelegate
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        📘("picked image, location on disk: \(info[UIImagePickerControllerReferenceURL])")
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let mediaUrl = info[UIImagePickerControllerReferenceURL].debugDescription
+        📘("picked image, location on disk: \(mediaUrl)")
         
         if let pickedMediaType = info[UIImagePickerControllerMediaType] {
             ToastMessage.show(messageText: "Picked a \(pickedMediaType)")
