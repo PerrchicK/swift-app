@@ -19,7 +19,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     
     @IBOutlet weak var gyroDataLabel: UILabel!
     @IBOutlet weak var pickedImageButton: UIButton!
-    // More info at: https://littlebitesofcocoa.com/226-bettersegmentedcontrol
+    // A replacement for UISegmentedControl, more info at: https://littlebitesofcocoa.com/226-bettersegmentedcontrol
     @IBOutlet weak var sourceControl: BetterSegmentedControl!
     @IBOutlet weak var typeControl: BetterSegmentedControl!
     @IBOutlet weak var isEditableControl: BetterSegmentedControl!
@@ -108,6 +108,9 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         // MARK: - Core Motion
         if manager.isGyroAvailable {
             manager.gyroUpdateInterval = 0.5
+            manager.startGyroUpdates(to: .main, withHandler: { (data, error) in
+                //
+            })
             manager.startGyroUpdates(to: OperationQueue.main) { [weak self] (gyroData, error) in
                 guard let gyroData = gyroData else { return }
 

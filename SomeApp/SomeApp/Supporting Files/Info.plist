@@ -60,5 +60,9 @@
 	<string>To demonstrate image picking from your library to the screen</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To demonstrate camera capture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To record videos</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>To load media from you &quot;gallery&quot;</string>
 </dict>
 </plist>
