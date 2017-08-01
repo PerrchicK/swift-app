@@ -39,6 +39,7 @@ class SplashScreenViewController : UIViewController {
                 
                 //strongSelf.pushViewController(StarterViewController.instantiate(), animated: true)
                 runBlockAfterDelay(afterDelay: 1.0, block: { () -> Void in
+                    //strongSelf.present(StarterViewController(), animated: true, completion: nil)
                     strongSelf.performSegue(withIdentifier: className(StarterViewController.self), sender: self)
                 })
             }
