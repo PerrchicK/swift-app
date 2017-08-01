@@ -81,8 +81,8 @@ class WhackGame: Game {
             return
         }
 
-        let randomColumn = Int(PerrFuncs._random(to: Configuration.ColumnsCount))
-        let randomRow = Int(PerrFuncs._random(to: Configuration.RowsCount))
+        let randomColumn = Int(PerrFuncs.random(to: Configuration.ColumnsCount))
+        let randomRow = Int(PerrFuncs.random(to: Configuration.RowsCount))
         if matrix[randomRow][randomColumn] == nil {
             matrix[randomRow][randomColumn] = computerPlayer.intValue()
             playMove(player: computerPlayer, row: randomRow, column: randomColumn)

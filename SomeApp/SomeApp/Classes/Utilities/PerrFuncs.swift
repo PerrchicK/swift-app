@@ -32,7 +32,7 @@ public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()-
 }
 
 // runClosureAfterDelay
-public func runBlockAfterDelay(afterDelay seconds: Double = 0.0, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
+public func runBlockAfterDelay(afterDelay seconds: Double, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
         let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
         onQueue.asyncAfter(deadline: delayTime, execute: block)
 }
@@ -113,6 +113,14 @@ open class PerrFuncs: NSObject {
                 sharedInstance.removeImage()
             }
         }
+    }
+
+    static func random(to: Int) -> UInt32 {
+        return arc4random() % UInt32(to)
+    }
+
+    static func random(from: Int, to: Int) -> UInt32 {
+        return random(to: to - from) + UInt32(from)
     }
 }
 
@@ -562,19 +570,22 @@ extension UIView: CAAnimationDelegate {
      */
     func onClick(_ onClickClosure: @escaping OnClickClosureWrapper.TapRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
+        let tapGestureRecognizer = OnClickListener(target: self, action: #selector(onTapRecognized(_:)))
+
         tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        
+        tapGestureRecognizer.closureWrapper = OnClickClosureWrapper(closure: onClickClosure)
+        tapGestureRecognizer.delegate = tapGestureRecognizer.closureWrapper
+
         addGestureRecognizer(tapGestureRecognizer)
-        let attachedClosureWrapper = OnClickClosureWrapper(closure: onClickClosure)
-        tapGestureRecognizer.delegate = attachedClosureWrapper
-        objc_setAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
     func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
-        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty) as? OnClickClosureWrapper else { return }
-        attachedClosureWrapper.closure(tapGestureRecognizer)
+        guard let tapGestureRecognizer = tapGestureRecognizer as? OnClickListener else { return }
+
+        tapGestureRecognizer.closureWrapper?.closure(tapGestureRecognizer)
     }
-    
+
     /**
      Attaches the closure to the tap event (onClick event)
      
@@ -582,20 +593,26 @@ extension UIView: CAAnimationDelegate {
      */
     func onLongPress(_ onLongPressClosure: @escaping OnLongPressClosureWrapper.LongPressRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressRecognized(_:)))
-        addGestureRecognizer(longPressRecognizer)
-        let attachedClosureWrapper = OnLongPressClosureWrapper(closure: onLongPressClosure)
-        longPressRecognizer.delegate = attachedClosureWrapper
-        objc_setAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
+        let tapGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)))
+        
+        tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        
+        tapGestureRecognizer.closureWrapper = OnLongPressClosureWrapper(closure: onLongPressClosure)
+        tapGestureRecognizer.delegate = tapGestureRecognizer.closureWrapper
+        
+        addGestureRecognizer(tapGestureRecognizer)
     }
     
     func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty) as? OnLongPressClosureWrapper else { return }
-        if longPressGestureRecognizer.state == .began {
-            attachedClosureWrapper.closure(longPressGestureRecognizer)
-        }
+        guard let longPressGestureRecognizer = longPressGestureRecognizer as? OnLongPressListener else { return }
+
+        longPressGestureRecognizer.closureWrapper?.closure(longPressGestureRecognizer)
     }
-    
+
+//    open override func didChangeValue(forKey key: String, withSetMutation mutationKind: NSKeyValueSetMutationKind, using objects: Set<AnyHashable>) {
+//        <#code#>
+//    }
+
     func firstResponder() -> UIView? {
         var firstResponder: UIView? = self
         
@@ -615,9 +632,22 @@ extension UIView: CAAnimationDelegate {
 }
 
 // Wrapper to save closure into a property
+class TapRecognizedClosureWrapper: NSObject, UIGestureRecognizerDelegate {
+    typealias TapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
+
+    let closure: TapRecognizedClosure
+    
+    init(closure: @escaping TapRecognizedClosure) {
+        self.closure = closure
+    }
+    
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+}
+
 class OnClickClosureWrapper: NSObject, UIGestureRecognizerDelegate {
     typealias TapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
-    static var onClickClosureProperty = "onClickClosureProperty"
     
     let closure: TapRecognizedClosure
     
@@ -628,12 +658,15 @@ class OnClickClosureWrapper: NSObject, UIGestureRecognizerDelegate {
     @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
+
+    deinit {
+        📘("OnClickClosureWrapper gone from RAM")
+    }
 }
 
 // Wrapper to save closure into a property
 class OnLongPressClosureWrapper: NSObject, UIGestureRecognizerDelegate {
     typealias LongPressRecognizedClosure = (_ longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
-    static var longPressClosureProperty = "longPressClosureProperty"
     
     let closure: LongPressRecognizedClosure
     
@@ -643,6 +676,10 @@ class OnLongPressClosureWrapper: NSObject, UIGestureRecognizerDelegate {
     
     @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+    
+    deinit {
+        📘("OnLongPressClosureWrapper gone from RAM")
     }
 }
 
@@ -691,5 +728,22 @@ extension UserDefaults {
         }
         
         return defaultValue
+    }
+}
+
+
+class OnClickListener: UITapGestureRecognizer {
+    var closureWrapper: OnClickClosureWrapper?
+
+    deinit {
+        📘("OnClickListener gone from RAM")
+    }
+}
+
+class OnLongPressListener: UILongPressGestureRecognizer {
+    var closureWrapper: OnLongPressClosureWrapper?
+    
+    deinit {
+        📘("OnLongPressListener gone from RAM")
     }
 }

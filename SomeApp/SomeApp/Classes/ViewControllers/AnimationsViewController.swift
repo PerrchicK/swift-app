@@ -61,7 +61,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     }
 
     func configureAnimations() {
-        animatedOutTransitionView.onClick { (tapGestureRecognizer) in
+        animatedOutTransitionView.onClick { [weak self] (tapGestureRecognizer) in
             let transition = CATransition()
             transition.startProgress = 0
             transition.endProgress = 1
@@ -70,17 +70,17 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
             transition.duration = 0.5
             
             // Add the transition animation to both layers
-            self.animatedOutTransitionView.layer.add(transition, forKey: "transition")
-            self.animatedInTransitionView.layer.add(transition, forKey: "transition")
+            self?.animatedOutTransitionView.layer.add(transition, forKey: "transition")
+            self?.animatedInTransitionView.layer.add(transition, forKey: "transition")
             
             // Finally, change the visibility of the layers.
-            self.animatedOutTransitionView.toggleVisibility()
-            self.animatedInTransitionView.toggleVisibility()
+            self?.animatedOutTransitionView.toggleVisibility()
+            self?.animatedInTransitionView.toggleVisibility()
         }
 
-        animatedOutTransitionView.onLongPress({ (longPressGestureRecognizer) in
+        animatedOutTransitionView.onLongPress({ [weak self] (longPressGestureRecognizer) in
             if longPressGestureRecognizer.state == .began {
-                self.flipViews(true)
+                self?.flipViews(true)
             }
         })
 
