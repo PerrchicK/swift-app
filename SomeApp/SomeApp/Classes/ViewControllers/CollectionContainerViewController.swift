@@ -19,6 +19,12 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
 
     var isGameEnabled = true
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        reloadGame()
+    }
+
     func reloadGame() {
         collectionView.reloadData()
     }
@@ -49,6 +55,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         let rowsCount = CGFloat(NumberOfColumns)
         let dimentions = collectionView.frame.height / rowsCount - (rowsCount * TileMargin * 0.8)
+
         return CGSize(width: dimentions, height: dimentions) // collectionView.frame.height * 0.9
     }
     

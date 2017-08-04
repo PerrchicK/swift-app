@@ -37,9 +37,9 @@ class SplashScreenViewController : UIViewController {
             self.swiftLabel.animateBounce { [weak self] (finished) -> Void in
                 guard let strongSelf = self else { return }
                 
-                //strongSelf.pushViewController(StarterViewController.instantiate(), animated: true)
+                
                 runBlockAfterDelay(afterDelay: 1.0, block: { () -> Void in
-                    strongSelf.performSegue(withIdentifier: className(StarterViewController), sender: self)
+                    strongSelf.present(CollectionContainerViewController.instantiate(), animated: true, completion: nil)
                 })
             }
         }

@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import Firebase
+//import Firebase
 //import Exception
 
 @UIApplicationMain
@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
 //        }
 
-        FIRApp.configure()
+        //FIRApp.configure()
         
         return true
     }
