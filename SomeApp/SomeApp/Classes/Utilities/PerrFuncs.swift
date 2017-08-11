@@ -16,11 +16,11 @@ public typealias CompletionClosure = ((AnyObject?) -> Void)
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-public func 📘(_ logMessage: String, file:String = #file, function:String = #function, line:Int = #line) {
+public func 📘(_ logMessage: Any, file:String = #file, function:String = #function, line:Int = #line) {
     let formattter = DateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
     let timesamp = formattter.string(from: Date())
-
+    
     print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(logMessage)")
 }
 
@@ -32,9 +32,9 @@ public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()-
 }
 
 // runClosureAfterDelay
-public func runBlockAfterDelay(afterDelay seconds: Double = 0.0, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
-        let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
-        onQueue.asyncAfter(deadline: delayTime, execute: block)
+public func runBlockAfterDelay(afterDelay seconds: Double, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
+    let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
+    onQueue.asyncAfter(deadline: delayTime, execute: block)
 }
 
 public func className(_ aClass: AnyClass) -> String {
@@ -55,7 +55,7 @@ open class PerrFuncs: NSObject {
     static var sharedInstance: PerrFuncs = {
         return PerrFuncs()
     }()
-
+    
     fileprivate override init() {
         super.init()
     }
@@ -64,20 +64,20 @@ open class PerrFuncs: NSObject {
         let container = UIView(frame: UIScreen.main.bounds)
         container.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         // To be a target, it must be an NSObject instance
-        container.onClick() {_ in 
+        container.onClick() {_ in
             self.removeImage()
         }
-
+        
         return container
     }()
-
+    
     func removeImage() {
         imageContainer.animateFade(fadeIn: false, duration: 0.5) { (doneSuccessfully) in
             self.imageContainer.removeAllSubviews()
             self.imageContainer.removeFromSuperview()
         }
     }
-
+    
     class func shareImage(_ sharedImage: UIImage, completionClosure: @escaping UIActivityViewControllerCompletionWithItemsHandler) {
         let activityViewController = UIActivityViewController(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
         activityViewController.completionWithItemsHandler = completionClosure
@@ -85,7 +85,7 @@ open class PerrFuncs: NSObject {
         
         UIApplication.mostTopViewController()?.present(activityViewController, animated: true, completion: nil)
     }
-
+    
     class func fetchAndPresentImage(_ imageUrl: String?) {
         guard let imageUrl = imageUrl, imageUrl.length() > 0,
             let app = UIApplication.shared.delegate as? AppDelegate,
@@ -93,7 +93,7 @@ open class PerrFuncs: NSObject {
             else { return }
         
         📘("fetching \(imageUrl)")
-
+        
         let loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         loadingSpinner.startAnimating()
         sharedInstance.imageContainer.addSubview(loadingSpinner)
@@ -102,7 +102,7 @@ open class PerrFuncs: NSObject {
         
         window.addSubview(sharedInstance.imageContainer)
         sharedInstance.imageContainer.stretchToSuperViewEdges()
-
+        
         let screenWidth = WIDTH(window.frame) //Or: UIScreen.mainScreen().bounds.width
         UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: screenWidth, height: screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in
             if let imageView = imageView as? UIImageView, imageView.image != nil {
@@ -114,13 +114,65 @@ open class PerrFuncs: NSObject {
             }
         }
     }
+    
+    static func random(to: Int) -> UInt32 {
+        return arc4random() % UInt32(to)
+    }
+    
+    static func random(from: Int, to: Int) -> UInt32 {
+        return random(to: to - from) + UInt32(from)
+    }
+    
+    @discardableResult
+    static func postRequest(urlString: String, jsonDictionary: [String: Any], completion: @escaping ([String: Any]?) -> ()) -> URLSessionDataTask? {
+        guard let url = URL(string: urlString) else { completion(nil); return nil }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: .prettyPrinted)
+            
+            // create post request
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            // insert json data to the request
+            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+            request.timeoutInterval = 30
+            
+            
+            let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+                if let error = error {
+                    📘("Error: \(error)")
+                    completion(nil)
+                    return
+                }
+                guard let data = data else { completion(nil); return }
+                
+                do {
+                    guard let result = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { completion(nil); return }
+                    completion(result)
+                } catch let deserializationError {
+                    📘("Failed to parse JSON: \(deserializationError)")
+                    completion(nil)
+                }
+            }
+            
+            task.resume()
+            return task
+        } catch let serializationError {
+            📘("Failed to serialize JSON: \(serializationError)")
+            completion(nil)
+        }
+        
+        return nil
+    }
 }
 
 extension String {
     func length() -> Int {
         return self.characters.count
     }
-
+    
     func toEmoji() -> String {
         // "Hard" guard
         assert(self.length() > 0, "Cannot make emoji from an empty string")
@@ -129,8 +181,8 @@ extension String {
         var emoji = ""
         
         switch self {
-
-            // Just for fun
+            
+        // Just for fun
         case "yo":
             emoji = "👋🏻"
         case "ahalan":
@@ -141,14 +193,14 @@ extension String {
             fallthrough
         case "peace":
             emoji = "✌🏽"
-
-            // Icons for menu titles
+            
+        // Icons for menu titles
         case "UI":
             emoji = "👋🏻"
         case "Communication & Location":
-        emoji = "🌏"
+            emoji = "🌏"
         case "GCD & Multithreading":
-        emoji = "🚦"
+            emoji = "🚦"
         case "Notifications":
             emoji = "👻"
         case "Persistence & Data":
@@ -161,7 +213,7 @@ extension String {
             emoji = "📚"
         case "Images & Core Motion":
             emoji = "📷"
-
+            
         default:
             📘("Error: Couldn't find emoji for string '\(self)'")
             break
@@ -177,7 +229,7 @@ extension UIImage {
     static func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
         guard let url = URL(string: urlString) else { completionClosure?(nil); return }
         
-        let backgroundQueue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
+        let backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         // Run on background thread:
         backgroundQueue.async {
             var image: UIImage? = nil
@@ -189,7 +241,7 @@ extension UIImage {
                     completionClosure?(image)
                 }
             }
-
+            
             // The most (and inefficient) simple way to download a photo from the web (no timeout, error handling etc.)
             do {
                 let data = try Data(contentsOf: url)
@@ -204,16 +256,16 @@ extension UIImage {
 extension UIImageView {
     func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
         guard urlString.length() > 0 else { completionClosure?(nil); return }
-
+        
         UIImage.fetchImage(withUrl: urlString) { (image) in
             defer {
                 DispatchQueue.main.async {
                     completionClosure?(self)
                 }
             }
-
+            
             guard let image = image as? UIImage else { return }
-
+            
             self.image = image
             self.contentMode = .scaleAspectFit
         }
@@ -223,26 +275,32 @@ extension UIImageView {
 //MARK: - Global Extensions
 
 // Declare a global var to produce a unique address as the assoc object handle
-var SompApplicationBelovedProperty: UInt8 = 0
+var SompApplicationHuggedProperty: UInt8 = 0
 
 infix operator &* { associativity left precedence 140 }
 
 extension NSObject { // try extending 'AnyObject'...
     /**
+     << EXPERIMENTAL METHOD >>
      Attaches any object to this NSObject.
      This enables the same idea of user info, to every object that inherits from NSObject.
      */
-    func 😘(belovedObject: AnyObject) throws -> Bool {
+    @discardableResult
+    func 😘(huggedObject: Any) -> Bool {
         //infix operator 😘 { associativity left precedence 140 }
-        📘("loving \(belovedObject)")
+        📘("hugging \(huggedObject)")
         
-        objc_setAssociatedObject(self, &SompApplicationBelovedProperty, belovedObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &SompApplicationHuggedProperty, huggedObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
         return true
     }
     
+    /**
+     << EXPERIMENTAL METHOD >>
+     Extracts the hugged object from an NSObject.
+     */
     func 😍() -> AnyObject? { // 1
-        guard let value = objc_getAssociatedObject(self, &SompApplicationBelovedProperty) else {
+        guard let value = objc_getAssociatedObject(self, &SompApplicationHuggedProperty) else {
             return nil
         }
         
@@ -253,7 +311,7 @@ extension NSObject { // try extending 'AnyObject'...
 extension UIViewController {
     func mostTopViewController() -> UIViewController {
         guard let topController = self.presentedViewController else { return self }
-
+        
         return topController.mostTopViewController()
     }
 }
@@ -266,12 +324,13 @@ extension UIApplication {
 }
 
 extension UIAlertController {
-
+    
     /**
      Dismisses the current alert (if presented) and pops up the new one
      */
-    func show() {
-        guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(self.title), message: \(self.message)]"); return }
+    @discardableResult
+    func show() -> UIAlertController? {
+        guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(String(describing: self.title)), message: \(String(describing: self.message))]"); return nil }
         if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
             // 1. Dismiss the alert
             mostTopViewController.dismiss(animated: true, completion: {
@@ -281,17 +340,18 @@ extension UIAlertController {
         } else {
             mostTopViewController.present(self, animated: true, completion: nil)
         }
+        
+        return self
     }
-
+    
     func withAction(_ action: UIAlertAction) -> UIAlertController {
         self.addAction(action)
         return self
     }
-
-    func withInputText(_ textFieldToAdd: inout UITextField, configurationBlock: @escaping ((_ textField: inout UITextField) -> Void)) -> UIAlertController {
-        self.addTextField(/*configurationHandler: */ configurationHandler: { (textField: UITextField!) -> Void in
-//            textFieldToAdd = textField
-//            configurationBlock(&textFieldToAdd)
+    
+    func withInputText(configurationBlock: @escaping ((_ textField: UITextField) -> Void)) -> UIAlertController {
+        self.addTextField(configurationHandler: { (textField: UITextField!) -> () in
+            configurationBlock(textField)
         })
         return self
     }
@@ -300,7 +360,7 @@ extension UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         return alertController
     }
-
+    
     /**
      A service method that alerts with title and message in the top view controller
      
@@ -322,7 +382,7 @@ extension UIViewController {
     
     fileprivate class func instantiateFromStoryboardHelper<T: UIViewController>(_ storyboardName: String?) -> T {
         let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
-        let identifier = NSStringFromClass(T).components(separatedBy: ".").last!
+        let identifier = NSStringFromClass(T.self).components(separatedBy: ".").last!
         let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! T
         return controller
     }
@@ -338,7 +398,7 @@ extension UIView: CAAnimationDelegate {
     func toggleVisibility() {
         self.show(show: !self.shown)
     }
-
+    
     // MARK: - Animations
     func animateScaleAndFadeOut(_ completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions(), animations: {
@@ -349,7 +409,7 @@ extension UIView: CAAnimationDelegate {
             completion?(completed)
         })
     }
-
+    
     public func animateBounce(_ completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: 0.1, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: { [weak self] () -> () in
             self?.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
@@ -361,55 +421,53 @@ extension UIView: CAAnimationDelegate {
             }
         }
     }
-
+    
     public func animateNo(_ completion: CompletionClosure? = nil) {
-        let noAnimation = CAKeyframeAnimation()
-        noAnimation.keyPath = "position.x"
-        
-        noAnimation.values = [0, 10, -10, 10, 0]
-        let keyTimes: [NSNumber] = [0, NSNumber(value: Float(1.0 / 6.0)), NSNumber(value: Float(3.0 / 6.0)), NSNumber(value: Float(5.0 / 6.0)), 1]
-        noAnimation.keyTimes = keyTimes
-        noAnimation.duration = 0.4
-        
-        noAnimation.isAdditive = true
-        noAnimation.delegate = self
-        noAnimation.isRemovedOnCompletion = false
-
-        if completion != nil {
-            let attachedClosureWrapper = CompletionClosureWrapper(closure: completion!)
-            objc_setAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
-        }
-
-        self.layer.add(noAnimation, forKey: ANIMATION_NO_KEY) // shake animation
-
-        // another implementation without using CAKeyframeAnimation:
         /*
-        let originX = self.frame.origin.x
-
-        UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
-            self?.frame.origin.x = originX - 10
-        }, completion: { (done) in
-            UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
-                self?.frame.origin.x = originX + 10
-            }, completion: { (done) in
-                UIView.animateWithDuration(0.05, animations: { [weak self] () -> Void in
-                    self?.frame.origin.x = originX
-                }, completion: { (done) in
-                    completion?(done)
-                })
-            })
-        })
+         let noAnimation = CAKeyframeAnimationWithClosure()
+         noAnimation.keyPath = "position.x"
+         
+         noAnimation.values = [0, 10, -10, 10, 0]
+         let keyTimes: [NSNumber] = [0, NSNumber(value: Float(1.0 / 6.0)), NSNumber(value: Float(3.0 / 6.0)), NSNumber(value: Float(5.0 / 6.0)), 1]
+         noAnimation.keyTimes = keyTimes
+         noAnimation.duration = 0.4
+         
+         noAnimation.isAdditive = true
+         noAnimation.delegate = self
+         noAnimation.isRemovedOnCompletion = false
+         
+         noAnimation.completionClosure = completion
+         
+         self.layer.add(noAnimation, forKey: ANIMATION_NO_KEY) // shake animation
          */
+        
+        // another implementation without using CAKeyframeAnimation:
+        let originX = self.frame.origin.x
+        
+        UIView.animate(withDuration: 0.1, animations: { [weak self] () -> Void in
+            self?.frame.origin.x = originX - 10
+            }, completion: { done in
+                UIView.animate(withDuration: 0.1, animations: { [weak self] () -> Void in
+                    self?.frame.origin.x = originX + 10
+                    }, completion: { done in
+                        UIView.animate(withDuration: 0.05, animations: { [weak self] () -> Void in
+                            self?.frame.origin.x = originX
+                            }, completion: { (done: Bool) in
+                                completion?(done as AnyObject)
+                        })
+                })
+        })
     }
-
+    
     public func animationDidStop(_ animation: CAAnimation, finished flag: Bool) {
         if self.layer.animation(forKey: ANIMATION_NO_KEY) == animation {
-            guard let attachedClosureWrapper = objc_getAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty) as? CompletionClosureWrapper else { return }
-            attachedClosureWrapper.closure(flag as AnyObject?)
+            guard let animation = animation as? CAKeyframeAnimationWithClosure else { return }
+            
+            animation.completionClosure?(flag as AnyObject?)
             self.layer.removeAnimation(forKey: ANIMATION_NO_KEY)
         }
     }
-
+    
     public func animateMoveCenterTo(x: CGFloat, y: CGFloat, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: duration, animations: {
             self.center.x = x
@@ -427,33 +485,33 @@ extension UIView: CAAnimationDelegate {
             } else {
                 self.frame.size = CGSize(width: 0.0, height: 0.0)
             }
-            }, completion: { (finished) in
-                self.show(show: zoomIn)
-                completion?(finished)
-        }) 
+        }, completion: { (finished) in
+            self.show(show: zoomIn)
+            completion?(finished)
+        })
     }
     
     public func animateFade(fadeIn: Bool, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
         // Skip redundant calls
         guard (fadeIn == false && (alpha > 0 || isHidden == false)) || (fadeIn == true && (alpha == 0 || isHidden == true)) else { return }
-
+        
         self.alpha = fadeIn ? 0.0 : 1.0
         self.show(show: true)
         UIView.animate(withDuration: duration, animations: {// () -> Void in
             self.alpha = fadeIn ? 1.0 : 0.0
-            }, completion: { (finished) in
-                self.show(show: fadeIn)
-                completion?(finished)
-        }) 
+        }, completion: { (finished) in
+            self.show(show: fadeIn)
+            completion?(finished)
+        })
     }
     
     // MARK: - Property setters-like methods
-
+    
     // Computed variable
     var shown: Bool {
         return !self.isHidden
     }
-
+    
     public func show(show: Bool, faded: Bool = false) {
         if faded {
             animateFade(fadeIn: show)
@@ -463,15 +521,15 @@ extension UIView: CAAnimationDelegate {
     }
     
     // MARK: - Property setters-like methods
-
+    
     /**
-    Recursively remove all receiver’s immediate subviews... and their subviews... and their subviews... and their subviews...
-    */
+     Recursively remove all receiver’s immediate subviews... and their subviews... and their subviews... and their subviews...
+     */
     public func removeAllSubviews() {
         for subView in self.subviews {
             subView.removeAllSubviews()
         }
-
+        
         📘("Removing: \(self), bounds: \(bounds), frame: \(frame):")
         self.removeFromSuperview()
     }
@@ -490,7 +548,7 @@ extension UIView: CAAnimationDelegate {
         let edgeConstraints = [leftConstraint, rightConstraint, topConstraint, bottomConstraint]
         
         translatesAutoresizingMaskIntoConstraints = false
-
+        
         superview.addConstraints(edgeConstraints)
     }
     
@@ -511,7 +569,7 @@ extension UIView: CAAnimationDelegate {
     func constraintWithItem(_ view: UIView, attribute: NSLayoutAttribute, multiplier: CGFloat, constant: CGFloat) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: view, attribute: attribute, multiplier: multiplier, constant: constant)
     }
-
+    
     /**
      Adds a transparent gradient layer to the view's mask.
      */
@@ -527,19 +585,19 @@ extension UIView: CAAnimationDelegate {
         
         gradientLayer.locations = [0.0, 0.4, 0.6, 1.0]
         gradientLayer.anchorPoint = CGPoint.zero
-
+        
         self.layer.mask = gradientLayer
-/*
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            transparentGradientLayer.bounds = self.bounds
-        }
-*/
-
+        /*
+         override func layoutSubviews() {
+         super.layoutSubviews()
+         
+         transparentGradientLayer.bounds = self.bounds
+         }
+         */
+        
         return gradientLayer
     }
-
+    
     func addVerticalGradientBackgroundLayer(topColor: UIColor, bottomColor: UIColor) -> CALayer {
         let gradientLayer = CAGradientLayer()
         let topCGColor = topColor.cgColor
@@ -547,30 +605,32 @@ extension UIView: CAAnimationDelegate {
         gradientLayer.colors = [topCGColor, bottomCGColor]
         gradientLayer.frame = frame
         layer.insertSublayer(gradientLayer, at: 0)
-
+        
         return gradientLayer
     }
-
+    
     // MARK: - Other cool additions
-
+    
     /**
      Attaches the closure to the tap event (onClick event)
-
+     
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onClick(_ onClickClosure: @escaping OnClickClosureWrapper.TapRecognizedClosure) {
+    func onClick(_ onClickClosure: @escaping OnTapRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapRecognized(_:)))
+        let tapGestureRecognizer = OnClickListener(target: self, action: #selector(onTapRecognized(_:)), closure: onClickClosure)
+        
         tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        
+        tapGestureRecognizer.delegate = tapGestureRecognizer
+        
         addGestureRecognizer(tapGestureRecognizer)
-        let attachedClosureWrapper = OnClickClosureWrapper(closure: onClickClosure)
-        tapGestureRecognizer.delegate = attachedClosureWrapper
-        objc_setAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
     }
     
     func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
-        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnClickClosureWrapper.onClickClosureProperty) as? OnClickClosureWrapper else { return }
-        attachedClosureWrapper.closure(tapGestureRecognizer)
+        guard let tapGestureRecognizer = tapGestureRecognizer as? OnClickListener else { return }
+        
+        tapGestureRecognizer.closure(tapGestureRecognizer)
     }
     
     /**
@@ -578,21 +638,25 @@ extension UIView: CAAnimationDelegate {
      
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onLongPress(_ onLongPressClosure: @escaping OnLongPressClosureWrapper.LongPressRecognizedClosure) {
+    func onLongPress(_ onLongPressClosure: @escaping OnLongPressRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressRecognized(_:)))
-        addGestureRecognizer(longPressRecognizer)
-        let attachedClosureWrapper = OnLongPressClosureWrapper(closure: onLongPressClosure)
-        longPressRecognizer.delegate = attachedClosureWrapper
-        objc_setAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
+        let tapGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)), closure: onLongPressClosure)
+        
+        tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        
+        tapGestureRecognizer.delegate = tapGestureRecognizer
+        addGestureRecognizer(tapGestureRecognizer)
     }
     
     func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard let attachedClosureWrapper = objc_getAssociatedObject(self, &OnLongPressClosureWrapper.longPressClosureProperty) as? OnLongPressClosureWrapper else { return }
-        if longPressGestureRecognizer.state == .began {
-            attachedClosureWrapper.closure(longPressGestureRecognizer)
-        }
+        guard let longPressGestureRecognizer = longPressGestureRecognizer as? OnLongPressListener else { return }
+        
+        longPressGestureRecognizer.closure(longPressGestureRecognizer)
     }
+    
+    //    open override func didChangeValue(forKey key: String, withSetMutation mutationKind: NSKeyValueSetMutationKind, using objects: Set<AnyHashable>) {
+    //        <#code#>
+    //    }
     
     func firstResponder() -> UIView? {
         var firstResponder: UIView? = self
@@ -612,48 +676,16 @@ extension UIView: CAAnimationDelegate {
     }
 }
 
-// Wrapper to save closure into a property
-class OnClickClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias TapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
-    static var onClickClosureProperty = "onClickClosureProperty"
-    
-    let closure: TapRecognizedClosure
-    
-    init(closure: @escaping TapRecognizedClosure) {
-        self.closure = closure
-    }
-
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-}
-
-// Wrapper to save closure into a property
-class OnLongPressClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias LongPressRecognizedClosure = (_ longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
-    static var longPressClosureProperty = "longPressClosureProperty"
-    
-    let closure: LongPressRecognizedClosure
-    
-    init(closure: @escaping LongPressRecognizedClosure) {
-        self.closure = closure
-    }
-    
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-}
-
-// Wrapper to save closure into a property
-class CompletionClosureWrapper {
-    static var completionClosureProperty = "completionClosureProperty"
-    
-    let closure: CompletionClosure
-    
-    init(closure: @escaping CompletionClosure) {
-        self.closure = closure
-    }
-}
+// Wrapper to save closure into a property - no need for this hack anymore, memory leak maker
+//class CompletionClosureWrapper {
+//    static var completionClosureProperty = "completionClosureProperty"
+//
+//    let closure: CompletionClosure
+//
+//    init(closure: @escaping CompletionClosure) {
+//        self.closure = closure
+//    }
+//}
 
 extension URL {
     func queryStringComponents() -> [String: AnyObject] {
@@ -684,10 +716,72 @@ extension UserDefaults {
     }
     
     static func load(key: String, defaultValue: AnyObject? = nil) -> AnyObject? {
-        if let actualValue = UserDefaults.standard.object(forKey: key) as? AnyObject {
-            return actualValue
+        if let actualValue = UserDefaults.standard.object(forKey: key) {
+            return actualValue as AnyObject
         }
         
         return defaultValue
+    }
+}
+
+typealias OnTapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
+class OnClickListener: UITapGestureRecognizer, UIGestureRecognizerDelegate {
+    private(set) var closure: OnTapRecognizedClosure
+    
+    init(target: Any?, action: Selector?, closure: @escaping OnTapRecognizedClosure) {
+        self.closure = closure
+        super.init(target: target, action: action)
+    }
+    
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    deinit {
+        📘("OnClickListener gone from RAM 💀")
+    }
+}
+
+typealias OnLongPressRecognizedClosure = (_ longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
+class OnLongPressListener: UILongPressGestureRecognizer, UIGestureRecognizerDelegate {
+    private(set) var closure: OnLongPressRecognizedClosure
+    
+    init(target: Any?, action: Selector?, closure: @escaping OnLongPressRecognizedClosure) {
+        self.closure = closure
+        super.init(target: target, action: action)
+    }
+    
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    
+    deinit {
+        📘("OnLongPressListener gone from RAM 💀")
+    }
+}
+
+/// An interesting fact: the CAKeyframeAnimation object does not survive the animation, it's being dealloced right after it has been added to the layer
+class CAKeyframeAnimationWithClosure: CAKeyframeAnimation {
+    var completionClosure: CompletionClosure?
+    
+    override init() {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        completionClosure = aDecoder.decodeObject(forKey: "completionClosure") as? CompletionClosure
+    }
+    
+    override func encode(with aCoder: NSCoder) {
+        super.encode(with: aCoder)
+        
+        aCoder.encode(completionClosure, forKey: "completionClosure")
+    }
+    
+    deinit {
+        📘("💀")
     }
 }
