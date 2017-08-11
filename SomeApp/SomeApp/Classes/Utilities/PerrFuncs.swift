@@ -122,6 +122,50 @@ open class PerrFuncs: NSObject {
     static func random(from: Int, to: Int) -> UInt32 {
         return random(to: to - from) + UInt32(from)
     }
+    
+    @discardableResult
+    static func postRequest(urlString: String, jsonDictionary: [String: Any], completion: @escaping ([String: Any]?) -> ()) -> URLSessionDataTask? {
+        guard let url = URL(string: urlString) else { completion(nil); return nil }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: .prettyPrinted)
+            
+            // create post request
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            // insert json data to the request
+            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+            request.timeoutInterval = 30
+            
+            
+            let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
+                if let error = error {
+                    📘("Error: \(error)")
+                    completion(nil)
+                    return
+                }
+                guard let data = data else { completion(nil); return }
+                
+                do {
+                    guard let result = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { completion(nil); return }
+                    completion(result)
+                } catch let deserializationError {
+                    📘("Failed to parse JSON: \(deserializationError)")
+                    completion(nil)
+                }
+            }
+            
+            task.resume()
+            return task
+        } catch let serializationError {
+            📘("Failed to serialize JSON: \(serializationError)")
+            completion(nil)
+        }
+        
+        return nil
+    }
 }
 
 extension String {
@@ -237,6 +281,7 @@ infix operator &* { associativity left precedence 140 }
 
 extension NSObject { // try extending 'AnyObject'...
     /**
+     << EXPERIMENTAL METHOD >>
      Attaches any object to this NSObject.
      This enables the same idea of user info, to every object that inherits from NSObject.
      */
@@ -244,12 +289,16 @@ extension NSObject { // try extending 'AnyObject'...
     func 😘(huggedObject: Any) -> Bool {
         //infix operator 😘 { associativity left precedence 140 }
         📘("hugging \(huggedObject)")
-        
+
         objc_setAssociatedObject(self, &SompApplicationHuggedProperty, huggedObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
         return true
     }
     
+    /**
+     << EXPERIMENTAL METHOD >>
+     Extracts the hugged object from an NSObject.
+     */
     func 😍() -> AnyObject? { // 1
         guard let value = objc_getAssociatedObject(self, &SompApplicationHuggedProperty) else {
             return nil
@@ -279,6 +328,7 @@ extension UIAlertController {
     /**
      Dismisses the current alert (if presented) and pops up the new one
      */
+    @discardableResult
     func show() -> UIAlertController? {
         guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(String(describing: self.title)), message: \(String(describing: self.message))]"); return nil }
         if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
@@ -373,7 +423,8 @@ extension UIView: CAAnimationDelegate {
     }
 
     public func animateNo(_ completion: CompletionClosure? = nil) {
-        let noAnimation = CAKeyframeAnimation()
+        /*
+        let noAnimation = CAKeyframeAnimationWithClosure()
         noAnimation.keyPath = "position.x"
         
         noAnimation.values = [0, 10, -10, 10, 0]
@@ -385,37 +436,34 @@ extension UIView: CAAnimationDelegate {
         noAnimation.delegate = self
         noAnimation.isRemovedOnCompletion = false
 
-        if completion != nil {
-            let attachedClosureWrapper = CompletionClosureWrapper(closure: completion!)
-            objc_setAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty, attachedClosureWrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN);
-        }
+        noAnimation.completionClosure = completion
 
         self.layer.add(noAnimation, forKey: ANIMATION_NO_KEY) // shake animation
+         */
 
         // another implementation without using CAKeyframeAnimation:
-        /*
         let originX = self.frame.origin.x
 
-        UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
+        UIView.animate(withDuration: 0.1, animations: { [weak self] () -> Void in
             self?.frame.origin.x = originX - 10
-        }, completion: { (done) in
-            UIView.animateWithDuration(0.1, animations: { [weak self] () -> Void in
+        }, completion: { done in
+            UIView.animate(withDuration: 0.1, animations: { [weak self] () -> Void in
                 self?.frame.origin.x = originX + 10
-            }, completion: { (done) in
-                UIView.animateWithDuration(0.05, animations: { [weak self] () -> Void in
+            }, completion: { done in
+                UIView.animate(withDuration: 0.05, animations: { [weak self] () -> Void in
                     self?.frame.origin.x = originX
-                }, completion: { (done) in
-                    completion?(done)
+                    }, completion: { (done: Bool) in
+                    completion?(done as AnyObject)
                 })
             })
         })
-         */
     }
 
     public func animationDidStop(_ animation: CAAnimation, finished flag: Bool) {
         if self.layer.animation(forKey: ANIMATION_NO_KEY) == animation {
-            guard let attachedClosureWrapper = objc_getAssociatedObject(self, &CompletionClosureWrapper.completionClosureProperty) as? CompletionClosureWrapper else { return }
-            attachedClosureWrapper.closure(flag as AnyObject?)
+            guard let animation = animation as? CAKeyframeAnimationWithClosure else { return }
+
+            animation.completionClosure?(flag as AnyObject?)
             self.layer.removeAnimation(forKey: ANIMATION_NO_KEY)
         }
     }
@@ -451,9 +499,9 @@ extension UIView: CAAnimationDelegate {
         self.show(show: true)
         UIView.animate(withDuration: duration, animations: {// () -> Void in
             self.alpha = fadeIn ? 1.0 : 0.0
-            }, completion: { (finished) in
-                self.show(show: fadeIn)
-                completion?(finished)
+        }, completion: { (finished) in
+            self.show(show: fadeIn)
+            completion?(finished)
         }) 
     }
     
@@ -568,14 +616,13 @@ extension UIView: CAAnimationDelegate {
 
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onClick(_ onClickClosure: @escaping OnClickClosureWrapper.TapRecognizedClosure) {
+    func onClick(_ onClickClosure: @escaping OnTapRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let tapGestureRecognizer = OnClickListener(target: self, action: #selector(onTapRecognized(_:)))
+        let tapGestureRecognizer = OnClickListener(target: self, action: #selector(onTapRecognized(_:)), closure: onClickClosure)
 
         tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
         
-        tapGestureRecognizer.closureWrapper = OnClickClosureWrapper(closure: onClickClosure)
-        tapGestureRecognizer.delegate = tapGestureRecognizer.closureWrapper
+        tapGestureRecognizer.delegate = tapGestureRecognizer
 
         addGestureRecognizer(tapGestureRecognizer)
     }
@@ -583,7 +630,7 @@ extension UIView: CAAnimationDelegate {
     func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
         guard let tapGestureRecognizer = tapGestureRecognizer as? OnClickListener else { return }
 
-        tapGestureRecognizer.closureWrapper?.closure(tapGestureRecognizer)
+        tapGestureRecognizer.closure(tapGestureRecognizer)
     }
 
     /**
@@ -591,22 +638,20 @@ extension UIView: CAAnimationDelegate {
      
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onLongPress(_ onLongPressClosure: @escaping OnLongPressClosureWrapper.LongPressRecognizedClosure) {
+    func onLongPress(_ onLongPressClosure: @escaping OnLongPressRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let tapGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)))
+        let tapGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)), closure: onLongPressClosure)
         
         tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
         
-        tapGestureRecognizer.closureWrapper = OnLongPressClosureWrapper(closure: onLongPressClosure)
-        tapGestureRecognizer.delegate = tapGestureRecognizer.closureWrapper
-        
+        tapGestureRecognizer.delegate = tapGestureRecognizer
         addGestureRecognizer(tapGestureRecognizer)
     }
     
     func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard let longPressGestureRecognizer = longPressGestureRecognizer as? OnLongPressListener else { return }
 
-        longPressGestureRecognizer.closureWrapper?.closure(longPressGestureRecognizer)
+        longPressGestureRecognizer.closure(longPressGestureRecognizer)
     }
 
 //    open override func didChangeValue(forKey key: String, withSetMutation mutationKind: NSKeyValueSetMutationKind, using objects: Set<AnyHashable>) {
@@ -631,68 +676,16 @@ extension UIView: CAAnimationDelegate {
     }
 }
 
-// Wrapper to save closure into a property
-class TapRecognizedClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias TapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
-
-    let closure: TapRecognizedClosure
-    
-    init(closure: @escaping TapRecognizedClosure) {
-        self.closure = closure
-    }
-    
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-}
-
-class OnClickClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias TapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
-    
-    let closure: TapRecognizedClosure
-    
-    init(closure: @escaping TapRecognizedClosure) {
-        self.closure = closure
-    }
-
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-
-    deinit {
-        📘("OnClickClosureWrapper gone from RAM")
-    }
-}
-
-// Wrapper to save closure into a property
-class OnLongPressClosureWrapper: NSObject, UIGestureRecognizerDelegate {
-    typealias LongPressRecognizedClosure = (_ longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
-    
-    let closure: LongPressRecognizedClosure
-    
-    init(closure: @escaping LongPressRecognizedClosure) {
-        self.closure = closure
-    }
-    
-    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-    
-    deinit {
-        📘("OnLongPressClosureWrapper gone from RAM")
-    }
-}
-
-// Wrapper to save closure into a property
-class CompletionClosureWrapper {
-    static var completionClosureProperty = "completionClosureProperty"
-    
-    let closure: CompletionClosure
-    
-    init(closure: @escaping CompletionClosure) {
-        self.closure = closure
-    }
-}
+// Wrapper to save closure into a property - no need for this hack anymore, memory leak maker
+//class CompletionClosureWrapper {
+//    static var completionClosureProperty = "completionClosureProperty"
+//    
+//    let closure: CompletionClosure
+//    
+//    init(closure: @escaping CompletionClosure) {
+//        self.closure = closure
+//    }
+//}
 
 extension URL {
     func queryStringComponents() -> [String: AnyObject] {
@@ -723,27 +716,72 @@ extension UserDefaults {
     }
     
     static func load(key: String, defaultValue: AnyObject? = nil) -> AnyObject? {
-        if let actualValue = UserDefaults.standard.object(forKey: key) as? AnyObject {
-            return actualValue
+        if let actualValue = UserDefaults.standard.object(forKey: key) {
+            return actualValue as AnyObject
         }
         
         return defaultValue
     }
 }
 
+typealias OnTapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
+class OnClickListener: UITapGestureRecognizer, UIGestureRecognizerDelegate {
+    private(set) var closure: OnTapRecognizedClosure
 
-class OnClickListener: UITapGestureRecognizer {
-    var closureWrapper: OnClickClosureWrapper?
-
-    deinit {
-        📘("OnClickListener gone from RAM")
+    init(target: Any?, action: Selector?, closure: @escaping OnTapRecognizedClosure) {
+        self.closure = closure
+        super.init(target: target, action: action)
     }
+    
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+
+//    deinit {
+//        📘("OnClickListener gone from RAM 💀")
+//    }
 }
 
-class OnLongPressListener: UILongPressGestureRecognizer {
-    var closureWrapper: OnLongPressClosureWrapper?
+typealias OnLongPressRecognizedClosure = (_ longPressGestureRecognizer: UILongPressGestureRecognizer) -> ()
+class OnLongPressListener: UILongPressGestureRecognizer, UIGestureRecognizerDelegate {
+    private(set) var closure: OnLongPressRecognizedClosure
+
+    init(target: Any?, action: Selector?, closure: @escaping OnLongPressRecognizedClosure) {
+        self.closure = closure
+        super.init(target: target, action: action)
+    }
+
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+
+    
+//    deinit {
+//        📘("OnLongPressListener gone from RAM 💀")
+//    }
+}
+
+/// An interesting fact: the CAKeyframeAnimation object does not survive the animation, it's being dealloced right after it has been added to the layer
+class CAKeyframeAnimationWithClosure: CAKeyframeAnimation {
+    var completionClosure: CompletionClosure?
+    
+    override init() {
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+        completionClosure = aDecoder.decodeObject(forKey: "completionClosure") as? CompletionClosure
+    }
+    
+    override func encode(with aCoder: NSCoder) {
+        super.encode(with: aCoder)
+
+        aCoder.encode(completionClosure, forKey: "completionClosure")
+    }
     
     deinit {
-        📘("OnLongPressListener gone from RAM")
+        📘("💀")
     }
 }

@@ -77,22 +77,22 @@ class ConcurrencyViewController: UIViewController {
         action3Spinner.stopAnimating()
 
         let holder1 = synchronizer.createHolder()
-        action1Spinner.onClick {_ in 
+        action1Spinner.onClick { [weak self] _ in
             holder1.release()
             📘("action 1 dispatched")
-            self.action1Spinner.stopAnimating()
+            self?.action1Spinner.stopAnimating()
         }
         let holder2 = synchronizer.createHolder()
-        action2Spinner.onClick {_ in
+        action2Spinner.onClick { [weak self] _ in
             holder2.release()
             📘("action 2 dispatched")
-            self.action2Spinner.stopAnimating()
+            self?.action2Spinner.stopAnimating()
         }
         let holder3 = synchronizer.createHolder()
-        action3Spinner.onClick {_ in
+        action3Spinner.onClick { [weak self] _ in
             holder3.release()
             📘("action 2 dispatched")
-            self.action3Spinner.stopAnimating()
+            self?.action3Spinner.stopAnimating()
         }
 
         openCountingThread()
@@ -222,5 +222,9 @@ class ConcurrencyViewController: UIViewController {
             time += 1
             📘("counting \(time)")
         }
+    }
+    
+    deinit {
+        📘("I'm dead 💀")
     }
 }

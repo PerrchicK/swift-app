@@ -20,8 +20,8 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
 
     static let PLAYER_NAME = "user"
     lazy var game: Game = {
-//        let game = TicTabToeGame()
-        let game = WhackGame(playerName: CollectionContainerViewController.PLAYER_NAME)
+        let game = TicTabToeGame()
+//        let game = WhackGame(playerName: CollectionContainerViewController.PLAYER_NAME)
         game.delegate = self
 
         return game
@@ -33,7 +33,8 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //collectionView.register(GameCell.self, forCellWithReuseIdentifier: className(GameCell.self))
+        collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
+        collectionView.register(XibGameCell.self, forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -52,7 +53,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: className(GameCell.self), for: indexPath) as! GameCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryboardGameCell.REUSE_IDENTIFIER, for: indexPath) as! GameCell
 
         cell.configCell()
 
@@ -88,7 +89,7 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
         let dimentions = collectionView.frame.height / rowsCount - (rowsCount * TileMargin * 0.8)
         return CGSize(width: dimentions, height: dimentions) // collectionView.frame.height * 0.9
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(TileMargin, TileMargin, TileMargin, TileMargin)
     }
@@ -113,9 +114,66 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     }
 }
 
+class ProgrammaticallyGameCell: GameCell {
+    static let REUSE_IDENTIFIER = className(ProgrammaticallyGameCell.self)
+
+    override func awakeFromNib() {
+        📘("Created a \(className(ProgrammaticallyGameCell.self)) object")
+    }
+
+    override var playerMarkLabel: UILabel! {
+        get {
+            return _playerMarkLabel
+        }
+        set { }
+    }
+    
+    lazy var _playerMarkLabel: UILabel = {
+        var playerMarkLabel = UILabel()
+        playerMarkLabel.textAlignment = .center
+        self.addSubview(playerMarkLabel)
+        playerMarkLabel.stretchToSuperViewEdges()
+        return playerMarkLabel
+    }()
+}
+
+class StoryboardGameCell: GameCell {
+    static let REUSE_IDENTIFIER = className(StoryboardGameCell.self)
+    
+    @IBOutlet weak var _playerMarkLabel: UILabel!
+
+    override func awakeFromNib() {
+        📘("Created a \(className(StoryboardGameCell.self)) object")
+    }
+    
+    override var playerMarkLabel: UILabel! {
+        get {
+            return _playerMarkLabel
+        }
+        set {
+            _playerMarkLabel = newValue
+        }
+    }
+}
+
+class XibGameCell: GameCell {
+    static let REUSE_IDENTIFIER = className(XibGameCell.self)
+    
+    @IBOutlet weak var _playerMarkLabel: UILabel!
+    
+    override var playerMarkLabel: UILabel! {
+        get {
+            return _playerMarkLabel
+        }
+        set {
+            _playerMarkLabel = newValue
+        }
+    }
+}
+
 class GameCell: UICollectionViewCell {
 
-    @IBOutlet weak var playerMarkLabel: UILabel!
+    var playerMarkLabel: UILabel!
 
     func configCell() {
         self.backgroundColor = UIColor.red

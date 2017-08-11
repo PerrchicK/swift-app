@@ -26,7 +26,6 @@
 		7572206C1E98FBB4000E2B62 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206A1E98FBB4000E2B62 /* Game.swift */; };
 		7572206D1E98FBB4000E2B62 /* TicTabToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */; };
 		7572FD9F1E99259E005A9E9F /* WhackGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572FD9E1E99259E005A9E9F /* WhackGame.swift */; };
-		7572FDA11E9946B3005A9E9F /* GameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7572FDA01E9946B3005A9E9F /* GameCell.xib */; };
 		7573DE001C7780A700E3C37F /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */; };
 		7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */; };
 		7582DB8F1CADDBE2001CDC62 /* SomeAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */; };
@@ -54,6 +53,7 @@
 		75D7A4DB1C4E924400CDD88F /* SomeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4DA1C4E924400CDD88F /* SomeAppUITests.swift */; };
 		75DCE39A1C76381A00FF6F18 /* ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DCE3991C76381A00FF6F18 /* ToastMessage.swift */; };
 		75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75DCE39B1C76382900FF6F18 /* ToastMessage.xib */; };
+		75DF68D61F398536004CF94E /* XibGameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75DF68D51F398536004CF94E /* XibGameCell.xib */; };
 		75F1AD701C6E8C92005D7FCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD691C6E8C92005D7FCA /* Assets.xcassets */; };
 		75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */; };
 		75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */; };
@@ -134,7 +134,6 @@
 		7572206A1E98FBB4000E2B62 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTabToeGame.swift; sourceTree = "<group>"; };
 		7572FD9E1E99259E005A9E9F /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
-		7572FDA01E9946B3005A9E9F /* GameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameCell.xib; sourceTree = "<group>"; };
 		7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SomeAnnotationView.xib; sourceTree = "<group>"; };
 		7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomeAnnotationView.swift; sourceTree = "<group>"; };
@@ -167,6 +166,7 @@
 		75D7A4DC1C4E924400CDD88F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75DCE3991C76381A00FF6F18 /* ToastMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastMessage.swift; sourceTree = "<group>"; };
 		75DCE39B1C76382900FF6F18 /* ToastMessage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToastMessage.xib; sourceTree = "<group>"; };
+		75DF68D51F398536004CF94E /* XibGameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XibGameCell.xib; sourceTree = "<group>"; };
 		75F1AD691C6E8C92005D7FCA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75F1AD6A1C6E8C92005D7FCA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75F1AD6C1C6E8C92005D7FCA /* SomeApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SomeApp.xcdatamodel; sourceTree = "<group>"; };
@@ -392,10 +392,10 @@
 				75C2C8E31C7554EA00D42707 /* NibView.swift */,
 				75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */,
 				75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */,
+				75DF68D51F398536004CF94E /* XibGameCell.xib */,
 				759F58A91C75008B009C6E51 /* AnimatedGifBoxView.xib */,
 				759F58AD1C750168009C6E51 /* AnimatedGifBoxView.swift */,
 				75DCE3991C76381A00FF6F18 /* ToastMessage.swift */,
-				7572FDA01E9946B3005A9E9F /* GameCell.xib */,
 				75DCE39B1C76382900FF6F18 /* ToastMessage.xib */,
 				7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */,
 				7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */,
@@ -597,7 +597,7 @@
 				755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */,
 				75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
-				7572FDA11E9946B3005A9E9F /* GameCell.xib in Resources */,
+				75DF68D61F398536004CF94E /* XibGameCell.xib in Resources */,
 				75A484861CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif in Resources */,
 				75A484821CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif in Resources */,
 				75A4848A1CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif in Resources */,
@@ -838,7 +838,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -878,7 +878,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -896,6 +896,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "SomeApp/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.iOSApp;
@@ -915,6 +919,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "SomeApp/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.iOSApp;

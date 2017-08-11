@@ -325,4 +325,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait        
     }
+
+    deinit {
+        📘("I'm dead 💀")
+    }
 }
