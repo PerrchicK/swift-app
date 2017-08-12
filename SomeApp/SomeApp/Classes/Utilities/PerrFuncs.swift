@@ -626,11 +626,28 @@ extension UIView: CAAnimationDelegate {
 
         addGestureRecognizer(tapGestureRecognizer)
     }
-    
+
     func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
         guard let tapGestureRecognizer = tapGestureRecognizer as? OnClickListener else { return }
-
+        
         tapGestureRecognizer.closure(tapGestureRecognizer)
+    }
+    
+    func onSwipe(direction: UISwipeGestureRecognizerDirection, _ onSwipeClosure: @escaping OnSwipeRecognizedClosure) {
+        self.isUserInteractionEnabled = true
+        let swipeGestureRecognizer = OnSwipeListener(target: self, action: #selector(onSwipeRecognized(_:)), closure: onSwipeClosure)
+        
+        swipeGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        
+        swipeGestureRecognizer.delegate = swipeGestureRecognizer
+        swipeGestureRecognizer.direction = direction
+        addGestureRecognizer(swipeGestureRecognizer)
+    }
+
+    func onSwipeRecognized(_ swipeGestureRecognizer: UISwipeGestureRecognizer) {
+        guard let swipeGestureRecognizer = swipeGestureRecognizer as? OnSwipeListener else { return }
+
+        swipeGestureRecognizer.closure(swipeGestureRecognizer)
     }
 
     /**
@@ -640,12 +657,12 @@ extension UIView: CAAnimationDelegate {
      */
     func onLongPress(_ onLongPressClosure: @escaping OnLongPressRecognizedClosure) {
         self.isUserInteractionEnabled = true
-        let tapGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)), closure: onLongPressClosure)
+        let longPressGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)), closure: onLongPressClosure)
         
-        tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        longPressGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
         
-        tapGestureRecognizer.delegate = tapGestureRecognizer
-        addGestureRecognizer(tapGestureRecognizer)
+        longPressGestureRecognizer.delegate = longPressGestureRecognizer
+        addGestureRecognizer(longPressGestureRecognizer)
     }
     
     func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -724,6 +741,24 @@ extension UserDefaults {
     }
 }
 
+typealias OnSwipeRecognizedClosure = (_ tapGestureRecognizer: UISwipeGestureRecognizer) -> ()
+class OnSwipeListener: UISwipeGestureRecognizer, UIGestureRecognizerDelegate {
+    private(set) var closure: OnSwipeRecognizedClosure
+    
+    init(target: Any?, action: Selector?, closure: @escaping OnSwipeRecognizedClosure) {
+        self.closure = closure
+        super.init(target: target, action: action)
+    }
+    
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+//    deinit {
+//        📘("\(className(OnSwipeListener.self)) gone from RAM 💀")
+//    }
+}
+
 typealias OnTapRecognizedClosure = (_ tapGestureRecognizer: UITapGestureRecognizer) -> ()
 class OnClickListener: UITapGestureRecognizer, UIGestureRecognizerDelegate {
     private(set) var closure: OnTapRecognizedClosure
@@ -738,7 +773,7 @@ class OnClickListener: UITapGestureRecognizer, UIGestureRecognizerDelegate {
     }
 
 //    deinit {
-//        📘("OnClickListener gone from RAM 💀")
+//        📘("\(className(OnClickListener.self)) gone from RAM 💀")
 //    }
 }
 
@@ -756,9 +791,9 @@ class OnLongPressListener: UILongPressGestureRecognizer, UIGestureRecognizerDele
     }
 
     
-//    deinit {
-//        📘("OnLongPressListener gone from RAM 💀")
-//    }
+    deinit {
+        📘("\(className(OnLongPressListener.self)) gone from RAM 💀")
+    }
 }
 
 /// An interesting fact: the CAKeyframeAnimation object does not survive the animation, it's being dealloced right after it has been added to the layer

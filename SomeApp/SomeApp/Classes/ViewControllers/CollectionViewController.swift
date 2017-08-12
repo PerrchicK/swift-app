@@ -38,7 +38,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
+        view.onSwipe(direction: .down) { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }
+
         reloadGame()
     }
     
