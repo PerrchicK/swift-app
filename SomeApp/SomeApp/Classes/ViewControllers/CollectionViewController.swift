@@ -33,7 +33,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
 
         collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
-        collectionView.register(XibGameCell.self, forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
+        collectionView.register(UINib(nibName: className(XibGameCell.self), bundle: nil), forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -56,7 +56,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryboardGameCell.REUSE_IDENTIFIER, for: indexPath) as! GameCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: XibGameCell.REUSE_IDENTIFIER, for: indexPath) as! GameCell
 
         cell.configCell()
 
@@ -145,10 +145,6 @@ class StoryboardGameCell: GameCell {
     
     @IBOutlet weak var _playerMarkLabel: UILabel!
 
-    override func awakeFromNib() {
-        📘("Created a \(className(StoryboardGameCell.self)) object")
-    }
-    
     override var playerMarkLabel: UILabel! {
         get {
             return _playerMarkLabel
@@ -178,6 +174,10 @@ class GameCell: UICollectionViewCell {
 
     var playerMarkLabel: UILabel!
 
+    override func awakeFromNib() {
+        📘("Created a \(className(self.classForCoder)) object")
+    }
+    
     func configCell() {
         self.backgroundColor = UIColor.red
         self.playerMarkLabel.text = ""
