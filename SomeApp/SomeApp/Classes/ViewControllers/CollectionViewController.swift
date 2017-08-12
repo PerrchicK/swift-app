@@ -9,10 +9,11 @@
 import Foundation
 import UIKit
 
-class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, TicTabToeGameDelegate {
+class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, GameDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
+    var playerNameTextField: UITextField?
     
     let NumberOfRows = TicTabToeGame.Configuration.RowsCount // X - number of section
     let NumberOfColumns = TicTabToeGame.Configuration.ColumnsCount // Y - number of items in section
@@ -24,14 +25,15 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 //        let game = WhackGame(playerName: CollectionViewController.PLAYER_NAME)
         game.delegate = self
 
-        return game
-    }()
+        return game!
+    }
 
     var isGameEnabled = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //https://randexdev.com/2014/08/uicollectionviewcell/
         collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
         collectionView.register(UINib(nibName: className(XibGameCell.self), bundle: nil), forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
     }
@@ -97,7 +99,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         return UIEdgeInsetsMake(TileMargin, TileMargin, TileMargin, TileMargin)
     }
 
-    // MARK: - TicTabToeGameDelegate
+    // MARK: - TicTacToeGameDelegate
 
     func game(_ game: Game, playerMadeMove player: Player, row: Int, column: Int) {
         guard let cell = collectionView.cellForItem(at: IndexPath(item: column, section: row)) as? GameCell else {
@@ -194,6 +196,5 @@ class GameCell: UICollectionViewCell {
             //playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             playerMarkLabel.text = mark
         }
-        
     }
 }

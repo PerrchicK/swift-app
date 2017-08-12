@@ -1,5 +1,5 @@
 //
-//  TicTabToeGame.swift
+//  TicTacToeGame.swift
 //  SomeApp
 //
 //  Created by Perry on 2/23/16.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-protocol TicTabToeGameDelegate: GameDelegate {
+protocol TicTacToeGameDelegate: GameDelegate {
 }
 
-class TicTabToeGame: Game {
+class TicTacToeGame: Game {
     internal var currentPlayer: Player
     weak internal var delegate: GameDelegate?
 
@@ -21,16 +21,16 @@ class TicTabToeGame: Game {
         static let MaxMovesInSequence = Configuration.RowsCount
     }
 
-    enum TicTabToePlayer: Player { // Enums don't must to inherit from anywhere, but it's helpful
+    enum TicTacToePlayer: Player { // Enums don't must to inherit from anywhere, but it's helpful
         case X
         case O
         
         func intValue() -> Int {
-            return TicTabToePlayer.X == self ? 1 : -1
+            return TicTacToePlayer.X == self ? 1 : -1
         }
         
         func stringValue() -> String {
-            return TicTabToePlayer.X == self ? "X" : "O"
+            return TicTacToePlayer.X == self ? "X" : "O"
         }
     }
 
@@ -48,7 +48,7 @@ class TicTabToeGame: Game {
     fileprivate lazy var matrix = Array<[Int?]>(repeating: Array<Int?>(repeating: nil, count: Configuration.RowsCount), count: Configuration.ColumnsCount)
     
     init() {
-        currentPlayer = TicTabToePlayer.X
+        currentPlayer = TicTacToePlayer.X
     }
 
     internal func playMove(player: Player, row: Int, column: Int) {
@@ -67,8 +67,8 @@ class TicTabToeGame: Game {
     }
 
     fileprivate func switchTurns() {
-        guard let _currentPlayer = currentPlayer as? TicTabToePlayer else { return }
-        currentPlayer = _currentPlayer == TicTabToePlayer.X ? TicTabToePlayer.O : TicTabToePlayer.X
+        guard let _currentPlayer = currentPlayer as? TicTacToePlayer else { return }
+        currentPlayer = _currentPlayer == TicTacToePlayer.X ? TicTacToePlayer.O : TicTacToePlayer.X
     }
 
     fileprivate func checkWinner() -> Player? {

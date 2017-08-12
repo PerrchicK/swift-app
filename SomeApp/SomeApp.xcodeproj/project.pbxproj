@@ -24,7 +24,7 @@
 		7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */; };
 		7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */; };
 		7572206C1E98FBB4000E2B62 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206A1E98FBB4000E2B62 /* Game.swift */; };
-		7572206D1E98FBB4000E2B62 /* TicTabToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */; };
+		7572206D1E98FBB4000E2B62 /* TicTacToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206B1E98FBB4000E2B62 /* TicTacToeGame.swift */; };
 		7572FD9F1E99259E005A9E9F /* WhackGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572FD9E1E99259E005A9E9F /* WhackGame.swift */; };
 		7573DE001C7780A700E3C37F /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */; };
 		7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */; };
@@ -132,7 +132,7 @@
 		7570D2DA1C600E6A00EA34D3 /* StarterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarterViewController.swift; sourceTree = "<group>"; };
 		7570D2DD1C600E8B00EA34D3 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		7572206A1E98FBB4000E2B62 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
-		7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTabToeGame.swift; sourceTree = "<group>"; };
+		7572206B1E98FBB4000E2B62 /* TicTacToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeGame.swift; sourceTree = "<group>"; };
 		7572FD9E1E99259E005A9E9F /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
 		7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SomeAnnotationView.xib; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 			children = (
 				7572FD9E1E99259E005A9E9F /* WhackGame.swift */,
 				7572206A1E98FBB4000E2B62 /* Game.swift */,
-				7572206B1E98FBB4000E2B62 /* TicTabToeGame.swift */,
+				7572206B1E98FBB4000E2B62 /* TicTacToeGame.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -697,7 +697,7 @@
 				7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */,
 				75C2C8E41C7554EA00D42707 /* NibView.swift in Sources */,
 				759F58AC1C7500C5009C6E51 /* UIImage+AnimatedGif.swift in Sources */,
-				7572206D1E98FBB4000E2B62 /* TicTabToeGame.swift in Sources */,
+				7572206D1E98FBB4000E2B62 /* TicTacToeGame.swift in Sources */,
 				759282FD1EBC925A00C95AFF /* PersistableUser.swift in Sources */,
 				7570D2DE1C600E8B00EA34D3 /* SplashScreenViewController.swift in Sources */,
 				759F58AE1C750168009C6E51 /* AnimatedGifBoxView.swift in Sources */,
