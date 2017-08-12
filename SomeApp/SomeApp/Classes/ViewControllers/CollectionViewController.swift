@@ -1,5 +1,5 @@
 //
-//  CollectionContainerViewController.swift
+//  CollectionViewController.swift
 //  SomeApp
 //
 //  Created by Perry on 2/21/16.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CollectionContainerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, TicTabToeGameDelegate {
+class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, TicTabToeGameDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -21,13 +21,12 @@ class CollectionContainerViewController: UIViewController, UICollectionViewDataS
     static let PLAYER_NAME = "user"
     lazy var game: Game = {
         let game = TicTabToeGame()
-//        let game = WhackGame(playerName: CollectionContainerViewController.PLAYER_NAME)
+//        let game = WhackGame(playerName: CollectionViewController.PLAYER_NAME)
         game.delegate = self
 
         return game
     }()
 
-//    var game: Game
     var isGameEnabled = true
 
     override func viewDidLoad() {
@@ -182,12 +181,13 @@ class GameCell: UICollectionViewCell {
 
     func placeMark(_ mark: String) {
         if playerMarkLabel.text?.length() ?? 0 > 0 {
-            playerMarkLabel.animateZoom(zoomIn: false, duration: 0.4, completion: { _ in
-                self.playerMarkLabel.text = ""
-                self.playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-            })
+            playerMarkLabel.text = ""
+//            playerMarkLabel.animateZoom(zoomIn: false, duration: 0.4, completion: { _ in
+//                self.playerMarkLabel.text = ""
+//                self.playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+//            })
         } else {
-            playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            //playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             playerMarkLabel.text = mark
         }
         

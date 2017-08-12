@@ -67,7 +67,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         case LeftMenuOptions.UI.Views_Animations:
             navigationController?.pushViewController(AnimationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.CollectionView:
-            navigationController?.pushViewController(CollectionContainerViewController.instantiate(), animated: true)
+            navigationController?.pushViewController(CollectionViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.CommunicationLocation:
