@@ -782,10 +782,10 @@
             </objects>
             <point key="canvasLocation" x="844" y="1281"/>
         </scene>
-        <!--Collection Container View Controller-->
+        <!--Collection View Controller-->
         <scene sceneID="mvH-5E-CWs">
             <objects>
-                <viewController storyboardIdentifier="CollectionContainerViewController" id="LHZ-1z-G7a" customClass="CollectionContainerViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CollectionViewController" id="LHZ-1z-G7a" customClass="CollectionViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DnM-fq-LaF"/>
                         <viewControllerLayoutGuide type="bottom" id="dHz-o7-VJR"/>
