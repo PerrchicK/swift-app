@@ -13,7 +13,7 @@ class ConcurrencyViewController: UIViewController {
     // Grand Central Dispatch (GCD) usage
     let myQueue = DispatchQueue(label: "myQueue", attributes: DispatchQueue.Attributes.concurrent)
     let myGroup = DispatchGroup()
-    var isVisible = false
+    lazy var isAppeared: Bool = false
     
     @IBOutlet weak var progressButton: UIButton!
     @IBOutlet weak var goButton: UIButton!
@@ -94,21 +94,25 @@ class ConcurrencyViewController: UIViewController {
             📘("action 2 dispatched")
             self?.action3Spinner.stopAnimating()
         }
-
-        openCountingThread()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        isVisible = true
         resetProgressBars()
+        isAppeared = true
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 
-        isVisible = false
+        openCountingThread_3()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        isAppeared = false
     }
 
     @IBAction func btnStartProgressPressed(_ sender: UIButton) {
@@ -202,25 +206,25 @@ class ConcurrencyViewController: UIViewController {
         }
     }
 
-    func openCountingThread() {
-        let myThread = Thread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil)
+    func openCountingThread_1() {
+        let myThread = Thread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: "1")
         myThread.start()  // Actually creates the thread
     }
 
-    func openCountingThread2() {
-        Thread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: nil).start()
+    func openCountingThread_2() {
+        Thread(target: self, selector: #selector(ConcurrencyViewController.countForever), object: "2").start()
     }
     
-    func openCountingThread3() {
-        Thread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, with: nil)
+    func openCountingThread_3() {
+        Thread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, with: "3")
     }
     
-    func countForever() {
+    func countForever(argument: Any?) {
         var time = 0
-        while self.isVisible {
+        while self.isAppeared {
             Thread.sleep(forTimeInterval: 1)
             time += 1
-            📘("counting \(time)")
+            📘("counting (\(time) til now) on thread with argument: \(String(describing: argument))")
         }
     }
     
