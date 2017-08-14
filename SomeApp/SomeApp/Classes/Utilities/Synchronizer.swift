@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Responsible for synchronizing asynchronous operations by wrapping Apple's OperationQueue class
 class Synchronizer {
     internal class HolderTicket {
         let blockOperation: BlockOperation
@@ -41,17 +42,18 @@ class Synchronizer {
 
     let completionOperation: BlockOperation
     fileprivate var shouldAddCompletionOperation = true
+
     /**
-     Initializes an atomic synchronization between two operations
+     Initializes an atomic synchronization between various operations
      
-     - parameter operation1: An operation to do, regardless the time to end
-     - parameter operation2: An operation to do, regardless the time to end
-     - parameter finalOperation: The completion operation to do, only after the first two are finished. It shall be invoked on the main thread.
+     - parameter finalOperationQueue: In case of updating UI without using 'DispatchQueue.main' (not on the main thread), the block will run on a background thread, we might get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release.". Usually the app will not crash, but will act weird and slow.
+     
+     - parameter finalOperationClosure: The completion operation to do, only after the all holders are released.
      */
-    init(finalOperation: @escaping () -> ()) {
+    init(finalOperationQueue: DispatchQueue = DispatchQueue.main, finalOperationClosure: @escaping () -> ()) {
         let completionOperation = BlockOperation {
-            DispatchQueue.main.async(execute: { 
-                finalOperation()
+            finalOperationQueue.async(execute: {
+                finalOperationClosure()
             })
         }
 
@@ -71,11 +73,11 @@ class Synchronizer {
         return blocker
     }
     
-    static func syncOperations(_ operations: (() -> Void)..., withFinalOperation finalOperation: @escaping () -> Void) {
-        guard operations.count > 0 else { finalOperation(); return }
+    static func syncOperations(_ operationClosures: (() -> Void)..., withFinalOperation finalOperation: @escaping () -> Void) {
+        guard operationClosures.count > 0 else { finalOperation(); return }
 
-        guard operations.count > 1 else {
-            operations[0]()
+        guard operationClosures.count > 1 else {
+            operationClosures[0]()
             finalOperation()
             return
         }
@@ -88,8 +90,8 @@ class Synchronizer {
         }
 
         var blockOperations = [BlockOperation]()
-        for operation in operations {
-            let blockOperation = BlockOperation(block: operation)
+        for operationBlock in operationClosures {
+            let blockOperation = BlockOperation(block: operationBlock)
             blockOperations.append(blockOperation)
            
             completionOperation.addDependency(blockOperation)

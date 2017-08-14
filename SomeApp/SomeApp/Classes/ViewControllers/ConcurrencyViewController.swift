@@ -10,6 +10,7 @@ import UIKit
 
 class ConcurrencyViewController: UIViewController {
 
+    // Grand Central Dispatch (GCD) usage
     let myQueue = DispatchQueue(label: "myQueue", attributes: DispatchQueue.Attributes.concurrent)
     let myGroup = DispatchGroup()
     var isVisible = false
@@ -22,10 +23,9 @@ class ConcurrencyViewController: UIViewController {
     @IBOutlet weak var action2Spinner: UIActivityIndicatorView!
     @IBOutlet weak var action3Spinner: UIActivityIndicatorView!
 
+    // OperationQueue class usage
     let synchronizer = Synchronizer {
-        runOnUiThread { // Without this, if the block will run on a background thread, you may get the following error: "This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.  This will cause an exception in a future release."
-            ToastMessage.show(messageText: "released")
-        }
+        ToastMessage.show(messageText: "released")
     }
     
     var randomProgressBarIndexes: [Int]!
@@ -45,22 +45,22 @@ class ConcurrencyViewController: UIViewController {
         randomProgressBarIndexes = [-1,-1,-1,-1]
 
         Synchronizer.syncOperations({
-            Thread.sleep(forTimeInterval: 0.001)
+            Thread.sleep(forTimeInterval: 0.01)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[0] = rand
             📘("Random 0: \(rand)")
         },{
-            Thread.sleep(forTimeInterval: 0.002)
+            Thread.sleep(forTimeInterval: 0.02)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[1] = rand
             📘("Random 1: \(rand)")
         },{
-            Thread.sleep(forTimeInterval: 0.003)
+            Thread.sleep(forTimeInterval: 0.03)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[2] = rand
             📘("Random 2: \(rand)")
         },{
-            Thread.sleep(forTimeInterval: 0.004)
+            Thread.sleep(forTimeInterval: 0.04)
             let rand = self.findNextRandomNumber()
             self.randomProgressBarIndexes[3] = rand
             📘("Random 3: \(rand)")
