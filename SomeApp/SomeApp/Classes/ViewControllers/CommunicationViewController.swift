@@ -108,7 +108,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     func parseResponse(_ responseObject: Any) -> String? {
         var result :String?
 
-        guard let responseDictionary = responseObject as? [String:AnyObject],
+        guard let responseDictionary = responseObject as? [AnyHashable:Any],
             let status = responseDictionary["status"] as? String, status == "OK" else { return result }
 
         📘("Parsing JSON dictionary:\n\(responseDictionary)")

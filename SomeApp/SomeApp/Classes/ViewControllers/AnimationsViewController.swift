@@ -47,6 +47,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
         super.viewDidAppear(animated)
 
         scheduleAutoScrollTimer()
+        //MARK: KVO: Adding the observer
+        shootedViewRightMarginConstraint.addObserver(self, forKeyPath: AnimationsViewController.KVO_KEY_PATH_TO_OBSERVE, options: .new, context: nil)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -178,9 +180,6 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
         theWallView.onLongPress { [weak self] (longPressGestureRecognizer) in
             self?.theWallView.animateFade(fadeIn: false)
         }
-
-        //MARK: KVO: Adding the observer
-        shootedViewRightMarginConstraint.addObserver(self, forKeyPath: AnimationsViewController.KVO_KEY_PATH_TO_OBSERVE, options: .new, context: nil)
 
         theWallView.onClick { [weak self] (tapGestureRecognizer) in
             guard let strongSelf = self else { return }

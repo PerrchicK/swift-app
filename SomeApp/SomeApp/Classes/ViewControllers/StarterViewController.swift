@@ -36,13 +36,14 @@ class StarterViewController: UIViewController {
 
             strongSelf.drawer.closeDrawer(animated: true, completion: nil)
         }
-        📘(" ... ")
+
+        //📘(" ... ")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        📘(" ... ")
+        //📘(" ... ")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -53,12 +54,13 @@ class StarterViewController: UIViewController {
         navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .done, target: self, action: #selector(openLeftMenu))
         present(navigationController, animated: true, completion: nil)
 
-        📘(" ... ")
+        //📘(" ... ")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        📘("didReceiveMemoryWarning!")
     }
     
     // MARK: - Other super class methods
@@ -75,5 +77,4 @@ class StarterViewController: UIViewController {
     func openLeftMenu () {
         drawer.open(.left, animated: true, completion: nil)
     }
-
 }
