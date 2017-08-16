@@ -1,5 +1,5 @@
 //
-//  CommunicationViewController.swift
+//  CommunicationMapLocationViewController.swift
 //  SomeApp
 //
 //  Created by Perry on 3/23/16.
@@ -10,12 +10,12 @@ import Foundation
 import MapKit
 import Alamofire
 
-class CommunicationViewController: UIViewController, MKMapViewDelegate {
+class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
     let afkeaLatitude: Double = 32.115216
     let afkeaLongitude: Double = 34.8174598
 
-    @IBOutlet weak var tappedCoordinateLabel: UILabel!
+    @IBOutlet weak var tappedCoordinateButton: UIButton!
     var tappedCoordinate: CLLocationCoordinate2D?
     let MyAnnotationViewIdentifier = "MyAnnotationViewIdentifier"
 
@@ -37,6 +37,13 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
             let tappedLocationCoordinate = mapView.convert(tapGestureRecognizer.location(in: mapView), toCoordinateFrom: mapView)
             📘("tapped on location's coordinate:\n\(tappedLocationCoordinate)")
             self?.mapView(mapView, didFeelTapOnCoordinate: tappedLocationCoordinate)
+        }
+        
+        tappedCoordinateButton.onClick { [weak self] (tapGestureRecognizer) in
+            if let coordinatesString = self?.tappedCoordinateButton.titleLabel?.text {
+                UIPasteboard.general.string = NSString(string: coordinatesString) as String
+                ToastMessage.show(messageText: "copied to clipbaord")
+            }
         }
     }
 
@@ -106,7 +113,7 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
     }
     
     func parseResponse(_ responseObject: Any) -> String? {
-        var result :String?
+        var result: String?
 
         guard let responseDictionary = responseObject as? [AnyHashable:Any],
             let status = responseDictionary["status"] as? String, status == "OK" else { return result }
@@ -139,12 +146,12 @@ class CommunicationViewController: UIViewController, MKMapViewDelegate {
         return annotationView
     }
 
-    func mapView(_ mapView: MKMapView, didFeelTapOnCoordinate tappedCoordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: MKMapView, didFeelTapOnCoordinate _tappedCoordinate: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
-        self.tappedCoordinate = tappedCoordinate
-        self.tappedCoordinateLabel.text = "\((self.tappedCoordinate?.latitude)!),\((self.tappedCoordinate?.longitude)!)"
+        self.tappedCoordinate = _tappedCoordinate
+        tappedCoordinateButton.setTitle("\(_tappedCoordinate.latitude),\(_tappedCoordinate.longitude)", for: .normal)
         annotation.title = "annotation's callout title"
-        annotation.coordinate = tappedCoordinate
+        annotation.coordinate = _tappedCoordinate
         
         mapView.addAnnotation(annotation)
     }

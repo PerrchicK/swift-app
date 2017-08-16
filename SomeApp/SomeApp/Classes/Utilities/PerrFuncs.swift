@@ -12,6 +12,7 @@ import ObjectiveC
 // MARK: - "macros"
 
 public typealias CompletionClosure = ((AnyObject?) -> Void)
+public typealias PredicateClosure = ((AnyObject?) -> Bool)
 
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
@@ -277,7 +278,10 @@ extension UIImageView {
 // Declare a global var to produce a unique address as the assoc object handle
 var SompApplicationHuggedProperty: UInt8 = 0
 
-infix operator &* { associativity left precedence 140 }
+precedencegroup Additive {
+    associativity: left
+}
+infix operator &* : Additive
 
 extension NSObject { // try extending 'AnyObject'...
     /**
@@ -391,6 +395,16 @@ extension UIViewController {
 let DEFAULT_ANIMATION_DURATION = TimeInterval(1)
 let ANIMATION_NO_KEY = "noAnimation"
 extension UIView: CAAnimationDelegate {
+    
+    var isPresented: Bool {
+        get {
+            return !isHidden
+        }
+        set {
+            isHidden = !newValue
+        }
+    }
+    
     /**
      Hides the view if it's shown.
      Shows the view if it's hidden.
@@ -508,15 +522,11 @@ extension UIView: CAAnimationDelegate {
     // MARK: - Property setters-like methods
 
     // Computed variable
-    var shown: Bool {
-        return !self.isHidden
-    }
-
     public func show(show: Bool, faded: Bool = false) {
         if faded {
             animateFade(fadeIn: show)
         } else {
-            self.isHidden = !show
+            self.isPresented = show
         }
     }
     
@@ -616,24 +626,79 @@ extension UIView: CAAnimationDelegate {
 
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onClick(_ onClickClosure: @escaping OnTapRecognizedClosure) {
+    @discardableResult
+    func onClick(_ onClickClosure: @escaping OnTapRecognizedClosure) -> OnClickListener {
         self.isUserInteractionEnabled = true
         let tapGestureRecognizer = OnClickListener(target: self, action: #selector(onTapRecognized(_:)), closure: onClickClosure)
 
         tapGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
-        
         tapGestureRecognizer.delegate = tapGestureRecognizer
 
+        if self is UIButton {
+            (self as? UIButton)?.addTarget(self, action: #selector(onTapRecognized(_:)), for: .touchUpInside)
+            tapGestureRecognizer.isEnabled = false
+        }
+
         addGestureRecognizer(tapGestureRecognizer)
+        return tapGestureRecognizer
     }
 
     func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
-        guard let tapGestureRecognizer = tapGestureRecognizer as? OnClickListener else { return }
+        var onClickListener: OnClickListener?
+        if self is UIButton {
+            onClickListener = gestureRecognizers?.filter( { $0.isEnabled == false && $0 is OnClickListener } ).first as? OnClickListener
+        } else {
+            onClickListener = tapGestureRecognizer as? OnClickListener
+        }
+
+        guard let _onClickListener = onClickListener else { return }
         
-        tapGestureRecognizer.closure(tapGestureRecognizer)
+        _onClickListener.closure(_onClickListener)
+    }
+
+    @discardableResult
+    func onDrag(predicateClosure: PredicateClosure? = nil, onDragClosure: @escaping CompletionClosure) -> OnPanListener {
+        return onPan { panGestureRecognizer in
+            guard let draggedView = panGestureRecognizer.view, let superview = draggedView.superview, predicateClosure?(self) ?? true, let onPanListener = panGestureRecognizer as? OnPanListener else { return }
+            let locationOfTouch = panGestureRecognizer.location(in: superview)
+
+            switch panGestureRecognizer.state {
+            case .cancelled: fallthrough
+            case .ended:
+                onPanListener.additionalInfo = nil
+            case .began:
+                onPanListener.additionalInfo = CGPoint(x: draggedView.center.x - locationOfTouch.x, y: draggedView.center.y - locationOfTouch.y) as AnyObject
+                fallthrough
+            default:
+                if let offset = onPanListener.additionalInfo as? CGPoint {
+                    draggedView.center = CGPoint(x: locationOfTouch.x + (offset.x), y: locationOfTouch.y + (offset.y))
+                }
+            }
+            
+            onDragClosure(draggedView.center as AnyObject)
+        }
+    }
+
+    @discardableResult
+    func onPan(_ onPanClosure: @escaping OnPanRecognizedClosure) -> OnPanListener {
+        self.isUserInteractionEnabled = true
+        let panGestureRecognizer = OnPanListener(target: self, action: #selector(onPanRecognized(_:)), closure: onPanClosure)
+        
+        panGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
+        panGestureRecognizer.delegate = panGestureRecognizer
+        addGestureRecognizer(panGestureRecognizer)
+
+        return panGestureRecognizer
     }
     
-    func onSwipe(direction: UISwipeGestureRecognizerDirection, _ onSwipeClosure: @escaping OnSwipeRecognizedClosure) {
+    func onPanRecognized(_ panGestureRecognizer: UIPanGestureRecognizer) {
+        guard let panGestureRecognizer = panGestureRecognizer as? OnPanListener else { return }
+        
+        panGestureRecognizer.closure(panGestureRecognizer)
+    }
+
+    @discardableResult
+    func onSwipe(direction: UISwipeGestureRecognizerDirection, _ onSwipeClosure: @escaping OnSwipeRecognizedClosure) -> OnSwipeListener {
         self.isUserInteractionEnabled = true
         let swipeGestureRecognizer = OnSwipeListener(target: self, action: #selector(onSwipeRecognized(_:)), closure: onSwipeClosure)
         
@@ -641,7 +706,9 @@ extension UIView: CAAnimationDelegate {
         
         swipeGestureRecognizer.delegate = swipeGestureRecognizer
         swipeGestureRecognizer.direction = direction
+
         addGestureRecognizer(swipeGestureRecognizer)
+        return swipeGestureRecognizer
     }
 
     func onSwipeRecognized(_ swipeGestureRecognizer: UISwipeGestureRecognizer) {
@@ -655,14 +722,16 @@ extension UIView: CAAnimationDelegate {
      
      - parameter onClickClosure: A closure to dispatch when a tap gesture is recognized.
      */
-    func onLongPress(_ onLongPressClosure: @escaping OnLongPressRecognizedClosure) {
+    @discardableResult
+    func onLongPress(_ onLongPressClosure: @escaping OnLongPressRecognizedClosure) -> OnLongPressListener {
         self.isUserInteractionEnabled = true
         let longPressGestureRecognizer = OnLongPressListener(target: self, action: #selector(longPressRecognized(_:)), closure: onLongPressClosure)
         
         longPressGestureRecognizer.cancelsTouchesInView = false // Solves bug: https://stackoverflow.com/questions/18159147/iphone-didselectrowatindexpath-only-being-called-after-long-press-on-custom-c
-        
         longPressGestureRecognizer.delegate = longPressGestureRecognizer
+
         addGestureRecognizer(longPressGestureRecognizer)
+        return longPressGestureRecognizer
     }
     
     func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -741,7 +810,42 @@ extension UserDefaults {
     }
 }
 
-typealias OnSwipeRecognizedClosure = (_ tapGestureRecognizer: UISwipeGestureRecognizer) -> ()
+extension Array {
+    public subscript(safe index: Int) -> Element? {
+        guard count > index else {return nil }
+        return self[index]
+    }
+    
+    @discardableResult
+    mutating func remove(where predicate: (Array.Iterator.Element) throws -> Bool) -> Element? {
+        if let indexToRemove = try? self.index(where: predicate), let _indexToRemove = indexToRemove {
+            return self.remove(at: _indexToRemove)
+        }
+        
+        return nil
+    }
+}
+
+typealias OnPanRecognizedClosure = (_ panGestureRecognizer: UIPanGestureRecognizer) -> ()
+class OnPanListener: UIPanGestureRecognizer, UIGestureRecognizerDelegate {
+    private(set) var closure: OnPanRecognizedClosure
+    var additionalInfo: AnyObject?
+
+    init(target: Any?, action: Selector?, closure: @escaping OnPanRecognizedClosure) {
+        self.closure = closure
+        super.init(target: target, action: action)
+    }
+    
+    @objc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    //    deinit {
+    //        📘("\(className(OnSwipeListener.self)) gone from RAM 💀")
+    //    }
+}
+
+typealias OnSwipeRecognizedClosure = (_ swipeGestureRecognizer: UISwipeGestureRecognizer) -> ()
 class OnSwipeListener: UISwipeGestureRecognizer, UIGestureRecognizerDelegate {
     private(set) var closure: OnSwipeRecognizedClosure
     
@@ -791,9 +895,9 @@ class OnLongPressListener: UILongPressGestureRecognizer, UIGestureRecognizerDele
     }
 
     
-    deinit {
-        📘("\(className(OnLongPressListener.self)) gone from RAM 💀")
-    }
+//    deinit {
+//        📘("\(className(OnLongPressListener.self)) gone from RAM 💀")
+//    }
 }
 
 /// An interesting fact: the CAKeyframeAnimation object does not survive the animation, it's being dealloced right after it has been added to the layer

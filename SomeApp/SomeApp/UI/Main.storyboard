@@ -90,7 +90,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Starting..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yp8-II-DFh">
-                                <rect key="frame" x="123" y="274" width="75" height="21"/>
+                                <rect key="frame" x="122.5" y="273.5" width="75" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -120,13 +120,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a subject from the (sliding) menu" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYf-0k-QB9">
-                                <rect key="frame" x="22" y="119" width="276" height="55"/>
+                                <rect key="frame" x="22" y="119" width="276" height="27.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <color key="textColor" red="0.93092105260000002" green="0.53939423340000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" editable="NO" text="Visit this project's repository at: https://github.com/PerrchicK/swift-app" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="XyY-bk-b9s">
-                                <rect key="frame" x="36" y="274" width="248" height="284"/>
+                                <rect key="frame" x="36" y="246.5" width="248" height="311.5"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -443,7 +443,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mv3-VS-f6M" userLabel="showFirebaseButton">
-                                <rect key="frame" x="143" y="45" width="35" height="43"/>
+                                <rect key="frame" x="142.5" y="45" width="35" height="43"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Mv3-VS-f6M" secondAttribute="height" multiplier="73:91" id="ZRf-OJ-Mf8"/>
                                 </constraints>
@@ -700,11 +700,11 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Fg-15-N56" id="Bj3-9X-Nxm">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu option title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-Ab-ka6">
-                                                    <rect key="frame" x="48" y="12" width="254" height="21"/>
+                                                    <rect key="frame" x="48" y="12" width="534" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -898,10 +898,10 @@
             </objects>
             <point key="canvasLocation" x="2359" y="-263"/>
         </scene>
-        <!--Communication View Controller-->
+        <!--Communication Map Location View Controller-->
         <scene sceneID="am2-GS-V7e">
             <objects>
-                <viewController storyboardIdentifier="CommunicationViewController" id="aXh-g7-93R" customClass="CommunicationViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CommunicationMapLocationViewController" id="aXh-g7-93R" customClass="CommunicationMapLocationViewController" customModule="SomeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Icg-NE-yUD"/>
                         <viewControllerLayoutGuide type="bottom" id="uJo-xo-mZw"/>
@@ -911,33 +911,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQX-lw-isa">
-                                <rect key="frame" x="44" y="500" width="232" height="30"/>
+                                <rect key="frame" x="44" y="480" width="232" height="30"/>
                                 <state key="normal" title="Alamofire (former 'AFNetworking')"/>
                                 <connections>
                                     <action selector="afnetworkingRequestButtonPressed:" destination="aXh-g7-93R" eventType="touchUpInside" id="T9v-pt-KYG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q8b-om-ZWC">
-                                <rect key="frame" x="108" y="462" width="103" height="30"/>
+                                <rect key="frame" x="108" y="442" width="103" height="30"/>
                                 <state key="normal" title="NSURLSession"/>
                                 <connections>
                                     <action selector="nativeRequestButtonPressed:" destination="aXh-g7-93R" eventType="touchUpInside" id="NT2-M7-5Cd"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="make reverse geocoding request with:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q72-My-Fxn">
-                                <rect key="frame" x="36" y="413" width="248" height="41"/>
+                                <rect key="frame" x="36" y="413.5" width="248" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map Example" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a5T-yn-vYx">
-                                <rect key="frame" x="62" y="87" width="197" height="23"/>
+                                <rect key="frame" x="62" y="87.5" width="197" height="23"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="zQE-Np-gUL">
-                                <rect key="frame" x="35" y="141" width="250" height="225"/>
+                                <rect key="frame" x="35" y="141.5" width="250" height="225"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="zQE-Np-gUL" secondAttribute="height" multiplier="10:9" id="3uP-rb-dCm"/>
                                     <constraint firstAttribute="height" constant="225" id="lRl-yX-2Wg"/>
@@ -947,25 +947,22 @@
                                 </connections>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tapped coordinate:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXu-SB-LfX">
-                                <rect key="frame" x="86" y="366" width="149" height="21"/>
+                                <rect key="frame" x="86" y="366.5" width="149" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00,0.00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="33p-A2-koa">
-                                <rect key="frame" x="124" y="387" width="72" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g6h-1c-tzX">
+                                <rect key="frame" x="120" y="384.5" width="80" height="30"/>
+                                <state key="normal" title="(0.00, 0.00)"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="q72-My-Fxn" firstAttribute="top" secondItem="33p-A2-koa" secondAttribute="bottom" constant="5" id="1vP-wJ-RLF"/>
-                            <constraint firstItem="33p-A2-koa" firstAttribute="centerX" secondItem="zQE-Np-gUL" secondAttribute="centerX" id="7QU-y2-2Rp"/>
+                            <constraint firstItem="q72-My-Fxn" firstAttribute="top" secondItem="g6h-1c-tzX" secondAttribute="bottom" constant="-1" id="1U4-Jn-7hf"/>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="leading" secondItem="wFp-rR-LRS" secondAttribute="leadingMargin" constant="20" id="FGk-ya-d4K"/>
+                            <constraint firstItem="g6h-1c-tzX" firstAttribute="top" secondItem="AXu-SB-LfX" secondAttribute="bottom" constant="-3" id="JHd-d0-Mvk"/>
                             <constraint firstItem="Q8b-om-ZWC" firstAttribute="centerX" secondItem="q72-My-Fxn" secondAttribute="centerX" id="MhV-zu-55b"/>
-                            <constraint firstItem="33p-A2-koa" firstAttribute="top" secondItem="AXu-SB-LfX" secondAttribute="bottom" id="OEd-Ni-Zhy"/>
                             <constraint firstItem="Q8b-om-ZWC" firstAttribute="top" secondItem="q72-My-Fxn" secondAttribute="bottom" constant="8" id="SCc-Ht-Wve"/>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="centerY" secondItem="wFp-rR-LRS" secondAttribute="centerY" id="Yo1-RL-gfS"/>
                             <constraint firstItem="zQE-Np-gUL" firstAttribute="top" secondItem="a5T-yn-vYx" secondAttribute="bottom" constant="31" id="aIQ-Yg-z1E"/>
@@ -977,6 +974,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="q72-My-Fxn" secondAttribute="trailing" constant="20" id="rkS-Ny-p6U"/>
                             <constraint firstItem="AXu-SB-LfX" firstAttribute="centerX" secondItem="zQE-Np-gUL" secondAttribute="centerX" id="sjz-aa-NKG"/>
                             <constraint firstItem="zQE-Np-gUL" firstAttribute="centerX" secondItem="wFp-rR-LRS" secondAttribute="centerX" id="uTp-jg-s64"/>
+                            <constraint firstItem="g6h-1c-tzX" firstAttribute="centerX" secondItem="zQE-Np-gUL" secondAttribute="centerX" id="vRa-sT-7iv"/>
                             <constraint firstItem="zQE-Np-gUL" firstAttribute="centerY" secondItem="wFp-rR-LRS" secondAttribute="centerY" constant="-30" id="x44-Vz-8D3"/>
                         </constraints>
                         <variation key="default">
@@ -987,7 +985,7 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="zQE-Np-gUL" id="xPR-gs-BMM"/>
-                        <outlet property="tappedCoordinateLabel" destination="33p-A2-koa" id="TLe-zJ-4zw"/>
+                        <outlet property="tappedCoordinateButton" destination="g6h-1c-tzX" id="Jgt-xU-h0F"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nHU-2c-G4Z" userLabel="First Responder" sceneMemberID="firstResponder"/>

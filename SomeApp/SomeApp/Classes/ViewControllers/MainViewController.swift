@@ -11,7 +11,6 @@ import UIKit
 
 class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
     static let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
-//    var reachabilityManager: NetworkReachabilityManager?
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
@@ -22,20 +21,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        reachabilityManager = reachabilityManager()
-//        reachabilityManager?.listener = { [weak self] (status: NetworkReachabilityManager.NetworkReachabilityStatus) -> () in
-//            📘("Network reachability status changed: \(status)")
-//            switch status {
-//            case .NotReachable:
-//                self?.navigationController?.navigationBar.barTintColor = UIColor.redColor()
-//            case .Reachable(NetworkReachabilityManager.ConnectionType.EthernetOrWiFi): fallthrough
-//            case .Reachable(NetworkReachabilityManager.ConnectionType.WWAN):
-//                self?.navigationController?.navigationBar.barTintColor = nil
-//            default:
-//                break
-//            }
-//        }
-//        reachabilityManager?.startListening()
+        try? Reachability.shared?.startNotifier()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -49,12 +35,33 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
                 }))
                 .show()
         }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityDidChange), name: Notification.Name.ReachabilityDidChange, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: InAppNotifications.CloseDrawer), object: nil)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    func reachabilityDidChange(notification: Notification) {
+        guard let status = Reachability.shared?.currentReachabilityStatus else { return }
+        📘("Network reachability status changed: \(status)")
+
+        switch status {
+        case .notReachable:
+            navigationController?.navigationBar.barTintColor = UIColor.red
+        case .reachableViaWiFi: fallthrough
+        case .reachableViaWWAN:
+            navigationController?.navigationBar.barTintColor = nil
+        }
     }
 
     // MARK: - LeftMenuViewControllerDelegate
@@ -71,7 +78,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.CommunicationLocation:
-            navigationController?.pushViewController(CommunicationViewController.instantiate(), animated: true)
+            navigationController?.pushViewController(CommunicationMapLocationViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.Notifications:
             navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.ImagesCoreMotion:

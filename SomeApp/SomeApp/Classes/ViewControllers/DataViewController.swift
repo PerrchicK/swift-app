@@ -43,8 +43,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dbStateTableView.isHidden = true
 
         userDefaultsTextField.text = UserDefaults.standard.object(forKey: UserDefaultsStringKey) as? String
-        self.view.onClick {_ in 
-            self.view.endEditing(true)
+        view.onClick { [weak self] _ in
+            self?.view.endEditing(true)
         }
 
         dbStateTableView.layer.cornerRadius = 5
@@ -214,7 +214,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let tableViewType = tableView.😍() as? TableViewType {
             switch tableViewType {
             case TableViewType.firebase:
-                cell.textLabel?.text = firebaseKeys[index]
+                cell.textLabel?.text = firebaseKeys[safe: index]
             case TableViewType.coreData:
                 cell.textLabel?.text = users[index].nickname
             }
@@ -326,21 +326,5 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     func refreshUsersArray() {
         users = DataManager.fetchUsers()
-    }
-}
-
-extension Array {
-    public subscript(safe index: Int) -> Element? {
-        guard count > index else {return nil }
-        return self[index]
-    }
-
-    @discardableResult
-    mutating func remove(where predicate: (Array.Iterator.Element) throws -> Bool) -> Element? {
-        if let indexToRemove = try? self.index(where: predicate), let _indexToRemove = indexToRemove {
-            return self.remove(at: _indexToRemove)
-        }
-
-        return nil
     }
 }
