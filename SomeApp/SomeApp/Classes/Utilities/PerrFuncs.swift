@@ -410,7 +410,7 @@ extension UIView: CAAnimationDelegate {
      Shows the view if it's hidden.
      */
     func toggleVisibility() {
-        self.show(show: !self.shown)
+        isPresented = !isPresented
     }
 
     // MARK: - Animations
