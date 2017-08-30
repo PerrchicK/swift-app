@@ -221,7 +221,9 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         cell.onLongPress({ [weak self] (longPressGestureRecognizer) in
-            self?.tableView(tableView, didLongTapOnRowAtIndex: index)
+            if longPressGestureRecognizer.state == .began {
+                self?.tableView(tableView, didLongTapOnRowAtIndex: index)
+            }
         })
         return cell
     }
