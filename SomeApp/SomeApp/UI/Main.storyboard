@@ -700,7 +700,7 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Fg-15-N56" id="Bj3-9X-Nxm">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu option title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-Ab-ka6">
@@ -797,8 +797,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="f7s-gB-N52">
                                 <rect key="frame" x="26" y="150" width="268" height="268"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="f7s-gB-N52" secondAttribute="height" multiplier="1:1" id="fap-jc-eFO"/>
-                                    <constraint firstAttribute="width" constant="240" id="rOa-eb-5Jb"/>
+                                    <constraint firstAttribute="width" secondItem="f7s-gB-N52" secondAttribute="height" multiplier="1:1" id="4Ff-3n-gw7"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="7J5-mB-ekW">
                                     <size key="itemSize" width="50" height="50"/>
@@ -833,11 +832,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="rOa-eb-5Jb"/>
-                                    </mask>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="LHZ-1z-G7a" id="7Wp-wG-FCc"/>
                                     <outlet property="delegate" destination="LHZ-1z-G7a" id="Y84-Sv-scM"/>
@@ -847,15 +841,10 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="f7s-gB-N52" firstAttribute="leading" secondItem="Yc9-zo-Vyb" secondAttribute="leadingMargin" constant="10" id="5ja-IF-Ve7"/>
-                            <constraint firstItem="f7s-gB-N52" firstAttribute="centerX" secondItem="Yc9-zo-Vyb" secondAttribute="centerX" id="7le-Y0-Pd2"/>
-                            <constraint firstItem="f7s-gB-N52" firstAttribute="centerY" secondItem="Yc9-zo-Vyb" secondAttribute="centerY" id="YNU-O0-n7n"/>
+                            <constraint firstItem="f7s-gB-N52" firstAttribute="centerX" secondItem="Yc9-zo-Vyb" secondAttribute="centerX" id="Xqu-CG-hDH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="f7s-gB-N52" secondAttribute="trailing" constant="10" id="aen-O9-xlv"/>
+                            <constraint firstItem="f7s-gB-N52" firstAttribute="centerY" secondItem="Yc9-zo-Vyb" secondAttribute="centerY" id="suI-E0-jwW"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="7le-Y0-Pd2"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="f7s-gB-N52" id="sJV-QB-5d0"/>

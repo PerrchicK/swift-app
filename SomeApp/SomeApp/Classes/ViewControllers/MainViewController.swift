@@ -74,9 +74,9 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         case LeftMenuOptions.UI.Views_Animations:
             navigationController?.pushViewController(AnimationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.CollectionView:
-            let _navigationController = UINavigationController(rootViewController: CollectionViewController.instantiate())
-            _navigationController.isToolbarHidden = true
-            navigationController?.present(_navigationController, animated: true, completion: nil)
+            let gameNavigationController = GameNavigationController(rootViewController: CollectionViewController.instantiate())
+            gameNavigationController.isNavigationBarHidden = true
+            navigationController?.present(gameNavigationController, animated: true, completion: nil)
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.CommunicationLocation:

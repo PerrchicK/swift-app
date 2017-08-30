@@ -10,12 +10,13 @@ import Foundation
 import MapKit
 import Alamofire
 
-class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegate {
+class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
     let afkeaLatitude: Double = 32.115216
     let afkeaLongitude: Double = 34.8174598
 
     @IBOutlet weak var tappedCoordinateButton: UIButton!
+    lazy var locationManager = CLLocationManager()
     var tappedCoordinate: CLLocationCoordinate2D?
     let MyAnnotationViewIdentifier = "MyAnnotationViewIdentifier"
 
@@ -45,12 +46,32 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
                 ToastMessage.show(messageText: "copied to clipbaord")
             }
         }
+        
+        view.onSwipe(direction: .right) { [weak self] (swipeGestureRecognizer) in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        view.onSwipe(direction: .down) { [weak self] (swipeGestureRecognizer) in
+            self?.dismiss(animated: true, completion: { 
+                ToastMessage.show(messageText: "game dismissed")
+            })
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         takeMapToLocation(CLLocation(latitude: afkeaLatitude, longitude: afkeaLongitude))
+
+        locationManager.requestWhenInUseAuthorization()
+
+        locationManager.startUpdatingLocation()
+        locationManager.delegate = self
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        locationManager.delegate = nil
     }
 
     @IBAction func nativeRequestButtonPressed(_ sender: UIButton) {
@@ -126,6 +147,21 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
         }
 
         return result
+    }
+    
+    //MARK:  - CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            manager.startUpdatingLocation()
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard locationManager == manager, let location = locations.first else { return }
+        
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
     }
     
     // MARK: - MKMapViewDelegate

@@ -35,6 +35,6 @@ public struct LeftMenuOptions {
     public struct Concurrency {
         public static let title = "Concurrency"
         
-        public static let GCD = "GCD & Multithreading" // Grand Central Dispatch
+        public static let GCD = "GCD & Multithreading"
     }
 }

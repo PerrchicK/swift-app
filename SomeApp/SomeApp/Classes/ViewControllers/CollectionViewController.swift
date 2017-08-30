@@ -15,18 +15,18 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var collectionView: UICollectionView!
     var playerNameTextField: UITextField?
     
-    let NumberOfRows = TicTabToeGame.Configuration.RowsCount // X - number of section
-    let NumberOfColumns = TicTabToeGame.Configuration.ColumnsCount // Y - number of items in section
+    let NumberOfRows = TicTacToeGame.Configuration.RowsCount // X - number of section
+    let NumberOfColumns = TicTacToeGame.Configuration.ColumnsCount // Y - number of items in section
     let TileMargin = CGFloat(5.0)
 
     static let PLAYER_NAME = "user"
     lazy var game: Game = {
-        let game = TicTabToeGame()
+        let game = TicTacToeGame()
 //        let game = WhackGame(playerName: CollectionViewController.PLAYER_NAME)
         game.delegate = self
 
-        return game!
-    }
+        return game
+    }()
 
     var isGameEnabled = true
 
@@ -36,8 +36,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //https://randexdev.com/2014/08/uicollectionviewcell/
         collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
         collectionView.register(UINib(nibName: className(XibGameCell.self), bundle: nil), forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
-    }
 
+        collectionView.isScrollEnabled = false
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -45,9 +47,19 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             self?.dismiss(animated: true, completion: nil)
         }
 
-        reloadGame()
+        collectionView.onSwipe(direction: .down) { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }
+
+        if isGameEnabled {
+            reloadGame()
+        } else {
+            ToastMessage.show(messageText: "There's nothing to see here...", onGone: { [weak self] in
+                self?.navigateToToMapView()
+            })
+        }
     }
-    
+
     func reloadGame() {
         collectionView.reloadData()
         game.restart()
@@ -112,6 +124,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func game(_ game: Game, finishedWithWinner winner: Player) {
         ToastMessage.show(messageText: "winner: \(winner)")
         isGameEnabled = false
+        
+        navigateToToMapView()
+    }
+    
+    func navigateToToMapView() {
+        navigationController?.pushViewController(CommunicationMapLocationViewController.instantiate(), animated: true)
     }
 
     func isGameEnabled(_ game: Game) -> Bool {
