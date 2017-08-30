@@ -20,13 +20,13 @@ class DataManager {
         return ""
     }()
 
-    static var applicationDocumentsPath: String = {
-        if let libraryDocumentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last {
-            return libraryDocumentsPath
+    static var applicationDocumentsPath: URL = {
+        guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
+            📘("ERROR!! Library directory not found 😱")
+            return URL(fileURLWithPath: "")
         }
 
-        📘("ERROR!! Library directory not found 😱")
-        return ""
+        return documentsDirectory
     }()
 
     fileprivate static var managedContext: NSManagedObjectContext {
@@ -39,8 +39,7 @@ class DataManager {
     static func saveImage(_ imageToSave: UIImage, toFile filename: String) -> Bool {
         if let data = UIImagePNGRepresentation(imageToSave) {
             do {
-                let applicationLibraryPathString = (applicationLibraryPath as String)
-                try data.write(to: URL(fileURLWithPath: applicationLibraryPathString + "/" + filename), options: .atomicWrite)
+                try data.write(to: URL(fileURLWithPath: (applicationLibraryPath as String) + "/" + filename), options: .atomicWrite)
                 return true
             } catch {
                 📘("Failed to save image!")
@@ -51,8 +50,7 @@ class DataManager {
     }
     
     static func loadImage(fromFile filename: String) -> UIImage? {
-        let applicationLibraryPathString = (applicationLibraryPath as String)
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: applicationLibraryPathString + "/" + filename)) {
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: (applicationLibraryPath as String) + "/" + filename)) {
             return UIImage(data: data)
         }
 

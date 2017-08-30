@@ -30,6 +30,7 @@
 		75817AE61F44AC3C0030450C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AE51F44AC3C0030450C /* Reachability.swift */; };
 		75817AEA1F44AC480030450C /* SharingImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AE81F44AC480030450C /* SharingImageSource.swift */; };
 		75817AEB1F44AC480030450C /* SharingTextSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AE91F44AC480030450C /* SharingTextSource.swift */; };
+		75817AED1F44BFFF0030450C /* CrazyWhackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AEC1F44BFFF0030450C /* CrazyWhackViewController.swift */; };
 		7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */; };
 		7582DB8F1CADDBE2001CDC62 /* SomeAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */; };
 		759282FD1EBC925A00C95AFF /* PersistableUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759282FC1EBC925A00C95AFF /* PersistableUser.swift */; };
@@ -139,6 +140,7 @@
 		75817AE51F44AC3C0030450C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		75817AE81F44AC480030450C /* SharingImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingImageSource.swift; sourceTree = "<group>"; };
 		75817AE91F44AC480030450C /* SharingTextSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingTextSource.swift; sourceTree = "<group>"; };
+		75817AEC1F44BFFF0030450C /* CrazyWhackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrazyWhackViewController.swift; sourceTree = "<group>"; };
 		7582DB8C1CADDBC7001CDC62 /* SomeAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SomeAnnotationView.xib; sourceTree = "<group>"; };
 		7582DB8E1CADDBE2001CDC62 /* SomeAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomeAnnotationView.swift; sourceTree = "<group>"; };
 		759282FC1EBC925A00C95AFF /* PersistableUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistableUser.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				7566A1831C8CD4D60070D9D9 /* NotificationsViewController.swift */,
 				756B96101CA2178700BF308D /* CommunicationMapLocationViewController.swift */,
 				755DB9671CB3029A0092BBC7 /* ImagesAndMotionViewController.swift */,
+				75817AEC1F44BFFF0030450C /* CrazyWhackViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -703,6 +706,7 @@
 				7570D2DB1C600E6A00EA34D3 /* AppDelegate.swift in Sources */,
 				756B96111CA2178700BF308D /* CommunicationMapLocationViewController.swift in Sources */,
 				75F1AD811C6F3D5B005D7FCA /* LeftMenuViewController.swift in Sources */,
+				75817AED1F44BFFF0030450C /* CrazyWhackViewController.swift in Sources */,
 				753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */,
 				7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */,
 				75C2C8E41C7554EA00D42707 /* NibView.swift in Sources */,

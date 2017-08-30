@@ -64,5 +64,7 @@
 	<string>To record videos</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>To load media from you &quot;gallery&quot;</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To demonstrate location update</string>
 </dict>
 </plist>

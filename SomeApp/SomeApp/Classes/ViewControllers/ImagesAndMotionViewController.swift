@@ -159,7 +159,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     @IBAction func backButtonPressed(_ sender: AnyObject) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 
     @IBAction func cameraLensPreviewButtonPressed(_ sender: AnyObject) {
