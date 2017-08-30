@@ -28,11 +28,11 @@ class SyncedUserDefaults {
     fileprivate static let FIREBASE_APP_URL = "https://boiling-inferno-8318.firebaseio.com/"
     fileprivate static let bundleIdentifier  = Bundle.main.bundleIdentifier
     // https://firebase.google.com/support/guides/firebase-ios
-    var syncedDbRef: FIRDatabaseReference?
+    var syncedDbRef: DatabaseReference?
 
     static let sharedInstance = SyncedUserDefaults()
     
-    fileprivate func databaseChangedEvent(_ firebaseChangeType: FIRDataEventType, dataSnapshot: FIRDataSnapshot?) {
+    fileprivate func databaseChangedEvent(_ firebaseChangeType: DataEventType, dataSnapshot: DataSnapshot?) {
         guard let key = dataSnapshot?.key, let value = dataSnapshot?.value as? String else { return }
         
         var changeType: ChangeType?
@@ -67,30 +67,30 @@ class SyncedUserDefaults {
     func syncFireBase(_ appUrl: String? = nil) {
         guard let bundleIdentifier = SyncedUserDefaults.bundleIdentifier, syncedDbRef == nil else { return }
 
-        let rootRef = FIRDatabase.database().reference(fromURL: String(format: "%@", appUrl ?? SyncedUserDefaults.FIREBASE_APP_URL))
+        let rootRef = Database.database().reference(fromURL: String(format: "%@", appUrl ?? SyncedUserDefaults.FIREBASE_APP_URL))
         syncedDbRef = rootRef.child(bundleIdentifier.replacingOccurrences(of: ".", with: "-"))
 
         // Listen to "add" events
-        syncedDbRef?.observe(FIRDataEventType.childAdded, with: { [weak self] (dataSnapshot) -> Void in
+        syncedDbRef?.observe(DataEventType.childAdded, with: { [weak self] (dataSnapshot) -> Void in
             self?.databaseChangedEvent(.childAdded, dataSnapshot: dataSnapshot)
             }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
 
         // Listen to "changed" events
-        syncedDbRef?.observe(FIRDataEventType.childChanged, with: { [weak self] (dataSnapshot) -> Void in
+        syncedDbRef?.observe(DataEventType.childChanged, with: { [weak self] (dataSnapshot) -> Void in
             self?.databaseChangedEvent(.childChanged, dataSnapshot: dataSnapshot)
             }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
         // Listen to "moved" (?) events
-        syncedDbRef?.observe(FIRDataEventType.childMoved, with: { [weak self] (dataSnapshot) -> Void in
+        syncedDbRef?.observe(DataEventType.childMoved, with: { [weak self] (dataSnapshot) -> Void in
             self?.databaseChangedEvent(.childMoved, dataSnapshot: dataSnapshot)
             }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")
         })
         // Listen to "delete" events
-        syncedDbRef?.observe(FIRDataEventType.childRemoved, with: { [weak self] (dataSnapshot) -> Void in
+        syncedDbRef?.observe(DataEventType.childRemoved, with: { [weak self] (dataSnapshot) -> Void in
             self?.databaseChangedEvent(.childRemoved, dataSnapshot: dataSnapshot)
             }, withCancel: { (error) -> Void in
                 📘("Error: \(error)")

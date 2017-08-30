@@ -69,21 +69,21 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         }
 
         sourceControl.titles = ["Library", "Camera", "Moments"]
-        try? sourceControl.set(sourceControlIndex)
+        try? sourceControl.setIndex(sourceControlIndex)
         sourceControl.backgroundColor = UIColor.brown
         sourceControl.titleColor = UIColor.black
         sourceControl.indicatorViewBackgroundColor = UIColor.red
         sourceControl.selectedTitleColor = UIColor.white
 
         typeControl.titles = [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue]
-        try? typeControl.set(typeControlIndex)
+        try? typeControl.setIndex(typeControlIndex)
         typeControl.backgroundColor = UIColor.yellow
         typeControl.titleColor = UIColor.black
         typeControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
         typeControl.selectedTitleColor = UIColor.blue
 
         isEditableControl.titles = ["editable","not editable"]
-        try? isEditableControl.set(isEditableControlIndex)
+        try? isEditableControl.setIndex(isEditableControlIndex)
         isEditableControl.backgroundColor = UIColor.brown
         isEditableControl.titleColor = UIColor.gray
         isEditableControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
