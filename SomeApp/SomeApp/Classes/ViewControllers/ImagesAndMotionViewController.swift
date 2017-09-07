@@ -33,8 +33,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
     // Computed variable example
     var isEditableSelected: Bool {
-        return isEditableControl.index == 0
-    }
+            return isEditableControl.index == 0
+        }
 
     enum MediaType: String {
         case Both
@@ -108,14 +108,11 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         // MARK: - Core Motion
         if manager.isGyroAvailable {
             manager.gyroUpdateInterval = 0.5
-            manager.startGyroUpdates(to: .main, withHandler: { (data, error) in
-                //
-            })
-            manager.startGyroUpdates(to: OperationQueue.main) { [weak self] (gyroData, error) in
+            manager.startGyroUpdates(to: OperationQueue.main, withHandler: { [weak self] (gyroData, error) in
                 guard let gyroData = gyroData else { return }
-
+                
                 self?.gyroDataLabel.text = "\(gyroData)"
-            }
+            })
         }
 
         if manager.isDeviceMotionAvailable {
@@ -180,15 +177,15 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         
         switch selectedMediaType {
         case .Photos:
-            imagePickerController.mediaTypes = [kUTTypeImage as String]
+            imagePickerController.mediaTypes = [kUTTypeImage.string]
         case .Videos:
-            imagePickerController.mediaTypes = [kUTTypeMovie as String]
+            imagePickerController.mediaTypes = [String(kUTTypeMovie)]
         case .Both:
             fallthrough
         default:
-            imagePickerController.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+            imagePickerController.mediaTypes = [kUTTypeImage.string, kUTTypeMovie as String]
         }
-
+        
         imagePickerController.allowsEditing = self.isEditableSelected
 
         present(imagePickerController, animated: true, completion: nil)
@@ -303,17 +300,18 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     // MARK: - UIImagePickerControllerDelegate
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
         let mediaUrl = info[UIImagePickerControllerReferenceURL].debugDescription
         📘("picked image, location on disk: \(mediaUrl)")
         
         if let pickedMediaType = info[UIImagePickerControllerMediaType] {
             ToastMessage.show(messageText: "Picked a \(pickedMediaType)")
         }
-        
-        let uiImageImageKey = isEditableSelected ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage
-        if let image = info[uiImageImageKey] as? UIImage {
+
+        let selectedImageKey = isEditableSelected ? UIImagePickerControllerEditedImage : UIImagePickerControllerOriginalImage
+        if let image = info[selectedImageKey] as? UIImage {
             pickedImageButton.setImage(image, for: .normal)
             DataManager.saveImage(image, toFile: "tempSavedImage")
         }
@@ -328,5 +326,11 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
     deinit {
         📘("I'm dead 💀")
+    }
+}
+
+extension CFString {
+    var string: String {
+        return String(self)
     }
 }

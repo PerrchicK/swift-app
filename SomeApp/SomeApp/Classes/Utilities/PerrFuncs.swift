@@ -289,10 +289,13 @@ precedencegroup Additive {
 }
 infix operator ~ : Additive // https://developer.apple.com/documentation/swift/operator_declarations
 
-/** Inclusively raffles a number from 'left hand operand' value to the 'right hand operand' value
- 
- For example: the expression { let random: Int =  -3 ~ 5 } will declare a random number between -3 and 5.
- */
+/// Inclusively raffles a number from `left` hand operand value to the `right` hand operand value.
+///
+/// For example: the expression `{ let random: Int =  -3 ~ 5 }` will declare a random number between -3 and 5.
+/// - parameter left:   The value represents `from`.
+/// - parameter right:  The value represents `to`.
+///
+/// - returns: A random number between `left` and `right`.
 func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift-operators/
     return PerrFuncs.random(from: left, to: right)
 }
