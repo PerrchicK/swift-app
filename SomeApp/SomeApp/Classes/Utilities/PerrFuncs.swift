@@ -116,12 +116,17 @@ open class PerrFuncs: NSObject {
         }
     }
 
-    static func random(to: Int) -> UInt32 {
-        return arc4random() % UInt32(to)
-    }
+    static func random(from: Int = 0, to: Int) -> Int {
+        guard to != from else { return to }
 
-    static func random(from: Int, to: Int) -> UInt32 {
-        return random(to: to - from) + UInt32(from)
+        var _from: Int = from, _to: Int = to
+        
+        if to < from {// Error handling
+            swap(&_to, &_from)
+        }
+
+        let rand: UInt32 = arc4random() % UInt32(_to - _from)
+        return Int(rand) + _from
     }
     
     @discardableResult
@@ -278,10 +283,19 @@ extension UIImageView {
 // Declare a global var to produce a unique address as the assoc object handle
 var SompApplicationHuggedProperty: UInt8 = 0
 
+// Allows this: { let temp = -3 ~ -80 ~ 5 ~ 10 }
 precedencegroup Additive {
-    associativity: left
+    associativity: left // Explanation: https://en.wikipedia.org/wiki/Operator_associativity
 }
-infix operator &* : Additive
+infix operator ~ : Additive // https://developer.apple.com/documentation/swift/operator_declarations
+
+/** Inclusively raffles a number from 'left hand operand' value to the 'right hand operand' value
+ 
+ For example: the expression { let random: Int =  -3 ~ 5 } will declare a random number between -3 and 5.
+ */
+func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift-operators/
+    return PerrFuncs.random(from: left, to: right)
+}
 
 extension NSObject { // try extending 'AnyObject'...
     /**

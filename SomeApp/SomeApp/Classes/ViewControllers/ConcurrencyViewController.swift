@@ -32,7 +32,7 @@ class ConcurrencyViewController: UIViewController {
 
     func findNextRandomNumber() -> Int {
         repeat {
-            let randomProgressBarIndex = Int(PerrFuncs.random(to: 4))
+            let randomProgressBarIndex = 0 ~ 4
             if self.randomProgressBarIndexes.contains(randomProgressBarIndex) {
                 Thread.sleep(forTimeInterval: 0.003)
             } else {
