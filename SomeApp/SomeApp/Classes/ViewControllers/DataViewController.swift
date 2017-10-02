@@ -69,9 +69,9 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         DataManager.syncedUserDefaults().delegate = self
         
-        if let persistableUserDataFromDefaults = UserDefaults.standard.object(forKey: className(PersistableUser.self)) as? Data,
-            let persistableUserFromDefaults = NSKeyedUnarchiver.unarchiveObject(with: persistableUserDataFromDefaults) as? PersistableUser {
-            📘(persistableUserFromDefaults)
+        if let persistableUsersData = UserDefaults.standard.object(forKey: className(PersistableUser.self)) as? Data,
+            let persistableUsers = NSKeyedUnarchiver.unarchiveObject(with: persistableUsersData) as? [PersistableUser] {
+            📘(persistableUsers)
         }
     }
 
@@ -83,10 +83,12 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             (lastNameTextField.text?.length() ?? 0) > 0 &&
             (nicknameTextField.text?.length() ?? 0) > 0 else { return }
         
-        let user = PersistableUser(email: emailTextField.text!, firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, nickname: nicknameTextField.text!)
+        let user1 = PersistableUser(email: "1", firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, nickname: nicknameTextField.text!)
+        let user2 = PersistableUser(email: "2", firstName: firstNameTextField.text!, lastName: lastNameTextField.text!, nickname: nicknameTextField.text!)
+
         let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent(PersistableUserFileName))
 
-        try? NSKeyedArchiver.archivedData(withRootObject: user).write(to: encodedUserFilePath)
+        try? NSKeyedArchiver.archivedData(withRootObject: [user1, user2]).write(to: encodedUserFilePath)
 
         self.view.endEditing(true)
     }
@@ -184,9 +186,10 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBAction func synchronizeButtonPressed(_ sender: AnyObject) {
         UserDefaults.standard.set(userDefaultsTextField.text, forKey: UserDefaultsStringKey)
 
-        let user = PersistableUser(email: "user@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty")
-        let userData = NSKeyedArchiver.archivedData(withRootObject: user)
-        UserDefaults.standard.set(userData, forKey: className(PersistableUser.self))
+        let user1 = PersistableUser(email: "user1@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty1")
+        let user2 = PersistableUser(email: "user2@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty2")
+        let usersData = NSKeyedArchiver.archivedData(withRootObject: [user1, user2])
+        UserDefaults.standard.set(usersData, forKey: className(PersistableUser.self))
         UserDefaults.standard.synchronize()
     }
 

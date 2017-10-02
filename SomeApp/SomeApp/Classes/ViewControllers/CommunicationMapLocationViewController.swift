@@ -14,11 +14,11 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
     let afkeaLatitude: Double = 32.115216
     let afkeaLongitude: Double = 34.8174598
+    let MyAnnotationViewIdentifier: String = "MyAnnotationViewIdentifier"
 
     @IBOutlet weak var tappedCoordinateButton: UIButton!
     lazy var locationManager = CLLocationManager()
     var tappedCoordinate: CLLocationCoordinate2D?
-    let MyAnnotationViewIdentifier = "MyAnnotationViewIdentifier"
 
     @IBOutlet weak var mapView: MKMapView!
     let regionRadius: CLLocationDistance = 100
@@ -30,15 +30,21 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // A workaround to get taps on map
-        mapView.onClick { [weak self] (tapGestureRecognizer) in
-            guard let mapView = self?.mapView else { return }
-
-            let tappedLocationCoordinate = mapView.convert(tapGestureRecognizer.location(in: mapView), toCoordinateFrom: mapView)
-            📘("tapped on location's coordinate:\n\(tappedLocationCoordinate)")
-            self?.mapView(mapView, didFeelTapOnCoordinate: tappedLocationCoordinate)
+        
+        CLGeocoder().geocodeAddressString("Bnei Efraim, Tel Aviv") { (placemarks, error) in
+            if let placemarks = placemarks {
+                📘(placemarks)
+            }
         }
+
+        // A workaround to get a custom user interaction on the map
+        mapView.onLongPress({ [weak self] (longPressGestureRecognizer) in
+            guard longPressGestureRecognizer.state == .began, let mapView = self?.mapView else { return }
+
+            let longPressedLocationCoordinate = mapView.convert(longPressGestureRecognizer.location(in: mapView), toCoordinateFrom: mapView)
+            📘("tapped on location's coordinate:\n\(longPressedLocationCoordinate)")
+            self?.mapView(mapView, didFeelLongPressOnCoordinate: longPressedLocationCoordinate)
+        })
         
         tappedCoordinateButton.onClick { [weak self] (tapGestureRecognizer) in
             if let coordinatesString = self?.tappedCoordinateButton.titleLabel?.text {
@@ -50,6 +56,7 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
         view.onSwipe(direction: .right) { [weak self] (swipeGestureRecognizer) in
             self?.navigationController?.popViewController(animated: true)
         }
+
         view.onSwipe(direction: .down) { [weak self] (swipeGestureRecognizer) in
             self?.dismiss(animated: true, completion: { 
                 ToastMessage.show(messageText: "game dismissed")
@@ -149,7 +156,7 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
         return result
     }
     
-    //MARK:  - CLLocationManagerDelegate
+    //MARK: - CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
@@ -173,21 +180,24 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
             dequeuedAnnotationView.annotation = annotation
             annotationView = dequeuedAnnotationView
         } else {
-            // Dequeued failed
+            // Dequeued failed -> instantiate
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
             annotationView.addSubview(SomeAnnotationView())
         }
 
-        annotationView.canShowCallout = false
+        annotationView.canShowCallout = true
+
         return annotationView
     }
 
-    func mapView(_ mapView: MKMapView, didFeelTapOnCoordinate _tappedCoordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: MKMapView, didFeelLongPressOnCoordinate coordinate: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
-        self.tappedCoordinate = _tappedCoordinate
-        tappedCoordinateButton.setTitle("\(_tappedCoordinate.latitude),\(_tappedCoordinate.longitude)", for: .normal)
-        annotation.title = "annotation's callout title"
-        annotation.coordinate = _tappedCoordinate
+        self.tappedCoordinate = coordinate
+        tappedCoordinateButton.setTitle("\(coordinate.latitude),\(coordinate.longitude)", for: .normal)
+        
+        annotation.title = "@: \(annotation.pointerAddress)"
+        annotation.subtitle = "b-date: \(Date.init().timeIntervalSince1970)"
+        annotation.coordinate = coordinate
         
         mapView.addAnnotation(annotation)
     }

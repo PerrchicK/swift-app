@@ -9,12 +9,13 @@
 import UIKit
 
 class GameNavigationController: UINavigationController {
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.portraitUpsideDown
+        return UIInterfaceOrientationMask.all
     }
     
     override var shouldAutorotate: Bool {
-        return false
+        return true
     }
     
     deinit {

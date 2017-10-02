@@ -17,6 +17,8 @@ public typealias PredicateClosure = ((AnyObject?) -> Bool)
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
+// MARK: - Global Methods
+
 public func 📘(_ logMessage: Any, file:String = #file, function:String = #function, line:Int = #line) {
     let formattter = DateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
@@ -24,8 +26,6 @@ public func 📘(_ logMessage: Any, file:String = #file, function:String = #func
 
     print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(logMessage)")
 }
-
-// MARK: - Global Methods
 
 // dispatch block on main queue
 public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()->()) {
@@ -61,6 +61,27 @@ open class PerrFuncs: NSObject {
         super.init()
     }
     
+    #if !os(macOS) && !os(watchOS)
+    /// This is an async operation (it needs an improvement - in case this method is being called again before the previous is completed?)
+    public static func runBackgroundTask(block: @escaping (_ completionHandler: @escaping () -> ()) -> ()) {
+        func endBackgroundTask(_ task: inout UIBackgroundTaskIdentifier) {
+            UIApplication.shared.endBackgroundTask(task)
+            task = UIBackgroundTaskInvalid
+        }
+        
+        var backgroundTask: UIBackgroundTaskIdentifier!
+        backgroundTask = UIApplication.shared.beginBackgroundTask {
+            endBackgroundTask(&backgroundTask!)
+        }
+        
+        let onDone = {
+            endBackgroundTask(&backgroundTask!)
+        }
+        
+        block(onDone)
+    }
+    #endif
+
     lazy var imageContainer: UIView = {
         let container = UIView(frame: UIScreen.main.bounds)
         container.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -125,27 +146,35 @@ open class PerrFuncs: NSObject {
             swap(&_to, &_from)
         }
 
-        let rand: UInt32 = arc4random() % UInt32(_to - _from)
-        return Int(rand) + _from
+        let randdomNumber: UInt32 = arc4random() % UInt32(_to - _from)
+        return Int(randdomNumber) + _from
     }
     
     @discardableResult
-    static func postRequest(urlString: String, jsonDictionary: [String: Any], completion: @escaping ([String: Any]?) -> ()) -> URLSessionDataTask? {
+    static func postRequest(urlString: String, jsonDictionary: [String: Any], httpHeaders: [String:String]? = nil, completion: @escaping ([String: Any]?) -> ()) -> URLSessionDataTask? {
+
         guard let url = URL(string: urlString) else { completion(nil); return nil }
-        
+
         do {
+            // here "jsonData" is the dictionary encoded in JSON data
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: .prettyPrinted)
-            
             // create post request
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             
-            // insert json data to the request
+            if let httpHeaders = httpHeaders {
+                for httpHeader in httpHeaders {
+                    request.setValue(httpHeader.value, forHTTPHeaderField: httpHeader.key)
+                }
+            }
+            
+            //request.setValue("application/json", forHTTPHeaderField: "Content-Type") // OR: setValue
             request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            // insert json data to the request
             request.httpBody = jsonData
             request.timeoutInterval = 30
-            
-            
+
+
             let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
                 if let error = error {
                     📘("Error: \(error)")
@@ -158,7 +187,7 @@ open class PerrFuncs: NSObject {
                     guard let result = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { completion(nil); return }
                     completion(result)
                 } catch let deserializationError {
-                    📘("Failed to parse JSON: \(deserializationError)")
+                    📘("Failed to parse JSON: \(deserializationError), data string: \(String(describing: String(data: data, encoding: String.Encoding.utf8)))")
                     completion(nil)
                 }
             }
@@ -228,6 +257,44 @@ extension String {
         📘("string to emoji: \(self) -> \(emoji)")
         
         return emoji
+    }
+}
+
+extension UIColor {
+    convenience init(hexString: String) {
+        let hexString:NSString = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString
+        let scanner = Scanner(string: hexString as String)
+        
+        if (hexString.hasPrefix("#")) {
+            scanner.scanLocation = 1
+        }
+        
+        var color:UInt32 = 0
+        scanner.scanHexInt32(&color)
+        
+        let mask = 0x000000FF
+        let r = Int(color >> 16) & mask
+        let g = Int(color >> 8) & mask
+        let b = Int(color) & mask
+        
+        let red   = CGFloat(r) / 255.0
+        let green = CGFloat(g) / 255.0
+        let blue  = CGFloat(b) / 255.0
+        
+        self.init(red:red, green:green, blue:blue, alpha:1)
+    }
+    
+    func toHexString() -> String {
+        var r:CGFloat = 0
+        var g:CGFloat = 0
+        var b:CGFloat = 0
+        var a:CGFloat = 0
+        
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        
+        let rgb:Int = (Int)(r*255)<<16 | (Int)(g*255)<<8 | (Int)(b*255)<<0
+        
+        return NSString(format:"#%06x", rgb) as String
     }
 }
 
@@ -301,6 +368,12 @@ func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift
 }
 
 extension NSObject { // try extending 'AnyObject'...
+
+    // Cool use: https://marcosantadev.com/swift-arrays-holding-elements-weak-references/
+    var pointerAddress: UnsafeMutableRawPointer {
+        return Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque()
+    }
+    
     /**
      << EXPERIMENTAL METHOD >>
      Attaches any object to this NSObject.
@@ -350,17 +423,10 @@ extension UIAlertController {
      Dismisses the current alert (if presented) and pops up the new one
      */
     @discardableResult
-    func show() -> UIAlertController? {
+    func show(completion: (() -> Swift.Void)? = nil) -> UIAlertController? {
         guard let mostTopViewController = UIApplication.mostTopViewController() else { 📘("Failed to present alert [title: \(String(describing: self.title)), message: \(String(describing: self.message))]"); return nil }
-        if mostTopViewController is UIAlertController { // Prevents a horrible bug, also promising the invocation of 'viewWillDisappear' in 'CommonViewController'
-            // 1. Dismiss the alert
-            mostTopViewController.dismiss(animated: true, completion: {
-                // 2. Then present fullscreen
-                UIApplication.mostTopViewController()?.present(self, animated: true, completion: nil)
-            })
-        } else {
-            mostTopViewController.present(self, animated: true, completion: nil)
-        }
+
+        mostTopViewController.present(self, animated: true, completion: completion)
 
         return self
     }
@@ -377,9 +443,17 @@ extension UIAlertController {
         return self
     }
     
-    static func makeAlert(title: String, message: String, dismissButtonTitle:String = "OK") -> UIAlertController {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+    static func make(style: UIAlertControllerStyle, title: String, message: String, dismissButtonTitle: String = "OK") -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
         return alertController
+    }
+
+    static func makeActionSheet(title: String, message: String, dismissButtonTitle: String = "OK") -> UIAlertController {
+        return make(style: .actionSheet, title: title, message: message, dismissButtonTitle: dismissButtonTitle)
+    }
+
+    static func makeAlert(title: String, message: String, dismissButtonTitle: String = "OK") -> UIAlertController {
+        return make(style: .alert, title: title, message: message, dismissButtonTitle: dismissButtonTitle)
     }
 
     /**

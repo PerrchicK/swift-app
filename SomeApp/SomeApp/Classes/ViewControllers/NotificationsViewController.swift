@@ -13,6 +13,14 @@ class NotificationsViewController: UIViewController {
 
     @IBOutlet weak var keyboardPresenterTextField: UITextField!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.onClick { [weak self] _ in
+            self?.view.firstResponder()?.resignFirstResponder()
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -37,8 +45,11 @@ class NotificationsViewController: UIViewController {
 
         notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.yoOccured(_:)), name: NSNotification.Name(rawValue: "yo2"), object: nil)
 
-        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.keyboardAppeared(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationsViewController.keyboardFrameChanged(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
+        notificationCenter.addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
 
         let soon = Date(timeIntervalSinceNow: 5)
         if !startLocalNotification("Local notification example", title: "yo3", popTime: soon) {
@@ -74,15 +85,83 @@ class NotificationsViewController: UIViewController {
         return true
     }
 
-    func keyboardAppeared(_ notification: Notification) {
-        📘("\(notification.object)")
-        ToastMessage.show(messageText: "keyboard appeard")
+    func keyboardWillHide(_ notification: Notification) {
+        guard let userInfo = (notification as NSNotification).userInfo else { return }
+        
+        if let keyboardAnimationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            handleNewKeyboardHeight(0, withAnimationDuration: keyboardAnimationDuration)
+        } else {
+            📘("Failed to extract keyboard frame!")
+        }
+    }
+
+    func applicationDidEnterBackground(_ notification: Notification) {
+        PerrFuncs.runBackgroundTask { [weak self](onDone) in
+            guard let strongSelf = self else { return }
+
+            if let fcmToken = AppDelegate.fcmToken {
+                let registrationIds: [String] = [fcmToken]
+                self?.sendPushNotificationUsingUrlRequest(notificationDictionary: strongSelf.generateNotificationPayload(withAlertTitle: "Remote notification example", andBody: "push notification's body"), dataDictionary: ["more data":"some ID"], toRegistrationIds: registrationIds) { succeeded in
+                    📘("did push notification request succeeded? - \(succeeded)")
+                    onDone()
+                }
+            }
+        }
+    }
+
+    func keyboardFrameChanged(_ notification: Notification) {
+        guard let userInfo = (notification as NSNotification).userInfo else { return }
+        
+        if let keyboardAnimationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval,
+            let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardFrame = keyboardFrameValue.cgRectValue
+            let keyboardHeight = keyboardFrame.height
+
+            handleNewKeyboardHeight(keyboardHeight, withAnimationDuration: keyboardAnimationDuration)
+        } else {
+            📘("Failed to extract keyboard frame!")
+        }
+    }
+    
+    func handleNewKeyboardHeight(_ keyboardHeight: CGFloat, withAnimationDuration keyboardAnimationDuration: TimeInterval) {
+        UIView.animate(withDuration: keyboardAnimationDuration, animations: { [weak self] in
+            self?.view.frame.origin.y = -keyboardHeight
+        }, completion: nil)
     }
     
     func yoOccured(_ notification: Notification) {
-        📘("notification posted: \(notification)\nassociated object:\(notification.object)\nuser info:\(notification.userInfo)")
+        📘("notification posted: \(notification)\nassociated object:\(String(describing: notification.object))\nuser info:\(String(describing: notification.userInfo))")
         if let textField = notification.object as? UITextField {
             textField.text = "yo2 has been posted"
+        }
+    }
+
+    private func generateNotificationPayload(withAlertTitle title: String, andBody body: String) -> [String:String] {
+        var notificationDictionary = [String:String]()
+        notificationDictionary["alert"] = title
+        notificationDictionary["body"] = body
+        notificationDictionary["icon"] = "app-icon"
+        notificationDictionary["title"] = title
+        notificationDictionary["sound"] = "default.aiff"
+        
+        return notificationDictionary
+    }
+
+    func sendPushNotificationUsingUrlRequest(notificationDictionary: [String:String], dataDictionary: [String:String], toRegistrationIds registrationIds: [String], completion: @escaping (Bool) -> ()) {
+        guard registrationIds.count > 0 else { completion(false); return }
+
+        var jsonDictionary = [String:Any]()
+        jsonDictionary["registration_ids"] = registrationIds // or use 'to' for a single device
+        jsonDictionary["notification"] = notificationDictionary
+        jsonDictionary["data"] = dataDictionary
+        
+        let secretApiKey = "your API key from FCM"
+
+        PerrFuncs.postRequest(urlString: "https://fcm.googleapis.com/fcm/send", jsonDictionary: jsonDictionary, httpHeaders: ["Authorization":"key= \(secretApiKey)"]) { (responseDataJson) in
+            guard let succeededCount = responseDataJson?["success"] as? Int else { completion(false); return }
+            
+            📘("responseDataJson: \(String(describing: responseDataJson))")
+            completion(succeededCount > 0)
         }
     }
 }

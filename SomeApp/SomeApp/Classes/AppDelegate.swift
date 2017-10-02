@@ -9,16 +9,31 @@
 import UIKit
 import CoreData
 import Firebase
+import FirebaseMessaging
+import UserNotifications
 //import Exception
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
+    static var fcmToken: String?
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         if let deepLinkDictionary = launchOptions {
             📘("launch options dictionary: \(deepLinkDictionary)")
+            
+            if let deepLinkDictionaryFromUrl = deepLinkDictionary[UIApplicationLaunchOptionsKey.url] {
+                📘("URL params: \(deepLinkDictionaryFromUrl)")
+            }
+
+            if let deepLinkDictionaryFromLocalNotification = deepLinkDictionary[UIApplicationLaunchOptionsKey.localNotification] {
+                📘("Local notification params: \(deepLinkDictionaryFromLocalNotification)")
+            }
+
+            if let deepLinkDictionaryFromRemoteNotification = deepLinkDictionary[UIApplicationLaunchOptionsKey.remoteNotification] {
+                📘("Remote notification params: \(deepLinkDictionaryFromRemoteNotification)")
+            }
         }
 
         let rootViewController = SplashScreenViewController.instantiate()
@@ -30,7 +45,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         FirebaseApp.configure()
 
+        setupNotifications(application: application)
+
         return true
+    }
+
+    func setupNotifications(application: UIApplication) {
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        Messaging.messaging().delegate = self
+        application.registerForRemoteNotifications()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -43,11 +78,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let message = notification.alertBody, application.applicationState == .active {
                 UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)).show()
         }
-        📘("Received notification: \(notification)")
+        📘("Received a local notification: \(notification)")
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         📘("Registered: \(notificationSettings)")
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        📘("Received a remote notification: \(userInfo)")
+    }
+    
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        📘("FCM (refreshed) token string: \(fcmToken)")
+        AppDelegate.fcmToken = fcmToken
+    }
+
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        // Sets the notification as "acknowledged"
+        Messaging.messaging().appDidReceiveMessage(remoteMessage.appData)
+        📘("Received a FCM notification: \(remoteMessage.appData)")
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        📘("Received a remote notification: \(userInfo)")
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let apnsTokenString = deviceToken.reduce("", { $0 + String(format: "%02X", $1) })
+        
+        📘("APNs token string: \(apnsTokenString.uppercased())")
+
+        //InstanceID.instanceID().setAPNSToken(deviceToken, type: InstanceIDAPNSTokenType.prod)
+        Messaging.messaging().apnsToken = deviceToken
+
+        if let fcmToken = InstanceID.instanceID().token() {
+            📘("FCM token string: \(fcmToken)")
+            AppDelegate.fcmToken = fcmToken
+        }
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        📘(error)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -130,5 +202,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 abort()
             }
         }
+    }
+}
+
+@available(iOS 10.0, *)
+extension AppDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(.alert)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
     }
 }
