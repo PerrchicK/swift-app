@@ -78,8 +78,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        guard (emailTextField.text?.length() ?? 0) > 0 &&
-            (firstNameTextField.text?.length() ?? 0) > 0 &&
+        guard (emailTextField.text?.length()).or(0) > 0 &&
+            (firstNameTextField.text?.length()).or(0) > 0 &&
             (lastNameTextField.text?.length() ?? 0) > 0 &&
             (nicknameTextField.text?.length() ?? 0) > 0 else { return }
         

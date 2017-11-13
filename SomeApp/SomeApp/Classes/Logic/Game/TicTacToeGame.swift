@@ -26,11 +26,13 @@ class TicTacToeGame: Game {
         case O
         
         func intValue() -> Int {
-            return TicTacToePlayer.X == self ? 1 : -1
+            // return TicTacToePlayer.X == self ? 1 : -1
+            return (TicTacToePlayer.X == self).if(then: 1, else: -1)
         }
         
         func stringValue() -> String {
-            return TicTacToePlayer.X == self ? "X" : "O"
+            // return TicTacToePlayer.X == self ? "X" : "O"
+            return (TicTacToePlayer.X == self).if(then: "X", else: "O")
         }
     }
 

@@ -23,8 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if let deepLinkDictionary = launchOptions {
             📘("launch options dictionary: \(deepLinkDictionary)")
             
-            if let deepLinkDictionaryFromUrl = deepLinkDictionary[UIApplicationLaunchOptionsKey.url] {
-                📘("URL params: \(deepLinkDictionaryFromUrl)")
+            if let deepLinkDictionaryFromUrl = deepLinkDictionary[UIApplicationLaunchOptionsKey.url] as? URL {
+                handleDeepLink(deeplinkUrl: deepLinkDictionaryFromUrl)
             }
 
             if let deepLinkDictionaryFromLocalNotification = deepLinkDictionary[UIApplicationLaunchOptionsKey.localNotification] {
@@ -47,6 +47,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         setupNotifications(application: application)
 
+        return true
+    }
+
+    @discardableResult
+    func handleDeepLink(deeplinkUrl: URL) -> Bool {
+        📘("Deep Link URL: \(deeplinkUrl)")
         return true
     }
 
@@ -87,6 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         📘("Received a remote notification: \(userInfo)")
+        completionHandler(.noData)
     }
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
@@ -142,6 +149,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     // MARK: - Core Data stack
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        return handleDeepLink(deeplinkUrl: url)
+    }
 
     lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.perrchick.SomeApp" in the application's documents Application Support directory.

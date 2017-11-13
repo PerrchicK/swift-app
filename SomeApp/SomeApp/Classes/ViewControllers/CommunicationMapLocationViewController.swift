@@ -17,17 +17,17 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
     let MyAnnotationViewIdentifier: String = "MyAnnotationViewIdentifier"
 
     @IBOutlet weak var tappedCoordinateButton: UIButton!
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var followCurrentLocationSwitch: UISwitch!
+
     lazy var locationManager = CLLocationManager()
     var tappedCoordinate: CLLocationCoordinate2D?
-
-    @IBOutlet weak var mapView: MKMapView!
     let regionRadius: CLLocationDistance = 100
 
-    func takeMapToLocation(_ location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
-        mapView.setRegion(coordinateRegion, animated: true)
+    var shouldMapFollowCurrentLocation: Bool {
+        return followCurrentLocationSwitch.isOn
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -140,6 +140,11 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
         }
     }
     
+    func takeMapToLocation(_ location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
     func parseResponse(_ responseObject: Any) -> String? {
         var result: String?
 
@@ -165,8 +170,8 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard locationManager == manager, let location = locations.first else { return }
-        
+        guard shouldMapFollowCurrentLocation, locationManager == manager, let location = locations.first else { return }
+
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }

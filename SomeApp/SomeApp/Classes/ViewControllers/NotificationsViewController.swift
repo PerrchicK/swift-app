@@ -101,7 +101,7 @@ class NotificationsViewController: UIViewController {
 
             if let fcmToken = AppDelegate.fcmToken {
                 let registrationIds: [String] = [fcmToken]
-                self?.sendPushNotificationUsingUrlRequest(notificationDictionary: strongSelf.generateNotificationPayload(withAlertTitle: "Remote notification example", andBody: "push notification's body"), dataDictionary: ["more data":"some ID"], toRegistrationIds: registrationIds) { succeeded in
+                self?.sendFcmNotificationUsingUrlRequest(notificationDictionary: strongSelf.generateNotificationPayload(withAlertTitle: "Remote notification example", andBody: "push notification's body"), dataDictionary: ["more data":"some ID"], toRegistrationIds: registrationIds) { succeeded in
                     📘("did push notification request succeeded? - \(succeeded)")
                     onDone()
                 }
@@ -147,7 +147,7 @@ class NotificationsViewController: UIViewController {
         return notificationDictionary
     }
 
-    func sendPushNotificationUsingUrlRequest(notificationDictionary: [String:String], dataDictionary: [String:String], toRegistrationIds registrationIds: [String], completion: @escaping (Bool) -> ()) {
+    func sendFcmNotificationUsingUrlRequest(notificationDictionary: [String:String], dataDictionary: [String:String], toRegistrationIds registrationIds: [String], completion: @escaping (Bool) -> ()) {
         guard registrationIds.count > 0 else { completion(false); return }
 
         var jsonDictionary = [String:Any]()

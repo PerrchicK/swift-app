@@ -67,7 +67,7 @@ class SyncedUserDefaults {
     func syncFireBase(_ appUrl: String? = nil) {
         guard let bundleIdentifier = SyncedUserDefaults.bundleIdentifier, syncedDbRef == nil else { return }
 
-        let rootRef = Database.database().reference(fromURL: String(format: "%@", appUrl ?? SyncedUserDefaults.FIREBASE_APP_URL))
+        let rootRef = Database.database().reference(fromURL: String(format: "%@", appUrl.or(SyncedUserDefaults.FIREBASE_APP_URL)))
         syncedDbRef = rootRef.child(bundleIdentifier.replacingOccurrences(of: ".", with: "-"))
 
         // Listen to "add" events
