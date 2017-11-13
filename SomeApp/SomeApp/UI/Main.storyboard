@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="WS7-E4-8ja">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="WS7-E4-8ja">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -344,7 +344,7 @@
                         <viewControllerLayoutGuide type="bottom" id="tBD-8X-nEc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="D0R-MC-43c">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="some value" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="REn-KO-6xX">
@@ -805,33 +805,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StoryboardGameCell" id="mNc-Pv-Jcm" customClass="StoryboardGameCell" customModule="SomeApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="X" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B9c-hx-fpS">
-                                                    <rect key="frame" x="8" y="8" width="34" height="34"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </view>
-                                        <constraints>
-                                            <constraint firstAttribute="bottomMargin" secondItem="B9c-hx-fpS" secondAttribute="bottom" id="LnL-bd-UAN"/>
-                                            <constraint firstItem="B9c-hx-fpS" firstAttribute="leading" secondItem="mNc-Pv-Jcm" secondAttribute="leadingMargin" id="T6H-Ey-3ps"/>
-                                            <constraint firstItem="B9c-hx-fpS" firstAttribute="top" secondItem="mNc-Pv-Jcm" secondAttribute="topMargin" id="VvP-B6-Ko1"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="B9c-hx-fpS" secondAttribute="trailing" id="jZH-6u-EB5"/>
-                                        </constraints>
-                                        <connections>
-                                            <outlet property="playerMarkLabel" destination="B9c-hx-fpS" id="9ze-Fb-Ubt"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                                 <connections>
                                     <outlet property="dataSource" destination="LHZ-1z-G7a" id="7Wp-wG-FCc"/>
                                     <outlet property="delegate" destination="LHZ-1z-G7a" id="Y84-Sv-scM"/>
@@ -900,7 +874,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQX-lw-isa">
-                                <rect key="frame" x="44" y="480" width="232" height="30"/>
+                                <rect key="frame" x="43.5" y="480" width="233" height="30"/>
                                 <state key="normal" title="Alamofire (former 'AFNetworking')"/>
                                 <connections>
                                     <action selector="afnetworkingRequestButtonPressed:" destination="aXh-g7-93R" eventType="touchUpInside" id="T9v-pt-KYG"/>
@@ -920,7 +894,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map Example" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a5T-yn-vYx">
-                                <rect key="frame" x="62" y="87.5" width="197" height="23"/>
+                                <rect key="frame" x="62" y="68.5" width="197" height="23"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -936,7 +910,7 @@
                                 </connections>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tapped coordinate:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXu-SB-LfX">
-                                <rect key="frame" x="86" y="366.5" width="149" height="21"/>
+                                <rect key="frame" x="86.5" y="366.5" width="148" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -945,16 +919,26 @@
                                 <rect key="frame" x="120" y="384.5" width="80" height="30"/>
                                 <state key="normal" title="(0.00, 0.00)"/>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QTd-aD-UoS">
+                                <rect key="frame" x="136" y="95.5" width="51" height="31"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="follow current location" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KaK-pq-Kik">
+                                <rect key="frame" x="106.5" y="126.5" width="108" height="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="top" secondItem="g6h-1c-tzX" secondAttribute="bottom" constant="-1" id="1U4-Jn-7hf"/>
+                            <constraint firstItem="KaK-pq-Kik" firstAttribute="top" secondItem="QTd-aD-UoS" secondAttribute="bottom" id="Esa-DP-PmH"/>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="leading" secondItem="wFp-rR-LRS" secondAttribute="leadingMargin" constant="20" id="FGk-ya-d4K"/>
                             <constraint firstItem="g6h-1c-tzX" firstAttribute="top" secondItem="AXu-SB-LfX" secondAttribute="bottom" constant="-3" id="JHd-d0-Mvk"/>
                             <constraint firstItem="Q8b-om-ZWC" firstAttribute="centerX" secondItem="q72-My-Fxn" secondAttribute="centerX" id="MhV-zu-55b"/>
                             <constraint firstItem="Q8b-om-ZWC" firstAttribute="top" secondItem="q72-My-Fxn" secondAttribute="bottom" constant="8" id="SCc-Ht-Wve"/>
                             <constraint firstItem="q72-My-Fxn" firstAttribute="centerY" secondItem="wFp-rR-LRS" secondAttribute="centerY" id="Yo1-RL-gfS"/>
-                            <constraint firstItem="zQE-Np-gUL" firstAttribute="top" secondItem="a5T-yn-vYx" secondAttribute="bottom" constant="31" id="aIQ-Yg-z1E"/>
+                            <constraint firstItem="zQE-Np-gUL" firstAttribute="top" secondItem="KaK-pq-Kik" secondAttribute="bottom" constant="3" id="aNE-8o-g37"/>
                             <constraint firstItem="AXu-SB-LfX" firstAttribute="top" secondItem="zQE-Np-gUL" secondAttribute="bottom" id="gxF-Js-MTq"/>
                             <constraint firstAttribute="trailingMargin" secondItem="a5T-yn-vYx" secondAttribute="trailing" constant="45" id="iaq-vB-w8H"/>
                             <constraint firstItem="PQX-lw-isa" firstAttribute="top" secondItem="Q8b-om-ZWC" secondAttribute="bottom" constant="8" id="oGb-ux-Jsz"/>
@@ -962,9 +946,12 @@
                             <constraint firstItem="PQX-lw-isa" firstAttribute="centerX" secondItem="Q8b-om-ZWC" secondAttribute="centerX" id="rcp-sV-3vI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="q72-My-Fxn" secondAttribute="trailing" constant="20" id="rkS-Ny-p6U"/>
                             <constraint firstItem="AXu-SB-LfX" firstAttribute="centerX" secondItem="zQE-Np-gUL" secondAttribute="centerX" id="sjz-aa-NKG"/>
+                            <constraint firstItem="QTd-aD-UoS" firstAttribute="top" secondItem="a5T-yn-vYx" secondAttribute="bottom" constant="4" id="tNy-w4-kdx"/>
                             <constraint firstItem="zQE-Np-gUL" firstAttribute="centerX" secondItem="wFp-rR-LRS" secondAttribute="centerX" id="uTp-jg-s64"/>
                             <constraint firstItem="g6h-1c-tzX" firstAttribute="centerX" secondItem="zQE-Np-gUL" secondAttribute="centerX" id="vRa-sT-7iv"/>
+                            <constraint firstItem="KaK-pq-Kik" firstAttribute="centerX" secondItem="QTd-aD-UoS" secondAttribute="centerX" id="vv3-l1-NVD"/>
                             <constraint firstItem="zQE-Np-gUL" firstAttribute="centerY" secondItem="wFp-rR-LRS" secondAttribute="centerY" constant="-30" id="x44-Vz-8D3"/>
+                            <constraint firstItem="QTd-aD-UoS" firstAttribute="centerX" secondItem="a5T-yn-vYx" secondAttribute="centerX" id="zbc-1t-YxP"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -973,6 +960,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="followCurrentLocationSwitch" destination="QTd-aD-UoS" id="GwA-UF-iEP"/>
                         <outlet property="mapView" destination="zQE-Np-gUL" id="xPR-gs-BMM"/>
                         <outlet property="tappedCoordinateButton" destination="g6h-1c-tzX" id="Jgt-xU-h0F"/>
                     </connections>

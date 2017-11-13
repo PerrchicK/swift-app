@@ -128,6 +128,7 @@
 		756791021CC66CF900EC507D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7567910C1CC6741F00EC507D /* swift-logo-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swift-logo-placeholder.png"; sourceTree = "<group>"; };
 		7567910E1CC67EFA00EC507D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		756A752F1F82004A009F595A /* SomeApp.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = SomeApp.entitlements; sourceTree = "<group>"; };
 		756B02611C798621007DC54A /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		756B96101CA2178700BF308D /* CommunicationMapLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationMapLocationViewController.swift; sourceTree = "<group>"; };
 		7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -160,7 +161,6 @@
 		75A575801CA6BC3900BAE35B /* SyncedUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncedUserDefaults.swift; sourceTree = "<group>"; };
 		75B87D091F576546000EE743 /* draft.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = draft.playground; sourceTree = "<group>"; };
 		75B87D0C1F577204000EE743 /* GameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameNavigationController.swift; sourceTree = "<group>"; };
-		75BA1D181F81811B0082D6BD /* SomeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SomeApp.entitlements; sourceTree = "<group>"; };
 		75C2C8E31C7554EA00D42707 /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
 		75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = running_cat_transparent.gif; sourceTree = "<group>"; };
 		75D7A4B41C4E924400CDD88F /* SomeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -351,7 +351,6 @@
 		75D7A4B61C4E924400CDD88F /* SomeApp */ = {
 			isa = PBXGroup;
 			children = (
-				75BA1D181F81811B0082D6BD /* SomeApp.entitlements */,
 				75F1AD681C6E8C92005D7FCA /* Supporting Files */,
 				75F1AD6D1C6E8C92005D7FCA /* UI */,
 				75D7A4E81C4E933700CDD88F /* Classes */,
@@ -398,6 +397,7 @@
 				75F1AD691C6E8C92005D7FCA /* Assets.xcassets */,
 				755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */,
 				75F1AD6A1C6E8C92005D7FCA /* Info.plist */,
+				756A752F1F82004A009F595A /* SomeApp.entitlements */,
 				75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */,
 			);
 			path = "Supporting Files";
@@ -919,7 +919,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SomeApp/SomeApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "SomeApp/Supporting Files/SomeApp.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -943,7 +943,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = SomeApp/SomeApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "SomeApp/Supporting Files/SomeApp.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
