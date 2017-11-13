@@ -1015,3 +1015,23 @@ class CAKeyframeAnimationWithClosure: CAKeyframeAnimation {
         📘("💀")
     }
 }
+
+extension Optional {
+    /// Still returning an optional, and dowesn't unwrap it ¯\\_(ツ)_/¯
+    func `or`(_ value: Wrapped?) -> Optional {
+        // Thanks to Lisa Dziuba. Reference: https://medium.com/flawless-app-stories/best-ios-hacks-from-twitter-october-edition-ce253347f88a
+        return self ?? value
+    }
+
+    // Ha, that was the missing part from his twit: https://gist.github.com/PaulTaykalo/2ebfe0d7c1ca9fff1938506e910f738c#file-optionalchaining-swift-L13
+    func `or`(_ value: Wrapped) -> Wrapped {
+        return self ?? value
+    }
+}
+
+extension Bool {
+    /// Inspired by: https://twitter.com/TT_Kilew/status/922458025713119232/photo/1
+    func `if`<T>(then valueIfTrue: T, else valueIfFalse: T) -> T {
+        return self ? valueIfTrue : valueIfFalse
+    }
+}
