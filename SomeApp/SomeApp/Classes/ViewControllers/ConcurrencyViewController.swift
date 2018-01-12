@@ -8,6 +8,13 @@
 
 import UIKit
 
+/// Reference: https://stackoverflow.com/questions/24045895/what-is-the-swift-equivalent-to-objective-cs-synchronized
+func synchronized(_ lock: Any, closure: () -> ()) {
+    objc_sync_enter(lock)
+    closure()
+    objc_sync_exit(lock)
+}
+
 class ConcurrencyViewController: UIViewController {
 
     // Grand Central Dispatch (GCD) usage
