@@ -25,7 +25,7 @@ class SyncedUserDefaults {
     weak var delegate: SyncedUserDefaultsDelegate?
 
     fileprivate(set) var currentDictionary = [String:String]()
-    fileprivate static let FIREBASE_APP_URL = "https://boiling-inferno-8318.firebaseio.com/"
+    fileprivate static let FIREBASE_APP_URL = "{your root address}/"
     fileprivate static let bundleIdentifier  = Bundle.main.bundleIdentifier
     // https://firebase.google.com/support/guides/firebase-ios
     var syncedDbRef: DatabaseReference?
