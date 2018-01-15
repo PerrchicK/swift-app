@@ -34,8 +34,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
 
         //https://randexdev.com/2014/08/uicollectionviewcell/
-        collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
-        collectionView.register(UINib(nibName: className(XibGameCell.self), bundle: nil), forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
+        collectionView.register(UINib(nibName: PerrFuncs.className(XibGameCell.self), bundle: nil), forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
 
         collectionView.isScrollEnabled = false
     }

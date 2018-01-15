@@ -477,7 +477,8 @@ extension UIViewController {
 extension UIView {
 
     // Inspired from: https://stackoverflow.com/questions/25513271/how-to-initialize--a-custom-uiview-class-with-a-xib-file-in-swift
-    public class func instantiateFromNib<T>(xibFileName: String) -> T {
+    class func instantiateFromNib<T>() -> T {
+        let xibFileName: String = PerrFuncs.className(self.classForCoder().self)
         let nib: UINib = UINib(nibName: xibFileName, bundle: nil)
         let nibObject = nib.instantiate(withOwner: nil, options: nil).first
         return nibObject as! T

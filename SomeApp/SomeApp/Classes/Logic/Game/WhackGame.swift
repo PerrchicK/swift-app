@@ -14,7 +14,7 @@ protocol WhackGameDelegate: GameDelegate {
 class WhackGame: Game {
     let currentPlayer: Player
     weak internal var delegate: GameDelegate?
-
+    
     struct Configuration {
         static let MaxPlayerHits = 5
         static let MaxPlayerMisses = 5
@@ -22,23 +22,23 @@ class WhackGame: Game {
         static let ColumnsCount = Configuration.RowsCount
         static let MaxMovesInSequence = Configuration.RowsCount
     }
-
+    
     init(playerName: String) {
         currentPlayer = WhackPlayer()
     }
     
     func restart() { }
-
+    
     func playMove(player: Player, row: Int, column: Int) { }
     
     class WhackPlayer: Player {
         func intValue() -> Int {
             return -1
         }
-
+        
         func stringValue() -> String {
             return ""
         }
     }
-
+    
 }

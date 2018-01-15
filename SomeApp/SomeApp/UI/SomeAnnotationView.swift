@@ -15,6 +15,7 @@ class SomeAnnotationView: UIView {
 
     override func awakeFromNib() {
         annotationIconLabel.text = generateIcon()
+        isUserInteractionEnabled = false
     }
 
     func generateIcon() -> String {

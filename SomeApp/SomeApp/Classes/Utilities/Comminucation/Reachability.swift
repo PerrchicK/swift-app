@@ -18,7 +18,7 @@ public enum ReachabilityError: Error {
 
 /// A C function
 fileprivate func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, info: UnsafeMutableRawPointer?) {
-    
+
     guard let info = info else { return }
     
     let reachability = Unmanaged<Reachability>.fromOpaque(info).takeUnretainedValue()

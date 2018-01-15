@@ -22,7 +22,7 @@ class ToastMessage: UIView {
         guard let appWindow = UIApplication.shared.keyWindow else { fatalError("cannot use keyWindow") }
 
         let width = UIScreen.main.bounds.width
-        let toastMessage: ToastMessage = ToastMessage.instantiateFromNib(xibFileName: "ToastMessage")
+        let toastMessage: ToastMessage = ToastMessage.instantiateFromNib()
 
         toastMessage.frame = CGRect(x: 0.0, y: 0.0, width: width, height: width / 2.0)
         toastMessage.delay = delay.rawValue

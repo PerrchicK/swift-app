@@ -187,7 +187,9 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
         } else {
             // Dequeued failed -> instantiate
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
-            annotationView.addSubview(SomeAnnotationView())
+            let someAnnotationView: SomeAnnotationView = SomeAnnotationView.instantiateFromNib()
+            annotationView.addSubview(someAnnotationView)
+            someAnnotationView.stretchToSuperViewEdges()
         }
 
         annotationView.canShowCallout = true
