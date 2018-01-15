@@ -18,16 +18,16 @@ class SharingTextSource: NSObject, UIActivityItemSource {
     }
     
     func activityViewController(_ activityViewController: UIActivityViewController,
-                                itemForActivityType activityType: UIActivityType) -> Any? {
+                                itemForActivityType activityType: UIActivityType?) -> Any? {
         var shareText = "Yo check this out!"
-        switch activityType.rawValue {
-        case activityTypeWhatsApp:
+        switch activityType?.rawValue {
+        case activityTypeWhatsApp?:
             shareText = "Whazzzzup? 😝" + shareText
-        case UIActivityType.message.rawValue:
+        case UIActivityType.message.rawValue?:
             shareText += " (I hope your iMessage is on)"
-        case UIActivityType.mail.rawValue:
+        case UIActivityType.mail.rawValue?:
             fallthrough // Consider building an HTML body
-        case UIActivityType.postToFacebook.rawValue:
+        case UIActivityType.postToFacebook.rawValue?:
             fallthrough // Consider taking a sharing URL in facebook
         default:
             shareText = MainViewController.projectLocationInsideGitHub

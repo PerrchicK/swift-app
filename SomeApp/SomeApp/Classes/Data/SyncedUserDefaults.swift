@@ -30,7 +30,7 @@ class SyncedUserDefaults {
     // https://firebase.google.com/support/guides/firebase-ios
     var syncedDbRef: DatabaseReference?
 
-    static let sharedInstance = SyncedUserDefaults()
+    static let shared = SyncedUserDefaults()
     
     fileprivate func databaseChangedEvent(_ firebaseChangeType: DataEventType, dataSnapshot: DataSnapshot?) {
         guard let key = dataSnapshot?.key, let value = dataSnapshot?.value as? String else { return }
@@ -47,7 +47,7 @@ class SyncedUserDefaults {
         case .childMoved:
             changeType = .modified
         default:
-            print("\(className(SyncedUserDefaults.self)) Error: unhandled firebase change type: \(firebaseChangeType)")
+            print("\(PerrFuncs.className(SyncedUserDefaults.self)) Error: unhandled firebase change type: \(firebaseChangeType)")
         }
 
         // Update current state
@@ -61,6 +61,7 @@ class SyncedUserDefaults {
     }
 
     fileprivate init() {
+        FirebaseApp.initialize()
         syncFireBase()
     }
 

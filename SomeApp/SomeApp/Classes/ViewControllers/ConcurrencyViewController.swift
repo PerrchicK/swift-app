@@ -176,7 +176,7 @@ class ConcurrencyViewController: UIViewController {
                 Thread.sleep(forTimeInterval: 0.001)
 
                 if progress == 20 {
-                    runOnUiThread() { [weak self] in
+                    PerrFuncs.runOnUiThread() { [weak self] in
                         guard let strongSelf = self else { return }
 
                         ToastMessage.show(messageText: "dispatch_group_wait: started")
@@ -190,14 +190,14 @@ class ConcurrencyViewController: UIViewController {
                     }
                     
                     // This code won't run until group is finished / timeout occured
-                    runOnUiThread() { [weak self] in
+                    PerrFuncs.runOnUiThread() { [weak self] in
                         ToastMessage.show(messageText: "dispatch_group_wait: finished...") { [weak self] in
                             self?.resetProgressBars()
                         }
                     }
                 }
 
-                runOnUiThread() {
+                PerrFuncs.runOnUiThread() {
                     self.ungroupedProgressBar.setProgress(Float(progress) / 100, animated: true)
                 }
             }
@@ -238,7 +238,7 @@ class ConcurrencyViewController: UIViewController {
         Thread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, with: "3")
     }
     
-    func countForever(argument: Any?) {
+    @objc func countForever(argument: Any?) {
         var time = 0
         while self.isAppeared {
             Thread.sleep(forTimeInterval: 1)

@@ -31,7 +31,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
-    fileprivate var users:[User]!
+    fileprivate var users:[AppUser]!
     fileprivate var firebaseKeys = [String]()
 
     override func viewDidLoad() {
@@ -69,7 +69,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         DataManager.syncedUserDefaults().delegate = self
         
-        if let persistableUsersData = UserDefaults.standard.object(forKey: className(PersistableUser.self)) as? Data,
+        if let persistableUsersData = UserDefaults.standard.object(forKey: PerrFuncs.className(PersistableUser.self)) as? Data,
             let persistableUsers = NSKeyedUnarchiver.unarchiveObject(with: persistableUsersData) as? [PersistableUser] {
             📘(persistableUsers)
         }
@@ -189,11 +189,11 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         let user1 = PersistableUser(email: "user1@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty1")
         let user2 = PersistableUser(email: "user2@from.defaults", firstName: "from", lastName: "defaults", nickname: "defaulty2")
         let usersData = NSKeyedArchiver.archivedData(withRootObject: [user1, user2])
-        UserDefaults.standard.set(usersData, forKey: className(PersistableUser.self))
+        UserDefaults.standard.set(usersData, forKey: PerrFuncs.className(PersistableUser.self))
         UserDefaults.standard.synchronize()
     }
 
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo, presentedAlert == nil else { return }
 
         if /*let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,*/
@@ -204,7 +204,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
 
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         self.view.frame.origin.y = 0
     }
 
@@ -272,11 +272,11 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
                 presentedAlert = UIAlertController.makeAlert(title: "Edit '\(key)'", message: "enter a new string:")
                     .withInputText(configurationBlock: { (textField) in
                         textField.placeholder = "new value"
-                        textField.text = SyncedUserDefaults.sharedInstance.currentDictionary[key]
+                        textField.text = SyncedUserDefaults.shared.currentDictionary[key]
                         textField.😘(huggedObject: tableViewType)
                     }).withAction(UIAlertAction(title: "Change", style: .destructive, handler: { [weak self] (alertAction) in
                         guard let newValue = self?.presentedAlert?.textFields?.first?.text else { return }
-                        SyncedUserDefaults.sharedInstance.putString(key: key, value: newValue)
+                        SyncedUserDefaults.shared.putString(key: key, value: newValue)
                         self?.refreshUsersArray()
                         tableView.reloadData()
                     }))

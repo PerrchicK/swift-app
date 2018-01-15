@@ -74,7 +74,7 @@ class StarterViewController: UIViewController {
 
     // MARK: - Other super class methods
 
-    func openLeftMenu () {
+    @objc func openLeftMenu () {
         drawer.open(.left, animated: true, completion: nil)
     }
 }

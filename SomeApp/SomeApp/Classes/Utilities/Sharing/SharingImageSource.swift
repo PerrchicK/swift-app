@@ -22,18 +22,18 @@ class SharingImageSource: NSObject, UIActivityItemSource {
         return UIImage()
     }
     
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
         
-        switch activityType.rawValue {
-        case UIActivityType.message.rawValue:
+        switch activityType?.rawValue {
+        case UIActivityType.message.rawValue?:
             fallthrough
-        case UIActivityType.saveToCameraRoll.rawValue:
+        case UIActivityType.saveToCameraRoll.rawValue?:
             fallthrough
-        case UIActivityType.mail.rawValue:
+        case UIActivityType.mail.rawValue?:
             fallthrough
-        case "net.whatsapp.WhatsApp.ShareExtension":
+        case "net.whatsapp.WhatsApp.ShareExtension"?:
             fallthrough
-        case activityTypeMyApp:
+        case activityTypeMyApp?:
             return self.image
         default:
             return nil

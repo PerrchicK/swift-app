@@ -65,7 +65,7 @@ class OperatorsViewController: UIViewController {
         }
     }
     
-    func dismiss(_ tapGestureRecognizer: UIGestureRecognizer) {
+    @objc func dismiss(_ tapGestureRecognizer: UIGestureRecognizer) {
         📘("Dismissing keyboard due to \(tapGestureRecognizer)")
         valueTextField.resignFirstResponder()
     }

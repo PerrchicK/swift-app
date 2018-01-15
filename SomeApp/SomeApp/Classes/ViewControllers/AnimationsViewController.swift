@@ -67,9 +67,9 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
         }
     }
 
-    func teaseUserToScroll(_ timer: Timer) {
+    @objc func teaseUserToScroll(_ timer: Timer) {
         scrollView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
-        runBlockAfterDelay(afterDelay: 0.3) { [weak self] in
+        PerrFuncs.runBlockAfterDelay(afterDelay: 0.3) { [weak self] in
             self?.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         }
     }

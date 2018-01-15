@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7515E36B2009889F00C9DEDD /* ClosureTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7515E36A2009889F00C9DEDD /* ClosureTimer.swift */; };
+		7515E36D2009893400C9DEDD /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7515E36C2009893400C9DEDD /* Throttler.swift */; };
 		752583121C9A835500E36E5E /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583111C9A835500E36E5E /* DataManager.swift */; };
-		752583141C9A839800E36E5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583131C9A839800E36E5E /* User.swift */; };
+		752583141C9A839800E36E5E /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752583131C9A839800E36E5E /* AppUser.swift */; };
 		753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */; };
 		755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 755572A11CF97B2C00833DB5 /* GoogleService-Info.plist */; };
 		755DB9681CB3029A0092BBC7 /* ImagesAndMotionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755DB9671CB3029A0092BBC7 /* ImagesAndMotionViewController.swift */; };
@@ -27,6 +29,8 @@
 		7572206D1E98FBB4000E2B62 /* TicTacToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572206B1E98FBB4000E2B62 /* TicTacToeGame.swift */; };
 		7572FD9F1E99259E005A9E9F /* WhackGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7572FD9E1E99259E005A9E9F /* WhackGame.swift */; };
 		7573DE001C7780A700E3C37F /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */; };
+		757C8487200841B1009C79F5 /* FirebaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757C8486200841B1009C79F5 /* FirebaseHelper.swift */; };
+		757C848920084827009C79F5 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757C848820084827009C79F5 /* CloudUser.swift */; };
 		75817AE61F44AC3C0030450C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AE51F44AC3C0030450C /* Reachability.swift */; };
 		75817AEA1F44AC480030450C /* SharingImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AE81F44AC480030450C /* SharingImageSource.swift */; };
 		75817AEB1F44AC480030450C /* SharingTextSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75817AE91F44AC480030450C /* SharingTextSource.swift */; };
@@ -49,7 +53,6 @@
 		75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */; };
 		75A575811CA6BC3900BAE35B /* SyncedUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A575801CA6BC3900BAE35B /* SyncedUserDefaults.swift */; };
 		75B87D0D1F577204000EE743 /* GameNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B87D0C1F577204000EE743 /* GameNavigationController.swift */; };
-		75C2C8E41C7554EA00D42707 /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C2C8E31C7554EA00D42707 /* NibView.swift */; };
 		75D75AFF1C77B4FE0095CE05 /* running_cat_transparent.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */; };
 		75D7A4D01C4E924400CDD88F /* SomeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4CF1C4E924400CDD88F /* SomeAppTests.swift */; };
 		75D7A4DB1C4E924400CDD88F /* SomeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4DA1C4E924400CDD88F /* SomeAppUITests.swift */; };
@@ -113,8 +116,10 @@
 		44F4244C711DA98F2A726E1F /* Pods-SomeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SomeApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-SomeApp/Pods-SomeApp.release.xcconfig"; sourceTree = "<group>"; };
 		721AF761DCD35B339255EB37 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7511E1181CD4F87F00696791 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7515E36A2009889F00C9DEDD /* ClosureTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureTimer.swift; sourceTree = "<group>"; };
+		7515E36C2009893400C9DEDD /* Throttler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		752583111C9A835500E36E5E /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		752583131C9A839800E36E5E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		752583131C9A839800E36E5E /* AppUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		753921D81C6FB9BE0086BB2D /* ConcurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencyViewController.swift; sourceTree = "<group>"; };
 		755284EB1CD2C01E0066D209 /* FLEX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLEX.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/FLEX.framework"; sourceTree = "<group>"; };
 		755284ED1CD2C0360066D209 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "../../../../Library/Developer/Xcode/DerivedData/SomeApp-gthbibsdxkicigafmckzmxjkdacn/Build/Products/Debug-iphonesimulator/Firebase.framework"; sourceTree = "<group>"; };
@@ -138,6 +143,8 @@
 		7572206B1E98FBB4000E2B62 /* TicTacToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeGame.swift; sourceTree = "<group>"; };
 		7572FD9E1E99259E005A9E9F /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
 		7573DDFF1C7780A700E3C37F /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
+		757C8486200841B1009C79F5 /* FirebaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseHelper.swift; sourceTree = "<group>"; };
+		757C848820084827009C79F5 /* CloudUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudUser.swift; sourceTree = "<group>"; };
 		75817AE51F44AC3C0030450C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		75817AE81F44AC480030450C /* SharingImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingImageSource.swift; sourceTree = "<group>"; };
 		75817AE91F44AC480030450C /* SharingTextSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingTextSource.swift; sourceTree = "<group>"; };
@@ -161,7 +168,6 @@
 		75A575801CA6BC3900BAE35B /* SyncedUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncedUserDefaults.swift; sourceTree = "<group>"; };
 		75B87D091F576546000EE743 /* draft.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = draft.playground; sourceTree = "<group>"; };
 		75B87D0C1F577204000EE743 /* GameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameNavigationController.swift; sourceTree = "<group>"; };
-		75C2C8E31C7554EA00D42707 /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
 		75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = running_cat_transparent.gif; sourceTree = "<group>"; };
 		75D7A4B41C4E924400CDD88F /* SomeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D7A4CB1C4E924400CDD88F /* SomeAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SomeAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,9 +230,11 @@
 			isa = PBXGroup;
 			children = (
 				752583111C9A835500E36E5E /* DataManager.swift */,
-				752583131C9A839800E36E5E /* User.swift */,
+				752583131C9A839800E36E5E /* AppUser.swift */,
 				75A575801CA6BC3900BAE35B /* SyncedUserDefaults.swift */,
 				759282FC1EBC925A00C95AFF /* PersistableUser.swift */,
+				757C8486200841B1009C79F5 /* FirebaseHelper.swift */,
+				757C848820084827009C79F5 /* CloudUser.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -406,7 +414,6 @@
 		75F1AD6D1C6E8C92005D7FCA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				75C2C8E31C7554EA00D42707 /* NibView.swift */,
 				75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */,
 				75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */,
 				75DF68D51F398536004CF94E /* XibGameCell.xib */,
@@ -426,6 +433,8 @@
 				75817AE71F44AC480030450C /* Sharing */,
 				75817AE41F44AC3C0030450C /* Comminucation */,
 				75F1AD791C6E8CBC005D7FCA /* PerrFuncs.swift */,
+				7515E36A2009889F00C9DEDD /* ClosureTimer.swift */,
+				7515E36C2009893400C9DEDD /* Throttler.swift */,
 				75F1AD8A1C6F780F005D7FCA /* Constants.swift */,
 				759F58AB1C7500C5009C6E51 /* UIImage+AnimatedGif.swift */,
 				75A5757C1CA4F5A500BAE35B /* Synchronizer.swift */,
@@ -546,12 +555,12 @@
 					756790FA1CC66CF900EC507D = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = BYQ4J9BT99;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 					};
 					75D7A4B31C4E924400CDD88F = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = BYQ4J9BT99;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -560,12 +569,12 @@
 					};
 					75D7A4CA1C4E924400CDD88F = {
 						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 						TestTargetID = 75D7A4B31C4E924400CDD88F;
 					};
 					75D7A4D51C4E924400CDD88F = {
 						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 						TestTargetID = 75D7A4B31C4E924400CDD88F;
 					};
 				};
@@ -651,13 +660,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SomeApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		79FA36548C805D0C949A6D38 /* [CP] Copy Pods Resources */ = {
@@ -680,9 +692,28 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-SomeApp/Pods-SomeApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/BetterSegmentedControl/BetterSegmentedControl.framework",
+				"${BUILT_PRODUCTS_DIR}/FLEX/FLEX.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/MMDrawerController/MMDrawerController.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BetterSegmentedControl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLEX.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MMDrawerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -706,6 +737,8 @@
 			files = (
 				75A575811CA6BC3900BAE35B /* SyncedUserDefaults.swift in Sources */,
 				756B02621C798621007DC54A /* CollectionViewController.swift in Sources */,
+				7515E36D2009893400C9DEDD /* Throttler.swift in Sources */,
+				757C8487200841B1009C79F5 /* FirebaseHelper.swift in Sources */,
 				752583121C9A835500E36E5E /* DataManager.swift in Sources */,
 				7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */,
 				75B87D0D1F577204000EE743 /* GameNavigationController.swift in Sources */,
@@ -718,7 +751,7 @@
 				75F1AD811C6F3D5B005D7FCA /* LeftMenuViewController.swift in Sources */,
 				753921D91C6FB9BE0086BB2D /* ConcurrencyViewController.swift in Sources */,
 				7570D2DC1C600E6A00EA34D3 /* StarterViewController.swift in Sources */,
-				75C2C8E41C7554EA00D42707 /* NibView.swift in Sources */,
+				7515E36B2009889F00C9DEDD /* ClosureTimer.swift in Sources */,
 				759F58AC1C7500C5009C6E51 /* UIImage+AnimatedGif.swift in Sources */,
 				7572206D1E98FBB4000E2B62 /* TicTacToeGame.swift in Sources */,
 				759282FD1EBC925A00C95AFF /* PersistableUser.swift in Sources */,
@@ -729,6 +762,7 @@
 				75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */,
 				75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */,
 				75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */,
+				757C848920084827009C79F5 /* CloudUser.swift in Sources */,
 				755DB9681CB3029A0092BBC7 /* ImagesAndMotionViewController.swift in Sources */,
 				7572206C1E98FBB4000E2B62 /* Game.swift in Sources */,
 				75DCE39A1C76381A00FF6F18 /* ToastMessage.swift in Sources */,
@@ -736,7 +770,7 @@
 				75817AEA1F44AC480030450C /* SharingImageSource.swift in Sources */,
 				7572FD9F1E99259E005A9E9F /* WhackGame.swift in Sources */,
 				75817AE61F44AC3C0030450C /* Reachability.swift in Sources */,
-				752583141C9A839800E36E5E /* User.swift in Sources */,
+				752583141C9A839800E36E5E /* AppUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,7 +837,8 @@
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -822,7 +857,8 @@
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -933,7 +969,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -956,7 +993,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -969,7 +1007,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SomeApp.app/SomeApp";
 			};
 			name = Debug;
@@ -983,7 +1022,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SomeApp.app/SomeApp";
 			};
 			name = Release;
@@ -996,7 +1036,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = SomeApp;
 				USES_XCTRUNNER = YES;
 			};
@@ -1010,7 +1051,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.perrchick.SomeAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SomeApp/Supporting Files/SomeApp-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = SomeApp;
 				USES_XCTRUNNER = YES;
 			};

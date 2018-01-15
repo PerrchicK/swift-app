@@ -11,15 +11,44 @@ import CoreData
 import Firebase
 import FirebaseMessaging
 import UserNotifications
+import FirebaseAuth
+
 //import Exception
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
-    static var fcmToken: String?
+    var signInHolder: Synchronizer.HolderTicket?
+    var tokenHolder: Synchronizer.HolderTicket?
+    var loggedInUser: User?
+    static var fcmToken: String? {
+        return (UIApplication.shared.delegate as? AppDelegate)?._fcmToken
+    }
+
+    private var _fcmToken: String? {
+        didSet {
+            self.tokenHolder?.release()
+        }
+    }
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        let loggedInTokenSynchronizer: Synchronizer = Synchronizer(finalOperationClosure: { [weak self] in
+            guard let user = self?.loggedInUser else { return }
+            FirebaseHelper.createUserNode(user: user)
+        })
+
+        FirebaseHelper.initialize()
+
+        tokenHolder = loggedInTokenSynchronizer.createHolder()
+        signInHolder = loggedInTokenSynchronizer.createHolder()
+        Auth.auth().signInAnonymously { [weak self] (anAnonymouslyUser, error) in
+            self?.loggedInUser = anAnonymouslyUser
+            📘("\(anAnonymouslyUser) logged in with error: \(error)")
+            self?.signInHolder?.release()
+        }
+
         if let deepLinkDictionary = launchOptions {
             📘("launch options dictionary: \(deepLinkDictionary)")
             
@@ -42,8 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        NSSetUncaughtExceptionHandler { (exception) in
 //            UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
 //        }
-
-        FirebaseApp.configure()
 
         setupNotifications(application: application)
 
@@ -98,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         📘("FCM (refreshed) token string: \(fcmToken)")
-        AppDelegate.fcmToken = fcmToken
+        self._fcmToken = fcmToken
     }
 
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
@@ -121,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         if let fcmToken = InstanceID.instanceID().token() {
             📘("FCM token string: \(fcmToken)")
-            AppDelegate.fcmToken = fcmToken
+            self._fcmToken = fcmToken
         }
     }
 
@@ -193,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     lazy var managedObjectContext: NSManagedObjectContext = {
         // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
-        let coordinator = self.persistentStoreCoordinator
+        let coordinator: NSPersistentStoreCoordinator = self.persistentStoreCoordinator
         var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext

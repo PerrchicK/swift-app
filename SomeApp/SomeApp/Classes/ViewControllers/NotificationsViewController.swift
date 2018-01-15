@@ -85,7 +85,7 @@ class NotificationsViewController: UIViewController {
         return true
     }
 
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         guard let userInfo = (notification as NSNotification).userInfo else { return }
         
         if let keyboardAnimationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval {
@@ -95,7 +95,7 @@ class NotificationsViewController: UIViewController {
         }
     }
 
-    func applicationDidEnterBackground(_ notification: Notification) {
+    @objc func applicationDidEnterBackground(_ notification: Notification) {
         PerrFuncs.runBackgroundTask { [weak self](onDone) in
             guard let strongSelf = self else { return }
 
@@ -109,7 +109,7 @@ class NotificationsViewController: UIViewController {
         }
     }
 
-    func keyboardFrameChanged(_ notification: Notification) {
+    @objc func keyboardFrameChanged(_ notification: Notification) {
         guard let userInfo = (notification as NSNotification).userInfo else { return }
         
         if let keyboardAnimationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval,
@@ -129,7 +129,7 @@ class NotificationsViewController: UIViewController {
         }, completion: nil)
     }
     
-    func yoOccured(_ notification: Notification) {
+    @objc func yoOccured(_ notification: Notification) {
         📘("notification posted: \(notification)\nassociated object:\(String(describing: notification.object))\nuser info:\(String(describing: notification.userInfo))")
         if let textField = notification.object as? UITextField {
             textField.text = "yo2 has been posted"
@@ -155,7 +155,7 @@ class NotificationsViewController: UIViewController {
         jsonDictionary["notification"] = notificationDictionary
         jsonDictionary["data"] = dataDictionary
         
-        let secretApiKey = "your API key from FCM"
+        let secretApiKey: String = "AAAAQ_UBwaU:APA91bHap420yZr1gH9xq__jyiYHI86SINQhuYJbeITdd3W5iADL5Bh-oHas1KyE6GNMjLTDXKVU4953NkhJ_o5h3oxYr9XWh0z_htRQpVpCB5rGD-Tam4dCees7jf-I2CbpzMh3yFTx"
 
         PerrFuncs.postRequest(urlString: "https://fcm.googleapis.com/fcm/send", jsonDictionary: jsonDictionary, httpHeaders: ["Authorization":"key= \(secretApiKey)"]) { (responseDataJson) in
             guard let succeededCount = responseDataJson?["success"] as? Int else { completion(false); return }

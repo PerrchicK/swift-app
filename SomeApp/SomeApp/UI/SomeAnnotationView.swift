@@ -9,11 +9,11 @@
 import Foundation
 import MapKit
 
-class SomeAnnotationView: NibView {
+class SomeAnnotationView: UIView {
     @IBOutlet weak var annotationIconLabel: UILabel!
     let possibleIcons: [String] = ["😏", "😍", "😜", "😟"]
 
-    override func viewDidLoadFromNib() {
+    override func awakeFromNib() {
         annotationIconLabel.text = generateIcon()
     }
 

@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-class ToastMessage: NibView {
-
+class ToastMessage: UIView {
     enum ToastMessageLength: TimeInterval {
         case long = 5.0
         case short = 3.0
@@ -23,11 +22,11 @@ class ToastMessage: NibView {
         guard let appWindow = UIApplication.shared.keyWindow else { fatalError("cannot use keyWindow") }
 
         let width = UIScreen.main.bounds.width
-        let frame = CGRect(x: 0.0, y: 0.0, width: width, height: width / 2.0)
-        let toastMessage = ToastMessage(frame: frame)
+        let toastMessage: ToastMessage = ToastMessage.instantiateFromNib(xibFileName: "ToastMessage")
 
+        toastMessage.frame = CGRect(x: 0.0, y: 0.0, width: width, height: width / 2.0)
         toastMessage.delay = delay.rawValue
-        toastMessage.show(show: false)
+        toastMessage.isPresented = false
         appWindow.addSubview(toastMessage)
         toastMessage.messageLabel.text = messageText
         toastMessage.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
@@ -47,7 +46,7 @@ class ToastMessage: NibView {
         toastMessage.animateFade(fadeIn: true, duration: 0.5)
         toastMessage.animateBounce()
 
-        runBlockAfterDelay(afterDelay: toastMessage.delay) {
+        PerrFuncs.runBlockAfterDelay(afterDelay: toastMessage.delay) {
             toastMessage.animateScaleAndFadeOut { [weak toastMessage] (completed) in
                 toastMessage?.messageLabel.text = ""
                 toastMessage?.removeFromSuperview()

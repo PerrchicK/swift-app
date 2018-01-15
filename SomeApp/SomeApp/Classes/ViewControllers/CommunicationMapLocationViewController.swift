@@ -109,7 +109,7 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
                 do {
                     let innerJson = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
                     let toastText = self?.parseResponse(innerJson) ?? "Parsing failed"
-                    runOnUiThread(block: { () -> Void in
+                    PerrFuncs.runOnUiThread(block: { () -> Void in
                         
                         ToastMessage.show(messageText: toastText)
                     })

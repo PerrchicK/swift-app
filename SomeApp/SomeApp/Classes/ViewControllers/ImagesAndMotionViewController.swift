@@ -61,7 +61,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         var sourceControlIndex: UInt = 1
         var typeControlIndex: UInt = 1
         var isEditableControlIndex: UInt = 0
-        if let selectedIndexesDictionary = UserDefaults.load(key: "selected settings") as? [String: UInt] {
+        if let selectedIndexesDictionary: [String: UInt] = UserDefaults.load(key: "selected settings") {
             print(selectedIndexesDictionary)
             sourceControlIndex = selectedIndexesDictionary["sourceControl"] ?? 1
             typeControlIndex = selectedIndexesDictionary["typeControl"] ?? 1
@@ -142,7 +142,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         UserDefaults.save(value: selectedIndexesDictionary as AnyObject, forKey: "selected settings").synchronize()
     }
 
-    func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
+    @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
         // Just for fun:
         📘("Selected: \(sender.titles[Int(sender.index)])")
     }
@@ -191,7 +191,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         present(imagePickerController, animated: true, completion: nil)
     }
 
-    func cameBackFromBackground(_ notification: Notification) {
+    @objc func cameBackFromBackground(_ notification: Notification) {
         self.takeSnapshot()
     }
 
@@ -208,14 +208,14 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     func setupCamera() {
-        let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
-        for device in devices! {
+        let devices = AVCaptureDevice.devices(for: AVMediaType.video)
+        for device in devices {
             if (device as AnyObject).position == .front {
                 self.device = device as? AVCaptureDevice
             }
         }
         do {
-            let input = try AVCaptureDeviceInput(device: self.device)
+            let input = try AVCaptureDeviceInput(device: self.device!)
             
             let output = AVCaptureVideoDataOutput()
             output.alwaysDiscardsLateVideoFrames = true
@@ -233,10 +233,10 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             if let captureSession = captureSession, let previewLayer = previewLayer {
                 captureSession.addInput(input)
                 captureSession.addOutput(output)
-                captureSession.sessionPreset = AVCaptureSessionPresetPhoto
+                captureSession.sessionPreset = AVCaptureSession.Preset.photo
 
                 previewLayer.session = captureSession
-                previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
                 
                 // CHECK FOR YOUR APP
                 previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: cameraLensPreviewButton.frame.size.width, height: cameraLensPreviewButton.frame.size.height)
@@ -253,7 +253,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+    func captureOutput(_ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         CVPixelBufferLockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0))

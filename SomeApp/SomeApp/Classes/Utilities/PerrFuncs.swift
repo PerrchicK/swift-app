@@ -10,16 +10,15 @@ import UIKit
 import ObjectiveC
 
 // MARK: - "macros"
-
-public typealias CompletionClosure = ((AnyObject?) -> Void)
-public typealias PredicateClosure = ((AnyObject?) -> Bool)
+public typealias CallbackClosure<T> = ((T) -> Void)
+public typealias PredicateClosure<T> = ((T) -> Bool)
 
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
 // MARK: - Global Methods
 
-public func 📘(_ logMessage: Any, file:String = #file, function:String = #function, line:Int = #line) {
+public func 📘(_ logMessage: Any, file: String = #file, function: String = #function, line: Int = #line) {
     let formattter = DateFormatter()
     formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
     let timesamp = formattter.string(from: Date())
@@ -27,40 +26,32 @@ public func 📘(_ logMessage: Any, file:String = #file, function:String = #func
     print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(logMessage)")
 }
 
-// dispatch block on main queue
-public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()->()) {
-    runBlockAfterDelay(afterDelay: seconds, block: block)
-}
-
-// runClosureAfterDelay
-public func runBlockAfterDelay(afterDelay seconds: Double, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
-        let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
-        onQueue.asyncAfter(deadline: delayTime, execute: block)
-}
-
-public func className(_ aClass: AnyClass) -> String {
-    let className = NSStringFromClass(aClass)
-    let components = className.components(separatedBy: ".")
-    
-    if components.count > 0 {
-        return components.last!
-    } else {
-        return className
-    }
-}
-
 // MARK: - Class
 
-open class PerrFuncs: NSObject {
-    // Computed static variables will act as lazy variables
-    static var sharedInstance: PerrFuncs = {
-        return PerrFuncs()
-    }()
+open class PerrFuncs {
 
-    fileprivate override init() {
-        super.init()
+    // dispatch block on main queue
+    static public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()->()) {
+        runBlockAfterDelay(afterDelay: seconds, block: block)
     }
     
+    // runClosureAfterDelay
+    static public func runBlockAfterDelay(afterDelay seconds: Double, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
+        let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
+        onQueue.asyncAfter(deadline: delayTime, execute: block)
+    }
+    
+    static public func className(_ aClass: AnyClass) -> String {
+        let className = NSStringFromClass(aClass)
+        let components = className.components(separatedBy: ".")
+        
+        if components.count > 0 {
+            return components.last!
+        } else {
+            return className
+        }
+    }
+
     #if !os(macOS) && !os(watchOS)
     /// This is an async operation (it needs an improvement - in case this method is being called again before the previous is completed?)
     public static func runBackgroundTask(block: @escaping (_ completionHandler: @escaping () -> ()) -> ()) {
@@ -82,24 +73,6 @@ open class PerrFuncs: NSObject {
     }
     #endif
 
-    lazy var imageContainer: UIView = {
-        let container = UIView(frame: UIScreen.main.bounds)
-        container.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        // To be a target, it must be an NSObject instance
-        container.onClick() {_ in 
-            self.removeImage()
-        }
-
-        return container
-    }()
-
-    func removeImage() {
-        imageContainer.animateFade(fadeIn: false, duration: 0.5) { (doneSuccessfully) in
-            self.imageContainer.removeAllSubviews()
-            self.imageContainer.removeFromSuperview()
-        }
-    }
-
     class func shareImage(_ sharedImage: UIImage, completionClosure: @escaping UIActivityViewControllerCompletionWithItemsHandler) {
         let activityViewController = UIActivityViewController(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
         activityViewController.completionWithItemsHandler = completionClosure
@@ -118,21 +91,37 @@ open class PerrFuncs: NSObject {
 
         let loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         loadingSpinner.startAnimating()
-        sharedInstance.imageContainer.addSubview(loadingSpinner)
-        loadingSpinner.pinToSuperViewCenter()
-        sharedInstance.imageContainer.animateFade(fadeIn: true, duration: 0.5)
         
-        window.addSubview(sharedInstance.imageContainer)
-        sharedInstance.imageContainer.stretchToSuperViewEdges()
+        let imageContainer: UIView = UIView(frame: UIScreen.main.bounds)
+
+        let removeImage: () -> () = { [ weak imageContainer] in
+            imageContainer?.animateFade(fadeIn: false, duration: 0.5) { (doneSuccessfully) in
+                imageContainer?.removeAllSubviews()
+                imageContainer?.removeFromSuperview()
+            }
+        }
+
+        imageContainer.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        // To be a target, it must be an NSObject instance
+        imageContainer.onClick() { (tapGestureRecognizer: UITapGestureRecognizer) in
+            removeImage()
+        }
+
+        imageContainer.addSubview(loadingSpinner)
+        loadingSpinner.pinToSuperViewCenter()
+        imageContainer.animateFade(fadeIn: true, duration: 0.5)
+        
+        window.addSubview(imageContainer)
+        imageContainer.stretchToSuperViewEdges()
 
         let screenWidth = WIDTH(window.frame) //Or: UIScreen.mainScreen().bounds.width
         UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: screenWidth, height: screenWidth)).fetchImage(withUrl: imageUrl) { (imageView) in
-            if let imageView = imageView as? UIImageView, imageView.image != nil {
-                sharedInstance.imageContainer.addSubview(imageView)
+            if imageView.image != nil {
+                imageContainer.addSubview(imageView)
                 imageView.isUserInteractionEnabled = false
                 imageView.pinToSuperViewCenter()
             } else {
-                sharedInstance.removeImage()
+                removeImage()
             }
         }
     }
@@ -248,6 +237,8 @@ extension String {
             emoji = "📚"
         case "Images & Core Motion":
             emoji = "📷"
+        case "Crazy Whack":
+            emoji = "😜"
 
         default:
             📘("Error: Couldn't find emoji for string '\(self)'")
@@ -299,7 +290,7 @@ extension UIColor {
 }
 
 extension UIImage {
-    static func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
+    static func fetchImage(withUrl urlString: String, completionClosure: CallbackClosure<UIImage?>?) {
         guard let url = URL(string: urlString) else { completionClosure?(nil); return }
 
         let backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
@@ -327,8 +318,8 @@ extension UIImage {
 }
 
 extension UIImageView {
-    func fetchImage(withUrl urlString: String, completionClosure: CompletionClosure?) {
-        guard urlString.length() > 0 else { completionClosure?(nil); return }
+    func fetchImage(withUrl urlString: String, completionClosure: CallbackClosure<UIImageView>?) {
+        guard urlString.length() > 0 else { completionClosure?(self); return }
 
         UIImage.fetchImage(withUrl: urlString) { (image) in
             defer {
@@ -337,7 +328,7 @@ extension UIImageView {
                 }
             }
 
-            guard let image = image as? UIImage else { return }
+            guard let image: UIImage = image else { return }
 
             self.image = image
             self.contentMode = .scaleAspectFit
@@ -483,10 +474,15 @@ extension UIViewController {
     }
 }
 
-let DEFAULT_ANIMATION_DURATION = TimeInterval(1)
-let ANIMATION_NO_KEY = "noAnimation"
-extension UIView: CAAnimationDelegate {
-    
+extension UIView {
+
+    // Inspired from: https://stackoverflow.com/questions/25513271/how-to-initialize--a-custom-uiview-class-with-a-xib-file-in-swift
+    public class func instantiateFromNib<T>(xibFileName: String) -> T {
+        let nib: UINib = UINib(nibName: xibFileName, bundle: nil)
+        let nibObject = nib.instantiate(withOwner: nil, options: nil).first
+        return nibObject as! T
+    }
+
     var isPresented: Bool {
         get {
             return !isHidden
@@ -527,7 +523,7 @@ extension UIView: CAAnimationDelegate {
         }
     }
 
-    public func animateNo(_ completion: CompletionClosure? = nil) {
+    public func animateNo(_ completion: CallbackClosure<Bool>? = nil) {
         /*
         let noAnimation = CAKeyframeAnimationWithClosure()
         noAnimation.keyPath = "position.x"
@@ -558,29 +554,20 @@ extension UIView: CAAnimationDelegate {
                 UIView.animate(withDuration: 0.05, animations: { [weak self] () -> Void in
                     self?.frame.origin.x = originX
                     }, completion: { (done: Bool) in
-                    completion?(done as AnyObject)
+                    completion?(done)
                 })
             })
         })
     }
 
-    public func animationDidStop(_ animation: CAAnimation, finished flag: Bool) {
-        if self.layer.animation(forKey: ANIMATION_NO_KEY) == animation {
-            guard let animation = animation as? CAKeyframeAnimationWithClosure else { return }
-
-            animation.completionClosure?(flag as AnyObject?)
-            self.layer.removeAnimation(forKey: ANIMATION_NO_KEY)
-        }
-    }
-
-    public func animateMoveCenterTo(x: CGFloat, y: CGFloat, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
+    public func animateMoveCenterTo(x: CGFloat, y: CGFloat, duration: TimeInterval = 1, completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: duration, animations: {
             self.center.x = x
             self.center.y = y
         }, completion: completion)
     }
     
-    public func animateZoom(zoomIn: Bool, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
+    public func animateZoom(zoomIn: Bool, duration: TimeInterval = 1, completion: ((Bool) -> Void)? = nil) {
         if zoomIn {
             self.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }
@@ -596,7 +583,7 @@ extension UIView: CAAnimationDelegate {
         }) 
     }
     
-    public func animateFade(fadeIn: Bool, duration: TimeInterval = DEFAULT_ANIMATION_DURATION, completion: ((Bool) -> Void)? = nil) {
+    public func animateFade(fadeIn: Bool, duration: TimeInterval = 1, completion: ((Bool) -> Void)? = nil) {
         // Skip redundant calls
         guard (fadeIn == false && (alpha > 0 || isHidden == false)) || (fadeIn == true && (alpha == 0 || isHidden == true)) else { return }
 
@@ -734,7 +721,7 @@ extension UIView: CAAnimationDelegate {
         return tapGestureRecognizer
     }
 
-    func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
+    @objc func onTapRecognized(_ tapGestureRecognizer: UITapGestureRecognizer) {
         var onClickListener: OnClickListener?
         if self is UIButton {
             onClickListener = gestureRecognizers?.filter( { $0.isEnabled == false && $0 is OnClickListener } ).first as? OnClickListener
@@ -748,9 +735,9 @@ extension UIView: CAAnimationDelegate {
     }
 
     @discardableResult
-    func onDrag(predicateClosure: PredicateClosure? = nil, onDragClosure: @escaping CompletionClosure) -> OnPanListener {
+    func onDrag(predicateClosure: PredicateClosure<UIView>? = nil, onDragClosure: @escaping CallbackClosure<CGPoint>) -> OnPanListener {
         return onPan { panGestureRecognizer in
-            guard let draggedView = panGestureRecognizer.view, let superview = draggedView.superview, predicateClosure?(self) ?? true, let onPanListener = panGestureRecognizer as? OnPanListener else { return }
+            guard let draggedView = panGestureRecognizer.view, let superview = draggedView.superview, (predicateClosure?(self)).or(true), let onPanListener = panGestureRecognizer as? OnPanListener else { return }
             let locationOfTouch = panGestureRecognizer.location(in: superview)
 
             switch panGestureRecognizer.state {
@@ -766,7 +753,7 @@ extension UIView: CAAnimationDelegate {
                 }
             }
             
-            onDragClosure(draggedView.center as AnyObject)
+            onDragClosure(draggedView.center)
         }
     }
 
@@ -782,7 +769,7 @@ extension UIView: CAAnimationDelegate {
         return panGestureRecognizer
     }
     
-    func onPanRecognized(_ panGestureRecognizer: UIPanGestureRecognizer) {
+    @objc func onPanRecognized(_ panGestureRecognizer: UIPanGestureRecognizer) {
         guard let panGestureRecognizer = panGestureRecognizer as? OnPanListener else { return }
         
         panGestureRecognizer.closure(panGestureRecognizer)
@@ -802,7 +789,7 @@ extension UIView: CAAnimationDelegate {
         return swipeGestureRecognizer
     }
 
-    func onSwipeRecognized(_ swipeGestureRecognizer: UISwipeGestureRecognizer) {
+    @objc func onSwipeRecognized(_ swipeGestureRecognizer: UISwipeGestureRecognizer) {
         guard let swipeGestureRecognizer = swipeGestureRecognizer as? OnSwipeListener else { return }
 
         swipeGestureRecognizer.closure(swipeGestureRecognizer)
@@ -825,7 +812,7 @@ extension UIView: CAAnimationDelegate {
         return longPressGestureRecognizer
     }
     
-    func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc func longPressRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard let longPressGestureRecognizer = longPressGestureRecognizer as? OnLongPressListener else { return }
 
         longPressGestureRecognizer.closure(longPressGestureRecognizer)
@@ -882,7 +869,7 @@ extension URL {
 }
 
 extension UserDefaults {
-    static func save(value: AnyObject, forKey key: String) -> UserDefaults {
+    static func save(value: Any, forKey key: String) -> UserDefaults {
         UserDefaults.standard.set(value, forKey: key)
         return UserDefaults.standard
     }
@@ -891,10 +878,18 @@ extension UserDefaults {
         UserDefaults.standard.set(nil, forKey: key)
         return UserDefaults.standard
     }
-    
-    static func load(key: String, defaultValue: AnyObject? = nil) -> AnyObject? {
+
+    static func load<T>(key: String) -> T? {
         if let actualValue = UserDefaults.standard.object(forKey: key) {
-            return actualValue as AnyObject
+            return actualValue as? T
+        }
+        
+        return nil
+    }
+    
+    static func load<T>(key: String, defaultValue: T) -> T {
+        if let actualValue = UserDefaults.standard.object(forKey: key) {
+            return (actualValue as? T).or(defaultValue)
         }
         
         return defaultValue
@@ -991,31 +986,6 @@ class OnLongPressListener: UILongPressGestureRecognizer, UIGestureRecognizerDele
 //    }
 }
 
-/// An interesting fact: the CAKeyframeAnimation object does not survive the animation, it's being dealloced right after it has been added to the layer
-class CAKeyframeAnimationWithClosure: CAKeyframeAnimation {
-    var completionClosure: CompletionClosure?
-    
-    override init() {
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-
-        completionClosure = aDecoder.decodeObject(forKey: "completionClosure") as? CompletionClosure
-    }
-    
-    override func encode(with aCoder: NSCoder) {
-        super.encode(with: aCoder)
-
-        aCoder.encode(completionClosure, forKey: "completionClosure")
-    }
-    
-    deinit {
-        📘("💀")
-    }
-}
-
 extension Optional {
     /// Still returning an optional, and dowesn't unwrap it ¯\\_(ツ)_/¯
     func `or`(_ value: Wrapped?) -> Optional {
@@ -1033,5 +1003,51 @@ extension Bool {
     /// Inspired by: https://twitter.com/TT_Kilew/status/922458025713119232/photo/1
     func `if`<T>(then valueIfTrue: T, else valueIfFalse: T) -> T {
         return self ? valueIfTrue : valueIfFalse
+    }
+}
+
+/// https://benscheirman.com/2017/06/swift-json/
+protocol DictionaryConvertible: Codable {
+    // Starting from Swift 4, the mapping methods are genereated automatically behind the scenes
+}
+
+// Other considerations: https://stackoverflow.com/questions/29599005/how-to-convert-or-parse-swift-objects-to-json
+extension DictionaryConvertible {
+    static var decoder: JSONDecoder {
+        get { return JSONDecoder() }
+    }
+    
+    static var encoder: JSONEncoder {
+        get { return JSONEncoder() }
+    }
+    
+    static func fromDictionary<T: DictionaryConvertible>(objectDictionary: [AnyHashable:Any]) -> T? {
+        let _objectDictionaryData: Data? = try? JSONSerialization.data(withJSONObject: objectDictionary, options: [])
+        guard let objectDictionaryData = _objectDictionaryData else { return nil }
+        guard let jsonString = String(data: objectDictionaryData, encoding: .utf8) else { return nil }
+        
+        return fromJson(jsonString: jsonString)
+    }
+    
+    static func fromJson<T: DictionaryConvertible>(jsonString: String) -> T? {
+        guard let jsonData = jsonString.data(using: .utf8) else { return nil }
+        return try? Self.decoder.decode(T.self, from: jsonData)
+    }
+    
+    func toJsonString() -> String? {
+        let _objectData: Data? = try? Self.encoder.encode(self)
+        guard let objectData = _objectData else { return nil }
+        return String(data: objectData, encoding: .utf8)
+    }
+    
+    func toDictionary() -> [AnyHashable:Any] {
+        let _objectData: Data? = try? Self.encoder.encode(self)
+        guard let objectData = _objectData else { return [:] }
+        
+        guard let _firebaseDictionary = try? JSONSerialization.jsonObject(with: objectData, options: JSONSerialization.ReadingOptions.allowFragments) as? [AnyHashable: Any] else { return [:] }
+        
+        guard let firebaseDictionary = _firebaseDictionary else { return [:] }
+        
+        return firebaseDictionary
     }
 }

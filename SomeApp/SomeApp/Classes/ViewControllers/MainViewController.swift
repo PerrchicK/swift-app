@@ -27,7 +27,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if let lastCrashCallStack = UserDefaults.load(key: "last crash") as? [String] {
+        if let lastCrashCallStack: [String] = UserDefaults.load(key: "last crash") {
             UIAlertController.makeAlert(title: "last crash", message: "\(lastCrashCallStack)")
                 .withAction(UIAlertAction(title: "fine", style: .cancel, handler: nil))
                 .withAction(UIAlertAction(title: "delete", style: .default, handler: { (alertAction) in
@@ -51,7 +51,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         NotificationCenter.default.removeObserver(self)
     }
 
-    func reachabilityDidChange(notification: Notification) {
+    @objc func reachabilityDidChange(notification: Notification) {
         guard let status = Reachability.shared?.currentReachabilityStatus else { return }
         📘("Network reachability status changed: \(status)")
 
@@ -85,6 +85,8 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.ImagesCoreMotion:
             navigationController?.present(ImagesAndMotionViewController.instantiate(), animated: true, completion: nil)
+//        case LeftMenuOptions.PersonalDevelopment.CrazyWhack:
+//            navigationController?.present(CrazyWhackViewController(), animated: true, completion: nil)
         default:
             UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
             📘("to be continued...")

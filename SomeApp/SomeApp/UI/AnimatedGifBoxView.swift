@@ -13,7 +13,7 @@ protocol AnimatedGifBoxViewDelegate: class {
     func animatedGifBoxView(_ animatedGifBoxView: AnimatedGifBoxView, durationSliderChanged newValue:Float)
 }
 
-class AnimatedGifBoxView: NibView {
+class AnimatedGifBoxView: UIView {
 
     let ANIMATED_GIF_FILENAME = "running_cat_transparent"
 
@@ -25,13 +25,13 @@ class AnimatedGifBoxView: NibView {
 
     fileprivate var isAnimating = false
 
-    override func viewDidLoadFromNib() {
+    override func awakeFromNib() {
         animatedGifImageView.contentMode = .scaleAspectFit
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), for: UIControlEvents.touchUpInside)
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), for: UIControlEvents.touchUpOutside)
     }
  
-    func durationSliderTouchUp(_ sender: UISlider) {
+    @objc func durationSliderTouchUp(_ sender: UISlider) {
         guard !isAnimating else { return }
 
         isAnimating = true

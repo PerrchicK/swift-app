@@ -42,7 +42,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
         view.onSwipe(direction: .down) { [weak self] _ in
             self?.dismiss(animated: true, completion: nil)
         }
@@ -135,13 +135,18 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func isGameEnabled(_ game: Game) -> Bool {
         return isGameEnabled
     }
+    
+    deinit {
+        📘("dead")
+    }
+
 }
 
 class ProgrammaticallyGameCell: GameCell {
-    static let REUSE_IDENTIFIER = className(ProgrammaticallyGameCell.self)
+    static let REUSE_IDENTIFIER = PerrFuncs.className(ProgrammaticallyGameCell.self)
 
     override func awakeFromNib() {
-        📘("Created a \(className(ProgrammaticallyGameCell.self)) object")
+        📘("Created a \(PerrFuncs.className(ProgrammaticallyGameCell.self)) object")
     }
 
     override var playerMarkLabel: UILabel! {
@@ -161,7 +166,7 @@ class ProgrammaticallyGameCell: GameCell {
 }
 
 class StoryboardGameCell: GameCell {
-    static let REUSE_IDENTIFIER = className(StoryboardGameCell.self)
+    static let REUSE_IDENTIFIER = PerrFuncs.className(StoryboardGameCell.self)
     
     @IBOutlet weak var _playerMarkLabel: UILabel!
 
@@ -176,7 +181,7 @@ class StoryboardGameCell: GameCell {
 }
 
 class XibGameCell: GameCell {
-    static let REUSE_IDENTIFIER = className(XibGameCell.self)
+    static let REUSE_IDENTIFIER = PerrFuncs.className(XibGameCell.self)
     
     @IBOutlet weak var _playerMarkLabel: UILabel!
     
@@ -195,7 +200,7 @@ class GameCell: UICollectionViewCell {
     var playerMarkLabel: UILabel!
 
     override func awakeFromNib() {
-        📘("Created a \(className(self.classForCoder)) object")
+        //📘("Created a \(className(self.classForCoder)) object")
     }
     
     func configCell() {
