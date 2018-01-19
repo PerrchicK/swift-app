@@ -14,6 +14,7 @@ import Firebase
 class FirebaseHelper {
 
     static let FIREBASE_CONFIGURATION_FILE_DEFAULT_NAME = "GoogleService-Info.plist"
+    private(set) static var isActivated: Bool?
     private static let rootRef: DatabaseReference = Database.database().reference()
     private struct Keys {
         static let Users: String = "Users"
@@ -24,8 +25,8 @@ class FirebaseHelper {
     }()
 
     static func loggedInUser(completionCallback: @escaping (_: Firebase.User?) -> ()) {
-        if let isConfigured = isConfigured {
-            if isConfigured {
+        if let isActivated = isActivated {
+            if isActivated {
                 if Auth.auth().currentUser == nil {
                     Auth.auth().signInAnonymously { (anAnonymouslyUser, error) in
                         📘("\(anAnonymouslyUser) logged in with error: \(error)")
@@ -43,8 +44,6 @@ class FirebaseHelper {
         }
     }
 
-    static var isConfigured: Bool?
-    
     static let GoogleServiceInfoPlistContent: NSDictionary = {
         let googleServiceInfoPlistContent: NSDictionary
         let fileNameAndExtension = FIREBASE_CONFIGURATION_FILE_DEFAULT_NAME.components(separatedBy: ".")
@@ -68,8 +67,8 @@ class FirebaseHelper {
 
     @discardableResult
     static func initialize() -> String? {
-        if let isConfigured = isConfigured {
-            if isConfigured {
+        if let isActivated = isActivated {
+            if isActivated {
                 return dbUrl
             } else {
                 return nil
@@ -79,18 +78,25 @@ class FirebaseHelper {
         let _dbUrl = dbUrl
         if let _ = URL(string: _dbUrl) {
             FirebaseApp.configure()
-            isConfigured = true
+            isActivated = true
             return _dbUrl
         }
 
-        isConfigured = false
+        isActivated = false
 
         return nil
     }
 
     static func createUserNode(user: Firebase.User) {
-        let clouUser = CloudUser(from: user, fcmToken: AppDelegate.fcmToken)
-        rootRef.child(Keys.Users).child(clouUser.uid).setValue(clouUser.toDictionary())
+        if let isActivated = isActivated {
+            if !isActivated { return }
+
+            let clouUser = CloudUser(from: user, fcmToken: AppDelegate.fcmToken)
+            rootRef.child(Keys.Users).child(clouUser.uid).setValue(clouUser.toDictionary())
+        } else {
+            initialize()
+            createUserNode(user: user)
+        }
     }
 
 }
