@@ -62,8 +62,8 @@ class DataManager {
         return SomeApp.User(entity: entity!, insertInto: DataManager.managedContext)
     }
 
-    static func syncedUserDefaults() -> SyncedUserDefaults {
-        return SyncedUserDefaults.shared
+    static func generateSyncedUserDefaults() -> SyncedUserDefaults {
+        return SyncedUserDefaults()
     }
 
     static func fetchUsers(_ named: String? = nil) -> [SomeApp.User]? {

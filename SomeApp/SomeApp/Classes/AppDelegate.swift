@@ -11,7 +11,6 @@ import CoreData
 import Firebase
 import FirebaseMessaging
 import UserNotifications
-import FirebaseAuth
 
 //import Exception
 
@@ -20,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var signInHolder: Synchronizer.HolderTicket?
     var tokenHolder: Synchronizer.HolderTicket?
-    var loggedInUser: Firebase.User?
     static var fcmToken: String? {
         return (UIApplication.shared.delegate as? AppDelegate)?._fcmToken
     }
 
+    var loggedInUser: Firebase.User?
     private var _fcmToken: String? {
         didSet {
             self.tokenHolder?.release()
@@ -39,19 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             FirebaseHelper.createUserNode(user: user)
         })
 
-        FirebaseHelper.initialize()
-
         tokenHolder = loggedInTokenSynchronizer.createHolder()
-        loggedInUser = Auth.auth().currentUser
         signInHolder = loggedInTokenSynchronizer.createHolder()
-        if loggedInUser == nil {
-            Auth.auth().signInAnonymously { [weak self] (anAnonymouslyUser, error) in
-                self?.loggedInUser = anAnonymouslyUser
-                📘("\(anAnonymouslyUser) logged in with error: \(error)")
-                self?.signInHolder?.release()
-            }
-        } else {
-            signInHolder?.release()
+
+        FirebaseHelper.loggedInUser { [weak self] (user) in
+            self?.loggedInUser = user
+            self?.signInHolder?.release()
         }
 
         if let deepLinkDictionary = launchOptions {

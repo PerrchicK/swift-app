@@ -32,7 +32,11 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
     fileprivate var users:[SomeApp.User]!
-    fileprivate var firebaseKeys = [String]()
+    fileprivate lazy var syncedUserDefaults: SyncedUserDefaults = DataManager.generateSyncedUserDefaults()
+
+    fileprivate lazy var firebaseKeys: [String] = {
+        return []
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +71,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        DataManager.syncedUserDefaults().delegate = self
+        syncedUserDefaults.delegate = self
         
         if let persistableUsersData = UserDefaults.standard.object(forKey: PerrFuncs.className(PersistableUser.self)) as? Data,
             let persistableUsers = NSKeyedUnarchiver.unarchiveObject(with: persistableUsersData) as? [PersistableUser] {
@@ -119,7 +123,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             .withAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] (alertAction) -> Void in
                 guard let key = self?.presentedAlert?.textFields?[safe: 0]?.text, let value = self?.presentedAlert?.textFields?[safe: 1]?.text else { return }
 
-                DataManager.syncedUserDefaults().putString(key: key, value: value)
+                self?.syncedUserDefaults.putString(key: key, value: value)
             }))
             .withInputText(configurationBlock: { (textField) in
                 textField.placeholder = "key"
@@ -209,7 +213,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     // MARK: - UITableViewDataSource
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellReuseIdentifier", for: indexPath)
 
@@ -235,7 +239,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let tableViewType = tableView.😍() as? TableViewType {
             switch tableViewType {
             case TableViewType.firebase:
-                return DataManager.syncedUserDefaults().currentDictionary.count
+                return syncedUserDefaults.currentDictionary.count
             case TableViewType.coreData:
                 return users.count
             }
@@ -252,7 +256,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             switch tableViewType {
             case TableViewType.firebase:
                 if let key = tableView.cellForRow(at: indexPath)?.textLabel?.text,
-                    let value = DataManager.syncedUserDefaults().currentDictionary[key] {
+                    let value = syncedUserDefaults.currentDictionary[key] {
                     toastMessage = value
                 }
             case TableViewType.coreData:
@@ -270,13 +274,13 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             case TableViewType.firebase:
                 let key = firebaseKeys[longTappedIndex]
                 presentedAlert = UIAlertController.makeAlert(title: "Edit '\(key)'", message: "enter a new string:")
-                    .withInputText(configurationBlock: { (textField) in
+                    .withInputText(configurationBlock: { [weak self] (textField) in
                         textField.placeholder = "new value"
-                        textField.text = SyncedUserDefaults.shared.currentDictionary[key]
+                        textField.text = self?.syncedUserDefaults.currentDictionary[key]
                         textField.😘(huggedObject: tableViewType)
                     }).withAction(UIAlertAction(title: "Change", style: .destructive, handler: { [weak self] (alertAction) in
                         guard let newValue = self?.presentedAlert?.textFields?.first?.text else { return }
-                        SyncedUserDefaults.shared.putString(key: key, value: newValue)
+                        self?.syncedUserDefaults.putString(key: key, value: newValue)
                         self?.refreshUsersArray()
                         tableView.reloadData()
                     }))
@@ -309,7 +313,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             switch tableViewType {
             case TableViewType.firebase:
                 if let key = tableView.cellForRow(at: indexPath)?.textLabel?.text {
-                    DataManager.syncedUserDefaults().removeString(key: key)
+                    syncedUserDefaults.removeString(key: key)
                     firebaseKeys.remove(where: { return $0 == key })
                 }
             case TableViewType.coreData:

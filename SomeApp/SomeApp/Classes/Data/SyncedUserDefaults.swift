@@ -25,12 +25,11 @@ class SyncedUserDefaults {
     weak var delegate: SyncedUserDefaultsDelegate?
 
     fileprivate(set) var currentDictionary = [String:String]()
-    fileprivate static let FIREBASE_APP_URL = "{your root address}/"
     fileprivate static let bundleIdentifier  = Bundle.main.bundleIdentifier
     // https://firebase.google.com/support/guides/firebase-ios
     var syncedDbRef: DatabaseReference?
 
-    static let shared = SyncedUserDefaults()
+    //static let shared = SyncedUserDefaults()
     
     fileprivate func databaseChangedEvent(_ firebaseChangeType: DataEventType, dataSnapshot: DataSnapshot?) {
         guard let key = dataSnapshot?.key, let value = dataSnapshot?.value as? String else { return }
@@ -60,15 +59,14 @@ class SyncedUserDefaults {
         delegate?.syncedUserDefaults(self, dbKey: key, dbValue: value, changed: changeType!)
     }
 
-    fileprivate init() {
-        FirebaseApp.initialize()
-        syncFireBase()
+    init() {
+        syncFireBase(FirebaseHelper.initialize())
     }
 
-    func syncFireBase(_ appUrl: String? = nil) {
-        guard let bundleIdentifier = SyncedUserDefaults.bundleIdentifier, syncedDbRef == nil else { return }
+    func syncFireBase(_ appUrl: String?) {
+        guard let appUrl = appUrl, let bundleIdentifier = SyncedUserDefaults.bundleIdentifier, syncedDbRef == nil else { return }
 
-        let rootRef = Database.database().reference(fromURL: String(format: "%@", appUrl.or(SyncedUserDefaults.FIREBASE_APP_URL)))
+        let rootRef = Database.database().reference(fromURL: String(format: "%@", appUrl))
         syncedDbRef = rootRef.child(bundleIdentifier.replacingOccurrences(of: ".", with: "-"))
 
         // Listen to "add" events
