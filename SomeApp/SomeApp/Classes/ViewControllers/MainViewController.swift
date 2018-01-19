@@ -29,11 +29,11 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
 
         if let lastCrashCallStack: [String] = UserDefaults.load(key: "last crash") {
             UIAlertController.makeAlert(title: "last crash", message: "\(lastCrashCallStack)")
-                .withAction(UIAlertAction(title: "fine", style: .cancel, handler: nil))
-                .withAction(UIAlertAction(title: "delete", style: .default, handler: { (alertAction) in
-                    UserDefaults.remove(key: "last crash").synchronize()
-                }))
-                .show()
+            .withAction(UIAlertAction(title: "fine", style: .cancel, handler: nil))
+            .withAction(UIAlertAction(title: "delete", style: .destructive, handler: { (alertAction) in
+                UserDefaults.remove(key: "last crash").synchronize()
+            }))
+            .show()
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityDidChange), name: Notification.Name.ReachabilityDidChange, object: nil)

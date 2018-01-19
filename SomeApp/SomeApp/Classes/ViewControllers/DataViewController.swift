@@ -31,7 +31,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
-    fileprivate var users:[AppUser]!
+    fileprivate var users:[SomeApp.User]!
     fileprivate var firebaseKeys = [String]()
 
     override func viewDidLoad() {
@@ -94,7 +94,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     @IBAction func showFirebaseButtonPressed(_ sender: AnyObject) {
-        dbStateTableView.😘(huggedObject: TableViewType.firebase as AnyObject)
+        dbStateTableView.😘(huggedObject: TableViewType.firebase)
         presentTableView()
     }
 

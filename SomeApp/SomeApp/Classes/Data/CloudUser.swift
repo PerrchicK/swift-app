@@ -8,6 +8,7 @@
 
 import Foundation
 import FirebaseAuth
+import Firebase
 
 //protocol FirebaseDictionaryConveratable {
 //    func toFirebaseDictionary()
@@ -34,7 +35,7 @@ class CloudUser: DictionaryConvertible {
     private(set) var uid: String
     var fcmToken: String?
 
-    init(from user: User, fcmToken: String?) {
+    init(from user: Firebase.User, fcmToken: String?) {
         uid = user.uid
         self.fcmToken = fcmToken
     }

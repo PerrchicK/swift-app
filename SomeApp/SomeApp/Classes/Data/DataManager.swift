@@ -56,26 +56,26 @@ class DataManager {
 
         return nil
     }
-    
-    static func createUser() -> AppUser {
-        let entity = NSEntityDescription.entity(forEntityName: PerrFuncs.className(AppUser.self), in: DataManager.managedContext)
-        return AppUser(entity: entity!, insertInto: DataManager.managedContext)
+
+    static func createUser() -> SomeApp.User {
+        let entity = NSEntityDescription.entity(forEntityName: PerrFuncs.className(SomeApp.User.self), in: DataManager.managedContext)
+        return SomeApp.User(entity: entity!, insertInto: DataManager.managedContext)
     }
 
     static func syncedUserDefaults() -> SyncedUserDefaults {
         return SyncedUserDefaults.shared
     }
 
-    static func fetchUsers(_ named: String? = nil) -> [AppUser]? {
-        var fetchedUsers: [AppUser]?
-        let usersFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: PerrFuncs.className(AppUser.self))
+    static func fetchUsers(_ named: String? = nil) -> [SomeApp.User]? {
+        var fetchedUsers: [SomeApp.User]?
+        let usersFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: PerrFuncs.className(SomeApp.User.self))
         
         if named != nil {
             usersFetchRequest.predicate = NSPredicate(format: "firstName == %@", named!)
         }
         
         do {
-            fetchedUsers = try managedContext.fetch(usersFetchRequest) as? [AppUser]
+            fetchedUsers = try managedContext.fetch(usersFetchRequest) as? [SomeApp.User]
         } catch {
             ToastMessage.show(messageText: "Error fetching from Core Data: \(error)")
         }

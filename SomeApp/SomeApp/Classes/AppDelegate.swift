@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var signInHolder: Synchronizer.HolderTicket?
     var tokenHolder: Synchronizer.HolderTicket?
-    var loggedInUser: User?
+    var loggedInUser: Firebase.User?
     static var fcmToken: String? {
         return (UIApplication.shared.delegate as? AppDelegate)?._fcmToken
     }
@@ -42,11 +42,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseHelper.initialize()
 
         tokenHolder = loggedInTokenSynchronizer.createHolder()
+        loggedInUser = Auth.auth().currentUser
         signInHolder = loggedInTokenSynchronizer.createHolder()
-        Auth.auth().signInAnonymously { [weak self] (anAnonymouslyUser, error) in
-            self?.loggedInUser = anAnonymouslyUser
-            📘("\(anAnonymouslyUser) logged in with error: \(error)")
-            self?.signInHolder?.release()
+        if loggedInUser == nil {
+            Auth.auth().signInAnonymously { [weak self] (anAnonymouslyUser, error) in
+                self?.loggedInUser = anAnonymouslyUser
+                📘("\(anAnonymouslyUser) logged in with error: \(error)")
+                self?.signInHolder?.release()
+            }
+        } else {
+            signInHolder?.release()
         }
 
         if let deepLinkDictionary = launchOptions {
@@ -68,9 +73,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let rootViewController = SplashScreenViewController.instantiate()
         self.window?.rootViewController = rootViewController
 
-//        NSSetUncaughtExceptionHandler { (exception) in
-//            UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
-//        }
+        NSSetUncaughtExceptionHandler { (exception) in
+            UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
+        }
 
         setupNotifications(application: application)
 

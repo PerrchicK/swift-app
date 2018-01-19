@@ -22,7 +22,10 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     @IBOutlet weak var shootedViewRightMarginConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollViewContentOffsetLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var animatedGifBoxView: AnimatedGifBoxView!
+    lazy var animatedGifBoxView: AnimatedGifBoxView = {
+        return animatedGifBoxViewXibContainer.contentView as! AnimatedGifBoxView
+    }()
+    @IBOutlet weak var animatedGifBoxViewXibContainer: XibViewContainer!
     @IBOutlet weak var animatedImageView: UIImageView!
     @IBOutlet weak var fetchImageButton: UIButton!
     @IBOutlet weak var fetchedImageUrlTextField: UITextField!
@@ -35,9 +38,6 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        animatedGifBoxView.delegate = self
-        fetchedImageUrlTextField.text = "http://vignette4.wikia.nocookie.net/simpsons/images/9/92/WOOHOO.jpg"
 
         configureAnimations()
         configureUi()
@@ -75,6 +75,8 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     }
 
     func configureAnimations() {
+        animatedGifBoxView.delegate = self
+
         animatedOutTransitionView.onClick { [weak self] (tapGestureRecognizer) in
             let transition = CATransition()
             transition.startProgress = 0
@@ -216,6 +218,9 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     }
 
     func configureUi() {
+        scrollView.keyboardDismissMode = .interactive
+        fetchedImageUrlTextField.text = "http://vignette4.wikia.nocookie.net/simpsons/images/9/92/WOOHOO.jpg"
+
         animatedJumpView.layer.cornerRadius = animatedJumpView.frame.width / 2
         animatedShootedView.layer.cornerRadius = animatedShootedView.frame.width / 2
 

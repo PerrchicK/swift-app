@@ -30,6 +30,14 @@ public func 📘(_ logMessage: Any, file: String = #file, function: String = #fu
 
 open class PerrFuncs {
 
+    static var dispatchTokens: [String] = []
+    static public func dispatchOnce(dispatchToken: String, block: () -> ()) {
+        if dispatchTokens.contains(dispatchToken) { return }
+        dispatchTokens.append(dispatchToken)
+
+        block()
+    }
+
     // dispatch block on main queue
     static public func runOnUiThread(afterDelay seconds: Double = 0.0, block: @escaping ()->()) {
         runBlockAfterDelay(afterDelay: seconds, block: block)
@@ -384,12 +392,12 @@ extension NSObject { // try extending 'AnyObject'...
      << EXPERIMENTAL METHOD >>
      Extracts the hugged object from an NSObject.
      */
-    func 😍() -> AnyObject? { // 1
+    func 😍() -> Any? { // 1
         guard let value = objc_getAssociatedObject(self, &SompApplicationHuggedProperty) else {
             return nil
         }
         
-        return value as AnyObject?
+        return value as Any?
     }
 }
 

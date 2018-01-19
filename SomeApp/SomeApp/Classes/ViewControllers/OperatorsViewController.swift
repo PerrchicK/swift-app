@@ -39,21 +39,19 @@ class OperatorsViewController: UIViewController {
     @IBAction func setButtonPressed(_ sender: AnyObject) {
         valueTextField.resignFirstResponder()
 
-        var lovingResult : AnyObject?
-        
-        do {
-            lovingResult = try valueTextField.😘(huggedObject: valueTextField.text! as AnyObject) as AnyObject?
-        } catch {
+        var huggingResult: Bool
+        if let text = valueTextField.text {
+            huggingResult = valueTextField.😘(huggedObject: text)
+        } else {
+            huggingResult = false
         }
-        
+
         defer {
-            if let lovingResult = lovingResult as? Bool {
-                let isThisLove = lovingResult ? "❤️" : "💔"
-                
-                UIAlertController.alert(title: "love result", message: isThisLove)
-                
-                valueTextField.text = ""
-            }
+            let isThisLove = huggingResult ? "❤️" : "💔"
+            
+            UIAlertController.alert(title: "love result", message: isThisLove)
+            
+            valueTextField.text = ""
         }
     }
     

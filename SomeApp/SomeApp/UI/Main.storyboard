@@ -161,7 +161,7 @@
                         <viewControllerLayoutGuide type="bottom" id="beB-CC-iGg"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pNQ-0G-mP1">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="image URL" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uJk-Ic-cM6">
@@ -177,18 +177,21 @@
                                 </connections>
                             </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z81-BL-qXn" userLabel="scrollView">
-                                <rect key="frame" x="0.0" y="146" width="320" height="422"/>
+                                <rect key="frame" x="0.0" y="146" width="320" height="754"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLh-y2-ula" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVd-sU-JZL" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVd-sU-JZL" customClass="XibViewContainer" customModule="SomeApp" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="340.5" width="280" height="280"/>
                                                 <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="288" id="P21-My-l6q"/>
                                                     <constraint firstAttribute="width" secondItem="HVd-sU-JZL" secondAttribute="height" multiplier="1:1" id="qlj-S1-Xb1"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="nibName" value="AnimatedGifBoxView"/>
+                                                </userDefinedRuntimeAttributes>
                                                 <variation key="default">
                                                     <mask key="constraints">
                                                         <exclude reference="P21-My-l6q"/>
@@ -316,8 +319,9 @@
                             </mask>
                         </variation>
                     </view>
+                    <size key="freeformSize" width="320" height="900"/>
                     <connections>
-                        <outlet property="animatedGifBoxView" destination="HVd-sU-JZL" id="ipJ-If-uUP"/>
+                        <outlet property="animatedGifBoxViewXibContainer" destination="HVd-sU-JZL" id="gkO-CM-97o"/>
                         <outlet property="animatedImageView" destination="OmT-qr-uC0" id="4o1-Iu-Mg3"/>
                         <outlet property="animatedInTransitionView" destination="FsO-8k-cSq" id="Nu2-0W-Oel"/>
                         <outlet property="animatedJumpView" destination="BKn-QA-fbX" id="BVa-Ja-aLx"/>
@@ -333,7 +337,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q9A-WD-86O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="844" y="-263"/>
+            <point key="canvasLocation" x="844" y="-695"/>
         </scene>
         <!--Operators View Controller-->
         <scene sceneID="3Ct-ov-wD9">

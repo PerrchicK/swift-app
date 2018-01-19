@@ -9,6 +9,12 @@
 import Foundation
 import CoreData
 
+/**
+ Thanks to the swift namespacing, this 'User' class won't conflict the Firebase 'User' class.
+ It's possible to access this class by using 'SomeApp.User'.
+
+ In ObjC we had to rename one of these classes.
+ */
 class User: NSManagedObject {
     @NSManaged var email: String!
     @NSManaged var firstName: String!

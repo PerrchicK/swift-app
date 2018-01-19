@@ -1,53 +1,45 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
-            <connections>
-                <outlet property="animatedGifImageView" destination="cQ5-OC-NnM" id="OvG-d0-Shz"/>
-                <outlet property="durationLabel" destination="Hxr-d8-oia" id="d8R-8K-Aeo"/>
-                <outlet property="durationSlider" destination="Ge5-Ga-ltV" id="8cB-kh-zhx"/>
-            </connections>
-        </placeholder>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="AnimatedGifBoxView" customModule="SomeApp" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="484" height="414"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AnimatedGifBoxView" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTq-Zt-GsU">
                     <rect key="frame" x="0.0" y="20" width="484" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hxr-d8-oia">
                     <rect key="frame" x="0.0" y="90.5" width="484" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Ge5-Ga-ltV">
                     <rect key="frame" x="8" y="50.5" width="468" height="31"/>
                     <connections>
-                        <action selector="sliderValueChanged:" destination="-1" eventType="valueChanged" id="sRP-jA-Mlc"/>
+                        <action selector="sliderValueChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="Gel-SX-dvQ"/>
                     </connections>
                 </slider>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cQ5-OC-NnM">
                     <rect key="frame" x="192" y="127" width="100" height="100"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="cQ5-OC-NnM" secondAttribute="height" multiplier="1:1" id="5FA-Y4-nuo"/>
-                        <constraint firstAttribute="height" constant="128" id="CDi-pf-Opn"/>
                         <constraint firstAttribute="width" constant="100" id="WjJ-ux-Chu"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="CDi-pf-Opn"/>
-                        </mask>
-                    </variation>
                 </imageView>
             </subviews>
             <constraints>
@@ -65,6 +57,11 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="animatedGifImageView" destination="cQ5-OC-NnM" id="SGP-5S-tXw"/>
+                <outlet property="durationLabel" destination="Hxr-d8-oia" id="Wdz-B0-QbS"/>
+                <outlet property="durationSlider" destination="Ge5-Ga-ltV" id="6sI-Da-2CN"/>
+            </connections>
             <point key="canvasLocation" x="-60" y="324"/>
         </view>
     </objects>

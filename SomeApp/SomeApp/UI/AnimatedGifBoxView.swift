@@ -14,7 +14,6 @@ protocol AnimatedGifBoxViewDelegate: class {
 }
 
 class AnimatedGifBoxView: UIView {
-
     let ANIMATED_GIF_FILENAME = "running_cat_transparent"
 
     weak var delegate: AnimatedGifBoxViewDelegate?
@@ -51,7 +50,7 @@ class AnimatedGifBoxView: UIView {
         isAnimating = true
         // Refresh image with the new frame rate
         durationLabel.animateNo() { [weak self] (isDone) in
-            if let isDone = isDone as? Bool {
+            if isDone {
                 self?.isAnimating = !isDone // not done <==> animating || done <==> not animating
             }
         }

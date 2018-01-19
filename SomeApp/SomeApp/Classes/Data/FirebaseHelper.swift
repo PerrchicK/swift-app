@@ -22,10 +22,9 @@ class FirebaseHelper {
         📘(rootRef)
     }
 
-    static func createUserNode(user: User) {
+    static func createUserNode(user: Firebase.User) {
         let clouUser = CloudUser(from: user, fcmToken: AppDelegate.fcmToken)
         rootRef.child(Keys.Users).child(clouUser.uid).setValue(clouUser.toDictionary())
     }
 
 }
-
