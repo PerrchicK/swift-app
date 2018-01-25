@@ -180,7 +180,7 @@
                                 <rect key="frame" x="0.0" y="146" width="320" height="754"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLh-y2-ula" userLabel="contentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="630.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVd-sU-JZL" customClass="XibViewContainer" customModule="SomeApp" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="340.5" width="280" height="280"/>
@@ -274,7 +274,7 @@
                                             <constraint firstItem="FsO-8k-cSq" firstAttribute="width" secondItem="bJZ-VT-cMy" secondAttribute="width" id="hE2-wj-oXQ"/>
                                             <constraint firstAttribute="trailing" secondItem="OmT-qr-uC0" secondAttribute="trailing" constant="40" id="rfE-nK-nwu"/>
                                             <constraint firstItem="BKn-QA-fbX" firstAttribute="centerX" secondItem="bJZ-VT-cMy" secondAttribute="centerX" id="sja-Us-fdM"/>
-                                            <constraint firstAttribute="height" constant="800" id="tld-n9-qS1"/>
+                                            <constraint firstAttribute="bottom" secondItem="HVd-sU-JZL" secondAttribute="bottom" constant="10" id="weV-ni-eov"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -676,7 +676,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swift-logo" translatesAutoresizingMaskIntoConstraints="NO" id="t1d-Ck-3fV">
-                                <rect key="frame" x="16" y="99" width="50" height="50"/>
+                                <rect key="frame" x="16" y="20" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="t1d-Ck-3fV" secondAttribute="height" multiplier="1:1" id="FBn-bZ-hbb"/>
                                     <constraint firstAttribute="width" secondItem="t1d-Ck-3fV" secondAttribute="height" multiplier="1:1" id="LJg-ti-NMe"/>
@@ -691,13 +691,13 @@
                                 </variation>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coding in Swift" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zgP-Nh-X7H">
-                                <rect key="frame" x="86" y="114" width="218" height="21"/>
+                                <rect key="frame" x="86" y="35" width="218" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.93092105260000002" green="0.53939423340000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="eV8-kY-nut">
-                                <rect key="frame" x="0.0" y="158" width="320" height="410"/>
+                                <rect key="frame" x="0.0" y="79" width="320" height="489"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LeftMenuCell" id="0Fg-15-N56" customClass="LeftMenuCell" customModule="SomeApp" customModuleProvider="target">
@@ -765,7 +765,7 @@
                             <constraint firstItem="t1d-Ck-3fV" firstAttribute="width" secondItem="t1d-Ck-3fV" secondAttribute="height" multiplier="1:1" id="ONa-RG-r0Y"/>
                             <constraint firstAttribute="leadingMargin" secondItem="t1d-Ck-3fV" secondAttribute="leading" id="RvZ-KM-cQ3"/>
                             <constraint firstItem="eV8-kY-nut" firstAttribute="leading" secondItem="QFm-rX-YP4" secondAttribute="leading" id="TS3-pd-AO0"/>
-                            <constraint firstItem="t1d-Ck-3fV" firstAttribute="top" secondItem="Aqt-iT-tnm" secondAttribute="bottom" constant="35" id="fbF-6v-oix"/>
+                            <constraint firstItem="t1d-Ck-3fV" firstAttribute="top" secondItem="Aqt-iT-tnm" secondAttribute="bottom" id="fbF-6v-oix"/>
                             <constraint firstAttribute="trailingMargin" secondItem="zgP-Nh-X7H" secondAttribute="trailing" id="j0p-NN-IJu"/>
                             <constraint firstAttribute="trailing" secondItem="eV8-kY-nut" secondAttribute="trailing" id="kAC-xp-rfL"/>
                             <constraint firstItem="t1d-Ck-3fV" firstAttribute="top" secondItem="zgP-Nh-X7H" secondAttribute="bottom" constant="40" id="zGc-ps-XTK"/>
@@ -776,7 +776,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="distanceFromTopConstraint" destination="fbF-6v-oix" id="82o-Js-p6J"/>
                         <outlet property="itemsTableView" destination="eV8-kY-nut" id="aiY-TR-FCA"/>

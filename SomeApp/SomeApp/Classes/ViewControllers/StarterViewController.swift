@@ -18,7 +18,9 @@ class StarterViewController: UIViewController {
         let mainViewController = MainViewController.instantiate()
         let leftMenuViewController = LeftMenuViewController.instantiate()
         leftMenuViewController.delegate = mainViewController
-        let drawerController = MMDrawerController(center: mainViewController, leftDrawerViewController: leftMenuViewController)
+        let leftMenuViewNavigationController: UINavigationController = UINavigationController(rootViewController: leftMenuViewController)
+        leftMenuViewNavigationController.isNavigationBarHidden = true
+        let drawerController = MMDrawerController(center: mainViewController, leftDrawerViewController: leftMenuViewNavigationController)
         drawerController?.openDrawerGestureModeMask = .all
         drawerController?.closeDrawerGestureModeMask = .all
         drawerController?.title = "Swift Course"
