@@ -71,6 +71,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         setupNotifications(application: application)
 
+        // Another (programmatic) way to determine the window
+        //        window = UIWindow(frame: UIScreen.main.bounds)
+        //        window?.rootViewController = UINavigationController(rootViewController: _)
+        //        window?.makeKeyAndVisible()
+
         return true
     }
 

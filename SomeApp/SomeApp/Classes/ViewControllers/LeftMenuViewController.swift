@@ -14,11 +14,6 @@ protocol LeftMenuViewControllerDelegate: class {
 
 class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: LeftMenuViewControllerDelegate?
-    let distanceFromTopMargin: CGFloat = 20.0
-    lazy var distanceFromTop: CGFloat = {
-        let distanceFromTop = HEIGHT(UINavigationController().navigationBar.frame) + HEIGHT(UIApplication.shared.statusBarFrame) + self.distanceFromTopMargin
-        return distanceFromTop
-    }()
 
     @IBOutlet weak var distanceFromTopConstraint: NSLayoutConstraint!
     let menuItems =
@@ -47,18 +42,6 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
 
         self.itemsTableView.alwaysBounceVertical = false
         self.itemsTableView.separatorStyle = .none
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-
-        self.distanceFromTopConstraint.constant = distanceFromTop
-    }
-
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-
-        distanceFromTop = self.distanceFromTopMargin
     }
 
     // MARK: - UITableViewDataSource
