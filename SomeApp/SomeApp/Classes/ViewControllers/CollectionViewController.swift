@@ -101,13 +101,13 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 //        collectionView.invalidateLayout() performBatch...
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         let rowsCount = CGFloat(NumberOfColumns)
         let dimentions = collectionView.frame.height / rowsCount - (rowsCount * TileMargin * 0.8)
         return CGSize(width: dimentions, height: dimentions) // collectionView.frame.height * 0.9
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(TileMargin, TileMargin, TileMargin, TileMargin)
     }
 
@@ -139,7 +139,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     deinit {
         📘("dead")
     }
-
 }
 
 class ProgrammaticallyGameCell: GameCell {
