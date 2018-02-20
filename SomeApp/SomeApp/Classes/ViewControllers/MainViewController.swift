@@ -12,6 +12,8 @@ import UIKit
 class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
     static let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
 
+    //lazy var utilsObjC: UtilsObjC = UtilsObjC()
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
@@ -37,6 +39,11 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityDidChange), name: Notification.Name.ReachabilityDidChange, object: nil)
+
+        // Just for Objective-C demonstrations
+        let utilsObjC = UtilsObjC()
+        //📘(utilsObjC.supportedDimensions)
+        //utilsObjC.alert(withTitle: "presented", andMessage: "some message", in: self)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

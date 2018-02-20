@@ -77,7 +77,10 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     func configureAnimations() {
         animatedGifBoxView.delegate = self
 
-        animatedOutTransitionView.onClick { [weak self] (tapGestureRecognizer) in
+        weak var weakSelf: AnimationsViewController? = self
+        animatedOutTransitionView.onClick { (tapGestureRecognizer) in
+            guard let strongSelf = weakSelf else { return }
+
             let transition = CATransition()
             transition.startProgress = 0
             transition.endProgress = 1
@@ -86,12 +89,12 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
             transition.duration = 0.5
             
             // Add the transition animation to both layers
-            self?.animatedOutTransitionView.layer.add(transition, forKey: "transition")
-            self?.animatedInTransitionView.layer.add(transition, forKey: "transition")
+            strongSelf.animatedOutTransitionView.layer.add(transition, forKey: "transition")
+            strongSelf.animatedInTransitionView.layer.add(transition, forKey: "transition")
             
             // Finally, change the visibility of the layers.
-            self?.animatedOutTransitionView.toggleVisibility()
-            self?.animatedInTransitionView.toggleVisibility()
+            strongSelf.animatedOutTransitionView.toggleVisibility()
+            strongSelf.animatedInTransitionView.toggleVisibility()
         }
 
         animatedOutTransitionView.onLongPress({ [weak self] (longPressGestureRecognizer) in

@@ -70,6 +70,8 @@
 		75F1AD851C6F42BC005D7FCA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD841C6F42BC005D7FCA /* MainViewController.swift */; };
 		75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD8A1C6F780F005D7FCA /* Constants.swift */; };
 		75F1AD8D1C6F7BB4005D7FCA /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD8C1C6F7BB4005D7FCA /* DataViewController.swift */; };
+		ACC55651203BEEFD001D786A /* GlobalClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC55650203BEEFD001D786A /* GlobalClass.swift */; };
+		ACD10A0520386C97004FE23A /* UtilsObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD10A0320386C97004FE23A /* UtilsObjC.m */; };
 		F2635CEEACE47C60F2C38826 /* Pods_SomeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26AEDA9A4F96F89E2F757882 /* Pods_SomeApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -193,6 +195,9 @@
 		75F1AD861C6F4B8A005D7FCA /* SomeApp-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SomeApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		75F1AD8A1C6F780F005D7FCA /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		75F1AD8C1C6F7BB4005D7FCA /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
+		ACC55650203BEEFD001D786A /* GlobalClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalClass.swift; sourceTree = "<group>"; };
+		ACD10A0320386C97004FE23A /* UtilsObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilsObjC.m; sourceTree = "<group>"; };
+		ACD10A0420386C97004FE23A /* UtilsObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilsObjC.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -394,6 +399,7 @@
 				75F1AD781C6E8CBC005D7FCA /* Utilities */,
 				7570D2D91C600E6A00EA34D3 /* ViewControllers */,
 				7570D2D81C600E6A00EA34D3 /* AppDelegate.swift */,
+				ACC55650203BEEFD001D786A /* GlobalClass.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -433,6 +439,8 @@
 		75F1AD781C6E8CBC005D7FCA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				ACD10A0420386C97004FE23A /* UtilsObjC.h */,
+				ACD10A0320386C97004FE23A /* UtilsObjC.m */,
 				75817AE71F44AC480030450C /* Sharing */,
 				75817AE41F44AC3C0030450C /* Comminucation */,
 				75F1AD791C6E8CBC005D7FCA /* PerrFuncs.swift */,
@@ -743,6 +751,7 @@
 				7515E36D2009893400C9DEDD /* Throttler.swift in Sources */,
 				757C8487200841B1009C79F5 /* FirebaseHelper.swift in Sources */,
 				752583121C9A835500E36E5E /* DataManager.swift in Sources */,
+				ACC55651203BEEFD001D786A /* GlobalClass.swift in Sources */,
 				7566A1841C8CD4D60070D9D9 /* NotificationsViewController.swift in Sources */,
 				75B87D0D1F577204000EE743 /* GameNavigationController.swift in Sources */,
 				75F1AD831C6F4011005D7FCA /* OperatorsViewController.swift in Sources */,
@@ -767,6 +776,7 @@
 				75A5757D1CA4F5A500BAE35B /* Synchronizer.swift in Sources */,
 				75F1AD8B1C6F780F005D7FCA /* Constants.swift in Sources */,
 				757C848920084827009C79F5 /* CloudUser.swift in Sources */,
+				ACD10A0520386C97004FE23A /* UtilsObjC.m in Sources */,
 				755DB9681CB3029A0092BBC7 /* ImagesAndMotionViewController.swift in Sources */,
 				7572206C1E98FBB4000E2B62 /* Game.swift in Sources */,
 				75DCE39A1C76381A00FF6F18 /* ToastMessage.swift in Sources */,

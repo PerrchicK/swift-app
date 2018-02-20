@@ -11,7 +11,7 @@ import MapKit
 
 class SomeAnnotationView: UIView {
     @IBOutlet weak var annotationIconLabel: UILabel!
-    let possibleIcons: [String] = ["😏", "😍", "😜", "😟"]
+    lazy var possibleIcons: [String] = ["😏", "😍", "😜", "😟"]
 
     override func awakeFromNib() {
         annotationIconLabel.text = generateIcon()
