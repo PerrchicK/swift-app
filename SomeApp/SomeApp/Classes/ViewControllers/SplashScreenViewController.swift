@@ -18,13 +18,34 @@ class SplashScreenViewController : UIViewController {
 
         📘("Segue 👉 \(segue.identifier!)")
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         swiftLogo.show(show: false)
+        foo()
+        fighters()
     }
-    
+
+    func foo() {
+        defer {
+            defer {
+                print(1)
+            }
+            print(2)
+        }
+
+        print("foo method is running")
+        
+        defer {
+            print(3)
+        }
+    }
+
+    func fighters() {
+        print("fighters method is running")
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 

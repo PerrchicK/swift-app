@@ -15,7 +15,7 @@ import CoreData
 
  In ObjC we had to rename one of these classes.
  */
-class User: NSManagedObject {
+class AppUser: NSManagedObject {
     @NSManaged var email: String!
     @NSManaged var firstName: String!
     @NSManaged var lastName: String!

@@ -31,7 +31,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
-    fileprivate var users:[SomeApp.User]!
+    fileprivate var users:[SomeApp.AppUser]!
     fileprivate lazy var syncedUserDefaults: SyncedUserDefaults = DataManager.generateSyncedUserDefaults()
 
     fileprivate lazy var firebaseKeys: [String] = {

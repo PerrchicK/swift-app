@@ -146,7 +146,15 @@ open class PerrFuncs {
         let randdomNumber: UInt32 = arc4random() % UInt32(_to - _from)
         return Int(randdomNumber) + _from
     }
-    
+
+    static func doesFileExistAtUrl(url: URL) -> Bool {
+        return doesFileExistAtPath(path: url.absoluteString)
+    }
+
+    static func doesFileExistAtPath(path: String) -> Bool {
+        return FileManager.default.fileExists(atPath: path.replacingOccurrences(of: "file://", with: ""))
+    }
+
     @discardableResult
     static func postRequest(urlString: String, jsonDictionary: [String: Any], httpHeaders: [String:String]? = nil, completion: @escaping ([String: Any]?) -> ()) -> URLSessionDataTask? {
 
@@ -1058,5 +1066,19 @@ extension DictionaryConvertible {
         guard let firebaseDictionary = _firebaseDictionary else { return [:] }
         
         return firebaseDictionary
+    }
+}
+
+extension NSError {
+    static func create(errorDomain: String? = Bundle.main.bundleIdentifier, errorCode: Int, description: String, failureReason: String, underlyingError: Error?) -> NSError {
+        var dict = [String: Any]()
+        dict[NSLocalizedDescriptionKey] = description
+        dict[NSLocalizedFailureReasonErrorKey] = failureReason
+
+        if let underlyingError = underlyingError {
+            dict[NSUnderlyingErrorKey] = underlyingError
+        }
+
+        return NSError(domain: errorDomain ?? "missing-domain", code: errorCode, userInfo: dict)
     }
 }
