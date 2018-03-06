@@ -397,6 +397,7 @@
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="draggedLabel" destination="e78-Tt-SD5" id="Bx7-oV-myU"/>
                         <outlet property="valueTextField" destination="REn-KO-6xX" id="gch-Cr-bS9"/>
                     </connections>
                 </viewController>
