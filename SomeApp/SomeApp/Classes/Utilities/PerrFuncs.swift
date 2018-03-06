@@ -210,7 +210,7 @@ open class PerrFuncs {
 
 extension String {
     func length() -> Int {
-        return self.characters.count
+        return self.count
     }
 
     func toEmoji() -> String {
@@ -372,6 +372,17 @@ infix operator ~ : Additive // https://developer.apple.com/documentation/swift/o
 /// - returns: A random number between `left` and `right`.
 func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift-operators/
     return PerrFuncs.random(from: left, to: right)
+}
+
+/// Inclusively raffles a number from `left` hand operand value to the `right` hand operand value.
+///
+/// For example: the expression `{ let random: Int =  -3 ~ 5 }` will declare a random number between -3 and 5.
+/// - parameter left:   The value represents `from`.
+/// - parameter right:  The value represents `to`.
+///
+/// - returns: A random number between `left` and `right`.
+func - (left: CGPoint, right: CGPoint) -> CGPoint { // Reference: http://nshipster.com/swift-operators/
+    return CGPoint(x: left.x - right.x, y: left.y - right.y)
 }
 
 extension NSObject { // try extending 'AnyObject'...
@@ -754,22 +765,12 @@ extension UIView {
     @discardableResult
     func onDrag(predicateClosure: PredicateClosure<UIView>? = nil, onDragClosure: @escaping CallbackClosure<CGPoint>) -> OnPanListener {
         return onPan { panGestureRecognizer in
-            guard let draggedView = panGestureRecognizer.view, let superview = draggedView.superview, (predicateClosure?(self)).or(true), let onPanListener = panGestureRecognizer as? OnPanListener else { return }
-            let locationOfTouch = panGestureRecognizer.location(in: superview)
+            guard let draggedView = panGestureRecognizer.view, (predicateClosure?(self)).or(true), let onPanListener = panGestureRecognizer as? OnPanListener else { return }
 
-            switch panGestureRecognizer.state {
-            case .cancelled: fallthrough
-            case .ended:
-                onPanListener.additionalInfo = nil
-            case .began:
-                onPanListener.additionalInfo = CGPoint(x: draggedView.center.x - locationOfTouch.x, y: draggedView.center.y - locationOfTouch.y) as AnyObject
-                fallthrough
-            default:
-                if let offset = onPanListener.additionalInfo as? CGPoint {
-                    draggedView.center = CGPoint(x: locationOfTouch.x + (offset.x), y: locationOfTouch.y + (offset.y))
-                }
+            if let pannedPoint = onPanListener.pannedPoint {
+                draggedView.center = pannedPoint
             }
-            
+
             onDragClosure(draggedView.center)
         }
     }
@@ -787,9 +788,36 @@ extension UIView {
     }
     
     @objc func onPanRecognized(_ panGestureRecognizer: UIPanGestureRecognizer) {
-        guard let panGestureRecognizer = panGestureRecognizer as? OnPanListener else { return }
+        guard let onPanListener = panGestureRecognizer as? OnPanListener,
+            let draggedView = panGestureRecognizer.view,
+            let superview = draggedView.superview else { return }
+
+        let locationOfTouch = panGestureRecognizer.location(in: superview)
         
-        panGestureRecognizer.closure(panGestureRecognizer)
+        switch panGestureRecognizer.state {
+        case .cancelled: fallthrough
+        case .ended:
+            onPanListener.startPoint = nil
+            onPanListener.pannedPoint = nil
+            onPanListener.offsetPoint = nil
+            onPanListener.relativeStartPoint = nil
+        case .began:
+            onPanListener.relativeStartPoint = locationOfTouch
+            onPanListener.startPoint = draggedView.center - locationOfTouch
+            fallthrough
+        default:
+            if let startPoint = onPanListener.startPoint {
+                let pannedPoint = CGPoint(x: locationOfTouch.x + (startPoint.x), y: locationOfTouch.y + (startPoint.y))
+                onPanListener.pannedPoint = pannedPoint
+                onPanListener.offsetPoint = locationOfTouch - startPoint
+            }
+
+            if let relativeStartPoint = onPanListener.relativeStartPoint {
+                onPanListener.offsetPoint = locationOfTouch - relativeStartPoint
+            }
+        }
+
+        onPanListener.closure(panGestureRecognizer)
     }
 
     @discardableResult
@@ -932,7 +960,10 @@ extension Array {
 typealias OnPanRecognizedClosure = (_ panGestureRecognizer: UIPanGestureRecognizer) -> ()
 class OnPanListener: UIPanGestureRecognizer, UIGestureRecognizerDelegate {
     private(set) var closure: OnPanRecognizedClosure
-    var additionalInfo: AnyObject?
+    var startPoint: CGPoint?
+    var relativeStartPoint: CGPoint?
+    var offsetPoint: CGPoint?
+    var pannedPoint: CGPoint?
 
     init(target: Any?, action: Selector?, closure: @escaping OnPanRecognizedClosure) {
         self.closure = closure

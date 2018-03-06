@@ -16,8 +16,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         case coreData
     }
 
-    @IBOutlet weak var firebaseStateTableView: UITableView!
-    var presentedAlert: UIAlertController?
+    private var presentedAlert: UIAlertController?
 
     @IBOutlet weak var dbStateTableView: UITableView!
 

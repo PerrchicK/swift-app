@@ -12,7 +12,8 @@ import UIKit
 class OperatorsViewController: UIViewController {
     
     @IBOutlet weak var valueTextField: UITextField!
-    
+    @IBOutlet weak var draggedLabel: UILabel!
+
     // MARK: - Lifcycle
     
     override func viewDidLoad() {
@@ -23,6 +24,16 @@ class OperatorsViewController: UIViewController {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(OperatorsViewController.dismiss(_:))))
 
         valueTextField.placeholder = "value that a String object will love"
+        
+        draggedLabel.onDrag(onDragClosure: { (point) in
+            📘(point)
+        })
+
+//        draggedLabel.onPan({ (recognizer) in
+//            if let offsetPoint = (recognizer as? OnPanListener)?.offsetPoint {
+//                📘(offsetPoint)
+//            }
+//        })
     }
 
     override func viewWillDisappear(_ animated: Bool) {

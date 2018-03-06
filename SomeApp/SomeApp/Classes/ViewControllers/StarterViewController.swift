@@ -54,6 +54,7 @@ class StarterViewController: UIViewController {
         // Will run only once
         let navigationController = UINavigationController(rootViewController: drawer)
         navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .done, target: self, action: #selector(openLeftMenu))
+        navigationController.modalTransitionStyle = .crossDissolve
         present(navigationController, animated: true, completion: nil)
 
         //📘(" ... ")

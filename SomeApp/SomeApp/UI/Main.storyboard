@@ -373,6 +373,12 @@
                                     <action selector="setButtonPressed:" destination="POn-e5-96I" eventType="touchUpInside" id="9Xl-c0-6w4"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⭐️" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e78-Tt-SD5">
+                                <rect key="frame" x="148.5" y="242" width="23" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -383,8 +389,10 @@
                             <constraint firstAttribute="trailingMargin" secondItem="REn-KO-6xX" secondAttribute="trailing" constant="-4" id="L7b-aV-4TU"/>
                             <constraint firstItem="REn-KO-6xX" firstAttribute="leading" secondItem="D0R-MC-43c" secondAttribute="leadingMargin" constant="-4" id="Nia-qg-TrV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6Rk-ZM-qQf" secondAttribute="trailing" constant="-4" id="S2i-5a-Gka"/>
+                            <constraint firstItem="e78-Tt-SD5" firstAttribute="centerY" secondItem="D0R-MC-43c" secondAttribute="centerY" id="eqf-06-K1P"/>
                             <constraint firstItem="6Rk-ZM-qQf" firstAttribute="leading" secondItem="D0R-MC-43c" secondAttribute="leadingMargin" constant="-4" id="fFE-Yk-ogR"/>
                             <constraint firstItem="w4V-jP-CqK" firstAttribute="leading" secondItem="D0R-MC-43c" secondAttribute="leadingMargin" constant="-4" id="fmg-hP-9EL"/>
+                            <constraint firstItem="e78-Tt-SD5" firstAttribute="centerX" secondItem="D0R-MC-43c" secondAttribute="centerX" id="xXA-KD-ZEt"/>
                         </constraints>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
