@@ -69,9 +69,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let reuseIdentifier = XibGameCell.REUSE_IDENTIFIER
+//        let reuseIdentifier = XibGameCell.REUSE_IDENTIFIER
 //        let reuseIdentifier = ProgrammaticallyGameCell.REUSE_IDENTIFIER
-//        let reuseIdentifier = StoryboardGameCell.REUSE_IDENTIFIER
+        let reuseIdentifier = StoryboardGameCell.REUSE_IDENTIFIER
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! GameCell
