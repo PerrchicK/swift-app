@@ -59,7 +59,7 @@ class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegat
 
         view.onSwipe(direction: .down) { [weak self] (swipeGestureRecognizer) in
             self?.dismiss(animated: true, completion: { 
-                ToastMessage.show(messageText: "game dismissed")
+                ToastMessage.show(messageText: "map screen dismissed")
             })
         }
     }

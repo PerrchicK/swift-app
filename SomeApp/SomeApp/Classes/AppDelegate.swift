@@ -12,8 +12,6 @@ import Firebase
 import FirebaseMessaging
 import UserNotifications
 
-//import Exception
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 

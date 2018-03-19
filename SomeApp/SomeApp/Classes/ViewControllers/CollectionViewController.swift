@@ -11,7 +11,6 @@ import UIKit
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, GameDelegate {
 
-    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
     var playerNameTextField: UITextField?
     
@@ -22,7 +21,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     static let PLAYER_NAME = "user"
     lazy var game: Game = {
         let game = TicTacToeGame()
-//        let game = WhackGame(playerName: CollectionViewController.PLAYER_NAME)
         game.delegate = self
 
         return game
@@ -34,8 +32,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
 
         //https://randexdev.com/2014/08/uicollectionviewcell/
-        //collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
+        collectionView.register(ProgrammaticallyGameCell.self, forCellWithReuseIdentifier: ProgrammaticallyGameCell.REUSE_IDENTIFIER)
         collectionView.register(UINib(nibName: PerrFuncs.className(XibGameCell.self), bundle: nil), forCellWithReuseIdentifier: XibGameCell.REUSE_IDENTIFIER)
+        // No need to to this: https://stackoverflow.com/a/29101490/2735029
+        //collectionView.register(StoryboardGameCell.self, forCellWithReuseIdentifier: StoryboardGameCell.REUSE_IDENTIFIER)
 
         collectionView.isScrollEnabled = false
     }
@@ -69,8 +69,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
+        let reuseIdentifier = XibGameCell.REUSE_IDENTIFIER
+//        let reuseIdentifier = ProgrammaticallyGameCell.REUSE_IDENTIFIER
+//        let reuseIdentifier = StoryboardGameCell.REUSE_IDENTIFIER
+
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: XibGameCell.REUSE_IDENTIFIER, for: indexPath) as! GameCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! GameCell
 
         cell.configCell()
 
@@ -79,6 +83,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         collectionView.backgroundColor = UIColor.clear
+        //return section == 1 ? NumberOfColumns - 1 : NumberOfColumns
         return NumberOfColumns
     }
 
@@ -141,6 +146,37 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
 }
 
+//MARK: - GameCell super class
+
+class GameCell: UICollectionViewCell {
+    
+    var playerMarkLabel: UILabel!
+    
+    override func awakeFromNib() {
+        //📘("Created a \(className(self.classForCoder)) object")
+    }
+
+    func configCell() {
+        self.backgroundColor = UIColor.red
+        self.playerMarkLabel.text = ""
+    }
+    
+    func placeMark(_ mark: String) {
+        if playerMarkLabel.text?.length() ?? 0 > 0 {
+            playerMarkLabel.text = ""
+            //            playerMarkLabel.animateZoom(zoomIn: false, duration: 0.4, completion: { _ in
+            //                self.playerMarkLabel.text = ""
+            //                self.playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            //            })
+        } else {
+            //playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            playerMarkLabel.text = mark
+        }
+    }
+}
+
+//MARK: - GameCell subclasses
+
 class ProgrammaticallyGameCell: GameCell {
     static let REUSE_IDENTIFIER = PerrFuncs.className(ProgrammaticallyGameCell.self)
 
@@ -169,6 +205,10 @@ class StoryboardGameCell: GameCell {
     
     @IBOutlet weak var _playerMarkLabel: UILabel!
 
+    override func awakeFromNib() {
+        📘("Created a \(PerrFuncs.className(StoryboardGameCell.self)) object")
+    }
+
     override var playerMarkLabel: UILabel! {
         get {
             return _playerMarkLabel
@@ -190,33 +230,6 @@ class XibGameCell: GameCell {
         }
         set {
             _playerMarkLabel = newValue
-        }
-    }
-}
-
-class GameCell: UICollectionViewCell {
-
-    var playerMarkLabel: UILabel!
-
-    override func awakeFromNib() {
-        //📘("Created a \(className(self.classForCoder)) object")
-    }
-    
-    func configCell() {
-        self.backgroundColor = UIColor.red
-        self.playerMarkLabel.text = ""
-    }
-
-    func placeMark(_ mark: String) {
-        if playerMarkLabel.text?.length() ?? 0 > 0 {
-            playerMarkLabel.text = ""
-//            playerMarkLabel.animateZoom(zoomIn: false, duration: 0.4, completion: { _ in
-//                self.playerMarkLabel.text = ""
-//                self.playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-//            })
-        } else {
-            //playerMarkLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-            playerMarkLabel.text = mark
         }
     }
 }

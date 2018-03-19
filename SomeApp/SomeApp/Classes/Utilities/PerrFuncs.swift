@@ -421,6 +421,17 @@ extension NSObject { // try extending 'AnyObject'...
 }
 
 extension UIViewController {
+    class func instantiate(storyboardName: String? = nil) -> Self {
+        return instantiateFromStoryboardHelper(storyboardName)
+    }
+    
+    fileprivate class func instantiateFromStoryboardHelper<T: UIViewController>(_ storyboardName: String?) -> T {
+        let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
+        let identifier = NSStringFromClass(T.self).components(separatedBy: ".").last!
+        let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! T
+        return controller
+    }
+
     func mostTopViewController() -> UIViewController {
         guard let topController = self.presentedViewController else { return self }
 
@@ -484,20 +495,6 @@ extension UIAlertController {
         UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: dismissButtonTitle, style: UIAlertActionStyle.cancel, handler: { (alertAction) -> Void in
             onGone?()
         })).show()
-    }
-}
-
-extension UIViewController {
-    
-    class func instantiate(storyboardName: String? = nil) -> Self {
-        return instantiateFromStoryboardHelper(storyboardName)
-    }
-    
-    fileprivate class func instantiateFromStoryboardHelper<T: UIViewController>(_ storyboardName: String?) -> T {
-        let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
-        let identifier = NSStringFromClass(T.self).components(separatedBy: ".").last!
-        let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! T
-        return controller
     }
 }
 
@@ -763,7 +760,7 @@ extension UIView {
     }
 
     @discardableResult
-    func onDrag(predicateClosure: PredicateClosure<UIView>? = nil, onDragClosure: @escaping CallbackClosure<CGPoint>) -> OnPanListener {
+    func onDrag(predicateClosure: PredicateClosure<UIView>? = nil, onDragClosure: @escaping CallbackClosure<OnPanListener>) -> OnPanListener {
         return onPan { panGestureRecognizer in
             guard let draggedView = panGestureRecognizer.view, (predicateClosure?(self)).or(true), let onPanListener = panGestureRecognizer as? OnPanListener else { return }
 
@@ -771,7 +768,7 @@ extension UIView {
                 draggedView.center = pannedPoint
             }
 
-            onDragClosure(draggedView.center)
+            onDragClosure(onPanListener)
         }
     }
 
@@ -1044,6 +1041,21 @@ extension Optional {
     // Ha, that was the missing part from his twit: https://gist.github.com/PaulTaykalo/2ebfe0d7c1ca9fff1938506e910f738c#file-optionalchaining-swift-L13
     func `or`(_ value: Wrapped) -> Wrapped {
         return self ?? value
+    }
+}
+
+extension CGRect {
+    func withWidth(width _width: CGFloat) -> CGRect {
+        return CGRect(x: origin.x, y: origin.y, width: _width, height: size.height)
+    }
+    func withHeight(height _height: CGFloat) -> CGRect {
+        return CGRect(x: origin.x, y: origin.y, width: width, height: _height)
+    }
+    func withX(x _x: CGFloat) -> CGRect {
+        return CGRect(x: _x, y: origin.y, width: width, height: height)
+    }
+    func withY(y _y: CGFloat) -> CGRect {
+        return CGRect(x: origin.x, y: _y, width: width, height: height)
     }
 }
 

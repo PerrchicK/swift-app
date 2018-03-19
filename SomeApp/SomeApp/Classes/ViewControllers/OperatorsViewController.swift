@@ -13,8 +13,9 @@ class OperatorsViewController: UIViewController {
     
     @IBOutlet weak var valueTextField: UITextField!
     @IBOutlet weak var draggedLabel: UILabel!
+    @IBOutlet weak var positionLabel: UILabel!
 
-    // MARK: - Lifcycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,17 +24,36 @@ class OperatorsViewController: UIViewController {
         self.title = "Operators Overloading" // & 'Associated ObjC Objects'
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(OperatorsViewController.dismiss(_:))))
 
-        valueTextField.placeholder = "value that a String object will love"
-        
-        draggedLabel.onDrag(onDragClosure: { (point) in
-            📘(point)
+        valueTextField.placeholder = "value that a String object will hug"
+
+        draggedLabel.onDrag(onDragClosure: { [weak self] (onPanListener) in
+            if let offsetPoint = onPanListener.offsetPoint {
+                📘("offsetPoint: \(offsetPoint)")
+                self?.positionLabel.text = "\(offsetPoint)"
+            }
+            if let pannedPoint = onPanListener.pannedPoint {
+                📘("pannedPoint: \(pannedPoint)")
+            }
         })
 
-//        draggedLabel.onPan({ (recognizer) in
-//            if let offsetPoint = (recognizer as? OnPanListener)?.offsetPoint {
-//                📘(offsetPoint)
+        positionLabel.text = ""
+
+//        draggedLabel.onPan({ (gestureRecognizer) in
+//            guard let onPanListener = gestureRecognizer as? OnPanListener else { return }
+//
+//            if let offsetPoint = onPanListener.offsetPoint {
+//                📘("offsetPoint: \(offsetPoint)")
+//            }
+//            if let pannedPoint = onPanListener.pannedPoint {
+//                📘("pannedPoint: \(pannedPoint)")
 //            }
 //        })
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        draggedLabel.center = view.center
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -60,7 +80,7 @@ class OperatorsViewController: UIViewController {
         defer {
             let isThisLove = huggingResult ? "❤️" : "💔"
             
-            UIAlertController.alert(title: "love result", message: isThisLove)
+            UIAlertController.alert(title: "hugging result", message: isThisLove)
             
             valueTextField.text = ""
         }
@@ -70,7 +90,7 @@ class OperatorsViewController: UIViewController {
         valueTextField.resignFirstResponder()
 
         if let beloved = valueTextField.😍() as? String {
-            UIAlertController.alert(title: "beloved string", message: beloved)
+            UIAlertController.alert(title: "hugged string", message: beloved)
         }
     }
     
