@@ -78,14 +78,6 @@ open class PerrFuncs: NSObject {
         }
     }
     
-    class func shareImage(_ sharedImage: UIImage, completionClosure: @escaping UIActivityViewControllerCompletionWithItemsHandler) {
-        let activityViewController = UIActivityViewController(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
-        activityViewController.completionWithItemsHandler = completionClosure
-        activityViewController.excludedActivityTypes = [UIActivityType.airDrop]
-        
-        UIApplication.mostTopViewController()?.present(activityViewController, animated: true, completion: nil)
-    }
-    
     class func fetchAndPresentImage(_ imageUrl: String?) {
         guard let imageUrl = imageUrl, imageUrl.length() > 0,
             let app = UIApplication.shared.delegate as? AppDelegate,

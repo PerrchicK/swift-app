@@ -1,5 +1,5 @@
 //
-//  CollectionContainerViewController.swift
+//  CollectionViewController.swift
 //  SomeApp
 //
 //  Created by Perry on 2/21/16.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CollectionContainerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     

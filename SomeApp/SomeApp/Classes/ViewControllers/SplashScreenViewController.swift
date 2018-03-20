@@ -39,7 +39,7 @@ class SplashScreenViewController : UIViewController {
                 
                 
                 runBlockAfterDelay(afterDelay: 1.0, block: { () -> Void in
-                    strongSelf.present(CollectionContainerViewController.instantiate(), animated: true, completion: nil)
+                    strongSelf.present(CollectionViewController.instantiate(), animated: true, completion: nil)
                 })
             }
         }
