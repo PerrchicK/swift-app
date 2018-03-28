@@ -400,7 +400,7 @@ extension NSObject { // try extending 'AnyObject'...
     @discardableResult
     func 😘(huggedObject: Any) -> Bool {
         //infix operator 😘 { associativity left precedence 140 }
-        📘("hugging \(huggedObject)")
+        📘("\(self) is hugging \(huggedObject)")
 
         objc_setAssociatedObject(self, &SompApplicationHuggedProperty, huggedObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
@@ -804,8 +804,7 @@ extension UIView {
             fallthrough
         default:
             if let startPoint = onPanListener.startPoint {
-                let pannedPoint = CGPoint(x: locationOfTouch.x + (startPoint.x), y: locationOfTouch.y + (startPoint.y))
-                onPanListener.pannedPoint = pannedPoint
+                onPanListener.pannedPoint = CGPoint(x: locationOfTouch.x + (startPoint.x), y: locationOfTouch.y + (startPoint.y))
                 onPanListener.offsetPoint = locationOfTouch - startPoint
             }
 

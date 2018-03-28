@@ -29,7 +29,7 @@ class FirebaseHelper {
             if isActivated {
                 if Auth.auth().currentUser == nil {
                     Auth.auth().signInAnonymously { (anAnonymouslyUser, error) in
-                        📘("\(anAnonymouslyUser) logged in with error: \(error)")
+                        📘("\(String(describing: anAnonymouslyUser)) logged in with error: \(String(describing: error))")
                         completionCallback(anAnonymouslyUser)
                     }
                 } else {

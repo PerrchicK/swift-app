@@ -48,6 +48,15 @@ class DataManager {
 
         return false
     }
+
+    /// This method blocks the current thread and downloads the image from this URL string in case the URL is valid
+    static func downloadImage(fromUrl imageUrlString: String) -> UIImage? {
+        if let imageUrl = URL(string: imageUrlString), let imageData = try? Data(contentsOf: imageUrl) {
+            return UIImage(data: imageData)
+        }
+        
+        return nil
+    }
     
     static func loadImage(fromFile filename: String) -> UIImage? {
         if let data = try? Data(contentsOf: URL(fileURLWithPath: (applicationLibraryPath as String) + "/" + filename)) {

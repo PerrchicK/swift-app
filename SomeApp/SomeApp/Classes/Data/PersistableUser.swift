@@ -42,4 +42,8 @@ class PersistableUser: NSObject, NSCoding {
     override var description: String {
         return "first name: \(firstName), email: \(email)"
     }
+    
+    deinit {
+        📘("\(self) is dead 💀")
+    }
 }

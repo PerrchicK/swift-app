@@ -12,14 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="XibGameCell" customModule="SomeApp" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="XibGameCell" id="IEJ-7A-SbQ" customClass="XibGameCell" customModule="SomeApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="213" height="110"/>
+            <rect key="frame" x="0.0" y="0.0" width="253" height="95"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="213" height="110"/>
+                <rect key="frame" x="0.0" y="0.0" width="253" height="95"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" X" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hMf-6Q-SNf">
-                        <rect key="frame" x="0.0" y="0.0" width="213" height="110"/>
+                        <rect key="frame" x="0.0" y="0.0" width="253" height="95"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -32,11 +32,11 @@
                 <constraint firstAttribute="bottom" secondItem="hMf-6Q-SNf" secondAttribute="bottom" id="SNm-wr-3eV"/>
                 <constraint firstItem="hMf-6Q-SNf" firstAttribute="leading" secondItem="IEJ-7A-SbQ" secondAttribute="leading" id="n3M-kD-x1z"/>
             </constraints>
-            <size key="customSize" width="213" height="110"/>
+            <size key="customSize" width="253" height="95"/>
             <connections>
                 <outlet property="_playerMarkLabel" destination="hMf-6Q-SNf" id="vtO-k0-Ja8"/>
             </connections>
-            <point key="canvasLocation" x="-215.5" y="255"/>
+            <point key="canvasLocation" x="-182" y="214"/>
         </collectionViewCell>
     </objects>
 </document>

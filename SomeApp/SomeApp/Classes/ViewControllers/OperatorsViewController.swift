@@ -25,13 +25,40 @@ class OperatorsViewController: UIViewController {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(OperatorsViewController.dismiss(_:))))
 
         valueTextField.placeholder = "value that a String object will hug"
+        var pannedPoint: CGPoint? = nil
+        var offsetPoint: CGPoint? = nil
+        var startPoint: CGPoint? = nil
+        var relativeStartPoint: CGPoint? = nil
 
         draggedLabel.onDrag(onDragClosure: { [weak self] (onPanListener) in
-            if let offsetPoint = onPanListener.offsetPoint {
+            guard let draggedView = onPanListener.view,
+                let superview = draggedView.superview else { return }
+            
+            let locationOfTouch = onPanListener.location(in: superview)
+
+            switch onPanListener.state {
+            case .cancelled: fallthrough
+            case .ended: break
+            case .began:
+                relativeStartPoint = locationOfTouch
+                startPoint = draggedView.center - locationOfTouch
+                fallthrough
+            default:
+                if let startPoint = startPoint {
+                    pannedPoint = CGPoint(x: locationOfTouch.x + (startPoint.x), y: locationOfTouch.y + (startPoint.y))
+                    offsetPoint = locationOfTouch - startPoint // CGPoint - CGPoint
+                }
+                
+                if let relativeStartPoint = relativeStartPoint {
+                    offsetPoint = locationOfTouch - relativeStartPoint
+                }
+            }
+
+            if let offsetPoint = offsetPoint {
                 📘("offsetPoint: \(offsetPoint)")
                 self?.positionLabel.text = "\(offsetPoint)"
             }
-            if let pannedPoint = onPanListener.pannedPoint {
+            if let pannedPoint = pannedPoint {
                 📘("pannedPoint: \(pannedPoint)")
             }
         })
@@ -72,7 +99,9 @@ class OperatorsViewController: UIViewController {
 
         var huggingResult: Bool
         if let text = valueTextField.text {
+            let p: PersistableUser = PersistableUser(email: text, firstName: text, lastName: text, nickname: text)
             huggingResult = valueTextField.😘(huggedObject: text)
+            valueTextField.😘(huggedObject: p)
         } else {
             huggingResult = false
         }
@@ -95,7 +124,7 @@ class OperatorsViewController: UIViewController {
     }
     
     @objc func dismiss(_ tapGestureRecognizer: UIGestureRecognizer) {
-        📘("Dismissing keyboard due to \(tapGestureRecognizer)")
+        📘("Dismissing keyboard due to \(tapGestureRecognizer.pointerAddress)")
         valueTextField.resignFirstResponder()
     }
 }

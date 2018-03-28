@@ -615,20 +615,20 @@
                                 <rect key="frame" x="36" y="233" width="248" height="2"/>
                             </progressView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="KQn-md-5ea">
-                                <rect key="frame" x="36" y="443" width="20" height="20"/>
+                                <rect key="frame" x="36" y="513" width="20" height="20"/>
                             </activityIndicatorView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sdx-D0-AID">
-                                <rect key="frame" x="264" y="443" width="20" height="20"/>
+                                <rect key="frame" x="264" y="513" width="20" height="20"/>
                             </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q2y-OV-T1q">
-                                <rect key="frame" x="112" y="438" width="97" height="30"/>
-                                <state key="normal" title="start progress"/>
+                                <rect key="frame" x="64.5" y="508" width="192" height="30"/>
+                                <state key="normal" title="start synchronized progress"/>
                                 <connections>
                                     <action selector="btnStartProgressPressed:" destination="Oj0-pd-GcM" eventType="touchUpInside" id="Sf4-Bz-e2J"/>
                                 </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="4OV-Ye-X71">
-                                <rect key="frame" x="150" y="443" width="20" height="20"/>
+                                <rect key="frame" x="150" y="513" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -653,7 +653,7 @@
                             <constraint firstItem="Fah-nx-inj" firstAttribute="height" secondItem="w64-ye-J6J" secondAttribute="height" id="iT9-7M-i3H"/>
                             <constraint firstItem="Ewc-OT-EGv" firstAttribute="top" secondItem="AlM-TT-4TL" secondAttribute="bottom" constant="10" id="mlU-5g-vWB"/>
                             <constraint firstItem="KQn-md-5ea" firstAttribute="leading" secondItem="3mm-np-lyk" secondAttribute="leading" id="nPF-qC-JJK"/>
-                            <constraint firstItem="ATp-LM-0IH" firstAttribute="top" secondItem="Q2y-OV-T1q" secondAttribute="bottom" constant="100" id="nvh-fa-0uY"/>
+                            <constraint firstItem="ATp-LM-0IH" firstAttribute="top" secondItem="Q2y-OV-T1q" secondAttribute="bottom" constant="30" id="nvh-fa-0uY"/>
                             <constraint firstItem="fvP-PV-HIj" firstAttribute="width" secondItem="Fah-nx-inj" secondAttribute="width" id="qFr-k6-C0R"/>
                             <constraint firstItem="4OV-Ye-X71" firstAttribute="centerY" secondItem="sdx-D0-AID" secondAttribute="centerY" id="tWy-AZ-gOl"/>
                             <constraint firstItem="w64-ye-J6J" firstAttribute="height" secondItem="Ewc-OT-EGv" secondAttribute="height" id="tqr-Ig-vpW"/>
