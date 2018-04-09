@@ -13,7 +13,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 
     @IBOutlet weak var collectionView: UICollectionView!
     var playerNameTextField: UITextField?
-    
+
     let NumberOfRows = TicTacToeGame.Configuration.RowsCount // X - number of section
     let NumberOfColumns = TicTacToeGame.Configuration.ColumnsCount // Y - number of items in section
     let TileMargin = CGFloat(5.0)
@@ -70,8 +70,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
 //        let reuseIdentifier = XibGameCell.REUSE_IDENTIFIER
-//        let reuseIdentifier = ProgrammaticallyGameCell.REUSE_IDENTIFIER
-        let reuseIdentifier = StoryboardGameCell.REUSE_IDENTIFIER
+        let reuseIdentifier = ProgrammaticallyGameCell.REUSE_IDENTIFIER
+//        let reuseIdentifier = StoryboardGameCell.REUSE_IDENTIFIER
 
         // This will: (1) dequeue the cell, if it doesn't exist it will create one. (2) will cast it to our custom cell. (3) will assert that the casting is legal.
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! GameCell
@@ -153,7 +153,7 @@ class GameCell: UICollectionViewCell {
     var playerMarkLabel: UILabel!
     
     override func awakeFromNib() {
-        //📘("Created a \(className(self.classForCoder)) object")
+        📘("Created a \(PerrFuncs.className(self.classForCoder)) object")
     }
 
     func configCell() {
@@ -181,6 +181,7 @@ class ProgrammaticallyGameCell: GameCell {
     static let REUSE_IDENTIFIER = PerrFuncs.className(ProgrammaticallyGameCell.self)
 
     override func awakeFromNib() {
+        super.awakeFromNib()
         📘("Created a \(PerrFuncs.className(ProgrammaticallyGameCell.self)) object")
     }
 
@@ -195,7 +196,9 @@ class ProgrammaticallyGameCell: GameCell {
         var playerMarkLabel = UILabel()
         playerMarkLabel.textAlignment = .center
         self.addSubview(playerMarkLabel)
-        playerMarkLabel.stretchToSuperViewEdges()
+        playerMarkLabel.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        playerMarkLabel.stretchToSuperViewEdges(UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10))
+        playerMarkLabel.makeRoundedCorners()
         return playerMarkLabel
     }()
 }

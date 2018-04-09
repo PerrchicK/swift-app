@@ -15,8 +15,8 @@ import UserNotifications
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
-    var signInHolder: Synchronizer.HolderTicket?
-    var tokenHolder: Synchronizer.HolderTicket?
+    var signInHolder: Synchronizer.Holder?
+    var tokenHolder: Synchronizer.Holder?
     static var fcmToken: String? {
         return (UIApplication.shared.delegate as? AppDelegate)?._fcmToken
     }

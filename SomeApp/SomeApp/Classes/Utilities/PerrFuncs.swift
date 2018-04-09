@@ -646,6 +646,17 @@ extension UIView {
         📘("Removing: \(self), bounds: \(bounds), frame: \(frame):")
         self.removeFromSuperview()
     }
+
+    func beOval() {
+//        frame.width = frame.height
+        self.layer.cornerRadius = frame.width / 2
+        self.layer.masksToBounds = true
+    }
+
+    func makeRoundedCorners(_ radius: CGFloat = 5) {
+        self.layer.cornerRadius = radius
+        self.layer.masksToBounds = true
+    }
     
     // MARK: - Constraints methods
     

@@ -29,96 +29,44 @@ class ConcurrencyViewController: UIViewController {
     @IBOutlet weak var action1Spinner: UIActivityIndicatorView!
     @IBOutlet weak var action2Spinner: UIActivityIndicatorView!
     @IBOutlet weak var action3Spinner: UIActivityIndicatorView!
+    private var startSynchronizerButton: UIButton?
 
-    // OperationQueue class usage
-    let synchronizer = Synchronizer {
-        ToastMessage.show(messageText: "released")
-    }
+    // OperationQueue usage example:
+    var synchronizer: Synchronizer?
     
     var randomProgressBarIndexes: [Int]!
 
-    func findNextRandomNumber() -> Int {
-        repeat {
-            let randomProgressBarIndex = 0 ~ 4
-            if self.randomProgressBarIndexes.contains(randomProgressBarIndex) {
-                Thread.sleep(forTimeInterval: 0.003)
-            } else {
-                return randomProgressBarIndex
-            }
-        } while true
-    }
-
-    private func fillAllRandomProgressBarIndexes(_ onDone: @escaping () -> Void) {
-        randomProgressBarIndexes = [-1,-1,-1,-1]
-
-        let v = UIView()
-        v.isPresented = true
-
-        // Sync the async:
-        func _fillRandomProgressBarIndexes(index: Int = 0, onDone: @escaping () -> Void) {
-            guard let _ = self.randomProgressBarIndexes[safe: index] else { onDone(); return }
-            let randomIndex = self.findNextRandomNumber()
-            self.randomProgressBarIndexes[index] = randomIndex
-            📘("Random \(index): \(randomIndex)")
-            
-            _fillRandomProgressBarIndexes(index: index + 1, onDone: onDone)
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        _fillRandomProgressBarIndexes(onDone: onDone)
+        resetSynchronizedOperations()
+        resetProgressBars()
 
 //        Synchronizer.syncOperations({
 //            Thread.sleep(forTimeInterval: 0.01)
-//        },{
+//        },{ [weak self] in
+//            guard let strongSelf = self else { return }
 //            Thread.sleep(forTimeInterval: 0.02)
-//            let rand = self.findNextRandomNumber()
-//            self.randomProgressBarIndexes[1] = rand
+//            let rand = strongSelf.findNextRandomNumber()
 //            📘("Random 1: \(rand)")
-//        },{
-//            Thread.sleep(forTimeInterval: 0.03)
-//            let rand = self.findNextRandomNumber()
-//            self.randomProgressBarIndexes[2] = rand
-//            📘("Random 2: \(rand)")
-//        },{
-//            Thread.sleep(forTimeInterval: 0.04)
-//            let rand = self.findNextRandomNumber()
-//            self.randomProgressBarIndexes[3] = rand
-//            📘("Random 3: \(rand)")
-//        }, withFinalOperation: {
-//            onDone()
+//            },{ [weak self] in
+//                guard let strongSelf = self else { return }
+//                Thread.sleep(forTimeInterval: 0.03)
+//                let rand = strongSelf.findNextRandomNumber()
+//                📘("Random 2: \(rand)")
+//            },{ [weak self] in
+//                guard let strongSelf = self else { return }
+//                Thread.sleep(forTimeInterval: 0.04)
+//                let rand = strongSelf.findNextRandomNumber()
+//                📘("Random 3: \(rand)")
+//            }, withFinalOperation: {
+//                📘("All done 😋")
 //        })
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        action1Spinner.stopAnimating()
-        action2Spinner.stopAnimating()
-        action3Spinner.stopAnimating()
-
-        let holder1 = synchronizer.createHolder()
-        action1Spinner.onClick { [weak self] _ in
-            holder1.release()
-            📘("action 1 dispatched")
-            self?.action1Spinner.stopAnimating()
-        }
-        let holder2 = synchronizer.createHolder()
-        action2Spinner.onClick { [weak self] _ in
-            holder2.release()
-            📘("action 2 dispatched")
-            self?.action2Spinner.stopAnimating()
-        }
-        let holder3 = synchronizer.createHolder()
-        action3Spinner.onClick { [weak self] _ in
-            holder3.release()
-            📘("action 2 dispatched")
-            self?.action3Spinner.stopAnimating()
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        resetProgressBars()
         isAppeared = true
     }
 
@@ -136,6 +84,8 @@ class ConcurrencyViewController: UIViewController {
 
     @IBAction func btnStartProgressPressed(_ sender: UIButton) {
         sender.animateFade(fadeIn: false)
+
+        startSynchronizerButton = sender
         action1Spinner.startAnimating()
         action2Spinner.startAnimating()
         action3Spinner.startAnimating()
@@ -145,6 +95,7 @@ class ConcurrencyViewController: UIViewController {
         guard randomProgressBarIndexes.contains(-1) == false else { return }
 
         sender.isEnabled = false
+
 
         myQueue.async(group: myGroup) { [weak self] in
             guard let strongSelf = self else { return }
@@ -166,10 +117,11 @@ class ConcurrencyViewController: UIViewController {
             //Task 4
             strongSelf.animateProgressRun(progressIndex: strongSelf.randomProgressBarIndexes[3], withInterval: 0.009)
         }
-        myGroup.notify(queue: DispatchQueue.main) { [weak self] in
+
+        myGroup.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: { [weak self] in
             // Will be dispatched on the main queue after all group is finished
             self?.ungroupedProgressBar.animateBounce()
-        }
+        }))
 
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             for progress in 1...100 {
@@ -188,7 +140,6 @@ class ConcurrencyViewController: UIViewController {
                     if succeeded == DispatchTimeoutResult.timedOut {
                         📘("dispatch_group_wait failed!")
                     }
-                    
                     // This code won't run until group is finished / timeout occured
                     PerrFuncs.runOnUiThread() { [weak self] in
                         ToastMessage.show(messageText: "dispatch_group_wait: finished...") { [weak self] in
@@ -204,6 +155,39 @@ class ConcurrencyViewController: UIViewController {
         }
     }
 
+    func resetSynchronizedOperations() {
+        synchronizer = Synchronizer { [weak self] in
+            self?.resetSynchronizedOperations()
+            self?.startSynchronizerButton?.animateFade(fadeIn: true)
+            ToastMessage.show(messageText: "synchronizer released")
+        }
+        
+        guard let synchronizer = synchronizer else { return }
+
+        action1Spinner.stopAnimating()
+        action2Spinner.stopAnimating()
+        action3Spinner.stopAnimating()
+        
+        let holder1 = synchronizer.createHolder()
+        action1Spinner.onClick { [weak self] _ in
+            holder1.release()
+            📘("action 1 dispatched")
+            self?.action1Spinner.stopAnimating()
+        }
+        let holder2 = synchronizer.createHolder()
+        action2Spinner.onClick { [weak self] _ in
+            holder2.release()
+            📘("action 2 dispatched")
+            self?.action2Spinner.stopAnimating()
+        }
+        let holder3 = synchronizer.createHolder()
+        action3Spinner.onClick { [weak self] _ in
+            holder3.release()
+            📘("action 2 dispatched")
+            self?.action3Spinner.stopAnimating()
+        }
+    }
+
     func resetProgressBars() {
         goButton.isEnabled = false
         fillAllRandomProgressBarIndexes { [weak self] in
@@ -215,7 +199,37 @@ class ConcurrencyViewController: UIViewController {
         }
         ungroupedProgressBar.setProgress(0.0, animated: false)
     }
+
+    func findNextRandomNumber() -> Int {
+        repeat {
+            let randomProgressBarIndex = 0 ~ 4
+            if self.randomProgressBarIndexes.contains(randomProgressBarIndex) {
+                Thread.sleep(forTimeInterval: 0.003)
+            } else {
+                return randomProgressBarIndex
+            }
+        } while true
+    }
     
+    private func fillAllRandomProgressBarIndexes(_ onDone: @escaping () -> Void) {
+        randomProgressBarIndexes = [-1,-1,-1,-1]
+        
+        let v = UIView()
+        v.isPresented = true
+        
+        // Sync the async:
+        func _fillRandomProgressBarIndexes(index: Int = 0, onDone: @escaping () -> Void) {
+            guard let _ = self.randomProgressBarIndexes[safe: index] else { onDone(); return }
+            let randomIndex = self.findNextRandomNumber()
+            self.randomProgressBarIndexes[index] = randomIndex
+            📘("Random \(index): \(randomIndex)")
+            
+            _fillRandomProgressBarIndexes(index: index + 1, onDone: onDone)
+        }
+        
+        _fillRandomProgressBarIndexes(onDone: onDone)
+    }
+
     func animateProgressRun(progressIndex: Int, withInterval interval: TimeInterval) {
         for progress in 1...100 {
             Thread.sleep(forTimeInterval: interval)
@@ -235,7 +249,7 @@ class ConcurrencyViewController: UIViewController {
     }
     
     func openCountingThread_3() {
-        Thread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever), toTarget: self, with: "3")
+        Thread.detachNewThreadSelector(#selector(ConcurrencyViewController.countForever(argument:)), toTarget: self, with: "3")
     }
     
     @objc func countForever(argument: Any?) {
@@ -243,7 +257,7 @@ class ConcurrencyViewController: UIViewController {
         while self.isAppeared {
             Thread.sleep(forTimeInterval: 1)
             time += 1
-            📘("counting (\(time) til now) on thread with argument: \(String(describing: argument))")
+            📘("counting (\(time) til now) on thread with argument: \(argument as! String)")
         }
     }
     

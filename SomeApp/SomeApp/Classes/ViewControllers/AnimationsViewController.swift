@@ -78,7 +78,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
         animatedGifBoxView.delegate = self
 
         weak var weakSelf: AnimationsViewController? = self
-        animatedOutTransitionView.onClick { (tapGestureRecognizer) in
+        animatedOutTransitionView.onClick { _ in
             guard let strongSelf = weakSelf else { return }
 
             let transition = CATransition()
@@ -221,6 +221,16 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     }
 
     func configureUi() {
+        fetchImageButton.onPan { [weak self] (panGestureRecognizer) in
+            guard let strongSelf = self else { return }
+
+            if let superview = panGestureRecognizer.view?.superview {
+                let locationOfTouch = panGestureRecognizer.location(in: superview)
+                📘(locationOfTouch)
+                strongSelf.scrollView.contentOffset = locationOfTouch
+            }
+        }
+
         scrollView.keyboardDismissMode = .interactive
         fetchedImageUrlTextField.text = "http://vignette4.wikia.nocookie.net/simpsons/images/9/92/WOOHOO.jpg"
 

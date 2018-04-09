@@ -149,7 +149,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         dbStateTableView.superview?.insertSubview(bgView, belowSubview: dbStateTableView)
         dbStateTableView.reloadData()
         bgView.stretchToSuperViewEdges()
-        
+
         let prettyFast = 0.3
         bgView.animateFade(fadeIn: true, duration: prettyFast)
         dbStateTableView.animateFade(fadeIn: true, duration: prettyFast)
@@ -317,10 +317,10 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             case TableViewType.coreData:
                 let selectedUser = users[indexPath.row]
-                let selectedUserName = selectedUser.firstName
+                let selectedUserDescription = selectedUser.description
                 
                 if selectedUser.remove() && selectedUser.save() {
-                    ToastMessage.show(messageText: "Deleted \(String(describing: selectedUserName))")
+                    ToastMessage.show(messageText: "Deleted: [\(selectedUserDescription)])")
                 }
                 
                 refreshUsersArray()
