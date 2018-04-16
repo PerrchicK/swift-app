@@ -45,8 +45,58 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // From: https://medium.com/@cjinghong/interactive-animations-in-ios-e3f8e1beb5b0
+        if #available(iOS 10.0, *) {
+            let cubicTiming = UICubicTimingParameters(animationCurve: .easeOut)
+            let animator = UIViewPropertyAnimator(duration: 2.0, timingParameters: cubicTiming)
+            animator.addAnimations { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.scrollViewContentOffsetLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+            }
+            // Instead of animate it automatically...
+            //animator.startAnimation()
 
-        scheduleAutoScrollTimer()
+            // ... Let's use a gesture
+            scrollViewContentOffsetLabel.onDrag(predicateClosure: { _ in
+                return true
+            }, onDragClosure: { [weak self] dragGestureListener in
+                guard let superview = self?.view, let draggingPoint = dragGestureListener.pannedPoint else { return }
+                
+                // 0 ... 0.5 ... 1
+                let fractionCompleted = draggingPoint.x / superview.bounds.width
+                
+                // -0.5 ... 0 ... 0.5
+                // let fractionCompleted = draggingPoint.x / superview.bounds.width - 0.5
+                animator.fractionComplete = fractionCompleted
+            })
+            
+            let originalY = scrollViewContentOffsetLabel.center.y;
+            let flyLowAnimator = UIViewPropertyAnimator(duration: 0.5, timingParameters: cubicTiming)
+            flyLowAnimator.addAnimations { [weak self] in
+                guard let strongSelf = self else { return }
+                
+                strongSelf.scrollViewContentOffsetLabel.center = CGPoint(x: strongSelf.scrollViewContentOffsetLabel.center.x, y: 100)
+                strongSelf.scrollViewContentOffsetLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 4)
+            }
+            flyLowAnimator.startAnimation()
+            flyLowAnimator.addCompletion({ position in
+                let landBackAnimator = UIViewPropertyAnimator(duration: 0.5, timingParameters: cubicTiming)
+                landBackAnimator.addAnimations { [weak self] in
+                    guard let strongSelf = self else { return }
+                    strongSelf.scrollViewContentOffsetLabel.center = CGPoint(x: strongSelf.scrollViewContentOffsetLabel.center.x, y: originalY)
+                    strongSelf.scrollViewContentOffsetLabel.transform = CGAffineTransform(rotationAngle: 0)
+                }
+                landBackAnimator.startAnimation()
+            })
+        } else {
+            // Fallback on earlier versions - do nothing in this case
+        }
+        
+        scrollViewContentOffsetLabel.onClick { [weak self] _ in
+            self?.scheduleAutoScrollTimer()
+        }
+        
         //MARK: KVO: Adding the observer
         shootedViewRightMarginConstraint.addObserver(self, forKeyPath: AnimationsViewController.KVO_KEY_PATH_TO_OBSERVE, options: .new, context: nil)
     }
@@ -263,7 +313,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
 
         self.scrollViewContentOffsetLabel.text = String(format: "(%.1f,%.1f)", scrollView.contentOffset.x, scrollView.contentOffset.y)
         if scrollView.contentOffset.y == 0 {
-            scheduleAutoScrollTimer()
+            //scheduleAutoScrollTimer()
         }
     }
     
