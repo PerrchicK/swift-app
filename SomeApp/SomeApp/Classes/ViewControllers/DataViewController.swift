@@ -18,7 +18,18 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     private var presentedAlert: UIAlertController?
 
-    @IBOutlet weak var dbStateTableView: UITableView!
+    lazy var dbStateTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        self.view.addSubview(tableView)
+
+        let navigationBarHeight: CGFloat = self.navigationController?.navigationBar.frame.height ?? 0
+        tableView.stretchToSuperViewEdges(UIEdgeInsets(top: navigationBarHeight + 40, left: 20, bottom: -20, right: -20))
+
+        tableView.isPresented = false
+        return tableView
+    }()
 
     /* Saved in Core Data */
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -91,7 +102,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent(PersistableUserFileName))
 
-        try? NSKeyedArchiver.archivedData(withRootObject: [user1, user2]).write(to: encodedUserFilePath)
+        let usersData = NSKeyedArchiver.archivedData(withRootObject: [user1, user2])
+        try? usersData.write(to: encodedUserFilePath)
 
         self.view.endEditing(true)
     }

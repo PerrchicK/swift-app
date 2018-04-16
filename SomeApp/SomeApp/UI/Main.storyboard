@@ -510,19 +510,10 @@
                                     <action selector="addKeyValueToFirebaseButtonPressed:" destination="7SB-GE-wZr" eventType="touchUpInside" id="aYO-5s-g0b"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lQR-OC-cbF">
-                                <rect key="frame" x="26" y="70" width="268" height="448"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="7SB-GE-wZr" id="xud-fs-VzU"/>
-                                    <outlet property="delegate" destination="7SB-GE-wZr" id="2eN-iC-5MS"/>
-                                </connections>
-                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="QZW-zd-kvt" firstAttribute="centerX" secondItem="v5P-qC-wyY" secondAttribute="centerX" id="0L8-Q9-gg4"/>
-                            <constraint firstItem="lQR-OC-cbF" firstAttribute="centerX" secondItem="v5P-qC-wyY" secondAttribute="centerX" id="0gV-ux-f1t"/>
                             <constraint firstItem="2qf-M3-7HM" firstAttribute="centerX" secondItem="dSv-K5-Wyb" secondAttribute="centerX" id="1AQ-WD-XIS"/>
                             <constraint firstItem="2oQ-o6-3N5" firstAttribute="centerX" secondItem="KYW-tg-fjq" secondAttribute="centerX" id="2TC-FZ-iaj"/>
                             <constraint firstItem="SJG-cD-xJr" firstAttribute="centerX" secondItem="Go5-Ud-zIw" secondAttribute="centerX" id="4Nx-1e-Dou"/>
@@ -548,27 +539,17 @@
                             <constraint firstItem="dSv-K5-Wyb" firstAttribute="width" secondItem="eGi-ge-0VM" secondAttribute="width" id="Rzy-7d-rhO"/>
                             <constraint firstItem="KYW-tg-fjq" firstAttribute="centerX" secondItem="v5P-qC-wyY" secondAttribute="centerX" id="S0U-Fp-oyI"/>
                             <constraint firstItem="Mv3-VS-f6M" firstAttribute="width" secondItem="SJG-cD-xJr" secondAttribute="width" constant="-15" id="TZb-Xe-d4J"/>
-                            <constraint firstItem="lQR-OC-cbF" firstAttribute="width" secondItem="v5P-qC-wyY" secondAttribute="width" id="WKa-u0-x1V"/>
                             <constraint firstItem="dSv-K5-Wyb" firstAttribute="top" secondItem="eGi-ge-0VM" secondAttribute="bottom" constant="8" id="Xyv-KW-OcY"/>
                             <constraint firstItem="KYW-tg-fjq" firstAttribute="width" secondItem="v5P-qC-wyY" secondAttribute="width" id="bDD-Zh-Rfg"/>
-                            <constraint firstItem="lQR-OC-cbF" firstAttribute="top" secondItem="PRB-Vm-XIR" secondAttribute="bottom" constant="50" id="bSg-cJ-drb"/>
                             <constraint firstItem="KYW-tg-fjq" firstAttribute="top" secondItem="2oQ-o6-3N5" secondAttribute="bottom" id="eiG-NP-MAk"/>
                             <constraint firstItem="cKB-G5-UPC" firstAttribute="top" secondItem="N3R-Sa-VSv" secondAttribute="bottom" constant="2" id="exn-Jl-f4U"/>
                             <constraint firstItem="dSv-K5-Wyb" firstAttribute="centerX" secondItem="eGi-ge-0VM" secondAttribute="centerX" id="hKn-vM-D2z"/>
                             <constraint firstItem="yN5-Yd-dTO" firstAttribute="width" secondItem="v5P-qC-wyY" secondAttribute="width" id="m4e-G7-7W1"/>
-                            <constraint firstItem="uKa-J8-hDA" firstAttribute="top" secondItem="lQR-OC-cbF" secondAttribute="bottom" constant="50" id="rYa-Sa-l6d"/>
                             <constraint firstItem="QZW-zd-kvt" firstAttribute="top" secondItem="v5P-qC-wyY" secondAttribute="bottom" constant="8" id="s4b-CG-iX3"/>
-                            <constraint firstItem="lQR-OC-cbF" firstAttribute="top" secondItem="2oQ-o6-3N5" secondAttribute="bottom" id="wnC-xa-BXD"/>
                             <constraint firstItem="yN5-Yd-dTO" firstAttribute="top" secondItem="SJG-cD-xJr" secondAttribute="bottom" id="xdv-b6-9ps"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="wnC-xa-BXD"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="dbStateTableView" destination="lQR-OC-cbF" id="bic-xR-MYm"/>
                         <outlet property="emailTextField" destination="dSv-K5-Wyb" id="Z3D-Pv-xAE"/>
                         <outlet property="firstNameTextField" destination="v5P-qC-wyY" id="v8E-QC-elo"/>
                         <outlet property="lastNameTextField" destination="QZW-zd-kvt" id="NpW-jK-qMw"/>
