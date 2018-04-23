@@ -19,8 +19,9 @@
 @property (nonatomic, assign) NSInteger dimension;
 @property (nonatomic, strong) NSArray *supportedDimensions;
 
-- (BOOL)crashTheAppDueToAnUnimplementedMethodWithParam:(NSString *)stringParam;
-- (CGSize)boardSize;
+-(BOOL)crashTheAppDueToAnUnimplementedMethodWithParam:(NSString *)stringParam;
+-(CGSize)boardSize;
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message inViewController:(UIViewController *) viewController;
++(BOOL)isRunningOnSimulator;
 
 @end

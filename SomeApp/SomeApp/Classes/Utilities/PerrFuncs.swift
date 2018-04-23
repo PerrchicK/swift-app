@@ -60,6 +60,10 @@ open class PerrFuncs {
         }
     }
 
+    static func isRunningOnSimulator() -> Bool {
+        return UtilsObjC.isRunningOnSimulator()
+    }
+
     #if !os(macOS) && !os(watchOS)
     /// This is an async operation (it needs an improvement - in case this method is being called again before the previous is completed?)
     public static func runBackgroundTask(block: @escaping (_ completionHandler: @escaping () -> ()) -> ()) {

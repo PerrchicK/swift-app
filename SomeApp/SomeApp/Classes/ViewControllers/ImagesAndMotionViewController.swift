@@ -95,6 +95,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         isEditableControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         
         self.setupCamera()
+
         cameraLensPreviewButton.onClick { [weak self] (tapGestureRecognizer) in
             self?.takeSnapshot()
         }
@@ -171,7 +172,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
                 📘(errorString)
                 return
         }
-
+        
         imagePickerController.delegate = self
         imagePickerController.sourceType = selectedSourceType
         
@@ -188,6 +189,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         
         imagePickerController.allowsEditing = self.isEditableSelected
 
+        // Check permission using:
+        // import Photos => PHPhotoLibrary.authorizationStatus() == .authorized
         present(imagePickerController, animated: true, completion: nil)
     }
 
@@ -196,6 +199,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     func takeSnapshot() {
+        guard !PerrFuncs.isRunningOnSimulator() else { return }
+
         if let capturedImage = cameraLensImage {
             self.cameraLensPreviewButton.setImage(capturedImage, for: .normal)
             UIImageWriteToSavedPhotosAlbum(capturedImage,
@@ -208,6 +213,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     func setupCamera() {
+        guard !PerrFuncs.isRunningOnSimulator() else { return }
+
         let devices = AVCaptureDevice.devices(for: AVMediaType.video)
         for device in devices {
             if (device as AnyObject).position == .front {

@@ -19,6 +19,14 @@
 
 @implementation UtilsObjC
 
++(BOOL)isRunningOnSimulator {
+#if TARGET_IPHONE_SIMULATOR
+    return YES;
+#else
+    return NO;
+#endif
+}
+
 + (NSString *)dimentionsKey
 {
     return @"yo"; // The @"yo" is a shortcut for: [NSString stringWithCString:"yo" encoding:NSUTF8StringEncoding]

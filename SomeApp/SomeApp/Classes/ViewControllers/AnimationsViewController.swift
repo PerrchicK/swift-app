@@ -98,7 +98,11 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
         }
         
         //MARK: KVO: Adding the observer
-        shootedViewRightMarginConstraint.addObserver(self, forKeyPath: AnimationsViewController.KVO_KEY_PATH_TO_OBSERVE, options: .new, context: nil)
+        if shootedViewRightMarginConstraint.observationInfo == nil {
+            // The 'addObserver' will occur only once...
+            shootedViewRightMarginConstraint.addObserver(self, forKeyPath: AnimationsViewController.KVO_KEY_PATH_TO_OBSERVE, options: .new, context: nil)
+
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -130,7 +134,7 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
         weak var weakSelf: AnimationsViewController? = self
         animatedOutTransitionView.onClick { _ in
             guard let strongSelf = weakSelf else { return }
-
+            
             let transition = CATransition()
             transition.startProgress = 0
             transition.endProgress = 1
