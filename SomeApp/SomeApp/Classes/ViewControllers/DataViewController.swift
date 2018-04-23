@@ -24,12 +24,13 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.dataSource = self
         self.view.addSubview(tableView)
 
-        let navigationBarHeight: CGFloat = self.navigationController?.navigationBar.frame.height ?? 0
         tableView.stretchToSuperViewEdges(UIEdgeInsets(top: navigationBarHeight + 40, left: 20, bottom: -20, right: -20))
 
         tableView.isPresented = false
         return tableView
     }()
+
+    @IBOutlet weak var scrollView: UIScrollView!
 
     /* Saved in Core Data */
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -48,6 +49,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         return []
     }()
 
+    lazy var navigationBarHeight: CGFloat = navigationController?.navigationBar.frame.height ?? 0 + 1.0
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,6 +58,12 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         self.dbStateTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellReuseIdentifier")
         self.dbStateTableView.isHidden = true
+        scrollView.keyboardDismissMode = .interactive
+
+        let contentInsets = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
+        scrollView.contentInset = contentInsets
+//        scrollView.scrollIndicatorInsets = contentInsets
+        scrollView.alwaysBounceVertical = false
 
         userDefaultsTextField.text = UserDefaults.standard.object(forKey: UserDefaultsStringKey) as? String
         view.onClick { [weak self] _ in
@@ -80,7 +89,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(DataViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
+
         syncedUserDefaults.delegate = self
         
         if let persistableUsersData = UserDefaults.standard.object(forKey: PerrFuncs.className(PersistableUser.self)) as? Data,
@@ -208,6 +217,7 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         UserDefaults.standard.synchronize()
     }
 
+    // https://stackoverflow.com/questions/1983463/whats-the-uiscrollview-contentinset-property-for
     @objc func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo, presentedAlert == nil else { return }
 
@@ -215,12 +225,27 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.cgRectValue
             let keyboardSize = keyboardFrame.size
-            self.view.frame.origin.y = -keyboardSize.height
+
+            // From: https://stackoverflow.com/questions/16705159/uiscrollview-content-insets-not-working-for-keyboard-height
+
+            let hiddenScrollViewRect = view.convert(scrollView.frame, from: view).intersection(keyboardFrame)
+            scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight + 40, left: 0, bottom: hiddenScrollViewRect.size.height, right: 0)
+            scrollView.scrollIndicatorInsets = scrollView.contentInset
         }
     }
 
     @objc func keyboardWillHide(_ notification: Notification) {
-        self.view.frame.origin.y = 0
+        guard let userInfo = notification.userInfo, let windowFrame = self.view.window?.frame else { return }
+        let viewHeight = view.frame.height
+
+        if /*let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,*/
+            let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardFrame = keyboardFrameValue.cgRectValue
+            let keyboardSize = keyboardFrame.size
+        }
+        
+        scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight + 40, left: 0, bottom: 0, right: 0)
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
     }
 
     // MARK: - UITableViewDataSource
@@ -262,8 +287,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedIndex = indexPath.row
-        var toastMessage = ""
         if let tableViewType = tableView.😍() as? TableViewType {
+            var toastMessage: String = ""
             switch tableViewType {
             case TableViewType.firebase:
                 if let key = tableView.cellForRow(at: indexPath)?.textLabel?.text,
@@ -273,9 +298,9 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             case TableViewType.coreData:
                 toastMessage = users[selectedIndex].description //users[selectedIndex].firstName + " " + users[selectedIndex].lastName
             }
+            ToastMessage.show(messageText: toastMessage)
         }
 
-        ToastMessage.show(messageText: toastMessage)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

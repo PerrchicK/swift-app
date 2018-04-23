@@ -196,8 +196,7 @@ class ProgrammaticallyGameCell: GameCell {
         var playerMarkLabel = UILabel()
         playerMarkLabel.textAlignment = .center
         self.addSubview(playerMarkLabel)
-        playerMarkLabel.backgroundColor = UIColor.white.withAlphaComponent(0.3)
-        playerMarkLabel.stretchToSuperViewEdges(UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10))
+        playerMarkLabel.stretchToSuperViewEdges()
         playerMarkLabel.makeRoundedCorners()
         return playerMarkLabel
     }()
