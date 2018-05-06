@@ -2,7 +2,7 @@
 
 import UIKit
 
-var str = "Hello, playgroun"
+var str = "Hello, playground"
 
 let sequence = stride(from: 0, through: 10, by: 0.3)
 for element in sequence {

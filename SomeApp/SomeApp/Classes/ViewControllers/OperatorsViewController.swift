@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import OnGestureSwift
+import Scryptonizer
 
 class OperatorsViewController: UIViewController {
     
@@ -75,6 +77,11 @@ class OperatorsViewController: UIViewController {
 //                📘("pannedPoint: \(pannedPoint)")
 //            }
 //        })
+        
+        let encrypted = "my private key".encrypt(password: "1234")
+        📘(encrypted)
+        let decrypted = encrypted.decrypt(password: "1234")
+        📘(decrypted)
     }
 
     override func viewWillAppear(_ animated: Bool) {

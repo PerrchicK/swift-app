@@ -22,6 +22,8 @@ class SplashScreenViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        swiftLabel.text = NSLocalizedString("welcome_phrase", comment: "")
+
         swiftLogo.show(show: false)
         foo()
         fighters()

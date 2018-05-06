@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FLEX
 import MMDrawerController
 
 class StarterViewController: UIViewController {

@@ -69,35 +69,4 @@ class Synchronizer {
             return true
         }
     }
-
-//    static func syncOperations(_ operationClosures: (() -> Void)..., withFinalOperation finalOperation: @escaping () -> Void) {
-//        guard operationClosures.count > 0 else { finalOperation(); return }
-//
-//        guard operationClosures.count > 1 else {
-//            operationClosures[0]()
-//            finalOperation()
-//            return
-//        }
-//
-//        let raceConditionQueue = OperationQueue()
-//        let completionOperation = BlockOperation {
-//            DispatchQueue.main.async(execute: {
-//                finalOperation()
-//            })
-//        }
-//
-//        var blockOperations = [BlockOperation]()
-//        for operationBlock in operationClosures {
-//            let blockOperation = BlockOperation(block: operationBlock)
-//            blockOperations.append(blockOperation)
-//
-//            completionOperation.addDependency(blockOperation)
-//        }
-//
-//        raceConditionQueue.addOperation(completionOperation)
-//
-//        for blockOperation in blockOperations {
-//            raceConditionQueue.addOperation(blockOperation)
-//        }
-//    }
 }
