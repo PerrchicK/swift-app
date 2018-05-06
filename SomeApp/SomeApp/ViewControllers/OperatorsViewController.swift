@@ -79,9 +79,9 @@ class OperatorsViewController: UIViewController {
 //        })
         
         let encrypted = "my private key".encrypt(password: "1234")
-        📘(encrypted)
+        print(encrypted)
         let decrypted = encrypted.decrypt(password: "1234")
-        📘(decrypted)
+        print(decrypted)
     }
 
     override func viewWillAppear(_ animated: Bool) {

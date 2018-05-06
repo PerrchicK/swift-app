@@ -41,7 +41,7 @@ class CrazyWhackViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.register(UINib(nibName: className(CrazyGameCell.self), bundle: nil), forCellWithReuseIdentifier: CrazyGameCell.REUSE_IDENTIFIER)
+        collectionView.register(UINib(nibName: PerrFuncs.className(CrazyGameCell.self), bundle: nil), forCellWithReuseIdentifier: CrazyGameCell.REUSE_IDENTIFIER)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -148,7 +148,7 @@ class CrazyWhackViewController: UIViewController, UICollectionViewDataSource, UI
 }
 
 class CrazyGameCell: GameCell {
-    static let REUSE_IDENTIFIER = className(XibGameCell.self)
+    static let REUSE_IDENTIFIER = PerrFuncs.className(XibGameCell.self)
     
     @IBOutlet weak var _playerMarkLabel: UILabel!
     

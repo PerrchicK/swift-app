@@ -44,6 +44,16 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         let utilsObjC = UtilsObjC()
         //📘(utilsObjC.supportedDimensions)
         //utilsObjC.alert(withTitle: "presented", andMessage: "some message", in: self)
+        
+//        PerrFuncs.runBlockAfterDelay(afterDelay: 2) {
+//            let img = DataManager.downloadImage(fromUrl: "https://pre00.deviantart.net/6c76/th/pre/f/2017/264/6/9/avengers____infinity_war_by_themadbutcher-dbo60d8.jpg")
+//            
+//            let imageView: UIImageView = UIImageView()
+//            imageView.image = img
+//            imageView.contentMode = .scaleAspectFit
+//            UIApplication.mostTopViewController()?.view.addSubview(imageView)
+//            imageView.stretchToSuperViewEdges()
+//        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,6 +94,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             let gameNavigationController = GameNavigationController(rootViewController: CollectionViewController.instantiate())
             gameNavigationController.isNavigationBarHidden = true
             navigationController?.present(gameNavigationController, animated: true, completion: nil)
+//            navigationController?.pushViewController(gameNavigationController, animated: true) // This will crash
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.CommunicationLocation:

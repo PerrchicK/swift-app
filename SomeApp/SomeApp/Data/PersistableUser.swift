@@ -20,7 +20,7 @@ class PersistableUser: NSObject, NSCoding {
         self.lastName = lastName
         self.nickname = nickname
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         guard let email = aDecoder.decodeObject(forKey: "email") as? String, let firstName = aDecoder.decodeObject(forKey: "firstName") as? String,
             let lastName = aDecoder.decodeObject(forKey: "lastName") as? String,
