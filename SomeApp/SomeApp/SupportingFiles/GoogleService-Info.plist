@@ -3,38 +3,38 @@
 <plist version="1.0">
 <dict>
 	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>some ID</string>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>some ID</string>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>some ID</string>
+	<string>168769002973-hdpqot67coafo036hir138smbsi7q5au.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>some ID</string>
+	<string>com.googleusercontent.apps.168769002973-hdpqot67coafo036hir138smbsi7q5au</string>
 	<key>API_KEY</key>
-	<string>your API key</string>
+	<string>AIzaSyBCTPMIwmmQLlIJeIjcjoaaWNfUNv41PDs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>some ID</string>
+	<string>168769002973</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>your bundle ID</string>
+	<string>com.perrchick.iOSApp</string>
 	<key>PROJECT_ID</key>
-	<string>some ID</string>
+	<string>perry-sh</string>
 	<key>STORAGE_BUCKET</key>
-	<string>your storage bucket</string>
+	<string>perry-sh.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>some ID</string>
+	<string>1:168769002973:ios:0f92986792863226</string>
 	<key>DATABASE_URL</key>
-	<string>your database URL</string>
+	<string>https://perry-sh.firebaseio.com</string>
 </dict>
 </plist>

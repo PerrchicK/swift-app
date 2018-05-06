@@ -149,7 +149,7 @@
 		ACA7F370209F85C7000F886D /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F34F209F85C6000F886D /* Game.swift */; };
 		ACA7F371209F85C7000F886D /* TicTacToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F350209F85C6000F886D /* TicTacToeGame.swift */; };
 		ACA7F372209F85C7000F886D /* WhackGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F351209F85C6000F886D /* WhackGame.swift */; };
-		ACA7F376209F88B6000F886D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F375209F88B6000F886D /* AppDelegate.swift */; };
+		ACA7F378209F8994000F886D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F377209F8994000F886D /* AppDelegate.swift */; };
 		F2635CEEACE47C60F2C38826 /* Pods_SomeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26AEDA9A4F96F89E2F757882 /* Pods_SomeApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -433,7 +433,7 @@
 		ACA7F34F209F85C6000F886D /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		ACA7F350209F85C6000F886D /* TicTacToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeGame.swift; sourceTree = "<group>"; };
 		ACA7F351209F85C6000F886D /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
-		ACA7F375209F88B6000F886D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		ACA7F377209F8994000F886D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACAF59CC2099E3B800D4E0B5 /* StringCipher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StringCipher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -512,7 +512,6 @@
 			isa = PBXGroup;
 			children = (
 				75D7A4B61C4E924400CDD88F /* SomeApp */,
-				ACA7F375209F88B6000F886D /* AppDelegate.swift */,
 				75D7A4CE1C4E924400CDD88F /* SomeAppTests */,
 				75D7A4D91C4E924400CDD88F /* SomeAppUITests */,
 				756790FC1CC66CF900EC507D /* SomeExtension */,
@@ -961,6 +960,7 @@
 		ACA7F34D209F85C6000F886D /* Logic */ = {
 			isa = PBXGroup;
 			children = (
+				ACA7F377209F8994000F886D /* AppDelegate.swift */,
 				ACA7F34E209F85C6000F886D /* Game */,
 			);
 			path = Logic;
@@ -1330,7 +1330,7 @@
 				AC6845A4209EC3430082CF62 /* FLEXCookiesTableViewController.m in Sources */,
 				AC6845A7209EC3430082CF62 /* FLEXFileBrowserTableViewController.m in Sources */,
 				AC684593209EC3430082CF62 /* FLEXDefaultEditorViewController.m in Sources */,
-				ACA7F376209F88B6000F886D /* AppDelegate.swift in Sources */,
+				ACA7F378209F8994000F886D /* AppDelegate.swift in Sources */,
 				ACA7F362209F85C7000F886D /* AnimationsViewController.swift in Sources */,
 				ACA7F359209F85C6000F886D /* Reachability.swift in Sources */,
 				ACA7F36F209F85C7000F886D /* StarterViewController.swift in Sources */,
