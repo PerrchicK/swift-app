@@ -9,6 +9,7 @@
 import UIKit
 import ObjectiveC
 import OnGestureSwift
+import LocalAuthentication
 
 // MARK: - "macros"
 
@@ -23,6 +24,25 @@ public func 📘(_ logMessage: Any, file: String = #file, function: String = #fu
     let timesamp = formattter.string(from: Date())
 
     print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(logMessage)")
+}
+
+// MARK: - Operators Overloading
+
+// Allows this: { let temp = -3 ~ -80 ~ 5 ~ 10 }
+precedencegroup Additive {
+    associativity: left // Explanation: https://en.wikipedia.org/wiki/Operator_associativity
+}
+infix operator ~ : Additive // https://developer.apple.com/documentation/swift/operator_declarations
+
+/// Inclusively raffles a number from `left` hand operand value to the `right` hand operand value.
+///
+/// For example: the expression `{ let random: Int =  -3 ~ 5 }` will declare a random number between -3 and 5.
+/// - parameter left:   The value represents `from`.
+/// - parameter right:  The value represents `to`.
+///
+/// - returns: A random number between `left` and `right`.
+func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift-operators/
+    return PerrFuncs.random(from: left, to: right)
 }
 
 // MARK: - Class
@@ -209,7 +229,38 @@ open class PerrFuncs {
         
         return nil
     }
+
+    ///Verifies whether the device has a configured local authentication AND the user is the owner.
+    static public func verifyDeviceOwner(callbackClosure: @escaping CallbackClosure<Bool?>) {
+        let localAuthenticationContext = LAContext()
+        let localAuthenticationLocalizedReasonString = "To proceed you must be the iPhone owner"
+        
+        var authError: NSError? // This exactly is how Swift's try-catch works (what happens behind the scenes)!
+        if #available(iOS 8.0, macOS 10.12.1, *) {
+            if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
+                localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: localAuthenticationLocalizedReasonString) { success, evaluateError in
+                    if success {
+                        // User authenticated successfully, take appropriate action
+                        UIAlertController.alert(title: "Alrighty then", message: "You're in 😃")
+                        callbackClosure(true)
+                    } else {
+                        // User did not authenticate successfully, look at error and take appropriate action
+                        UIAlertController.alert(title: "Hmmmm...", message: "Who are you again? 🤔")
+                        callbackClosure(false)
+                    }
+                }
+            } else {
+                // Could not evaluate policy; look at authError and present an appropriate message to user
+                callbackClosure(nil)
+            }
+        } else {
+            // Fallback on earlier versions
+            callbackClosure(nil)
+        }
+    }
 }
+
+// MARK: - Global Extensions
 
 extension String {
     func length() -> Int {
@@ -355,27 +406,8 @@ extension UIImageView {
     }
 }
 
-//MARK: - Global Extensions
-
 // Declare a global var to produce a unique address as the assoc object handle
 var SompApplicationHuggedProperty: UInt8 = 0
-
-// Allows this: { let temp = -3 ~ -80 ~ 5 ~ 10 }
-precedencegroup Additive {
-    associativity: left // Explanation: https://en.wikipedia.org/wiki/Operator_associativity
-}
-infix operator ~ : Additive // https://developer.apple.com/documentation/swift/operator_declarations
-
-/// Inclusively raffles a number from `left` hand operand value to the `right` hand operand value.
-///
-/// For example: the expression `{ let random: Int =  -3 ~ 5 }` will declare a random number between -3 and 5.
-/// - parameter left:   The value represents `from`.
-/// - parameter right:  The value represents `to`.
-///
-/// - returns: A random number between `left` and `right`.
-func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift-operators/
-    return PerrFuncs.random(from: left, to: right)
-}
 
 extension NSObject { // try extending 'AnyObject'...
 
@@ -461,6 +493,7 @@ extension UIAlertController {
         self.addTextField(configurationHandler: { (textField: UITextField!) -> () in
             configurationBlock(textField)
         })
+
         return self
     }
     
@@ -725,12 +758,6 @@ extension UIView {
         return gradientLayer
     }
 
-    // MARK: - Other cool additions
-
-//    open override func didChangeValue(forKey key: String, withSetMutation mutationKind: NSKeyValueSetMutationKind, using objects: Set<AnyHashable>) {
-//        <#code#>
-//    }
-
     func firstResponder() -> UIView? {
         var firstResponder: UIView? = self
         
@@ -748,17 +775,6 @@ extension UIView {
         return nil
     }
 }
-
-// Wrapper to save closure into a property - no need for this hack anymore, memory leak maker
-//class CompletionClosureWrapper {
-//    static var completionClosureProperty = "completionClosureProperty"
-//    
-//    let closure: CompletionClosure
-//    
-//    init(closure: @escaping CompletionClosure) {
-//        self.closure = closure
-//    }
-//}
 
 extension URL {
     func queryStringComponents() -> [String: AnyObject] {
