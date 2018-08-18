@@ -1,5 +1,5 @@
 //
-//  CommunicationMapLocationViewController.swift
+//  MapLocationAndCommunicationViewController.swift
 //  SomeApp
 //
 //  Created by Perry on 3/23/16.
@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import Alamofire
 
-class CommunicationMapLocationViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     let GoogleMapsUrlApiKey = "AIzaSyBprjBz5erFJ6Ai9OnEmZdY3uYIoWNtGGI"
     let afkeaLatitude: Double = 32.115216
     let afkeaLongitude: Double = 34.8174598

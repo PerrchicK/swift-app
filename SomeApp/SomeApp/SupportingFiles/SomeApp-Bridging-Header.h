@@ -5,5 +5,7 @@
 #import "UtilsObjC.h"
  // Delete these libs if they don't exist:
 #import "FLEX.h"
-//#import "MMDrawerController/MMDrawerController.h"
+//#import "SwiftyScryptoString/SwiftyScryptoString-Swift.h"
 //#import "Firebase/Firebase.h"
+
+#import "SwiftBridgedClass.h"

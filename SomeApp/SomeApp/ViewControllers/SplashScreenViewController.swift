@@ -29,6 +29,7 @@ class SplashScreenViewController : UIViewController {
         fighters()
     }
 
+    /// The `defer` command is taken from Python: https://pythonhosted.org/defer/defer.html
     func foo() {
         defer {
             defer {

@@ -38,18 +38,18 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //collectionView.register(StoryboardGameCell.self, forCellWithReuseIdentifier: StoryboardGameCell.REUSE_IDENTIFIER)
 
         collectionView.isScrollEnabled = false
+
+        view.onSwipe(direction: .down) { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        
+        collectionView.onSwipe(direction: .down) { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        view.onSwipe(direction: .down) { [weak self] _ in
-            self?.dismiss(animated: true, completion: nil)
-        }
-
-        collectionView.onSwipe(direction: .down) { [weak self] _ in
-            self?.dismiss(animated: true, completion: nil)
-        }
 
         if isGameEnabled {
             reloadGame()
@@ -134,7 +134,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func navigateToToMapView() {
-        navigationController?.pushViewController(CommunicationMapLocationViewController.instantiate(), animated: true)
+        navigationController?.pushViewController(MapLocationAndCommunicationViewController.instantiate(), animated: true)
     }
 
     func isGameEnabled(_ game: Game) -> Bool {

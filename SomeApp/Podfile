@@ -13,7 +13,7 @@ target "SomeApp" do
     pod 'Alamofire', '~> 4.0.1'
     pod 'BetterSegmentedControl', '0.8'
     
-    pod 'ScryptoString'#, :path => '../../ScryptoString-Pod'
+    #pod 'ScryptoString'#, :path => '../../ScryptoString-Pod'
     #pod 'LPMessagingSDK'
     pod 'OnGestureSwift'#, :path => '../../OnGesture-Pod/OnGestureSwift'
     
@@ -26,4 +26,3 @@ target "SomeApp" do
     end
     
 end
-

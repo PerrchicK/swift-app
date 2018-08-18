@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import OnGestureSwift
-import Scryptonizer
+//import SwiftyScryptoString
 
 class OperatorsViewController: UIViewController {
     
@@ -77,17 +77,26 @@ class OperatorsViewController: UIViewController {
 //                📘("pannedPoint: \(pannedPoint)")
 //            }
 //        })
-        
-        let encrypted = "my private key".encrypt(password: "1234")
-        print(encrypted)
-        let decrypted = encrypted.decrypt(password: "1234")
-        print(decrypted)
+
+//        let encrypted = "my private key".encrypt(withPassword: "1234")
+//        📘("encrypted: \(encrypted)")
+//        let decrypted = encrypted.decrypt(withPassword: "1234")
+//        📘("decrypted: \(decrypted)")
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         draggedLabel.center = view.center
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        PerrFuncs.verifyDeviceOwner { (didSucceed) in
+            guard let didSucceed = didSucceed else { return }
+            📘(didSucceed)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {

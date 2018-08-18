@@ -41,7 +41,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityDidChange), name: Notification.Name.ReachabilityDidChange, object: nil)
 
         // Just for Objective-C demonstrations
-        let utilsObjC = UtilsObjC()
+        //let utilsObjC = UtilsObjC()
         //📘(utilsObjC.supportedDimensions)
         //utilsObjC.alert(withTitle: "presented", andMessage: "some message", in: self)
         
@@ -98,7 +98,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.CommunicationLocation:
-            navigationController?.pushViewController(CommunicationMapLocationViewController.instantiate(), animated: true)
+            navigationController?.pushViewController(MapLocationAndCommunicationViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.Notifications:
             navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.ImagesCoreMotion:

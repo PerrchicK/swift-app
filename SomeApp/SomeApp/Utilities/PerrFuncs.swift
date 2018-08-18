@@ -34,6 +34,8 @@ precedencegroup Additive {
 }
 infix operator ~ : Additive // https://developer.apple.com/documentation/swift/operator_declarations
 
+infix operator ^ : Additive // https://developer.apple.com/documentation/swift/operator_declarations
+
 /// Inclusively raffles a number from `left` hand operand value to the `right` hand operand value.
 ///
 /// For example: the expression `{ let random: Int =  -3 ~ 5 }` will declare a random number between -3 and 5.
@@ -43,6 +45,10 @@ infix operator ~ : Additive // https://developer.apple.com/documentation/swift/o
 /// - returns: A random number between `left` and `right`.
 func ~ (left: Int, right: Int) -> Int { // Reference: http://nshipster.com/swift-operators/
     return PerrFuncs.random(from: left, to: right)
+}
+
+func ^ (left: Bool, right: Bool) -> Bool { // Reference: http://nshipster.com/swift-operators/
+    return PerrFuncs.xor(arg1: left, arg2: right)
 }
 
 // MARK: - Class
@@ -258,6 +264,14 @@ open class PerrFuncs {
             callbackClosure(nil)
         }
     }
+
+    static func xor(arg1: Bool, arg2: Bool) -> Bool {
+        return (arg1 && !arg2) || (arg2 && !arg1)
+    }
+
+    func pointerAddress(pointee: AnyObject) -> UnsafeMutableRawPointer {
+        return Unmanaged<AnyObject>.passUnretained(pointee).toOpaque()
+    }
 }
 
 // MARK: - Global Extensions
@@ -318,6 +332,72 @@ extension String {
         📘("string to emoji: \(self) -> \(emoji)")
         
         return emoji
+    }
+
+    subscript (i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
+    
+    subscript (bounds: CountableRange<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[start ..< end]
+    }
+    
+    subscript (bounds: CountableClosedRange<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[start ... end]
+    }
+    
+    subscript (bounds: CountablePartialRangeFrom<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(endIndex, offsetBy: -1)
+        return self[start ... end]
+    }
+    
+    subscript (bounds: PartialRangeThrough<Int>) -> Substring {
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[startIndex ... end]
+    }
+    
+    subscript (bounds: PartialRangeUpTo<Int>) -> Substring {
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[startIndex ..< end]
+    }
+}
+
+extension Substring {
+    subscript (i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
+    
+    subscript (bounds: CountableRange<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[start ..< end]
+    }
+    
+    subscript (bounds: CountableClosedRange<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[start ... end]
+    }
+    
+    subscript (bounds: CountablePartialRangeFrom<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(endIndex, offsetBy: -1)
+        return self[start ... end]
+    }
+    
+    subscript (bounds: PartialRangeThrough<Int>) -> Substring {
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[startIndex ... end]
+    }
+    
+    subscript (bounds: PartialRangeUpTo<Int>) -> Substring {
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return self[startIndex ..< end]
     }
 }
 
@@ -422,7 +502,7 @@ extension NSObject { // try extending 'AnyObject'...
      This enables the same idea of user info, to every object that inherits from NSObject.
      */
     @discardableResult
-    func 😘(huggedObject: Any) -> Bool {
+    @objc func 😘(huggedObject: Any) -> Bool {
         //infix operator 😘 { associativity left precedence 140 }
         📘("\(self) is hugging \(huggedObject)")
 
@@ -435,7 +515,7 @@ extension NSObject { // try extending 'AnyObject'...
      << EXPERIMENTAL METHOD >>
      Extracts the hugged object from an NSObject.
      */
-    func 😍() -> Any? { // 1
+    @objc func 😍() -> Any? { // 1
         guard let value = objc_getAssociatedObject(self, &SompApplicationHuggedProperty) else {
             return nil
         }
@@ -497,17 +577,17 @@ extension UIAlertController {
         return self
     }
     
-    static func make(style: UIAlertControllerStyle, title: String, message: String, dismissButtonTitle: String = "OK") -> UIAlertController {
+    static func make(style: UIAlertControllerStyle, title: String, message: String) -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
         return alertController
     }
 
-    static func makeActionSheet(title: String, message: String, dismissButtonTitle: String = "OK") -> UIAlertController {
-        return make(style: .actionSheet, title: title, message: message, dismissButtonTitle: dismissButtonTitle)
+    static func makeActionSheet(title: String, message: String) -> UIAlertController {
+        return make(style: .actionSheet, title: title, message: message)
     }
 
-    static func makeAlert(title: String, message: String, dismissButtonTitle: String = "OK") -> UIAlertController {
-        return make(style: .alert, title: title, message: message, dismissButtonTitle: dismissButtonTitle)
+    static func makeAlert(title: String, message: String) -> UIAlertController {
+        return make(style: .alert, title: title, message: message)
     }
 
     /**
@@ -523,8 +603,27 @@ extension UIAlertController {
     }
 }
 
-extension UIView {
+protocol RoundCorneredView {
+}
 
+protocol RoundCorneredViewVisitor {
+    func visit(view: UIView)
+}
+
+extension RoundCorneredViewVisitor {
+    func visit(view: UIView) {
+        view.layer.cornerRadius = 5
+        view.layer.masksToBounds = true
+    }
+}
+
+extension UIView: RoundCorneredView {
+    func accept(visitor: RoundCorneredViewVisitor) {
+        visitor.visit(view: self)
+    }
+}
+
+extension UIView {
     // Inspired from: https://stackoverflow.com/questions/25513271/how-to-initialize--a-custom-uiview-class-with-a-xib-file-in-swift
     class func instantiateFromNib<T>() -> T {
         let xibFileName: String = PerrFuncs.className(self.classForCoder().self)
@@ -929,5 +1028,13 @@ extension NSError {
         }
 
         return NSError(domain: errorDomain ?? "missing-domain", code: errorCode, userInfo: dict)
+    }
+}
+
+extension OnClickListener {
+    func remove() {
+        if let mySelf = view?.gestureRecognizers?.filter( { $0 == self } ).first {
+            view?.removeGestureRecognizer(mySelf)
+        }
     }
 }

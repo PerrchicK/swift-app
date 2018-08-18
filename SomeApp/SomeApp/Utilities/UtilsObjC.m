@@ -77,4 +77,8 @@
     return self;
 }
 
++ (void)load {
+    NSLog(@"App loaded");
+}
+
 @end

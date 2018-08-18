@@ -38,6 +38,8 @@
 		75F1AD721C6E8C92005D7FCA /* SomeApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */; };
 		75F1AD731C6E8C92005D7FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */; };
 		75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */; };
+		AC20C52A2128838D002F996C /* SwiftBridgedClass.m in Sources */ = {isa = PBXBuildFile; fileRef = AC20C5292128838D002F996C /* SwiftBridgedClass.m */; };
+		AC20C52C212883BA002F996C /* SwiftBridgedClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC20C52B212883BA002F996C /* SwiftBridgedClass.swift */; };
 		AC684586209EC3430082CF62 /* FLEXArgumentInputColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6844E0209EC3430082CF62 /* FLEXArgumentInputColorView.m */; };
 		AC684587209EC3430082CF62 /* FLEXArgumentInputDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6844E2209EC3430082CF62 /* FLEXArgumentInputDateView.m */; };
 		AC684588209EC3430082CF62 /* FLEXArgumentInputFontsPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6844E4209EC3430082CF62 /* FLEXArgumentInputFontsPickerView.m */; };
@@ -134,7 +136,7 @@
 		ACA7F361209F85C7000F886D /* UtilsObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F33D209F85C6000F886D /* UtilsObjC.m */; };
 		ACA7F362209F85C7000F886D /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F33F209F85C6000F886D /* AnimationsViewController.swift */; };
 		ACA7F363209F85C7000F886D /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F340209F85C6000F886D /* CollectionViewController.swift */; };
-		ACA7F364209F85C7000F886D /* CommunicationMapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F341209F85C6000F886D /* CommunicationMapLocationViewController.swift */; };
+		ACA7F364209F85C7000F886D /* MapLocationAndCommunicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F341209F85C6000F886D /* MapLocationAndCommunicationViewController.swift */; };
 		ACA7F365209F85C7000F886D /* ConcurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F342209F85C6000F886D /* ConcurrencyViewController.swift */; };
 		ACA7F366209F85C7000F886D /* CrazyWhackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F343209F85C6000F886D /* CrazyWhackViewController.swift */; };
 		ACA7F367209F85C7000F886D /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F344209F85C6000F886D /* DataViewController.swift */; };
@@ -189,6 +191,16 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AC855F02209F90B0000D97C9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -241,6 +253,9 @@
 		75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		75F1AD861C6F4B8A005D7FCA /* SomeApp-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SomeApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		AC20C5292128838D002F996C /* SwiftBridgedClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftBridgedClass.m; sourceTree = "<group>"; };
+		AC20C52B212883BA002F996C /* SwiftBridgedClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftBridgedClass.swift; sourceTree = "<group>"; };
+		AC20C52F21289348002F996C /* SwiftBridgedClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftBridgedClass.h; sourceTree = "<group>"; };
 		AC6844DF209EC3430082CF62 /* FLEXArgumentInputColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLEXArgumentInputColorView.h; sourceTree = "<group>"; };
 		AC6844E0209EC3430082CF62 /* FLEXArgumentInputColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLEXArgumentInputColorView.m; sourceTree = "<group>"; };
 		AC6844E1209EC3430082CF62 /* FLEXArgumentInputDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLEXArgumentInputDateView.h; sourceTree = "<group>"; };
@@ -418,7 +433,7 @@
 		ACA7F33D209F85C6000F886D /* UtilsObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilsObjC.m; sourceTree = "<group>"; };
 		ACA7F33F209F85C6000F886D /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		ACA7F340209F85C6000F886D /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
-		ACA7F341209F85C6000F886D /* CommunicationMapLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationMapLocationViewController.swift; sourceTree = "<group>"; };
+		ACA7F341209F85C6000F886D /* MapLocationAndCommunicationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLocationAndCommunicationViewController.swift; sourceTree = "<group>"; };
 		ACA7F342209F85C6000F886D /* ConcurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencyViewController.swift; sourceTree = "<group>"; };
 		ACA7F343209F85C6000F886D /* CrazyWhackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrazyWhackViewController.swift; sourceTree = "<group>"; };
 		ACA7F344209F85C6000F886D /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
@@ -434,7 +449,6 @@
 		ACA7F350209F85C6000F886D /* TicTacToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeGame.swift; sourceTree = "<group>"; };
 		ACA7F351209F85C6000F886D /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
 		ACA7F377209F8994000F886D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		ACAF59CC2099E3B800D4E0B5 /* StringCipher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StringCipher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -905,14 +919,17 @@
 		ACA7F330209F85C6000F886D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				ACA7F331209F85C6000F886D /* ClosureTimer.swift */,
 				ACA7F332209F85C6000F886D /* Comminucation */,
-				ACA7F334209F85C6000F886D /* Constants.swift */,
-				ACA7F335209F85C6000F886D /* PerrFuncs.swift */,
 				ACA7F336209F85C6000F886D /* Sharing */,
+				ACA7F334209F85C6000F886D /* Constants.swift */,
+				ACA7F331209F85C6000F886D /* ClosureTimer.swift */,
+				ACA7F335209F85C6000F886D /* PerrFuncs.swift */,
 				ACA7F339209F85C6000F886D /* Synchronizer.swift */,
 				ACA7F33A209F85C6000F886D /* Throttler.swift */,
 				ACA7F33B209F85C6000F886D /* UIImage+AnimatedGif.swift */,
+				AC20C52F21289348002F996C /* SwiftBridgedClass.h */,
+				AC20C5292128838D002F996C /* SwiftBridgedClass.m */,
+				AC20C52B212883BA002F996C /* SwiftBridgedClass.swift */,
 				ACA7F33C209F85C6000F886D /* UtilsObjC.h */,
 				ACA7F33D209F85C6000F886D /* UtilsObjC.m */,
 			);
@@ -941,7 +958,7 @@
 			children = (
 				ACA7F33F209F85C6000F886D /* AnimationsViewController.swift */,
 				ACA7F340209F85C6000F886D /* CollectionViewController.swift */,
-				ACA7F341209F85C6000F886D /* CommunicationMapLocationViewController.swift */,
+				ACA7F341209F85C6000F886D /* MapLocationAndCommunicationViewController.swift */,
 				ACA7F342209F85C6000F886D /* ConcurrencyViewController.swift */,
 				ACA7F343209F85C6000F886D /* CrazyWhackViewController.swift */,
 				ACA7F344209F85C6000F886D /* DataViewController.swift */,
@@ -979,7 +996,6 @@
 		CFB2A2C6277F3C8FB18AD242 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ACAF59CC2099E3B800D4E0B5 /* StringCipher.framework */,
 				7511E1181CD4F87F00696791 /* QuartzCore.framework */,
 				755284EF1CD2C03F0066D209 /* MMDrawerController.framework */,
 				755284ED1CD2C0360066D209 /* Firebase.framework */,
@@ -1020,6 +1036,7 @@
 				75D7A4B21C4E924400CDD88F /* Resources */,
 				9B2B74A52AB4CF8788CD2115 /* [CP] Embed Pods Frameworks */,
 				756791091CC66CF900EC507D /* Embed App Extensions */,
+				AC855F02209F90B0000D97C9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1215,7 +1232,6 @@
 				"${BUILT_PRODUCTS_DIR}/MMDrawerController/MMDrawerController.framework",
 				"${BUILT_PRODUCTS_DIR}/OnGestureSwift/OnGestureSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/ScryptoString/ScryptoString.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -1228,7 +1244,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MMDrawerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OnGestureSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ScryptoString.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -1254,7 +1269,7 @@
 			files = (
 				ACA7F35F209F85C7000F886D /* Throttler.swift in Sources */,
 				AC68459E209EC3430082CF62 /* FLEXTableColumnHeader.m in Sources */,
-				ACA7F364209F85C7000F886D /* CommunicationMapLocationViewController.swift in Sources */,
+				ACA7F364209F85C7000F886D /* MapLocationAndCommunicationViewController.swift in Sources */,
 				AC68458B209EC3430082CF62 /* FLEXArgumentInputNotSupportedView.m in Sources */,
 				AC6845A6209EC3430082CF62 /* FLEXFileBrowserSearchOperation.m in Sources */,
 				ACA7F352209F85C6000F886D /* CloudUser.swift in Sources */,
@@ -1313,8 +1328,10 @@
 				AC6845C3209EC3440082CF62 /* FLEXViewControllerExplorerViewController.m in Sources */,
 				AC6845C1209EC3440082CF62 /* FLEXObjectExplorerViewController.m in Sources */,
 				AC6845C4209EC3440082CF62 /* FLEXViewExplorerViewController.m in Sources */,
+				AC20C52C212883BA002F996C /* SwiftBridgedClass.swift in Sources */,
 				AC68459B209EC3430082CF62 /* FLEXMultiColumnTableView.m in Sources */,
 				759F58AE1C750168009C6E51 /* AnimatedGifBoxView.swift in Sources */,
+				AC20C52A2128838D002F996C /* SwiftBridgedClass.m in Sources */,
 				ACA7F361209F85C7000F886D /* UtilsObjC.m in Sources */,
 				ACA7F353209F85C6000F886D /* DataManager.swift in Sources */,
 				AC6845A2209EC3430082CF62 /* FLEXTableListViewController.m in Sources */,
@@ -1567,6 +1584,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SomeApp/3rdParties",
 				);
 				INFOPLIST_FILE = SomeApp/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1592,6 +1610,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SomeApp/3rdParties",
 				);
 				INFOPLIST_FILE = SomeApp/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -91,7 +91,9 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     /**
-     Returns a tuple of 2 strings as (title, icon) for a gicen index path
+     Returns a tuple of 2 strings as (title, icon) for a given index path.
+     
+     The returning of tuple is taken from Python: https://www.tutorialspoint.com/python/python_tuples.htm
      */
     func menuItemTitle(_ indexPath: IndexPath) -> (itemTitle: String, itemIcon: String)? {
         let sectionIndex = menuItems.index(menuItems.startIndex, offsetBy: indexPath.section)
