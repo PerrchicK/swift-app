@@ -39,7 +39,7 @@ class SplashScreenViewController : UIViewController {
         }
 
         print("foo method is running")
-        
+
         defer {
             print(3)
         }

@@ -11,6 +11,7 @@ import Foundation
 extension SwiftBridgedClass { // Inspired (not taken) from: https://medium.com/post-mortem/using-nsobjects-load-and-initialize-from-swift-f6f2c6d9aad0
     @objc static func swiftyLoad() {
         📘("App classes are loaded")
+        PerrFuncs.onAppLoaded()
     }
 
     @objc static func swiftyInitialize() {

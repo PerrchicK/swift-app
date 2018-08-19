@@ -41,6 +41,14 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
 
         configureAnimations()
         configureUi()
+        animatedGifBoxView.animatedGifImageView.setUserInteractionEnablingClosure { [weak self] _ -> Bool in
+            guard let strongSelf = self else { return false }
+            let shouldInteract = strongSelf.animatedGifBoxView.isAnimating && strongSelf.animatedGifBoxView.durationSlider.value < 0.5
+            return shouldInteract
+        }
+        animatedGifBoxView.animatedGifImageView.onClick { recognizer in
+            ToastMessage.show(messageText: "Pressed on the running cat")
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {

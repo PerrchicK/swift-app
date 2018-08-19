@@ -59,6 +59,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             📘("Error: damaged tuple returned")
         }
+
         return cell
     }
 

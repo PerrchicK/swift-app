@@ -56,6 +56,11 @@ func ^ (left: Bool, right: Bool) -> Bool { // Reference: http://nshipster.com/sw
 open class PerrFuncs {
 
     static var dispatchTokens: [String] = []
+    
+    static func onAppLoaded() {
+        PerrFuncs.swizzleHitTest
+    }
+    
     static public func dispatchOnce(dispatchToken: String, block: () -> ()) {
         if dispatchTokens.contains(dispatchToken) { return }
         dispatchTokens.append(dispatchToken)
@@ -109,6 +114,21 @@ open class PerrFuncs {
         block(onDone)
     }
     #endif
+
+    /* "static members of Swift are implicitly lazy . That is the reason why swizzleDesriptionImplementation is not called again and swizzling was not happened for the second time."
+    - From: https://medium.com/@abhimuralidharan/method-swizzling-in-ios-swift-1f38edaf984f
+     */
+    private static let swizzleHitTest: Void = {
+        //let instance: UIView = UIColor.red
+        //let aClass: AnyClass! = object_getClass(instance)
+        let viewClass: AnyClass! = UIView.self
+        let originalMethod = class_getInstanceMethod(viewClass, #selector(UIView.hitTest(_:with:)))
+        let swizzledMethod = class_getInstanceMethod(viewClass, #selector(UIView.myHitTest(_:with:)))
+        if let originalMethod = originalMethod, let swizzledMethod = swizzledMethod {
+            // switch selectors
+            method_exchangeImplementations(originalMethod, swizzledMethod)
+        }
+    }()
 
     class func shareImage(_ sharedImage: UIImage, completionClosure: @escaping UIActivityViewControllerCompletionWithItemsHandler) {
         let activityViewController = UIActivityViewController(activityItems: [SharingTextSource(), SharingImageSource(image: sharedImage)], applicationActivities: nil)
@@ -1036,5 +1056,41 @@ extension OnClickListener {
         if let mySelf = view?.gestureRecognizers?.filter( { $0 == self } ).first {
             view?.removeGestureRecognizer(mySelf)
         }
+    }
+}
+
+class ConditionedGestureRecognizer: UIGestureRecognizer {
+    var permissionHandler: PredicateClosure<UIView>?
+}
+
+extension UIView {
+    @objc func myHitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let conditionedRecognizer: ConditionedGestureRecognizer? = gestureRecognizers?.filter({ $0 is ConditionedGestureRecognizer }).first as? ConditionedGestureRecognizer
+        let isAllowed = conditionedRecognizer?.permissionHandler?(self) ?? true
+        guard isAllowed else { return nil }
+        guard self.point(inside: point, with: event) else { return nil }
+
+        var passed = [UIView]()
+        for subView in subviews {
+            guard subView.isUserInteractionEnabled else { continue }
+            let subviewPoint = self.convert(point, to: subView)
+
+            if let r = subView.hitTest(subviewPoint, with: event) {
+                passed.append(r)
+            }
+        }
+
+        return passed.last ?? self // Using last to follow the Z index
+    }
+
+    func setUserInteractionEnablingClosure(permissionHandler: @escaping PredicateClosure<UIView>) {
+        var conditionedRecognizer: ConditionedGestureRecognizer? = gestureRecognizers?.filter({ $0 is ConditionedGestureRecognizer }).first as? ConditionedGestureRecognizer
+        
+        if conditionedRecognizer == nil {
+            conditionedRecognizer = ConditionedGestureRecognizer()
+            addGestureRecognizer(conditionedRecognizer!)
+        }
+        
+        conditionedRecognizer?.permissionHandler = permissionHandler
     }
 }

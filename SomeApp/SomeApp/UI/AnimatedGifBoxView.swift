@@ -22,40 +22,48 @@ class AnimatedGifBoxView: UIView {
     @IBOutlet weak var durationSlider: UISlider!
     @IBOutlet weak var animatedGifImageView: UIImageView!
 
-    fileprivate var isAnimating = false
+    private(set) var isAnimating = false
 
     override func awakeFromNib() {
         animatedGifImageView.contentMode = .scaleAspectFit
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), for: UIControlEvents.touchUpInside)
         durationSlider.addTarget(self, action: #selector(AnimatedGifBoxView.durationSliderTouchUp(_:)), for: UIControlEvents.touchUpOutside)
+        let isBouncing = false
+        animatedGifImageView.😘(huggedObject: isBouncing)
+        let isNodding = false
+        durationLabel.😘(huggedObject: isNodding)
     }
  
     @objc func durationSliderTouchUp(_ sender: UISlider) {
-        guard !isAnimating else { return }
+        let isBouncing = animatedGifImageView.😍() as? Bool ?? false
+        guard !isBouncing else { return }
 
-        isAnimating = true
         // Refresh image with the new frame rate
         animatedGifImageView.image = UIImage(named: ANIMATED_GIF_FILENAME + ".gif")
         animatedGifImageView.animateBounce() { [weak self] (finished) in
             guard let strongSelf = self else { return }
 
-            strongSelf.isAnimating = false
+            let isBouncing = false
+            strongSelf.😘(huggedObject: isBouncing)
+
             strongSelf.animatedGifImageView.image = UIImage.gifWithName(strongSelf.ANIMATED_GIF_FILENAME, frameRate: TimeInterval(strongSelf.durationSlider.value) * 10000.0)
+            strongSelf.isAnimating = true
         }
     }
     
     func animateNope() {
-        guard !isAnimating else { return }
+        let isNodding = durationLabel.😍() as? Bool ?? false
+        guard !isNodding else { return }
 
-        isAnimating = true
+        durationLabel.😘(huggedObject: !isNodding)
         // Refresh image with the new frame rate
         durationLabel.animateNo() { [weak self] (isDone) in
             if isDone {
-                self?.isAnimating = !isDone // not done <==> animating || done <==> not animating
+                self?.durationLabel.😘(huggedObject: isNodding) // not done <==> animating || done <==> not animating
             }
         }
     }
-    
+
     @IBAction func sliderValueChanged(_ sender: UISlider) {
         guard durationSlider.value > 0.0 && durationSlider.value < 1.0 else { self.animateNope(); return }
 
