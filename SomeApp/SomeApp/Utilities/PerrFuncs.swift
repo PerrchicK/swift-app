@@ -1086,11 +1086,13 @@ extension UIView {
     func setUserInteractionEnablingClosure(permissionHandler: @escaping PredicateClosure<UIView>) {
         var conditionedRecognizer: ConditionedGestureRecognizer? = gestureRecognizers?.filter({ $0 is ConditionedGestureRecognizer }).first as? ConditionedGestureRecognizer
         
-        if conditionedRecognizer == nil {
-            conditionedRecognizer = ConditionedGestureRecognizer()
-            addGestureRecognizer(conditionedRecognizer!)
+        if let conditionedRecognizer = conditionedRecognizer {
+            gestureRecognizers?.remove(where: { $0 == conditionedRecognizer })
         }
-        
+
+        conditionedRecognizer = ConditionedGestureRecognizer()
+        addGestureRecognizer(conditionedRecognizer!)
+
         conditionedRecognizer?.permissionHandler = permissionHandler
     }
 }
