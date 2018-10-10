@@ -11,6 +11,7 @@ import UIKit
 
 class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimationDelegate, AnimatedGifBoxViewDelegate {
     
+    // More details at: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/KeyValueObserving/KeyValueObserving.html#//apple_ref/doc/uid/10000177i
     private static let KVO_KEY_PATH_TO_OBSERVE = "constant"
     
     @IBOutlet weak var animatedOutTransitionView: UIView!

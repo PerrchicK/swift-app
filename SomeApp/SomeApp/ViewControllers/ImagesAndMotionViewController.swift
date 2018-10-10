@@ -14,22 +14,17 @@ import BetterSegmentedControl
 
 class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
 
+    var cameraPreivew: CameraPreivew?
     let imagePickerController = UIImagePickerController()
     let manager = CMMotionManager()
     
+    @IBOutlet weak var cameraPreviewContainer: UIView!
     @IBOutlet weak var gyroDataLabel: UILabel!
     @IBOutlet weak var pickedImageButton: UIButton!
     // A replacement for UISegmentedControl, more info at: https://littlebitesofcocoa.com/226-bettersegmentedcontrol
     @IBOutlet weak var sourceControl: BetterSegmentedControl!
     @IBOutlet weak var typeControl: BetterSegmentedControl!
     @IBOutlet weak var isEditableControl: BetterSegmentedControl!
-
-    @IBOutlet weak var cameraLensPreviewButton: UIButton!
-
-    var device: AVCaptureDevice?
-    var captureSession: AVCaptureSession?
-    var previewLayer: AVCaptureVideoPreviewLayer?
-    var cameraLensImage: UIImage?
 
     // Computed variable example
     var isEditableSelected: Bool {
@@ -44,11 +39,6 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Initialize snapshot image view
-        self.cameraLensPreviewButton.contentMode = .scaleAspectFill
-        self.cameraLensPreviewButton.clipsToBounds = true
-        self.cameraLensPreviewButton.layer.cornerRadius = 12
 
         // Initialize picker image view
         pickedImageButton.layer.cornerRadius = 3
@@ -94,17 +84,23 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         typeControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         isEditableControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         
-        self.setupCamera()
-
-        cameraLensPreviewButton.onClick { [weak self] (tapGestureRecognizer) in
-            self?.takeSnapshot()
-        }
+        let preivew: CameraPreivew = CameraPreivew(frame: view.frame)
+        cameraPreviewContainer.addSubview(preivew)
+        cameraPreviewContainer.makeRoundedCorners()
+        preivew.stretchToSuperViewEdges()
+        preivew.dropShadow()
+        cameraPreivew = preivew
+        cameraPreivew?.onClick({ [weak self] _ in
+            let capturedImage = self?.cameraPreivew?.takeSnapshot()
+            
+        })
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(cameBackFromBackground(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        cameraPreivew?.setupCamera()
+        cameraPreivew?.start()
 
         // MARK: - Core Motion
         if manager.isGyroAvailable {
@@ -134,6 +130,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
+        cameraPreivew?.stop()
         manager.stopGyroUpdates()
         manager.stopDeviceMotionUpdates()
         NotificationCenter.default.removeObserver(self)
@@ -158,10 +155,6 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
     @IBAction func backButtonPressed(_ sender: AnyObject) {
         dismiss(animated: true, completion: nil)
-    }
-
-    @IBAction func cameraLensPreviewButtonPressed(_ sender: AnyObject) {
-        takeSnapshot()
     }
 
     @IBAction func cameraButtonPressed(_ sender: AnyObject) {
@@ -192,112 +185,6 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         // Check permission using:
         // import Photos => PHPhotoLibrary.authorizationStatus() == .authorized
         present(imagePickerController, animated: true, completion: nil)
-    }
-
-    @objc func cameBackFromBackground(_ notification: Notification) {
-        self.takeSnapshot()
-    }
-
-    func takeSnapshot() {
-        guard !PerrFuncs.isRunningOnSimulator() else { return }
-
-        if let capturedImage = cameraLensImage {
-            self.cameraLensPreviewButton.setImage(capturedImage, for: .normal)
-            UIImageWriteToSavedPhotosAlbum(capturedImage,
-                                           nil,//id completionTarget
-                nil,//SEL completionSelector
-                nil)//void *contextInfo
-        } else {
-//            self.previewLayer
-        }
-    }
-
-    func setupCamera() {
-        guard !PerrFuncs.isRunningOnSimulator() else { return }
-
-        let devices = AVCaptureDevice.devices(for: AVMediaType.video)
-        for device in devices {
-            if (device as AnyObject).position == .front {
-                self.device = device as? AVCaptureDevice
-            }
-        }
-        do {
-            let input = try AVCaptureDeviceInput(device: self.device!)
-            
-            let output = AVCaptureVideoDataOutput()
-            output.alwaysDiscardsLateVideoFrames = true
-            
-            let cameraQueue = DispatchQueue(label: "cameraQueue", attributes: [])
-            output.setSampleBufferDelegate(self, queue: cameraQueue)
-            
-            let key = kCVPixelBufferPixelFormatTypeKey as String
-            let value = Int(kCVPixelFormatType_32BGRA)
-            let videoSettings = [key:value]
-            output.videoSettings = videoSettings
-
-            captureSession = AVCaptureSession()
-            previewLayer = AVCaptureVideoPreviewLayer()
-            if let captureSession = captureSession, let previewLayer = previewLayer {
-                captureSession.addInput(input)
-                captureSession.addOutput(output)
-                captureSession.sessionPreset = AVCaptureSession.Preset.photo
-
-                previewLayer.session = captureSession
-                previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-                
-                // CHECK FOR YOUR APP
-                previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: cameraLensPreviewButton.frame.size.width, height: cameraLensPreviewButton.frame.size.height)
-                // CHECK FOR YOUR APP
-                
-                cameraLensPreviewButton.layer.insertSublayer(previewLayer, at:0)   // Comment-out to hide preview layer
-                
-                captureSession.startRunning()
-            }
-        } catch {
-            📘("Error: Failed to setup camera")
-        }
-    }
-    
-    // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
-
-    func captureOutput(_ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-
-        CVPixelBufferLockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0))
-        let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)// as? UInt8  else { return }
-        // size_t:
-        let bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer)
-        let width = CVPixelBufferGetWidth(imageBuffer)
-        let height = CVPixelBufferGetHeight(imageBuffer)
-        
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let newContext = CGContext(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue)
-
-        if let newImage = newContext?.makeImage() {
-            
-            //        CGContextRelease(newContext)
-            //        CGColorSpaceRelease(colorSpace)
-            
-            var imageOrientation = UIImageOrientation.downMirrored
-            switch UIDevice.current.orientation {
-            case .portrait:
-                imageOrientation = .leftMirrored
-            case .portraitUpsideDown:
-                imageOrientation = .rightMirrored
-            case .landscapeLeft:
-                imageOrientation = .downMirrored
-            case .landscapeRight:
-                imageOrientation = .upMirrored
-            default:
-                break
-            }
-            
-            self.cameraLensImage = UIImage(cgImage: newImage, scale:1.0, orientation:imageOrientation)
-            
-            // No need to release on Swift
-            //        CGImageRelease(newImage)
-        }
-        CVPixelBufferUnlockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0));
     }
 
     // MARK: - UIDocumentInteractionControllerDelegate
@@ -339,5 +226,140 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 extension CFString {
     var string: String {
         return String(self)
+    }
+}
+
+class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
+    var cameraLensPreview: UIImageView?
+    var device: AVCaptureDevice?
+    var captureSession: AVCaptureSession?
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var cameraLensImage: UIImage?
+    
+    override init(frame: CGRect) {
+        guard frame != CGRect.zero else { fatalError("The initial frame cannot be zero!"); return }
+        // Initialize snapshot image view
+        cameraLensPreview = UIImageView(frame: frame)
+        cameraLensPreview?.contentMode = .scaleAspectFill
+        
+        super.init(frame: frame)
+        
+        addSubview(cameraLensPreview!)
+        cameraLensPreview?.stretchToSuperViewEdges()
+        setupCamera()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    func start() {
+        if let captureSession = captureSession, !captureSession.isRunning {
+            captureSession.startRunning()
+        }
+    }
+    
+    func stop() {
+        if let captureSession = captureSession, captureSession.isRunning {
+            captureSession.stopRunning()
+        }
+    }
+
+    func takeSnapshot() -> UIImage? {
+        guard !PerrFuncs.isRunningOnSimulator() else { return nil }
+        
+        if let capturedImage = cameraLensImage {
+            return capturedImage
+        }
+
+        return nil
+    }
+    
+    func mockCamera() {
+        let mockView = UIView(frame: self.frame)
+        mockView.backgroundColor = .red
+        addSubview(mockView)
+        mockView.addVerticalGradientBackgroundLayer(topColor: UIColor.blue, bottomColor: UIColor.yellow)
+        mockView.stretchToSuperViewEdges()
+    }
+
+    func setupCamera() {
+        guard !PerrFuncs.isRunningOnSimulator() else { mockCamera(); return }
+        
+        let devicevideoCameras = AVCaptureDevice.devices(for: AVMediaType.video)
+        self.device = devicevideoCameras.filter( { $0.position == .back } ).first
+        guard let device = device else { mockCamera(); return }
+        
+        do {
+            let input = try AVCaptureDeviceInput(device: device)
+            
+            let output = AVCaptureVideoDataOutput()
+            output.alwaysDiscardsLateVideoFrames = true
+            
+            let cameraQueue = DispatchQueue(label: "cameraQueue", attributes: [])
+            output.setSampleBufferDelegate(self, queue: cameraQueue)
+            
+            let key = kCVPixelBufferPixelFormatTypeKey as String
+            let value = Int(kCVPixelFormatType_32BGRA)
+            let videoSettings = [key:value]
+            output.videoSettings = videoSettings
+            
+            captureSession = AVCaptureSession()
+            previewLayer = AVCaptureVideoPreviewLayer()
+            if let captureSession = captureSession, let previewLayer = previewLayer {
+                captureSession.addInput(input)
+                captureSession.addOutput(output)
+                captureSession.sessionPreset = AVCaptureSession.Preset.photo
+                
+                previewLayer.session = captureSession
+                previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+                
+                // CHECK FOR YOUR APP
+                previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: cameraLensPreview!.frame.size.width, height: cameraLensPreview!.frame.size.height)
+                // CHECK FOR YOUR APP
+                
+                cameraLensPreview?.layer.insertSublayer(previewLayer, at:0)   // Comment-out to hide preview layer
+                
+                //captureSession.startRunning()
+            }
+        } catch let error {
+            📘("Error: Failed to setup camera: \(error)")
+        }
+    }
+    
+    
+    
+    // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
+    
+    func captureOutput(_ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        
+        CVPixelBufferLockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0))
+        let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer)
+        let width = CVPixelBufferGetWidth(imageBuffer)
+        let height = CVPixelBufferGetHeight(imageBuffer)
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let newContext = CGContext(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue)
+        
+        if let newImage = newContext?.makeImage() {
+            var imageOrientation = UIImageOrientation.downMirrored
+            switch UIDevice.current.orientation {
+            case .portrait:
+                imageOrientation = .leftMirrored
+            case .portraitUpsideDown:
+                imageOrientation = .rightMirrored
+            case .landscapeLeft:
+                imageOrientation = .downMirrored
+            case .landscapeRight:
+                imageOrientation = .upMirrored
+            default:
+                break
+            }
+            
+            self.cameraLensImage = UIImage(cgImage: newImage, scale:1.0, orientation:imageOrientation)
+        }
+        CVPixelBufferUnlockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0));
     }
 }

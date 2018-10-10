@@ -161,31 +161,32 @@ class ConcurrencyViewController: UIViewController {
             self?.startSynchronizerButton?.animateFade(fadeIn: true)
             ToastMessage.show(messageText: "synchronizer released")
         }
-        
+
         guard let synchronizer = synchronizer else { return }
 
         action1Spinner.stopAnimating()
         action2Spinner.stopAnimating()
         action3Spinner.stopAnimating()
         
-        let holder1 = synchronizer.createHolder()
-        action1Spinner.onClick { [weak self] _ in
-            holder1.release()
-            📘("action 1 dispatched")
-            self?.action1Spinner.stopAnimating()
-        }
-        let holder2 = synchronizer.createHolder()
-        action2Spinner.onClick { [weak self] _ in
-            holder2.release()
-            📘("action 2 dispatched")
-            self?.action2Spinner.stopAnimating()
-        }
-        let holder3 = synchronizer.createHolder()
-        action3Spinner.onClick { [weak self] _ in
-            holder3.release()
-            📘("action 2 dispatched")
-            self?.action3Spinner.stopAnimating()
-        }
+        synchronizer.wait(forHolder: { (holder) in
+            action1Spinner.onClick { [weak self] _ in
+                holder.release()
+                📘("action 1 done")
+                self?.action1Spinner.stopAnimating()
+            }
+        }).wait(forHolder: { (holder) in
+            action2Spinner.onClick { [weak self] _ in
+                holder.release()
+                📘("action 2 done")
+                self?.action2Spinner.stopAnimating()
+            }
+        }).wait(forHolder: { (holder) in
+            action3Spinner.onClick { [weak self] _ in
+                holder.release()
+                📘("action 3 done")
+                self?.action3Spinner.stopAnimating()
+            }
+        })
     }
 
     func resetProgressBars() {

@@ -44,6 +44,12 @@ class Synchronizer {
         return blocker
     }
 
+    @discardableResult
+    func wait(forHolder holderClosure: (Holder) -> ()) -> Synchronizer {
+        holderClosure(createHolder())
+        return self
+    }
+
     internal class Holder {
         let blockOperation: BlockOperation
         let raceConditionQueue: OperationQueue

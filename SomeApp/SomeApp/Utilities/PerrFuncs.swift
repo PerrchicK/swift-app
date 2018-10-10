@@ -866,6 +866,7 @@ extension UIView {
         return gradientLayer
     }
 
+    @discardableResult
     func addVerticalGradientBackgroundLayer(topColor: UIColor, bottomColor: UIColor) -> CALayer {
         let gradientLayer = CAGradientLayer()
         let topCGColor = topColor.cgColor
