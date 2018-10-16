@@ -15,8 +15,8 @@ import BetterSegmentedControl
 class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
 
     var cameraPreivew: CameraPreivew?
-    let imagePickerController = UIImagePickerController()
-    let manager = CMMotionManager()
+    lazy var imagePickerController = UIImagePickerController()
+    lazy var manager = CMMotionManager()
     
     @IBOutlet weak var cameraPreviewContainer: UIView!
     @IBOutlet weak var gyroDataLabel: UILabel!
@@ -28,8 +28,8 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
 
     // Computed variable example
     var isEditableSelected: Bool {
-            return isEditableControl.index == 0
-        }
+        return isEditableControl.index == 0
+    }
 
     enum MediaType: String {
         case Both
@@ -88,11 +88,30 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         cameraPreviewContainer.addSubview(preivew)
         cameraPreviewContainer.makeRoundedCorners()
         preivew.stretchToSuperViewEdges()
-        preivew.dropShadow()
+        //preivew.dropShadow()
         cameraPreivew = preivew
         cameraPreivew?.onClick({ [weak self] _ in
-            let capturedImage = self?.cameraPreivew?.takeSnapshot()
-            
+            guard let capturedImage = self?.cameraPreivew?.takeSnapshot() else { return }
+            capturedImage.present()
+            if #available(iOS 11.0, *) {
+                PerrFuncs.readText(fromImage: capturedImage, block: { (text) in
+                    📘(text)
+                })
+            }
+        })
+
+        cameraPreivew?.onLongPress({ [weak self] recognizer in
+            guard recognizer.state == .began else { return }
+            self?.cameraPreivew?.stop()
+            self?.cameraPreivew?.addBlurEffect(blurEffectStyle: UIBlurEffectStyle.light)
+            PerrFuncs.runBlockAfterDelay(afterDelay: 0.2, block: {
+                self?.cameraPreivew?.animateFlip(duration: 0.5) { _ in
+                    let otherPosition: AVCaptureDevice.Position = self?.cameraPreivew?.device?.position == .front ? .back : .front
+                    self?.cameraPreivew?.setupCamera(cameraPosition: otherPosition)
+                    self?.cameraPreivew?.removeAllBlurEffects()
+                    self?.cameraPreivew?.start()
+                }
+            })
         })
     }
 
@@ -100,7 +119,9 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         super.viewDidAppear(animated)
 
         cameraPreivew?.setupCamera()
-        cameraPreivew?.start()
+        PerrFuncs.runOnBackground(block: {
+            self.cameraPreivew?.start()
+        })
 
         // MARK: - Core Motion
         if manager.isGyroAvailable {
@@ -237,7 +258,7 @@ class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDoc
     var cameraLensImage: UIImage?
     
     override init(frame: CGRect) {
-        guard frame != CGRect.zero else { fatalError("The initial frame cannot be zero!"); return }
+        guard frame != CGRect.zero else { fatalError("The initial frame cannot be zero!"); }
         // Initialize snapshot image view
         cameraLensPreview = UIImageView(frame: frame)
         cameraLensPreview?.contentMode = .scaleAspectFill
@@ -246,7 +267,6 @@ class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDoc
         
         addSubview(cameraLensPreview!)
         cameraLensPreview?.stretchToSuperViewEdges()
-        setupCamera()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -267,9 +287,15 @@ class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDoc
 
     func takeSnapshot() -> UIImage? {
         guard !PerrFuncs.isRunningOnSimulator() else { return nil }
-        
+        //previewLayer.image
         if let capturedImage = cameraLensImage {
-            return capturedImage
+            return capturedImage.fixedOrientation()
+        }
+
+        if #available(iOS 10.0, *) {
+            return asImage()
+        } else {
+            // Fallback on earlier versions
         }
 
         return nil
@@ -283,13 +309,23 @@ class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDoc
         mockView.stretchToSuperViewEdges()
     }
 
-    func setupCamera() {
+    func cleanup() {
+        captureSession?.stopRunning()
+        previewLayer?.removeFromSuperlayer()
+
+        captureSession = nil
+        previewLayer = nil
+    }
+
+    func setupCamera(cameraPosition: AVCaptureDevice.Position = .back) {
         guard !PerrFuncs.isRunningOnSimulator() else { mockCamera(); return }
         
         let devicevideoCameras = AVCaptureDevice.devices(for: AVMediaType.video)
-        self.device = devicevideoCameras.filter( { $0.position == .back } ).first
+        self.device = devicevideoCameras.filter( { $0.position == cameraPosition } ).first
         guard let device = device else { mockCamera(); return }
-        
+
+        cleanup()
+
         do {
             let input = try AVCaptureDeviceInput(device: device)
             
@@ -319,20 +355,20 @@ class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDoc
                 // CHECK FOR YOUR APP
                 
                 cameraLensPreview?.layer.insertSublayer(previewLayer, at:0)   // Comment-out to hide preview layer
-                
-                //captureSession.startRunning()
             }
         } catch let error {
             📘("Error: Failed to setup camera: \(error)")
         }
     }
     
-    
-    
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
     
     func captureOutput(_ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            guard let image = getImageFromSampleBuffer(sampleBuffer: sampleBuffer) else { return }
+            cameraLensImage = image
+            return
+        }
         
         CVPixelBufferLockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0))
         let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
@@ -360,6 +396,38 @@ class CameraPreivew: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, UIDoc
             
             self.cameraLensImage = UIImage(cgImage: newImage, scale:1.0, orientation:imageOrientation)
         }
+
         CVPixelBufferUnlockBaseAddress(imageBuffer,CVPixelBufferLockFlags(rawValue: 0));
+    }
+    
+    func getImageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return nil
+        }
+
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+
+        guard let context = CGContext(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue) else {
+            return nil
+        }
+
+        guard let cgImage = context.makeImage() else {
+            return nil
+        }
+
+        let image = UIImage(cgImage: cgImage, scale: 1, orientation:.right)
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        return image
+    }
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let image = getImageFromSampleBuffer(sampleBuffer: sampleBuffer) else { return }
+        cameraLensImage = image
     }
 }

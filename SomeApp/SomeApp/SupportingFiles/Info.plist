@@ -42,6 +42,20 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>To load media from you "gallery"</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To demonstrate camera capture</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To demonstrate location update</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To record videos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To demonstrate image picking from your library to the screen</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -56,15 +70,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To demonstrate image picking from your library to the screen</string>
-	<key>NSCameraUsageDescription</key>
-	<string>To demonstrate camera capture</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>To record videos</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>To load media from you &quot;gallery&quot;</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To demonstrate location update</string>
 </dict>
 </plist>

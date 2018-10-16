@@ -40,6 +40,7 @@
 		75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */; };
 		AC20C52A2128838D002F996C /* SwiftBridgedClass.m in Sources */ = {isa = PBXBuildFile; fileRef = AC20C5292128838D002F996C /* SwiftBridgedClass.m */; };
 		AC20C52C212883BA002F996C /* SwiftBridgedClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC20C52B212883BA002F996C /* SwiftBridgedClass.swift */; };
+		AC4463462176426E0071092B /* Swizzler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4463452176426E0071092B /* Swizzler.swift */; };
 		AC684586209EC3430082CF62 /* FLEXArgumentInputColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6844E0209EC3430082CF62 /* FLEXArgumentInputColorView.m */; };
 		AC684587209EC3430082CF62 /* FLEXArgumentInputDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6844E2209EC3430082CF62 /* FLEXArgumentInputDateView.m */; };
 		AC684588209EC3430082CF62 /* FLEXArgumentInputFontsPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6844E4209EC3430082CF62 /* FLEXArgumentInputFontsPickerView.m */; };
@@ -256,6 +257,7 @@
 		AC20C5292128838D002F996C /* SwiftBridgedClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftBridgedClass.m; sourceTree = "<group>"; };
 		AC20C52B212883BA002F996C /* SwiftBridgedClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftBridgedClass.swift; sourceTree = "<group>"; };
 		AC20C52F21289348002F996C /* SwiftBridgedClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftBridgedClass.h; sourceTree = "<group>"; };
+		AC4463452176426E0071092B /* Swizzler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swizzler.swift; sourceTree = "<group>"; };
 		AC6844DF209EC3430082CF62 /* FLEXArgumentInputColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLEXArgumentInputColorView.h; sourceTree = "<group>"; };
 		AC6844E0209EC3430082CF62 /* FLEXArgumentInputColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLEXArgumentInputColorView.m; sourceTree = "<group>"; };
 		AC6844E1209EC3430082CF62 /* FLEXArgumentInputDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLEXArgumentInputDateView.h; sourceTree = "<group>"; };
@@ -932,6 +934,7 @@
 				AC20C52B212883BA002F996C /* SwiftBridgedClass.swift */,
 				ACA7F33C209F85C6000F886D /* UtilsObjC.h */,
 				ACA7F33D209F85C6000F886D /* UtilsObjC.m */,
+				AC4463452176426E0071092B /* Swizzler.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1104,6 +1107,9 @@
 						DevelopmentTeam = BYQ4J9BT99;
 						LastSwiftMigration = 0900;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -1311,6 +1317,7 @@
 				AC6845A8209EC3430082CF62 /* FLEXGlobalsTableViewController.m in Sources */,
 				AC684597209EC3430082CF62 /* FLEXMethodCallingViewController.m in Sources */,
 				AC684598209EC3430082CF62 /* FLEXPropertyEditorViewController.m in Sources */,
+				AC4463462176426E0071092B /* Swizzler.swift in Sources */,
 				AC6845AE209EC3430082CF62 /* FLEXSystemLogTableViewCell.m in Sources */,
 				ACA7F365209F85C7000F886D /* ConcurrencyViewController.swift in Sources */,
 				ACA7F369209F85C7000F886D /* ImagesAndMotionViewController.swift in Sources */,
