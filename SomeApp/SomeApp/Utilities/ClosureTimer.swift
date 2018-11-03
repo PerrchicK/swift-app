@@ -9,6 +9,9 @@
 import Foundation
 import OnGestureSwift
 
+public typealias CallbackClosure<T> = ((T) -> Void)
+public typealias PredicateClosure<T> = ((T) -> Bool)
+
 class ClosureTimer {
     var timer: Timer?
     let block: CallbackClosure<Any?>

@@ -286,13 +286,27 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     }
 
     func configureUi() {
-        fetchImageButton.onPan { [weak self] (panGestureRecognizer) in
+        fetchImageButton.onPan { [weak self] (onPanListener) in
             guard let strongSelf = self else { return }
+            guard onPanListener.state != .ended else {
+                onPanListener.userInfo = nil
+                return
+            }
 
-            if let superview = panGestureRecognizer.view?.superview {
-                let locationOfTouch = panGestureRecognizer.location(in: superview)
+            if let superview = onPanListener.view?.superview {
+                let locationOfTouch = onPanListener.location(in: superview)
                 📘(locationOfTouch)
-                strongSelf.scrollView.contentOffset = locationOfTouch
+
+                if onPanListener.state == .began {
+                    onPanListener.userInfo = locationOfTouch.y + strongSelf.scrollView.contentOffset.y
+                }
+                let startingLocationOfTouchY: CGFloat = onPanListener.userInfo as? CGFloat ?? 0
+
+                let yDiff = startingLocationOfTouchY - locationOfTouch.y
+
+                var newContentOffset = strongSelf.scrollView.contentOffset
+                newContentOffset.y = yDiff
+                strongSelf.scrollView.contentOffset = newContentOffset
             }
         }
 
