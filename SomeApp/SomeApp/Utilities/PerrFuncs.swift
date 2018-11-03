@@ -11,6 +11,7 @@ import ObjectiveC
 import OnGestureSwift
 import LocalAuthentication
 import Vision
+import SwiftKeychainWrapper
 
 // MARK: - "macros"
 
@@ -502,7 +503,7 @@ extension UIImage {
         }
     }
 
-    func imageWithInsets(insets: UIEdgeInsets) -> UIImage? {
+    func addMargin(withInsets insets: UIEdgeInsets) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(
             CGSize(width: self.size.width + insets.left + insets.right,
                    height: self.size.height + insets.top + insets.bottom), false, self.scale)
@@ -526,7 +527,7 @@ extension UIImage {
         }
         imageView.alpha = 0
         imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.7)
-        imageView.image = self.imageWithInsets(insets: UIEdgeInsetsMake(100, 100, 100, 100))
+        imageView.image = addMargin(withInsets: UIEdgeInsetsMake(100, 100, 100, 100))
         imageView.center = topView.center
         topView.addSubview(imageView)
         imageView.animateFade(fadeIn: true, duration: 0.3, completion: nil)
@@ -1108,7 +1109,37 @@ extension URL {
     }
 }
 
+extension UserDefaults { // Inspired from: https://github.com/jrendel/SwiftKeychainWrapper and https://developer.apple.com/documentation/security/keychain_services
+    /// Stores a string (of this app, using keychain) by a given key
+    static func saveForEternity(value: String, forKey key: String) -> Bool {
+        return KeychainWrapper.standard.set(value, forKey: key)
+    }
+
+    /// Removes a string (of this app, using keychain) from a given key
+    static func removeFromEternity(withKey key: String) -> Bool {
+        return KeychainWrapper.standard.removeObject(forKey: key)
+    }
+
+    /// Loads a string (of this app, using keychain) from a given key
+    static func loadFromEternity(fromKey key: String) -> String? {
+        return KeychainWrapper.standard.string(forKey: key)
+    }
+}
+
 extension UserDefaults {
+    public subscript<T>(key: String) -> T? {
+        get {
+            return UserDefaults.load(key: key)
+        }
+        set {
+            if let newValue = newValue {
+                UserDefaults.save(value: newValue, forKey: key).synchronize()
+            } else {
+                UserDefaults.remove(key: key).synchronize()
+            }
+        }
+    }
+
     static func save(value: Any, forKey key: String) -> UserDefaults {
         UserDefaults.standard.set(value, forKey: key)
         return UserDefaults.standard
@@ -1244,14 +1275,6 @@ extension NSError {
         }
 
         return NSError(domain: errorDomain ?? "missing-domain", code: errorCode, userInfo: dict)
-    }
-}
-
-extension OnClickListener {
-    func remove() {
-        if let mySelf = view?.gestureRecognizers?.filter( { $0 == self } ).first {
-            view?.removeGestureRecognizer(mySelf)
-        }
     }
 }
 

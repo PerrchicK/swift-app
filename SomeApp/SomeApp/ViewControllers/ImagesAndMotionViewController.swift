@@ -52,7 +52,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         var typeControlIndex: UInt = 1
         var isEditableControlIndex: UInt = 0
         if let selectedIndexesDictionary: [String: UInt] = UserDefaults.load(key: "selected settings") {
-            print(selectedIndexesDictionary)
+            📘(selectedIndexesDictionary)
             sourceControlIndex = selectedIndexesDictionary["sourceControl"] ?? 1
             typeControlIndex = selectedIndexesDictionary["typeControl"] ?? 1
             isEditableControlIndex = selectedIndexesDictionary["isEditableControl"] ?? 0

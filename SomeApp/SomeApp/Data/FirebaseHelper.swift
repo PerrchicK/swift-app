@@ -26,13 +26,13 @@ class FirebaseHelper {
         return (GoogleServiceInfoPlistContent["DATABASE_URL"] as? String) ?? ""
     }()
 
-    static func loggedInUser(completionCallback: @escaping (_: Firebase.User?) -> ()) {
+    static func loggedInUser(completionCallback: @escaping (_: User?) -> ()) {
         if let isActivated = isActivated {
             if isActivated {
                 if Auth.auth().currentUser == nil {
-                    Auth.auth().signInAnonymously { (anAnonymouslyUser, error) in
-                        📘("\(String(describing: anAnonymouslyUser)) logged in with error: \(String(describing: error))")
-                        completionCallback(anAnonymouslyUser)
+                    Auth.auth().signInAnonymously { (authResult, error) in
+                        📘("auth result: '\(String(describing: authResult))' with error: \(String(describing: error))")
+                        completionCallback(authResult?.user)
                     }
                 } else {
                     completionCallback(Auth.auth().currentUser)
@@ -89,11 +89,11 @@ class FirebaseHelper {
         return nil
     }
 
-    static func createUserNode(user: Firebase.User) {
+    static func createUserNode(user: User) {
         if let isActivated = isActivated {
             if !isActivated { return }
 
-            let clouUser = CloudUser(from: user, fcmToken: AppDelegate.fcmToken)
+            let clouUser = CloudUser(from: user, fcmToken: AppDelegate.shared.fcmToken)
             rootRef.child(Keys.Users).child(clouUser.uid).setValue(clouUser.toDictionary())
         } else {
             initialize()

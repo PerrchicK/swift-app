@@ -26,6 +26,8 @@ class NotificationsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        AppDelegate.shared.setupNotifications()
+
         //MARK:- dispatch delayed notifications
         let shortLength = DispatchTime.timeWithSeconds(ToastMessage.ToastMessageLength.short.rawValue)
 
@@ -106,7 +108,7 @@ class NotificationsViewController: UIViewController {
         PerrFuncs.runBackgroundTask { [weak self](onDone) in
             guard let strongSelf = self else { return }
 
-            if let fcmToken = AppDelegate.fcmToken {
+            if let fcmToken = AppDelegate.shared.fcmToken {
                 let registrationIds: [String] = [fcmToken]
                 self?.sendFcmNotificationUsingUrlRequest(notificationDictionary: strongSelf.generateNotificationPayload(withAlertTitle: "Remote notification example", andBody: "push notification's body"), dataDictionary: ["more data":"some ID"], toRegistrationIds: registrationIds) { succeeded in
                     📘("did push notification request succeeded? - \(succeeded)")

@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import Firebase
+import FirebaseAuth
 import FirebaseMessaging
 import UserNotifications
 
@@ -17,17 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var signInHolder: Synchronizer.Holder?
     var tokenHolder: Synchronizer.Holder?
-    static var fcmToken: String? {
-        return (UIApplication.shared.delegate as? AppDelegate)?._fcmToken
-    }
 
-    var loggedInUser: Firebase.User?
-    private var _fcmToken: String? {
+    var loggedInUser: User?
+    private(set) var fcmToken: String? {
         didSet {
             self.tokenHolder?.release()
         }
     }
     var window: UIWindow?
+    static var shared: AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -67,8 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
         }
 
-        setupNotifications(application: application)
-
         // Another (programmatic) way to determine the window
         //        window = UIWindow(frame: UIScreen.main.bounds)
         //        window?.rootViewController = UINavigationController(rootViewController: _)
@@ -83,7 +81,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
 
-    func setupNotifications(application: UIApplication) {
+    func setupNotifications() {
+        setupNotifications(application: UIApplication.shared)
+    }
+
+    private func setupNotifications(application: UIApplication) {
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -125,7 +127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         📘("FCM (refreshed) token string: \(fcmToken)")
-        self._fcmToken = fcmToken
+        self.fcmToken = fcmToken
     }
 
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
@@ -148,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         if let fcmToken = InstanceID.instanceID().token() {
             📘("FCM token string: \(fcmToken)")
-            self._fcmToken = fcmToken
+            self.fcmToken = fcmToken
         }
     }
 

@@ -96,6 +96,16 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             let persistableUsers = NSKeyedUnarchiver.unarchiveObject(with: persistableUsersData) as? [PersistableUser] {
             📘(persistableUsers)
         }
+        
+        
+        //UserDefaults.saveForever(value: "cool forever", forKey: "Perry")
+        let valueFromKeychain = UserDefaults.loadFromEternity(fromKey: "Perry") ?? "<empty>"
+        
+        //UserDefaults.standard["Perry"] = "cool for a lifetime"
+        let valueFromUserDefaults: String = UserDefaults.standard["Perry"] ?? "<empty>"
+        
+        📘(valueFromKeychain)
+        📘(valueFromUserDefaults)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -15,8 +15,9 @@ target "SomeApp" do
     
     #pod 'ScryptoString'#, :path => '../../ScryptoString-Pod'
     #pod 'LPMessagingSDK'
-    pod 'OnGestureSwift'#, :path => '../../OnGesture-Pod/OnGestureSwift'
-    
+    pod 'OnGestureSwift'#, :path => '../../OnGestureSwift-Pod'
+    pod 'SwiftKeychainWrapper'
+
     post_install do |installer|
         installer.pods_project.targets.each do |target|
             target.build_configurations.each do |config|
