@@ -148,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         //InstanceID.instanceID().setAPNSToken(deviceToken, type: InstanceIDAPNSTokenType.prod)
         Messaging.messaging().apnsToken = deviceToken
 
-        if let fcmToken = InstanceID.instanceID().token() {
+        if let fcmToken = Messaging.messaging().fcmToken {
             📘("FCM token string: \(fcmToken)")
             self.fcmToken = fcmToken
         }

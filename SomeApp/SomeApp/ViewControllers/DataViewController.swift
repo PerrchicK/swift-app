@@ -101,8 +101,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         //UserDefaults.saveForever(value: "cool forever", forKey: "Perry")
         let valueFromKeychain = UserDefaults.loadFromEternity(fromKey: "Perry") ?? "<empty>"
         
-        //UserDefaults.standard["Perry"] = "cool for a lifetime"
-        let valueFromUserDefaults: String = UserDefaults.standard["Perry"] ?? "<empty>"
+        //localStorage["Perry"] = "cool for a lifetime"
+        let valueFromUserDefaults: String = localStorage["Perry"] ?? "<empty>"
         
         📘(valueFromKeychain)
         📘(valueFromUserDefaults)

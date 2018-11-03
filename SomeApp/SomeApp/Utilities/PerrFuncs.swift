@@ -14,6 +14,9 @@ import Vision
 import SwiftKeychainWrapper
 
 // MARK: - "macros"
+var localStorage: UserDefaults {
+    return UserDefaults.standard
+}
 
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
