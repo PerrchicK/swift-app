@@ -97,7 +97,10 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             📘(persistableUsers)
         }
         
-        
+        if !(FirebaseHelper.isActivated ?? false) {
+            ToastMessage.show(messageText: "Firebase is not integrated")
+        }
+
         //UserDefaults.saveForever(value: "cool forever", forKey: "Perry")
         let valueFromKeychain = UserDefaults.loadFromEternity(fromKey: "Perry") ?? "<empty>"
         

@@ -18,8 +18,8 @@ func synchronized(_ lock: Any, closure: () -> ()) {
 class ConcurrencyViewController: UIViewController {
 
     // Grand Central Dispatch (GCD) usage
-    let myQueue = DispatchQueue(label: "myQueue", attributes: DispatchQueue.Attributes.concurrent)
-    let myGroup = DispatchGroup()
+    lazy var myQueue = DispatchQueue(label: "myQueue", attributes: DispatchQueue.Attributes.concurrent)
+    lazy var myGroup = DispatchGroup()
     lazy var isAppeared: Bool = false
 
     @IBOutlet weak var progressButton: UIButton!

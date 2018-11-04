@@ -22,13 +22,23 @@ func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
 // MARK: - Global Methods
+let globalLoggerDateFormattter: DateFormatter = {
+    let globalLoggerDateFormattter = DateFormatter()
+    globalLoggerDateFormattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
+    return globalLoggerDateFormattter
+}()
+
+public func 📘(_ logMessage: Any, file: String = #file, function: String = #function, line: Int = #line) {
+    let timesamp = globalLoggerDateFormattter.string(from: Date())
+    print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(String(describing: logMessage))")
+}
 
 public func 📘(_ logMessage: Any?, file: String = #file, function: String = #function, line: Int = #line) {
-    let formattter = DateFormatter()
-    formattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
-    let timesamp = formattter.string(from: Date())
-
-    print("〈\(timesamp)〉\(file.components(separatedBy: "/").last!) ➤ \(function.components(separatedBy: "(").first!) (\(line)): \(String(describing: logMessage))")
+    var logMessage = logMessage
+    if logMessage == nil {
+        logMessage = "nil"
+    }
+    📘(logMessage!, file: file, function: function, line: line)
 }
 
 // MARK: - Operators Overloading
@@ -61,12 +71,15 @@ func ^ (left: Bool, right: Bool) -> Bool { // Reference: http://nshipster.com/sw
 open class PerrFuncs {
 
     static var dispatchTokens: [String] = []
-    static var originalDraw: (originalImplementation: IMP, originalSelector: Selector)?
+    /// Allows us to make aspect programming in iOS: https://github.com/steipete/Aspects
+    static var originalViewAppeared: (originalImplementation: IMP, originalSelector: Selector)?
 
     static func onAppLoaded() {
         // Let's swizzle Apple's "hit test" method
         Swizzler.swizzle(selector: #selector(UIView.hitTest(_:with:)), ofClass: UIView.self, withSelector: #selector(UIView.myHitTest(_:with:)))
-        originalDraw = Swizzler.swizzle(selector: #selector(UIView.draw(_:in:)), ofClass: UIView.self, withSelector: #selector(UIView.myDraw(_:in:)))
+
+        let _viewDidAppear = Swizzler.swizzle(selector: #selector(UIViewController.viewDidAppear(_:)), ofClass: UIViewController.self, withSelector: #selector(UIViewController.perrfuncs_viewDidAppear(_:)))
+        PerrFuncs.originalViewAppeared = _viewDidAppear // Perry: "Saving original Apple's implementation for later invocation"
     }
     
     static public func dispatchOnce(dispatchToken: String, block: () -> ()) {
@@ -718,6 +731,16 @@ extension UIViewController {
 
         return topController.mostTopViewController()
     }
+
+    @objc func perrfuncs_viewDidAppear(_ animated: Bool) {
+        guard let originalViewAppeared = PerrFuncs.originalViewAppeared else { return }
+        
+        // Do some aspect programming in iOS 😃
+        📘("View controller '\(self)' did appear...")
+        
+        let originalMethodClosure = unsafeBitCast(originalViewAppeared.originalImplementation, to: (@convention(c) (AnyObject, Selector, Bool) -> Void).self)
+        return originalMethodClosure(self, originalViewAppeared.originalSelector, animated)
+    }
 }
 
 extension UIApplication {
@@ -1286,13 +1309,6 @@ class ConditionedGestureRecognizer: UIGestureRecognizer {
 }
 
 extension UIView {
-
-    @objc func myDraw(_ layer: CALayer, in ctx: CGContext) {
-        guard let originalDrawMethod = PerrFuncs.originalDraw else { return }
-
-        let closure = unsafeBitCast(originalDrawMethod.originalImplementation, to: (@convention(c) (AnyObject, Selector, CALayer, CGContext) -> Void).self)
-        closure(self, originalDrawMethod.originalSelector, layer, ctx)
-    }
 
     @objc func myHitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let conditionedRecognizer: ConditionedGestureRecognizer? = gestureRecognizers?.filter({ $0 is ConditionedGestureRecognizer }).first as? ConditionedGestureRecognizer

@@ -10,7 +10,7 @@ import Foundation
 
 /// Responsible for synchronizing asynchronous operations by wrapping Apple's OperationQueue class
 class Synchronizer {
-    let raceConditionQueue = OperationQueue()
+    lazy var raceConditionQueue = OperationQueue()
 
     let completionOperation: BlockOperation
     fileprivate var shouldAddCompletionOperation: Bool

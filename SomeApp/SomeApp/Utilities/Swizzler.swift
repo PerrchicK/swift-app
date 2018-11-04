@@ -9,7 +9,6 @@
 import Foundation
 
 class Swizzler {
-    static var swizzledSelectors = [Selector:Any]()
     /* Swizzles
      - From: https://medium.com/@abhimuralidharan/method-swizzling-in-ios-swift-1f38edaf984f
      */
