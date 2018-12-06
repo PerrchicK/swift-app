@@ -56,8 +56,11 @@ class OperatorsViewController: UIViewController {
                 }
             }
 
-            if let offsetPoint = offsetPoint {
+            if var offsetPoint = offsetPoint {
                 📘("offsetPoint: \(offsetPoint)")
+                offsetPoint.x = offsetPoint.x.rounded(byPrecision: 2)
+                offsetPoint.y = offsetPoint.y.rounded(byPrecision: 2)
+
                 self?.positionLabel.text = "\(offsetPoint)"
             }
             if let pannedPoint = pannedPoint {
@@ -142,5 +145,29 @@ class OperatorsViewController: UIViewController {
     @objc func dismiss(_ tapGestureRecognizer: UIGestureRecognizer) {
         📘("Dismissing keyboard due to \(tapGestureRecognizer.pointerAddress)")
         valueTextField.resignFirstResponder()
+    }
+}
+
+extension CGFloat {
+    func rounded(byPrecision precision: UInt) -> CGFloat {
+        guard precision > 0 else { return rounded(FloatingPointRoundingRule.toNearestOrEven) }
+        
+        func pow(num: Int, power: UInt) -> Int {
+            if power == 0 {
+                return 1
+            }
+            if power == 1 {
+                return num
+            }
+
+            return pow(num: num, power: power - 1) * num
+        }
+
+        let offset = CGFloat(pow(num: 10, power: precision))
+        var result = self
+        result *= offset
+        result.round(FloatingPointRoundingRule.toNearestOrEven)
+        result /= offset
+        return result
     }
 }

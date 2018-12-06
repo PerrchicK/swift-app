@@ -106,7 +106,7 @@ class FirebaseHelper {
             completion(nil)
             return
         }
-        let timestamp = Int64(Date().timeIntervalSince1970 * 1000)
+        let timestamp = UInt64(Date().timeIntervalSince1970 * 1000)
         let requestId = "\(deviceId)_\(FirebaseHelper.requestsCounter)_\(timestamp)"
         FirebaseHelper.requestsCounter += 1
         let requestReference = rootRef.child(Keys.Requests).child("\(requestId)")
