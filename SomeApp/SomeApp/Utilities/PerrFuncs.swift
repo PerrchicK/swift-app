@@ -293,24 +293,31 @@ open class PerrFuncs {
         return nil
     }
 
-    ///Verifies whether the device has a configured local authentication AND the user is the owner.
+    /// Verifies whether the device has a configured local authentication AND the user is the owner. Reference: https://www.techotopia.com/index.php/Implementing_TouchID_Authentication_in_iOS_8_Apps
     static public func verifyDeviceOwner(callbackClosure: @escaping CallbackClosure<Bool?>) {
         let localAuthenticationContext = LAContext()
         let localAuthenticationLocalizedReasonString = "To proceed you must be the iPhone owner"
         
         var authError: NSError? // This exactly is how Swift's try-catch works (what happens behind the scenes)!
-        if #available(iOS 8.0, macOS 10.12.1, *) {
+        if #available(iOS 11.0, *) { //if #available(iOS 8.0, macOS 10.12.1, *) {
             if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
-                localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: localAuthenticationLocalizedReasonString) { success, evaluateError in
-                    if success {
-                        // User authenticated successfully, take appropriate action
-                        UIAlertController.alert(title: "Alrighty then", message: "You're in 😃")
-                        callbackClosure(true)
-                    } else {
-                        // User did not authenticate successfully, look at error and take appropriate action
-                        UIAlertController.alert(title: "Hmmmm...", message: "Who are you again? 🤔")
-                        callbackClosure(false)
+                switch localAuthenticationContext.biometryType {
+                    case .faceID: // Device support Face ID
+                        fallthrough
+                    case .touchID: // Device supports Touch ID
+                        localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: localAuthenticationLocalizedReasonString) { success, evaluateError in
+                            if success {
+                                // User authenticated successfully, take appropriate action
+                                UIAlertController.alert(title: "Alrighty then", message: "You're in 😃")
+                                callbackClosure(true)
+                            } else {
+                                // User did not authenticate successfully, look at error and take appropriate action
+                                UIAlertController.alert(title: "Hmmmm...", message: "Who are you again? 🤔")
+                                callbackClosure(false)
+                            }
                     }
+                default: // Device has no biometric support
+                    callbackClosure(nil)
                 }
             } else {
                 // Could not evaluate policy; look at authError and present an appropriate message to user
