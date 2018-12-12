@@ -153,6 +153,9 @@
 		ACA7F371209F85C7000F886D /* TicTacToeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F350209F85C6000F886D /* TicTacToeGame.swift */; };
 		ACA7F372209F85C7000F886D /* WhackGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F351209F85C6000F886D /* WhackGame.swift */; };
 		ACA7F378209F8994000F886D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA7F377209F8994000F886D /* AppDelegate.swift */; };
+		ACF8B24321C133E3009A30C0 /* LaunchScreen_en.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACF8B24121C133E3009A30C0 /* LaunchScreen_en.storyboard */; };
+		ACF8B24421C133E3009A30C0 /* LaunchScreen_he.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACF8B24221C133E3009A30C0 /* LaunchScreen_he.storyboard */; };
+		ACF8B24721C1352C009A30C0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = ACF8B24921C1352C009A30C0 /* InfoPlist.strings */; };
 		F2635CEEACE47C60F2C38826 /* Pods_SomeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26AEDA9A4F96F89E2F757882 /* Pods_SomeApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -451,6 +454,10 @@
 		ACA7F350209F85C6000F886D /* TicTacToeGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeGame.swift; sourceTree = "<group>"; };
 		ACA7F351209F85C6000F886D /* WhackGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhackGame.swift; sourceTree = "<group>"; };
 		ACA7F377209F8994000F886D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		ACF8B24121C133E3009A30C0 /* LaunchScreen_en.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen_en.storyboard; sourceTree = "<group>"; };
+		ACF8B24221C133E3009A30C0 /* LaunchScreen_he.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen_he.storyboard; sourceTree = "<group>"; };
+		ACF8B24821C1352C009A30C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		ACF8B24A21C1352E009A30C0 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -592,6 +599,7 @@
 				756A752F1F82004A009F595A /* SomeApp.entitlements */,
 				75F1AD6B1C6E8C92005D7FCA /* SomeApp.xcdatamodeld */,
 				AC7EAEE020978DA30000F22B /* Localizable.strings */,
+				ACF8B24921C1352C009A30C0 /* InfoPlist.strings */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -599,6 +607,8 @@
 		75F1AD6D1C6E8C92005D7FCA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				ACF8B24121C133E3009A30C0 /* LaunchScreen_en.storyboard */,
+				ACF8B24221C133E3009A30C0 /* LaunchScreen_he.storyboard */,
 				75F1AD6E1C6E8C92005D7FCA /* LaunchScreen.storyboard */,
 				75F1AD6F1C6E8C92005D7FCA /* Main.storyboard */,
 				75DF68D51F398536004CF94E /* XibGameCell.xib */,
@@ -1175,12 +1185,15 @@
 				75A484841CDAB4A500F897A9 /* hulk-and-thor-frame-3.gif in Resources */,
 				75A484891CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif in Resources */,
 				7582DB8D1CADDBC7001CDC62 /* SomeAnnotationView.xib in Resources */,
+				ACF8B24321C133E3009A30C0 /* LaunchScreen_en.storyboard in Resources */,
 				75A484851CDAB4A500F897A9 /* hulk-and-thor-frame-4.gif in Resources */,
 				755572A21CF97B2C00833DB5 /* GoogleService-Info.plist in Resources */,
 				AC7EAEDE20978DA30000F22B /* Localizable.strings in Resources */,
 				75DCE39C1C76382900FF6F18 /* ToastMessage.xib in Resources */,
+				ACF8B24421C133E3009A30C0 /* LaunchScreen_he.storyboard in Resources */,
 				75F1AD741C6E8C92005D7FCA /* Main.storyboard in Resources */,
 				75DF68D61F398536004CF94E /* XibGameCell.xib in Resources */,
+				ACF8B24721C1352C009A30C0 /* InfoPlist.strings in Resources */,
 				75A484861CDAB4A500F897A9 /* hulk-and-thor-frame-5.gif in Resources */,
 				75A484821CDAB4A500F897A9 /* hulk-and-thor-frame-1.gif in Resources */,
 				75A4848A1CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif in Resources */,
@@ -1447,6 +1460,15 @@
 				AC7EAEE120978DD50000F22B /* he */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		ACF8B24921C1352C009A30C0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ACF8B24821C1352C009A30C0 /* en */,
+				ACF8B24A21C1352E009A30C0 /* he */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

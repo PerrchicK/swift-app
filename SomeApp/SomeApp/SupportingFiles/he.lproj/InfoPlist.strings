@@ -1,0 +1,13 @@
+/*
+ InfoPlist.strings
+ SomeApp
+ 
+ More details: https://stackoverflow.com/questions/25736700/how-to-localise-a-string-inside-the-ios-info-plist-file
+ 
+ Created by Perry Shalev on 12/12/2018.
+ Copyright © 2018 PerrchicK. All rights reserved.
+*/
+
+//"UILaunchStoryboardName" = "he.lproj\LaunchScreen";
+"UILaunchStoryboardName" = "LaunchScreen_he.storyboard";
+"CFBundleDisplayName" = "אפליקציה";
