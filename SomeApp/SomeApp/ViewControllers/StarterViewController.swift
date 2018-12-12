@@ -12,7 +12,7 @@ import MMDrawerController
 class StarterViewController: UIViewController {
 
     // Lazy instantiation variable - will be allocated (and initialized) only once
-    lazy var drawer:MMDrawerController = {
+    lazy var drawer: MMDrawerController = {
         // Configure:
         let mainViewController = MainViewController.instantiate()
         let leftMenuViewController = LeftMenuViewController.instantiate()
@@ -22,7 +22,7 @@ class StarterViewController: UIViewController {
         let drawerController = MMDrawerController(center: mainViewController, leftDrawerViewController: leftMenuViewNavigationController)
         drawerController?.openDrawerGestureModeMask = .all
         drawerController?.closeDrawerGestureModeMask = .all
-        drawerController?.title = "Swift Course"
+        drawerController?.title = "Swift Course".localized()
 
         return drawerController!
     }()

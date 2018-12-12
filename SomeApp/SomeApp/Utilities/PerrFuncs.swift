@@ -398,6 +398,10 @@ extension String {
         return emoji
     }
 
+    func localized(comment: String = "") -> String {
+        return NSLocalizedString(self, comment: comment)
+    }
+
     subscript (i: Int) -> Character {
         return self[index(startIndex, offsetBy: i)]
     }
