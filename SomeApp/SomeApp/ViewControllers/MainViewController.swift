@@ -6,13 +6,16 @@
 //  Copyright © 2016 PerrchicK. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import MMDrawerController
 
 class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
     static let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
 
     //lazy var utilsObjC: UtilsObjC = UtilsObjC()
+    var drawer: MMDrawerController {
+        return navigationController!.viewControllers.first as! MMDrawerController
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
@@ -20,10 +23,31 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         📘("Segue 👉 \(segue.identifier!)")
     }
     
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        UIApplication.shared.keyWindow?.tintColor = UIColor.appMainColor
+
         try? Reachability.shared?.startNotifier()
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: InAppNotifications.CloseDrawer), object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
+            guard let strongSelf = self, strongSelf.drawer.openSide != .none else { return }
+
+            strongSelf.drawer.closeDrawer(animated: true, completion: nil)
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if drawer.navigationItem.leftBarButtonItem == nil {
+            let navigationBarHeight = drawer.navigationController?.navigationBar.frame.height ?? 30
+            let hamburgerImage: UIImage? = UIImage(named: "hamburger")?.resized(toSize: CGSize(width: navigationBarHeight, height: navigationBarHeight))
+            let btnMenu = UIBarButtonItem(image: hamburgerImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onMenuPressed))
+            drawer.navigationItem.leftBarButtonItem = btnMenu
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -68,6 +92,22 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         NotificationCenter.default.removeObserver(self)
     }
 
+    // MARK: - Other super class methods
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+        📘("didReceiveMemoryWarning!")
+    }
+    
+    @objc func onMenuPressed() {
+        if drawer.openSide == .none {
+            drawer.open(MMDrawerSide.left, animated: true, completion: nil)
+        } else {
+            drawer.closeDrawer(animated: true, completion: nil)
+        }
+    }
+
     @objc func reachabilityDidChange(notification: Notification) {
         guard let status = Reachability.shared?.currentReachabilityStatus else { return }
         📘("Network reachability status changed: \(status)")
@@ -82,6 +122,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     }
 
     // MARK: - LeftMenuViewControllerDelegate
+
     func leftMenuViewController(_ leftMenuViewController: LeftMenuViewController, selectedOption: String) {
         switch selectedOption {
         case LeftMenuOptions.SwiftStuff.OperatorsOverloading:
@@ -110,7 +151,9 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             📘("to be continued...")
         }
     }
-    
+
+    // MARK: - UITextViewDelegate
+
     func textView(_ textView: UITextView, shouldInteractWith URL: Foundation.URL, in characterRange: NSRange) -> Bool {
         📘("interacting with URL: \(URL)")
         return URL.absoluteString == MainViewController.projectLocationInsideGitHub

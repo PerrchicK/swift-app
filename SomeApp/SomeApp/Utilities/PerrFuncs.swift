@@ -470,6 +470,10 @@ extension Substring {
 }
 
 extension UIColor {
+    static var appMainColor: UIColor {
+        return UIColor(hexString: "ED8A00") //UIColor.orange
+    }
+
     convenience init(hexString: String) {
         let hexString:NSString = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as NSString
         let scanner = Scanner(string: hexString as String)
@@ -665,6 +669,19 @@ extension UIImage {
                 print("Failed to fetch image from url: \(url)\nwith error: \(error)")
             }
         }
+    }
+    
+    public func resized(toSize size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+
+    public func resized(byMultiplying multiplier: CGFloat) -> UIImage? {
+        let size = CGSize(width: self.size.width * multiplier, height: self.size.height * multiplier)
+        return resized(toSize: size)
     }
 }
 

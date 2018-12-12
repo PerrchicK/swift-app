@@ -183,6 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return handleDeepLink(deeplinkUrl: url)
     }
 
+    // Lazy instantiation variable - will be allocated (and initialized) only once
     lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.perrchick.SomeApp" in the application's documents Application Support directory.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -248,5 +249,18 @@ extension AppDelegate {
     // User did tap on notification... hallelujah, thank you iOS10!
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         completionHandler()
+    }
+}
+
+extension UIWindow { // Solution from: https://stackoverflow.com/questions/39518529/motionbeganwithevent-not-called-in-appdelegate-in-ios-10
+    override open var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    open override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            // Show local UI live debugging tool
+            FLEXManager.shared().showExplorer() // Delete if it doesn't exist
+        }
     }
 }

@@ -11,72 +11,27 @@ import MMDrawerController
 
 class StarterViewController: UIViewController {
 
-    // Lazy instantiation variable - will be allocated (and initialized) only once
-    lazy var drawer: MMDrawerController = {
+    // Will run only once in this app
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         // Configure:
         let mainViewController = MainViewController.instantiate()
         let leftMenuViewController = LeftMenuViewController.instantiate()
         leftMenuViewController.delegate = mainViewController
         let leftMenuViewNavigationController: UINavigationController = UINavigationController(rootViewController: leftMenuViewController)
         leftMenuViewNavigationController.isNavigationBarHidden = true
-        let drawerController = MMDrawerController(center: mainViewController, leftDrawerViewController: leftMenuViewNavigationController)
-        drawerController?.openDrawerGestureModeMask = .all
-        drawerController?.closeDrawerGestureModeMask = .all
-        drawerController?.title = "Swift Course".localized()
+        let drawerController = MMDrawerController(center: mainViewController, leftDrawerViewController: leftMenuViewNavigationController)!
+        drawerController.openDrawerGestureModeMask = .all
+        drawerController.closeDrawerGestureModeMask = .all
+        drawerController.title = "Swift Course".localized()
 
-        return drawerController!
-    }()
+        let drawerNavigationController = UINavigationController(rootViewController: drawerController)
+        drawerNavigationController.modalTransitionStyle = .crossDissolve
 
-    // MARK: - Lifcycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: InAppNotifications.CloseDrawer), object: nil, queue: OperationQueue.main) { [weak self] (notification) -> Void in
-            guard let strongSelf = self else { return }
-
-            strongSelf.drawer.closeDrawer(animated: true, completion: nil)
-        }
-
-        //📘(" ... ")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //📘(" ... ")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        // Will run only once
-        let navigationController = UINavigationController(rootViewController: drawer)
-        navigationController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "open", style: .done, target: self, action: #selector(openLeftMenu))
-        navigationController.modalTransitionStyle = .crossDissolve
-        present(navigationController, animated: true, completion: nil)
-
-        //📘(" ... ")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-        📘("didReceiveMemoryWarning!")
-    }
-    
-    // MARK: - Other super class methods
-    
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            // Show local UI live debugging tool
-            FLEXManager.shared().showExplorer() // Delete if it doesn't exist
-        }
-    }
-
-    // MARK: - Other super class methods
-
-    @objc func openLeftMenu () {
-        drawer.open(.left, animated: true, completion: nil)
+        let shouldBeTheLabel = view.subviews.filter( { $0 is UILabel } ).first // Because it's the label
+        shouldBeTheLabel?.animateFade(fadeIn: false, duration: 0.3, completion: { _ in
+            UIApplication.shared.keyWindow?.rootViewController = drawerNavigationController
+        })
     }
 }
