@@ -28,6 +28,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // From: https://stephenradford.me/quick-tip-globally-changing-tint-color-application-wide/
         UIApplication.shared.keyWindow?.tintColor = UIColor.appMainColor
 
         try? Reachability.shared?.startNotifier()
@@ -44,7 +45,8 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
 
         if drawer.navigationItem.leftBarButtonItem == nil {
             let navigationBarHeight = drawer.navigationController?.navigationBar.frame.height ?? 30
-            let hamburgerImage: UIImage? = UIImage(named: "hamburger")?.resized(toSize: CGSize(width: navigationBarHeight, height: navigationBarHeight))
+            var hamburgerImage: UIImage? = UIImage(named: "hamburger")// // From: https://stackoverflow.com/questions/25818845/how-do-vector-images-work-in-xcode-i-e-pdf-files/25818846#25818846
+            hamburgerImage = hamburgerImage?.resized(toSize: CGSize(width: navigationBarHeight, height: navigationBarHeight))
             let btnMenu = UIBarButtonItem(image: hamburgerImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(onMenuPressed))
             drawer.navigationItem.leftBarButtonItem = btnMenu
         }
