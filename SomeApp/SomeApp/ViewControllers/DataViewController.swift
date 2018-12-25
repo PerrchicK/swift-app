@@ -107,8 +107,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         //localStorage["Perry"] = "cool for a lifetime"
         let valueFromUserDefaults: String = localStorage["Perry"] ?? "<empty>"
         
-        📘(valueFromKeychain)
-        📘(valueFromUserDefaults)
+        📘("valueFromKeychain == \(valueFromKeychain)")
+        📘("valueFromUserDefaults == \(valueFromUserDefaults)")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
