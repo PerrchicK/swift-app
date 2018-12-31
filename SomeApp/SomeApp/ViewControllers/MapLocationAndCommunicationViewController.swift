@@ -48,8 +48,13 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
         
         tappedCoordinateButton.onClick { [weak self] (tapGestureRecognizer) in
             if let coordinatesString = self?.tappedCoordinateButton.titleLabel?.text {
-                UIPasteboard.general.string = NSString(string: coordinatesString) as String
-                ToastMessage.show(messageText: "copied to clipbaord")
+                UIAlertController.makeActionSheet(title: "Copy?", message: "\(coordinatesString)")
+                    .withAction(UIAlertAction(title: "Copy coordinates", style: UIAlertActionStyle.default, handler: { (action) in
+                        UIPasteboard.general.string = NSString(string: coordinatesString) as String
+                        ToastMessage.show(messageText: "copied to clipbaord")
+                    }))
+                    .withAction(UIAlertAction(title: "Cancel".localized(), style: UIAlertActionStyle.cancel, handler: nil))
+                    .show()
             }
         }
         
