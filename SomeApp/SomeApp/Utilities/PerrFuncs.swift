@@ -1346,6 +1346,7 @@ extension UIView {
 
         var passed = [UIView]()
         for subView in subviews {
+            guard subView.isPresented else { continue }
             guard subView.isUserInteractionEnabled else { continue }
             let subviewPoint = self.convert(point, to: subView)
 
