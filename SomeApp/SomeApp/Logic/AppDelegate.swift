@@ -177,11 +177,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.saveContext()
     }
 
-    // MARK: - Core Data stack
-
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         return handleDeepLink(deeplinkUrl: url)
     }
+
+    // MARK: - Core Data stack
 
     // Lazy instantiation variable - will be allocated (and initialized) only once
     lazy var applicationDocumentsDirectory: URL = {

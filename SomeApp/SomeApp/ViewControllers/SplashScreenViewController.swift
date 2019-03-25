@@ -61,8 +61,10 @@ class SplashScreenViewController : UIViewController {
             self.swiftLabel.animateBounce { [weak self] (finished) -> Void in
                 guard let strongSelf = self else { return }
                 
+                strongSelf.swiftLogo.animateBreath(duration: 2)
+
                 //strongSelf.pushViewController(StarterViewController.instantiate(), animated: true)
-                PerrFuncs.runBlockAfterDelay(afterDelay: 1.0, block: { () -> Void in
+                PerrFuncs.runBlockAfterDelay(afterDelay: 5.0, block: { () -> Void in
                     //strongSelf.present(StarterViewController(), animated: true, completion: nil)
                     strongSelf.performSegue(withIdentifier: PerrFuncs.className(StarterViewController.self), sender: self)
                 })

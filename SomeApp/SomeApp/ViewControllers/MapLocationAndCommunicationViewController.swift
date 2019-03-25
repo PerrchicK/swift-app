@@ -190,7 +190,7 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
             dequeuedAnnotationView.annotation = annotation
             annotationView = dequeuedAnnotationView
         } else {
-            // Dequeued failed -> instantiate
+            // Failed to dequeue -> instantiate
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
             let someAnnotationView: SomeAnnotationView = SomeAnnotationView.instantiateFromNib()
             annotationView.addSubview(someAnnotationView)

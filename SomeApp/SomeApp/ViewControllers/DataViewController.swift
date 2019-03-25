@@ -32,13 +32,14 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var scrollView: UIScrollView!
 
+    @IBOutlet weak var btnSave: UIButton!
+
     /* Saved in Core Data */
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var nicknameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     /* Saved in Core Data */
-    fileprivate var isScreenUp = false
 
     @IBOutlet weak var userDefaultsTextField: UITextField!
 
@@ -60,10 +61,10 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dbStateTableView.isHidden = true
         scrollView.keyboardDismissMode = .interactive
 
-        let contentInsets = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
-        scrollView.contentInset = contentInsets
+//        let contentInsets = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
+//        scrollView.contentInset = contentInsets
 //        scrollView.scrollIndicatorInsets = contentInsets
-        scrollView.alwaysBounceVertical = false
+        scrollView.alwaysBounceVertical = true
 
         userDefaultsTextField.text = UserDefaults.standard.object(forKey: UserDefaultsStringKey) as? String
         view.onClick { [weak self] _ in
@@ -139,6 +140,8 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         try? usersData.write(to: encodedUserFilePath)
 
         self.view.endEditing(true)
+        
+        NotificationCenter.default.removeObserver(self)
     }
 
     @IBAction func showFirebaseButtonPressed(_ sender: AnyObject) {
@@ -250,17 +253,18 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             let keyboardFrame = keyboardFrameValue.cgRectValue
             let keyboardSize = keyboardFrame.size
 
-            // From: https://stackoverflow.com/questions/16705159/uiscrollview-content-insets-not-working-for-keyboard-height
-
-            let hiddenScrollViewRect = view.convert(scrollView.frame, from: view).intersection(keyboardFrame)
-            scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight + 40, left: 0, bottom: hiddenScrollViewRect.size.height, right: 0)
-            scrollView.scrollIndicatorInsets = scrollView.contentInset
+            let screenLeftOver = UIScreen.main.bounds.height - keyboardSize.height
+            let diff = screenLeftOver - (btnSave.frame.origin.y + btnSave.frame.height)
+            if diff < 0 {
+                UIView.animate(withDuration: 0.3) {
+                    self.view.frame = self.view.frame.withY(y: diff)
+                }
+            }
         }
     }
 
     @objc func keyboardWillHide(_ notification: Notification) {
         guard let userInfo = notification.userInfo, let windowFrame = self.view.window?.frame else { return }
-        let viewHeight = view.frame.height
 
         if /*let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,*/
             let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
@@ -268,8 +272,13 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
             let keyboardSize = keyboardFrame.size
         }
         
-        scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight + 40, left: 0, bottom: 0, right: 0)
-        scrollView.scrollIndicatorInsets = scrollView.contentInset
+//        scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight + 40, left: 0, bottom: 0, right: 0)
+//        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        if self.view.frame.origin.y != 0 {
+            UIView.animate(withDuration: 0.3) {
+                self.view.frame = self.view.frame.withY(y: 0)
+            }
+        }
     }
 
     // MARK: - UITableViewDataSource

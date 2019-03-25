@@ -942,6 +942,31 @@ extension UIView {
         }
     }
 
+    static var BreathAnimationKey: String {
+        return "BREATH_ANIMATION_KEY"
+    }
+
+    func animateBreath(play shouldPlay: Bool = true, duration: CFTimeInterval = 10) {
+        if shouldPlay {
+            let floatAnimation = CAKeyframeAnimation()
+            floatAnimation.keyPath = "transform"
+            
+            let overshootScale = CATransform3DScale(layer.transform, 1.1, 1.1, 1.0)
+            let undershootScale = CATransform3DScale(layer.transform, 0.9, 0.9, 1.0)
+            let startingScale = layer.transform
+            
+            floatAnimation.values = [startingScale, undershootScale, overshootScale, undershootScale, startingScale]
+            floatAnimation.duration = duration
+            floatAnimation.repeatCount = Float.greatestFiniteMagnitude
+
+            floatAnimation.isRemovedOnCompletion = false
+            
+            layer.add(floatAnimation, forKey: UIView.BreathAnimationKey)
+        } else {
+            layer.removeAnimation(forKey: UIView.BreathAnimationKey)
+        }
+    }
+
     public func animateNo(_ completion: CallbackClosure<Bool>? = nil) {
         /*
         let noAnimation = CAKeyframeAnimationWithClosure()

@@ -572,6 +572,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnSave" destination="YLm-kz-yuY" id="hmb-tF-ac8"/>
                         <outlet property="emailTextField" destination="DEg-jM-bJt" id="bKV-UJ-SBI"/>
                         <outlet property="firstNameTextField" destination="BoO-x5-rfW" id="HpV-pf-7fn"/>
                         <outlet property="lastNameTextField" destination="F1p-am-xIQ" id="68U-8z-Cpx"/>
@@ -1167,8 +1168,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="database" width="33" height="36"/>
-        <image name="firebase-logo" width="25" height="31"/>
+        <image name="database" width="33" height="36.5"/>
+        <image name="firebase-logo" width="25" height="31.5"/>
         <image name="hulk-and-thor-frame-0.gif" width="500" height="280"/>
         <image name="swift-logo" width="352" height="352"/>
     </resources>
