@@ -76,13 +76,24 @@ class DataViewController: UIViewController, UITableViewDelegate, UITableViewData
         lastNameTextField.delegate = self
         nicknameTextField.delegate = self
         emailTextField.delegate = self
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         let encodedUserFilePath = URL(fileURLWithPath: DataManager.applicationLibraryPath.appendingPathComponent(PersistableUserFileName))
-        if let encodedUserData = try? Data(contentsOf: encodedUserFilePath), let encodedUser = NSKeyedUnarchiver.unarchiveObject(with: encodedUserData) as? PersistableUser {
-            📘(encodedUser)
+        do {
+            let encodedUserData = try Data(contentsOf: encodedUserFilePath)
+            if let encodedUsers = NSKeyedUnarchiver.unarchiveObject(with: encodedUserData) as? [PersistableUser] {
+                📘(encodedUsers)
+            } else {
+                📘("Failed to create user object from data object")
+            }
+        } catch {
+            📘("Failed to load user data from file, error: \(error)")
         }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
