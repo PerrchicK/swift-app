@@ -12,6 +12,12 @@ import FirebaseAuth
 import FirebaseMessaging
 import UserNotifications
 
+enum ShortcutItemType: String {
+    case OpenImageExamples
+    case OpenMultiTaskingExamples
+    case OpenMapExamples
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
@@ -39,10 +45,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         tokenHolder = loggedInTokenSynchronizer.createHolder()
         signInHolder = loggedInTokenSynchronizer.createHolder()
 
-        FirebaseHelper.loggedInUser { [weak self] (user) in
-            self?.loggedInUser = user
-            self?.signInHolder?.release()
-        }
+//        FirebaseHelper.loggedInUser { [weak self] (user) in
+//            self?.loggedInUser = user
+//            self?.signInHolder?.release()
+//        }
 
         if let deepLinkDictionary = launchOptions {
             📘("launch options dictionary: \(deepLinkDictionary)")
@@ -83,6 +89,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func setupNotifications() {
         setupNotifications(application: UIApplication.shared)
+    }
+
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        📘(shortcutItem.type)
+        ToastMessage.show(messageText: "3D Touched! User chose quick action: \(shortcutItem.localizedTitle)")
+        guard let shortcutItemType = ShortcutItemType.init(rawValue: shortcutItem.type) else { 📘("Error: Failed to instatiate ShortcutItemType enum from: '\(shortcutItem.type)'"); return }
+        switch shortcutItemType {
+        case .OpenImageExamples:
+            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.iOS.ImagesCoreMotion)
+        case .OpenMultiTaskingExamples:
+            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.Concurrency.GCD)
+        case .OpenMapExamples:
+            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.iOS.CommunicationLocation)
+        default:
+            📘("Error: Unhandled shortcut item type: \(shortcutItemType.rawValue)")
+        }
+        completionHandler(true)
     }
 
     private func setupNotifications(application: UIApplication) {
@@ -248,6 +271,10 @@ extension AppDelegate {
 
     // User did tap on notification... hallelujah, thank you iOS10!
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        if let notificationAddress = userInfo["address"] as? String, notificationAddress == "/main/notifications" {
+            //MainViewController?.shared?.navigateToNotifications()
+        }
         completionHandler()
     }
 }

@@ -347,6 +347,11 @@ class AnimationsViewController: UIViewController, UIScrollViewDelegate, CAAnimat
     }
     
     deinit {
+//        PerrFuncs.runOnUiThread(afterDelay: 1) { [weak self] in
+//            print("This will crash the app! \(self) 😱")
+//            Crash reason - swift_unknownWeakInit: https://github.com/kusl/swift/blob/814b3d2996b7df80d3f65761fe40cc96c4447571/unittests/runtime/weak.mm#L103
+//        }
+
         📘("I'm dead 💀")
     }
 }

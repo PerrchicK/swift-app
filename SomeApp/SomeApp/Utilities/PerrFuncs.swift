@@ -14,14 +14,14 @@ import Vision
 import SwiftKeychainWrapper
 
 // MARK: - "macros"
-var localStorage: UserDefaults {
-    return UserDefaults.standard
-}
-
 func WIDTH(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.width)! }
 func HEIGHT(_ frame: CGRect?) -> CGFloat { return frame == nil ? 0 : (frame?.size.height)! }
 
-// MARK: - Global Methods
+// MARK: - Global methods
+var localStorage: UserDefaults { // Inspired from HTML5
+    return UserDefaults.standard
+}
+
 let globalLoggerDateFormattter: DateFormatter = {
     let globalLoggerDateFormattter = DateFormatter()
     globalLoggerDateFormattter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
@@ -127,7 +127,7 @@ open class PerrFuncs {
     
     // runClosureAfterDelay
     static public func runBlockAfterDelay(afterDelay seconds: Double, onQueue: DispatchQueue = DispatchQueue.main, block: @escaping ()->()) {
-        let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC) // 2 seconds delay before retry
+        let delayTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         onQueue.asyncAfter(deadline: delayTime, execute: block)
     }
     
@@ -748,7 +748,7 @@ extension UIViewController {
     }
     
     fileprivate class func instantiateFromStoryboardHelper<T: UIViewController>(_ storyboardName: String?) -> T {
-        let storyboard = storyboardName != nil ? UIStoryboard(name: storyboardName!, bundle: nil) : UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: storyboardName ?? "Main", bundle: nil)
         let identifier = NSStringFromClass(T.self).components(separatedBy: ".").last!
         let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! T
         return controller

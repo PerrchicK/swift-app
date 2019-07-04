@@ -16,6 +16,8 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     var drawer: MMDrawerController {
         return navigationController!.viewControllers.first as! MMDrawerController
     }
+    
+    weak static var shared: MainViewController?
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
@@ -28,6 +30,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        MainViewController.shared = self
         // From: https://stephenradford.me/quick-tip-globally-changing-tint-color-application-wide/
         UIApplication.shared.keyWindow?.tintColor = UIColor.appMainColor
 
@@ -110,6 +113,10 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         }
     }
 
+    func navigateToNotifications() {
+        //(drawer.leftDrawerViewController as? LeftMenuViewController).or
+    }
+
     @objc func reachabilityDidChange(notification: Notification) {
         guard let status = Reachability.shared?.currentReachabilityStatus else { return }
         📘("Network reachability status changed: \(status)")
@@ -122,10 +129,14 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             navigationController?.navigationBar.barTintColor = nil
         }
     }
-
+    
+    func onSelected(menuOption selectedOption: String) { // TODO: Replace `selectedOption` String to an enum / struct / class.
+        onMenuOptionSelected(optionSelected: selectedOption)
+    }
+    
     // MARK: - LeftMenuViewControllerDelegate
 
-    func leftMenuViewController(_ leftMenuViewController: LeftMenuViewController, selectedOption: String) {
+    func onMenuOptionSelected(optionSelected selectedOption: String) {
         switch selectedOption {
         case LeftMenuOptions.SwiftStuff.OperatorsOverloading:
             navigationController?.pushViewController(OperatorsViewController.instantiate(), animated: true)
@@ -137,7 +148,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             let gameNavigationController = GameNavigationController(rootViewController: CollectionViewController.instantiate())
             gameNavigationController.isNavigationBarHidden = true
             navigationController?.present(gameNavigationController, animated: true, completion: nil)
-//            navigationController?.pushViewController(gameNavigationController, animated: true) // This will crash
+        //            navigationController?.pushViewController(gameNavigationController, animated: true) // This will crash
         case LeftMenuOptions.iOS.Data:
             navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.CommunicationLocation:
@@ -146,12 +157,20 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
         case LeftMenuOptions.iOS.ImagesCoreMotion:
             navigationController?.present(ImagesAndMotionViewController.instantiate(), animated: true, completion: nil)
-//        case LeftMenuOptions.PersonalDevelopment.CrazyWhack:
-//            navigationController?.present(CrazyWhackViewController(), animated: true, completion: nil)
+            //        case LeftMenuOptions.PersonalDevelopment.CrazyWhack:
+        //            navigationController?.present(CrazyWhackViewController(), animated: true, completion: nil)
         default:
             UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
             📘("to be continued...")
         }
+    }
+
+    func leftMenuViewController(_ leftMenuViewController: LeftMenuViewController, selectedOption: String) {
+        onSelected(menuOption: selectedOption)
+    }
+
+    func onMenuOptionSelected(_ leftMenuViewController: LeftMenuViewController, selectedOption: String) {
+        onSelected(menuOption: selectedOption)
     }
 
     // MARK: - UITextViewDelegate

@@ -16,6 +16,33 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconAdd</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Image Examples</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>OpenImageExamples</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>AppIcon</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Multi Tasking</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>OpenMultiTaskingExamples</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconAdd</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Map Examples</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>OpenMapExamples</string>
+		</dict>
+	</array>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
