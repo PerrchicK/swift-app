@@ -48,36 +48,40 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         pickedImageButton.imageView?.contentMode = .scaleAspectFit
 
         // MARK: - Load state
-        var sourceControlIndex: UInt = 1
-        var typeControlIndex: UInt = 1
-        var isEditableControlIndex: UInt = 0
-        if let selectedIndexesDictionary: [String: UInt] = UserDefaults.load(key: "selected settings") {
+        var sourceControlIndex: Int = 1
+        var typeControlIndex: Int = 1
+        var isEditableControlIndex: Int = 0
+        if let selectedIndexesDictionary: [String: Int] = UserDefaults.load(key: "selected settings") {
             📘(selectedIndexesDictionary)
             sourceControlIndex = selectedIndexesDictionary["sourceControl"] ?? 1
             typeControlIndex = selectedIndexesDictionary["typeControl"] ?? 1
             isEditableControlIndex = selectedIndexesDictionary["isEditableControl"] ?? 0
         }
 
-        sourceControl.titles = ["Library", "Camera", "Moments"]
-        try? sourceControl.setIndex(sourceControlIndex)
+        sourceControl.segments = [LabelSegment(text: "Library", normalTextColor: UIColor.black, selectedTextColor: UIColor.white),
+        LabelSegment(text: "Camera", normalTextColor: UIColor.black, selectedTextColor: UIColor.white),
+        LabelSegment(text: "Moments", normalTextColor: UIColor.black, selectedTextColor: UIColor.white)]
+        sourceControl.setIndex(sourceControlIndex)
         sourceControl.backgroundColor = UIColor.brown
-        sourceControl.titleColor = UIColor.black
+        
         sourceControl.indicatorViewBackgroundColor = UIColor.red
-        sourceControl.selectedTitleColor = UIColor.white
 
-        typeControl.titles = [MediaType.Videos.rawValue, MediaType.Both.rawValue, MediaType.Photos.rawValue]
-        try? typeControl.setIndex(typeControlIndex)
+        typeControl.segments = [LabelSegment(text: MediaType.Videos.rawValue, normalTextColor: UIColor.black, selectedTextColor: UIColor.blue),
+        LabelSegment(text: MediaType.Both.rawValue, normalTextColor: UIColor.black, selectedTextColor: UIColor.blue),
+        LabelSegment(text: MediaType.Photos.rawValue, normalTextColor: UIColor.black, selectedTextColor: UIColor.blue)] //[, MediaType.Both.rawValue, ]
+        typeControl.setIndex(typeControlIndex)
         typeControl.backgroundColor = UIColor.yellow
-        typeControl.titleColor = UIColor.black
         typeControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
-        typeControl.selectedTitleColor = UIColor.blue
 
-        isEditableControl.titles = ["editable","not editable"]
-        try? isEditableControl.setIndex(isEditableControlIndex)
+        isEditableControl.segments = [LabelSegment(text: "editable", normalTextColor: UIColor.gray, selectedTextColor: UIColor.green),
+        LabelSegment(text: "non editable", normalTextColor: UIColor.gray, selectedTextColor: UIColor.green)]
+        typeControl.setIndex(typeControlIndex)
+        typeControl.backgroundColor = UIColor.yellow
+        typeControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
+
+        isEditableControl.setIndex(isEditableControlIndex)
         isEditableControl.backgroundColor = UIColor.brown
-        isEditableControl.titleColor = UIColor.gray
         isEditableControl.indicatorViewBackgroundColor = UIColor.green.withAlphaComponent(0.5)
-        isEditableControl.selectedTitleColor = UIColor.green
         isEditableControl.layer.cornerRadius = 5
 
         sourceControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
@@ -162,8 +166,9 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {
+        let selectedTitle = (typeControl.segments[typeControl.index] as? LabelSegment)?.text ?? "😯"
         // Just for fun:
-        📘("Selected: \(sender.titles[Int(sender.index)])")
+        📘("Selected: \(selectedTitle)")
     }
 
     @IBAction func pickedImageButtonPressed(_ sender: UIButton) {
@@ -179,7 +184,7 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
     }
 
     @IBAction func cameraButtonPressed(_ sender: AnyObject) {
-        guard let selectedMediaType = MediaType(rawValue: typeControl.titles[Int(typeControl.index)]),
+        guard let selectedMediaType = MediaType(rawValue: (typeControl.segments[typeControl.index] as! LabelSegment).text.or("none")),
             let selectedSourceType = UIImagePickerControllerSourceType(rawValue: Int(sourceControl.index)), UIImagePickerController.isSourceTypeAvailable(selectedSourceType) else {
                 let errorString: String = "😱 Selected input types aren't available"
                 ToastMessage.show(messageText: errorString)

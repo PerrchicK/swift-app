@@ -1,4 +1,4 @@
-platform :ios, '9.1'
+platform :ios, '10.0'
 
 use_frameworks!
 
@@ -10,8 +10,8 @@ target "SomeApp" do
     pod 'Firebase/Database'
     pod 'Firebase/Messaging'
     pod 'Firebase/Auth'
-    pod 'Alamofire', '~> 4.0.1'
-    pod 'BetterSegmentedControl', '0.8'
+    pod 'Alamofire', '~> 5.0.0-rc.3'
+    pod 'BetterSegmentedControl', '~> 1.2' # to support Swift 5.0
     
     #pod 'ScryptoString'#, :path => '../../ScryptoString-Pod'
     #pod 'LPMessagingSDK'
@@ -21,7 +21,7 @@ target "SomeApp" do
     post_install do |installer|
         installer.pods_project.targets.each do |target|
             target.build_configurations.each do |config|
-                config.build_settings['SWIFT_VERSION'] = '3.0'
+                config.build_settings['SWIFT_VERSION'] = '5.0'
             end
         end
     end
