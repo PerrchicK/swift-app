@@ -7,12 +7,12 @@
 //
 
 #import "UtilsObjC.h"
+#import <AdSupport/ASIdentifierManager.h>
 
 // Everything that is decalred here (the implementation file) is considered as PRIVATE FIELDS & METHODS (as long as they're not exported in the header file).
 // Read more at: https://medium.com/@victorleungtw/connection-between-h-and-m-files-in-objective-c-eaf6b7366717
 
 @interface UtilsObjC()
-
 @property (nonatomic, strong) NSDictionary *environmentConfigurations;
 
 @end
@@ -78,6 +78,7 @@
 }
 
 + (void)load {
+    NSLog(@"IDFA: %@", [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]);
     NSLog(@"App loaded");
 }
 

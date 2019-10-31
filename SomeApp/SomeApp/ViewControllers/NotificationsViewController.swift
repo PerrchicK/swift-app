@@ -61,7 +61,8 @@ class NotificationsViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
 
         let soon = Date(timeIntervalSinceNow: 5)
-        if !startLocalNotification("Local notification example", title: "yo3", popTime: soon) {
+        
+        if !startLocalNotification("Local notification example", title: "yo3", popTime: soon, additionalInfo: ["address":"/main/notifications"]) {
             ToastMessage.show(messageText: "confirm user notification first")
         }
     }
@@ -105,7 +106,7 @@ class NotificationsViewController: UIViewController {
     }
 
     @objc func applicationDidEnterBackground(_ notification: Notification) {
-        PerrFuncs.runBackgroundTask { [weak self](onDone) in
+        PerrFuncs.runBackgroundTask { [weak self] (onDone) in
             guard let strongSelf = self else { return }
 
             if let fcmToken = AppDelegate.shared.fcmToken {

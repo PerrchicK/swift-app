@@ -134,8 +134,8 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
         
         // Make HTTP request and fetch...
         📘("Calling: \(urlString)")
-        Alamofire.request(urlString).responseJSON { [weak self] (response) in
-            if let JSON = response.result.value, response.result.error == nil {
+        AF.request(urlString).response { [weak self] (response) in
+            if let JSON = response.data, response.error == nil {
                 // Request succeeded! ... parse response
                 ToastMessage.show(messageText: self?.parseResponse(JSON) ?? "Parsing failed")
             } else {
