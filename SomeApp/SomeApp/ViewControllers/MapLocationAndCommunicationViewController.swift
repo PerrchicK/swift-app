@@ -30,12 +30,6 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        CLGeocoder().geocodeAddressString("Bnei Efraim, Tel Aviv") { (placemarks, error) in
-            if let placemarks = placemarks {
-                📘(placemarks)
-            }
-        }
 
         // A workaround to get a custom user interaction on the map
         mapView.onLongPress({ [weak self] (longPressGestureRecognizer) in
@@ -78,12 +72,22 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
 
         locationManager.startUpdatingLocation()
         locationManager.delegate = self
+        
+        LocationHelper.shared.requestLocation { [weak self] (location) in
+            guard (self?.shouldMapFollowCurrentLocation ?? false), let location = location else { return }
+            
+            self?.onLocationUpdated(location: location)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         locationManager.delegate = nil
+    }
+
+    @IBAction func iosSdkRequestButtonPressed(_ sender: UIButton) {
+        requestAddressWithCoreLocation(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
 
     @IBAction func nativeRequestButtonPressed(_ sender: UIButton) {
@@ -93,7 +97,23 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
     @IBAction func afnetworkingRequestButtonPressed(_ sender: UIButton) {
         requestAddressWithAlamofire(latitude: tappedCoordinate?.latitude ?? afkeaLatitude, longitude: tappedCoordinate?.longitude ?? afkeaLongitude)
     }
-    
+
+    func requestCoordinatesWithCoreLocation(placeName: String = "Bnei Efraim, Tel Aviv") {
+        CLGeocoder().geocodeAddressString(placeName) { (placemarks, error) in
+            if let placemarks = placemarks {
+                📘(placemarks)
+            }
+        }
+    }
+
+    func requestAddressWithCoreLocation(latitude lat: Double, longitude lng: Double) {
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: lat, longitude: lng)) { (placemarks, error) in
+            if let placemarks = placemarks {
+                📘(placemarks)
+            }
+        }
+    }
+
     /**
      Makes a request for Reverse Geocoding:
      https://developers.google.com/maps/documentation/geocoding/start#reverse
@@ -175,26 +195,42 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard shouldMapFollowCurrentLocation, locationManager == manager, let location = locations.first else { return }
+        guard locationManager == manager, let location = locations.first else { return }
+        
+        onLocationUpdated(location: location)
+    }
+    
+    func onLocationUpdated(location: CLLocation) {
+        guard shouldMapFollowCurrentLocation else { return }
 
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }
-    
-    // MARK: - MKMapViewDelegate
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        var annotationView: MKAnnotationView!
 
-        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: MyAnnotationViewIdentifier) {
+    // MARK: - MKMapViewDelegate
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        //let annotation = MyAnnotation()
+
+        var annotationView: SomeAnnotationView!
+        let _annotation = annotation as! MKPointAnnotation
+
+        //_annotation.title = ""
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: MyAnnotationViewIdentifier) as? SomeAnnotationView {
+            // Annotation View is recycled
             dequeuedAnnotationView.annotation = annotation
             annotationView = dequeuedAnnotationView
+            _annotation.title = "@: \(annotationView!.pointerAddress)"
+            _annotation.subtitle = "\(annotationView.bDayTimestamp!)"
         } else {
             // Failed to dequeue -> instantiate
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: MyAnnotationViewIdentifier)
             let someAnnotationView: SomeAnnotationView = SomeAnnotationView.instantiateFromNib()
-            annotationView.addSubview(someAnnotationView)
-            someAnnotationView.stretchToSuperViewEdges()
+            someAnnotationView.reuseIdentifier = MyAnnotationViewIdentifier
+
+            annotationView = someAnnotationView
+            annotationView.annotation = annotation
+            _annotation.title = "@: \(annotationView!.pointerAddress)"
+            _annotation.subtitle = "\(annotationView.bDayTimestamp!)"
         }
 
         annotationView.canShowCallout = true
@@ -203,14 +239,14 @@ class MapLocationAndCommunicationViewController: UIViewController, MKMapViewDele
     }
 
     func mapView(_ mapView: MKMapView, didFeelLongPressOnCoordinate coordinate: CLLocationCoordinate2D) {
-        let annotation = MKPointAnnotation()
         self.tappedCoordinate = coordinate
         tappedCoordinateButton.setTitle("\(coordinate.latitude),\(coordinate.longitude)", for: .normal)
-        
-        annotation.title = "@: \(annotation.pointerAddress)"
-        annotation.subtitle = "b-date: \(Date.init().timeIntervalSince1970)"
+        let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
-        
+
+        annotation.title = "Will be set later by the view"
+        annotation.subtitle = "Will be set later by the view"
+
         mapView.addAnnotation(annotation)
     }
 }

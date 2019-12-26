@@ -105,6 +105,8 @@
 		75A484891CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A4847F1CDAB4A500F897A9 /* hulk-and-thor-frame-8.gif */; };
 		75A4848A1CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75A484801CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif */; };
 		75B721E1200DF519000962AF /* XibViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B721E0200DF519000962AF /* XibViewContainer.swift */; };
+		75C38969236EDE9E00F55C5F /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C38967236EDE9D00F55C5F /* LocationHelper.swift */; };
+		75C3896A236EDE9E00F55C5F /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C38968236EDE9D00F55C5F /* QuickActions.swift */; };
 		75D75AFF1C77B4FE0095CE05 /* running_cat_transparent.gif in Resources */ = {isa = PBXBuildFile; fileRef = 75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */; };
 		75D7A4D01C4E924400CDD88F /* SomeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4CF1C4E924400CDD88F /* SomeAppTests.swift */; };
 		75D7A4DB1C4E924400CDD88F /* SomeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7A4DA1C4E924400CDD88F /* SomeAppUITests.swift */; };
@@ -396,6 +398,8 @@
 		75A484801CDAB4A500F897A9 /* hulk-and-thor-frame-9.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "hulk-and-thor-frame-9.gif"; sourceTree = "<group>"; };
 		75B721E0200DF519000962AF /* XibViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibViewContainer.swift; sourceTree = "<group>"; };
 		75B87D091F576546000EE743 /* draft.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = draft.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		75C38967236EDE9D00F55C5F /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
+		75C38968236EDE9D00F55C5F /* QuickActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickActions.swift; sourceTree = "<group>"; };
 		75D75AFE1C77B4FE0095CE05 /* running_cat_transparent.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = running_cat_transparent.gif; sourceTree = "<group>"; };
 		75D7A4B41C4E924400CDD88F /* SomeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SomeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D7A4CB1C4E924400CDD88F /* SomeAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SomeAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -990,6 +994,8 @@
 		ACA7F34D209F85C6000F886D /* Logic */ = {
 			isa = PBXGroup;
 			children = (
+				75C38967236EDE9D00F55C5F /* LocationHelper.swift */,
+				75C38968236EDE9D00F55C5F /* QuickActions.swift */,
 				ACA7F377209F8994000F886D /* AppDelegate.swift */,
 				ACA7F34E209F85C6000F886D /* Game */,
 			);
@@ -1251,7 +1257,7 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/MMDrawerController/MMDrawerController.framework",
 				"${BUILT_PRODUCTS_DIR}/OnGestureSwift/OnGestureSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
@@ -1264,7 +1270,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MMDrawerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OnGestureSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
@@ -1309,6 +1315,7 @@
 				75113C57223C58B700F0F0DD /* FLEXFieldEditorViewController.m in Sources */,
 				75113C41223C58B700F0F0DD /* FLEXDictionaryExplorerViewController.m in Sources */,
 				ACA7F352209F85C6000F886D /* CloudUser.swift in Sources */,
+				75C38969236EDE9E00F55C5F /* LocationHelper.swift in Sources */,
 				ACA7F35C209F85C6000F886D /* SharingImageSource.swift in Sources */,
 				75113C3F223C58B700F0F0DD /* FLEXImageExplorerViewController.m in Sources */,
 				ACA7F35E209F85C7000F886D /* Synchronizer.swift in Sources */,
@@ -1386,6 +1393,7 @@
 				75113C5F223C58B700F0F0DD /* FLEXArgumentInputFontView.m in Sources */,
 				ACA7F36D209F85C7000F886D /* OperatorsViewController.swift in Sources */,
 				ACA7F358209F85C6000F886D /* ClosureTimer.swift in Sources */,
+				75C3896A236EDE9E00F55C5F /* QuickActions.swift in Sources */,
 				ACA7F36E209F85C7000F886D /* SplashScreenViewController.swift in Sources */,
 				ACA7F36A209F85C7000F886D /* LeftMenuViewController.swift in Sources */,
 				75113C58223C58B700F0F0DD /* FLEXArgumentInputStringView.m in Sources */,

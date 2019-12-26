@@ -12,11 +12,11 @@ target "SomeApp" do
     pod 'Firebase/Auth'
     pod 'Alamofire', '~> 5.0.0-rc.3'
     pod 'BetterSegmentedControl', '~> 1.2' # to support Swift 5.0
-    
+
     #pod 'ScryptoString'#, :path => '../../ScryptoString-Pod'
     #pod 'LPMessagingSDK'
-    pod 'OnGestureSwift'#, :path => '../../OnGestureSwift-Pod'
-    pod 'SwiftKeychainWrapper'
+    pod 'OnGestureSwift' #, :path => '../../OnGestureSwift-Pod'
+    pod 'SwiftKeychainWrapper', '~> 3.4'
 
     post_install do |installer|
         installer.pods_project.targets.each do |target|

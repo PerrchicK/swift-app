@@ -16,33 +16,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconAdd</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Image Examples</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>OpenImageExamples</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>AppIcon</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Multi Tasking</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>OpenMultiTaskingExamples</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconAdd</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Map Examples</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>OpenMapExamples</string>
-		</dict>
-	</array>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -70,17 +43,52 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>To load media from you &quot;gallery&quot;</string>
+	<string>To load media from you "gallery"</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To demonstrate camera capture</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>To proceed you must be the iPhone owner</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>To demonstrate location update</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To record videos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To demonstrate image picking from your library to the screen</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>To proceed you must be the iPhone owner</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeTime</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Multithreading</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>view-multithreading</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeLocation</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>View map</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>view-map</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeFavorite</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Animations</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>view-animations</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCapturePhoto</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Images</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>view-images</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -9,13 +9,26 @@
 import Foundation
 import MapKit
 
-class SomeAnnotationView: UIView {
+class SomeAnnotationView: MKAnnotationView {
     @IBOutlet weak var annotationIconLabel: UILabel!
+
     lazy var possibleIcons: [String] = ["😏", "😍", "😜", "😟"]
+    private(set) var bDayTimestamp: TimeInterval!
+
+    private var _reuseIdentifier: String?
+    override var reuseIdentifier: String? {
+        set {
+            _reuseIdentifier = newValue
+        }
+        get {
+            return _reuseIdentifier
+        }
+    }
 
     override func awakeFromNib() {
         annotationIconLabel.text = generateIcon()
         isUserInteractionEnabled = false
+        bDayTimestamp = Date.init().timeIntervalSince1970
     }
 
     func generateIcon() -> String {

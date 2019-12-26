@@ -12,12 +12,6 @@ import FirebaseAuth
 import FirebaseMessaging
 import UserNotifications
 
-enum ShortcutItemType: String {
-    case OpenImageExamples
-    case OpenMultiTaskingExamples
-    case OpenMapExamples
-}
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
@@ -34,6 +28,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     static var shared: AppDelegate {
         return UIApplication.shared.delegate as! AppDelegate
     }
+
+    @discardableResult
+    func handleDeepLink(deeplinkUrl: URL) -> Bool {
+        📘("Deep Link URL: \(deeplinkUrl)")
+        return true
+    }
+
+    func setupNotifications() {
+        setupNotifications(application: UIApplication.shared)
+    }
+
+    private func setupNotifications(application: UIApplication) {
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        Messaging.messaging().delegate = self
+        application.registerForRemoteNotifications()
+    }
+    
+    // MARK: - Application Lifecycle Events
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -81,115 +105,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
 
-    @discardableResult
-    func handleDeepLink(deeplinkUrl: URL) -> Bool {
-        📘("Deep Link URL: \(deeplinkUrl)")
-        return true
-    }
-
-    func setupNotifications() {
-        setupNotifications(application: UIApplication.shared)
-    }
-
-    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        📘(shortcutItem.type)
-        ToastMessage.show(messageText: "3D Touched! User chose quick action: \(shortcutItem.localizedTitle)")
-        guard let shortcutItemType = ShortcutItemType.init(rawValue: shortcutItem.type) else { 📘("Error: Failed to instatiate ShortcutItemType enum from: '\(shortcutItem.type)'"); return }
-        switch shortcutItemType {
-        case .OpenImageExamples:
-            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.iOS.ImagesCoreMotion)
-        case .OpenMultiTaskingExamples:
-            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.Concurrency.GCD)
-        case .OpenMapExamples:
-            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.iOS.CommunicationLocation)
-        default:
-            📘("Error: Unhandled shortcut item type: \(shortcutItemType.rawValue)")
-        }
-        completionHandler(true)
-    }
-
-    private func setupNotifications(application: UIApplication) {
-        if #available(iOS 10.0, *) {
-            // For iOS 10 display notification (sent via APNS)
-            UNUserNotificationCenter.current().delegate = self
-            
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(
-                options: authOptions,
-                completionHandler: {_, _ in })
-        } else {
-            let settings: UIUserNotificationSettings =
-                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            application.registerUserNotificationSettings(settings)
-        }
-        Messaging.messaging().delegate = self
-        application.registerForRemoteNotifications()
-    }
-
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    }
-
-    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-        if  let title = notification.alertTitle,
-            let message = notification.alertBody, application.applicationState == .active {
-                UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)).show()
-        }
-        📘("Received a local notification: \(notification)")
-    }
-    
-    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        📘("Registered: \(notificationSettings)")
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        📘("Received a remote notification: \(userInfo)")
-        completionHandler(.noData)
-    }
-    
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        📘("FCM (refreshed) token string: \(fcmToken)")
-        self.fcmToken = fcmToken
-    }
-
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        // Sets the notification as "acknowledged"
-        Messaging.messaging().appDidReceiveMessage(remoteMessage.appData)
-        📘("Received a FCM notification: \(remoteMessage.appData)")
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        📘("Received a remote notification: \(userInfo)")
-    }
-
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let apnsTokenString = deviceToken.reduce("", { $0 + String(format: "%02X", $1) })
-        
-        📘("APNs token string: \(apnsTokenString.uppercased())")
-
-        //InstanceID.instanceID().setAPNSToken(deviceToken, type: InstanceIDAPNSTokenType.prod)
-        Messaging.messaging().apnsToken = deviceToken
-
-        if let fcmToken = Messaging.messaging().fcmToken {
-            📘("FCM token string: \(fcmToken)")
-            self.fcmToken = fcmToken
-        }
-    }
-
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        📘(error)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
@@ -200,6 +129,81 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.saveContext()
     }
 
+    // MARK: - Quick actions
+
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        📘(shortcutItem.type)
+        ToastMessage.show(messageText: "3D Touched! User chose quick action: \(shortcutItem.localizedTitle)")
+        guard let shortcutItemType = ShortcutItemType.init(from: shortcutItem.type) else { 📘("Error: Failed to instatiate ShortcutItemType enum from: '\(shortcutItem.type)'"); return }
+
+        switch shortcutItemType {
+        case .OpenImageExamples:
+            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.iOS.ImagesCoreMotion)
+        case .OpenMultiTaskingExamples:
+            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.Concurrency.GCD)
+        case .OpenMapExamples:
+            MainViewController.shared?.onSelected(menuOption: LeftMenuOptions.iOS.CommunicationLocation)
+        default:
+            📘("Error: Unhandled shortcut item type: \(shortcutItemType.rawValue)")
+        }
+
+        completionHandler(true)
+    }
+
+    // MARK: - Notifications Events
+
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        if  let title = notification.alertTitle,
+            let message = notification.alertBody, application.applicationState == .active {
+            UIAlertController.makeAlert(title: title, message: message).withAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)).show()
+        }
+        📘("Received a local notification: \(notification)")
+    }
+    
+    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
+        📘("Registered: \(notificationSettings)")
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        📘("Received a remote notification: \(userInfo)")
+        completionHandler(.noData)
+    }
+    
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        📘("FCM (refreshed) token string: \(fcmToken)")
+        self.fcmToken = fcmToken
+    }
+    
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        // Sets the notification as "acknowledged"
+        Messaging.messaging().appDidReceiveMessage(remoteMessage.appData)
+        📘("Received a FCM notification: \(remoteMessage.appData)")
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        📘("Received a remote notification: \(userInfo)")
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let apnsTokenString = deviceToken.reduce("", { $0 + String(format: "%02X", $1) })
+        
+        📘("APNs token string: \(apnsTokenString.uppercased())")
+        
+        //InstanceID.instanceID().setAPNSToken(deviceToken, type: InstanceIDAPNSTokenType.prod)
+        Messaging.messaging().apnsToken = deviceToken
+        
+        if let fcmToken = Messaging.messaging().fcmToken {
+            📘("FCM token string: \(fcmToken)")
+            self.fcmToken = fcmToken
+        }
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        📘(error)
+    }
+
+    // MARK: - Other application Events
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         return handleDeepLink(deeplinkUrl: url)
     }

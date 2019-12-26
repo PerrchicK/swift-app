@@ -16,7 +16,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 
     let NumberOfRows = TicTacToeGame.Configuration.RowsCount // X - number of section
     let NumberOfColumns = TicTacToeGame.Configuration.ColumnsCount // Y - number of items in section
-    let TileMargin = CGFloat(5.0)
+    lazy var TileMargin: CGFloat = CGFloat(2.0)
+    var allCellsPointers: [Int: [Int: WeakReference<GameCell>]] = [:]
 
     static let PLAYER_NAME = "user"
     lazy var game: Game = {
@@ -77,6 +78,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! GameCell
 
         cell.configCell()
+        if allCellsPointers[indexPath.row] == nil {
+            allCellsPointers[indexPath.row] = [:]
+        }
+        allCellsPointers[indexPath.row]?[indexPath.section] = WeakReference<GameCell>(cell)
+
+        cell.onLongPress { [weak self] _ in
+            self?.exposeAllCells(fromIndexPath: indexPath)
+        }
 
         return cell;
     }
@@ -108,7 +117,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         let rowsCount = CGFloat(NumberOfColumns)
-        let dimentions = collectionView.frame.height / rowsCount - (rowsCount * TileMargin * 0.8)
+        var dimentions = collectionView.frame.width / rowsCount - (rowsCount * TileMargin * 0.8)
+        dimentions = dimentions < 0 ? collectionView.frame.width / rowsCount : dimentions
+        dimentions = dimentions < 0 ? 5 : dimentions
         return CGSize(width: dimentions, height: dimentions) // collectionView.frame.height * 0.9
     }
 
@@ -139,6 +150,77 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 
     func isGameEnabled(_ game: Game) -> Bool {
         return isGameEnabled
+    }
+    
+    func exposeAllCells(fromIndexPath indexPath: IndexPath) {
+        guard let weakCellPointer = self.allCellsPointers[indexPath.row]?[indexPath.section] else { return }
+        guard let cell = weakCellPointer.some else {
+            // Cleanup...
+            self.allCellsPointers[indexPath.row]?[indexPath.section] = nil
+            return
+        }
+
+        guard cell.isPresented else { return }
+        guard (cell.playerMarkLabel.text?.length() ?? 0) == 0 else { return }
+
+        self.allCellsPointers[indexPath.row]?[indexPath.section]?.some?.isPresented = false
+        📘("Cell [\(indexPath.row)][\(indexPath.section)] disappeared...")
+
+        // Call all neighbours recursively
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row, section: indexPath.section + 1))
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+//
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row, section: indexPath.section - 1))
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row - 1, section: indexPath.section))
+//
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row + 1, section: indexPath.section - 1))
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row - 1, section: indexPath.section + 1))
+//
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row + 1, section: indexPath.section + 1))
+//        self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row - 1, section: indexPath.section - 1))
+        
+        let delayDelta = 0.1
+        var delay: Double = 0
+
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row, section: indexPath.section + 1))
+        }
+
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+        }
+        
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row, section: indexPath.section - 1))
+        }
+
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row - 1, section: indexPath.section))
+        }
+        
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row + 1, section: indexPath.section - 1))
+        }
+
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row - 1, section: indexPath.section + 1))
+        }
+        
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row + 1, section: indexPath.section + 1))
+        }
+
+        delay += delayDelta
+        PerrFuncs.runBlockAfterDelay(afterDelay: delay) {
+            self.exposeAllCells(fromIndexPath: IndexPath(row: indexPath.row - 1, section: indexPath.section - 1))
+        }
     }
     
     deinit {
@@ -235,3 +317,17 @@ class XibGameCell: GameCell {
         }
     }
 }
+
+public class WeakReference<Wrapped: AnyObject> {
+    weak private(set) var some: Wrapped?
+
+    public init(_ some: Wrapped) {
+        self.some = some
+    }
+}
+
+//extension Array<T: AnyObject> {
+//    convenience init(weak: T) {
+//        <#statements#>
+//    }
+//}

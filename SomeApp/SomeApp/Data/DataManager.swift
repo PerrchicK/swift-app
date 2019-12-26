@@ -12,7 +12,7 @@ import UIKit
 
 class DataManager {
     static var applicationLibraryPath: NSString = {
-        if let libraryDirectoryPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).last {
+        if let libraryDirectoryPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.libraryDirectory, .userDomainMask, true).last {
             return libraryDirectoryPath as NSString
         }
         
