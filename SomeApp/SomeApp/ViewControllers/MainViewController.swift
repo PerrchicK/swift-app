@@ -58,6 +58,9 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        let emailString = "i@dont.have" // "1@2.3"
+        📘("emailString is email == \(emailString.isEmail)")
+
         if let lastCrashCallStack: [String] = UserDefaults.load(key: "last crash") {
             UIAlertController.makeAlert(title: "last crash", message: "\(lastCrashCallStack)")
             .withAction(UIAlertAction(title: "fine", style: .cancel, handler: nil))

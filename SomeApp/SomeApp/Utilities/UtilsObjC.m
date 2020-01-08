@@ -42,6 +42,31 @@
     // Ignore... in other words, it's read only
 }
 
++(void)tryRunBlock:(dangerous_block)block error:(NSError **_Nullable)error {
+    if (!block) {
+        return;
+    }
+
+    @try {
+        block();
+        NSArray *arr = @[@0,@1,@2];
+        NSLog(arr[3]);
+        // Code that can potentially throw an exception
+    } @catch (NSException *exception) {
+        // Handle an exception thrown in the @try block
+        if (error) {
+            *error = [NSError errorWithDomain:@"swift-real-try-catch"
+                                         code:-1
+                                     userInfo:@{ @"originalException":exception}];
+        }
+//        if (error && *error) {
+//            return nil;
+//        }
+    } @finally {
+        // Code that gets executed whether or not an exception is thrown
+    }
+}
+
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message inViewController:(UIViewController *) viewController {
     UtilsObjC *__weak weakSelf = self;
 

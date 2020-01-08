@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^dangerous_block)();
+
 // Everything that is decalred here (the header file) is considered as PUBLIC FIELDS & METHODS
 // Read more at: https://medium.com/@victorleungtw/connection-between-h-and-m-files-in-objective-c-eaf6b7366717
 
@@ -21,6 +23,7 @@
 
 -(BOOL)crashTheAppDueToAnUnimplementedMethodWithParam:(NSString *)stringParam;
 -(CGSize)boardSize;
++(void)tryRunBlock:(dangerous_block)block error:(NSError **_Nullable)error;
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message inViewController:(UIViewController *) viewController;
 +(BOOL)isRunningOnSimulator;
 

@@ -220,6 +220,11 @@ open class PerrFuncs {
         }
     }
 
+    static func randomString(length: Int) -> String {
+        let allowedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        return String( (0...length - 1).map { _ in allowedLetters.randomElement()! } )
+    }
+
     static func random(from: Int = 0, to: Int) -> Int {
         guard to != from else { return to }
 
@@ -341,6 +346,24 @@ open class PerrFuncs {
 // MARK: - Global Extensions
 
 extension String {
+    var isEmail: Bool {
+        let emailRegEx = "(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}" +
+        "~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\" +
+        "x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-" +
+        "z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5" +
+        "]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-" +
+        "9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21" +
+        "-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
+
+        let emailTest = NSPredicate(format:"SELF MATCHES[c] %@", emailRegEx)
+        return emailTest.evaluate(with: self)
+    }
+
+    func makePluralIfNeeded(count _count: Int) -> String {
+        let pluralEnding = _count > 1 ? "s" : ""
+        return "\(self)\(pluralEnding)"
+    }
+
     func length() -> Int {
         return self.count
     }
