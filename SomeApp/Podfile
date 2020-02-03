@@ -4,7 +4,7 @@ use_frameworks!
 
 target "SomeApp" do
     #    pod 'FLEX', '~> 2.0', :configurations => ['Debug']
-    
+    pod 'CrashOps', '0.0.65'
     pod 'MMDrawerController', '~> 0.5.7'
     pod 'Firebase/Core'
     pod 'Firebase/Database'
@@ -12,7 +12,7 @@ target "SomeApp" do
     pod 'Firebase/Auth'
     pod 'Alamofire', '~> 5.0.0-rc.3'
     pod 'BetterSegmentedControl', '~> 1.2' # to support Swift 5.0
-    
+
     #pod 'ScryptoString'#, :path => '../../ScryptoString-Pod'
     #pod 'LPMessagingSDK'
     pod 'OnGestureSwift'#, :path => '../../OnGestureSwift-Pod'
@@ -25,5 +25,5 @@ target "SomeApp" do
             end
         end
     end
-    
+
 end

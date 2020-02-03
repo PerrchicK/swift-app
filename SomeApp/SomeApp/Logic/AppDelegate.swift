@@ -69,7 +69,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let rootViewController = SplashScreenViewController.instantiate()
         self.window?.rootViewController = rootViewController
 
-        NSSetUncaughtExceptionHandler { (exception) in
+        CrashOps.shared().previousCrashReports = { reports in
+            📘(reports)
+        }
+
+//        NSSetUncaughtExceptionHandler { (exception) in
+//            UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
+//        }
+
+        CrashOps.shared().appExceptionHandler = { exception in
             UserDefaults.save(value: exception.callStackSymbols, forKey: "last crash").synchronize()
         }
 

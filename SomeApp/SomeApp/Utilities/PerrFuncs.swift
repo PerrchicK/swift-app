@@ -71,7 +71,8 @@ func ^ (left: Bool, right: Bool) -> Bool { // Reference: http://nshipster.com/sw
 open class PerrFuncs {
 
     static var dispatchTokens: [String] = []
-    /// Allows us to make aspect programming in iOS: https://github.com/steipete/Aspects
+    /// Allows us to make AOP (Aspect-Oriented Programming) in iOS: https://github.com/steipete/Aspects
+    /// Read more about AOP here: https://en.wikipedia.org/wiki/Aspect-oriented_programming
     static var originalViewAppeared: (originalImplementation: IMP, originalSelector: Selector)?
 
     static func onAppLoaded() {
@@ -400,6 +401,12 @@ extension String {
 
     func localized(comment: String = "") -> String {
         return NSLocalizedString(self, comment: comment)
+    }
+
+    /// Helps a lot with URLs that contain Hebrew letters, for instance.
+    func toEncodedUrl() -> String? {
+        let allowedCharacterSet = CharacterSet(charactersIn: "!*'();@+$,#[] ").inverted
+        return addingPercentEncoding(withAllowedCharacters: allowedCharacterSet)
     }
 
     subscript (i: Int) -> Character {
@@ -852,7 +859,6 @@ extension UIView: RoundCorneredView {
 }
 
 extension UIView {
-    
     // Using a function since `var image` might conflict with an existing variable
     // (like on `UIImageView`)
     @available(iOS 10.0, *)
@@ -862,7 +868,7 @@ extension UIView {
             layer.render(in: rendererContext.cgContext)
         }
     }
-
+    
     // Inspired from: https://stackoverflow.com/questions/25513271/how-to-initialize--a-custom-uiview-class-with-a-xib-file-in-swift
     class func instantiateFromNib<T>() -> T {
         let xibFileName: String = PerrFuncs.className(self.classForCoder().self)
@@ -1369,18 +1375,18 @@ extension UIView {
         guard isAllowed else { return nil }
         guard self.point(inside: point, with: event) else { return nil }
 
-        var passed = [UIView]()
+        var allPassed = [UIView]()
         for subView in subviews {
             guard subView.isPresented else { continue }
             guard subView.isUserInteractionEnabled else { continue }
             let subviewPoint = self.convert(point, to: subView)
 
-            if let r = subView.hitTest(subviewPoint, with: event) {
-                passed.append(r)
+            if let passedView = subView.hitTest(subviewPoint, with: event) {
+                allPassed.append(passedView)
             }
         }
 
-        return passed.last ?? self // Using last to follow the Z index
+        return allPassed.last ?? self // Using last to follow the Z index
     }
 
     func setUserInteractionEnablingClosure(permissionHandler: @escaping PredicateClosure<UIView>) {

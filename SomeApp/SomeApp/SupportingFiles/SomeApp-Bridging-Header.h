@@ -4,6 +4,8 @@
 
 // Delete these libs if they don't exist:
 
+#import "CrashOps.h"
+
 #import "UtilsObjC.h"
 #ifdef DEBUG
 #import "FLEX.h"

@@ -177,6 +177,9 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
 
     func textView(_ textView: UITextView, shouldInteractWith URL: Foundation.URL, in characterRange: NSRange) -> Bool {
         📘("interacting with URL: \(URL)")
+
+        // CrashOps.shared().crash()
+
         return URL.absoluteString == MainViewController.projectLocationInsideGitHub
     }
 
