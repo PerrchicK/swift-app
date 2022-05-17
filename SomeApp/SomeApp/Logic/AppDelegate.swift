@@ -156,16 +156,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         completionHandler(.noData)
     }
     
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+    private func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         📘("FCM (refreshed) token string: \(fcmToken)")
         self.fcmToken = fcmToken
     }
 
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        // Sets the notification as "acknowledged"
-        Messaging.messaging().appDidReceiveMessage(remoteMessage.appData)
-        📘("Received a FCM notification: \(remoteMessage.appData)")
-    }
+
+//    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+//        // Sets the notification as "acknowledged"
+//        Messaging.messaging().appDidReceiveMessage(remoteMessage.appData)
+//        📘("Received a FCM notification: \(remoteMessage.appData)")
+//    }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         📘("Received a remote notification: \(userInfo)")

@@ -22,7 +22,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     LeftMenuOptions.UI.title:
         [LeftMenuOptions.UI.Views_Animations, LeftMenuOptions.UI.CollectionView],
     LeftMenuOptions.SwiftStuff.title:
-        [LeftMenuOptions.SwiftStuff.OperatorsOverloading],
+        [LeftMenuOptions.SwiftStuff.OperatorsOverloading, LeftMenuOptions.SwiftStuff.ButterflyHost, LeftMenuOptions.SwiftStuff.DeleteNonFavorites],
     LeftMenuOptions.Concurrency.title:
         [LeftMenuOptions.Concurrency.GCD]]
     //LeftMenuOptions.PersonalDevelopment.title:

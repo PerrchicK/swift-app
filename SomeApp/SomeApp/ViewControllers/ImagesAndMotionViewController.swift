@@ -11,6 +11,8 @@ import CoreMotion
 import AVFoundation
 import MobileCoreServices
 import BetterSegmentedControl
+import Photos
+import UIKit
 
 class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
 
@@ -163,6 +165,51 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
         // MARK: - Save state
         let selectedIndexesDictionary = ["isEditableControl":isEditableControl.index,"sourceControl":sourceControl.index,"typeControl":typeControl.index]
         UserDefaults.save(value: selectedIndexesDictionary as AnyObject, forKey: "selected settings").synchronize()
+    }
+
+    static func deleteNonFavouritesPhotos() {
+        var images = false
+        var videos = false
+        let prompt = UIAlertController.makeActionSheet(title: "Preparing to delete a bulk of...", message: "Videos / Photos")
+        let synchronizer = Synchronizer {
+            let didChoose = videos || images
+            if didChoose {
+                let fetchOptions: PHFetchOptions = PHFetchOptions()
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                let fetchResult = PHAsset.fetchAssets(with: images ? .image : .video, options: fetchOptions)
+                let assetsToDelete = NSMutableArray()
+                fetchResult.enumerateObjects { (imageAsset, index, stop) -> Void in
+                    if !imageAsset.isFavorite {
+                        assetsToDelete.add(imageAsset)
+                    }
+                }
+                
+                let count = fetchResult.count - assetsToDelete.count
+                UIAlertController.makeAlert(title: "Will delete a bulk", message: "We're going to keep \(count) \(images ? "images" : "videos") in your device")
+                    .withAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: { action in
+                        PHPhotoLibrary.shared().performChanges {
+                            PHAssetChangeRequest.deleteAssets(assetsToDelete)
+                        } completionHandler: { didSucceed, errorOrNull in
+                            📘(didSucceed)
+                        }
+                    }))
+                    .show()
+            }
+        }
+
+        let holder = synchronizer.createHolder()
+        synchronizer.createHolder().release()
+        
+        prompt.withAction(UIAlertAction(title: "... photos", style: UIAlertActionStyle.default, handler: { action in
+                images = true
+                holder.release()
+            }))
+            .withAction(UIAlertAction(title: "... videos", style: UIAlertActionStyle.default, handler: { action in
+                videos = true
+                holder.release()
+            }))
+            .withAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+            .show()
     }
 
     @objc func segmentedControlValueChanged(_ sender: BetterSegmentedControl) {

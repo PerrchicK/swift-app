@@ -8,6 +8,7 @@
 
 import UIKit
 import MMDrawerController
+import TheButterflySDK
 
 class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITextViewDelegate {
     static let projectLocationInsideGitHub = "https://github.com/PerrchicK/swift-app"
@@ -41,6 +42,8 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
 
             strongSelf.drawer.closeDrawer(animated: true, completion: nil)
         }
+        
+        UIApplication.shared.isIdleTimerDisabled = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -140,6 +143,24 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
         switch selectedOption {
         case LeftMenuOptions.SwiftStuff.OperatorsOverloading:
             navigationController?.pushViewController(OperatorsViewController.instantiate(), animated: true)
+        case LeftMenuOptions.SwiftStuff.ButterflyHost:
+            ButterflySDK.overrideCountry("ze")
+            var selectedLanguage: BFInterfaceLanguage?
+            switch "qwe" {
+            case "he":
+                selectedLanguage = BFInterfaceLanguage.hebrew
+            case "en":
+                selectedLanguage = BFInterfaceLanguage.english
+            default: break // ignore...
+            }
+            if let selectedLanguage = selectedLanguage {
+                ButterflySDK.overrideLanguage(selectedLanguage)
+            }
+            
+            ButterflySDK.useCustomColor("0000ff")
+            ButterflySDK.openReporter(withKey: "your-API-key")
+        case LeftMenuOptions.SwiftStuff.DeleteNonFavorites:
+            ImagesAndMotionViewController.deleteNonFavouritesPhotos()
         case LeftMenuOptions.Concurrency.GCD:
             navigationController?.pushViewController(ConcurrencyViewController.instantiate(), animated: true)
         case LeftMenuOptions.UI.Views_Animations:

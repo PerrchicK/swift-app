@@ -382,6 +382,10 @@ extension String {
             emoji = "👀"
         case "Operators Overloading":
             emoji = "🔧"
+        case "Butterfly Host":
+            emoji = "🦋"
+        case "Delete Non-Favorites":
+            emoji = "🗑"
         case "Collection View":
             emoji = "📚"
         case "Images & Core Motion":

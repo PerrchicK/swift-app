@@ -16,3 +16,4 @@
 //#import "Firebase/Firebase.h"
 
 #import "SwiftBridgedClass.h"
+#import "ButterflySDK.h"
