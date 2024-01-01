@@ -14,8 +14,14 @@ protocol LeftMenuViewControllerDelegate: class {
 
 class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: LeftMenuViewControllerDelegate?
-
     @IBOutlet weak var distanceFromTopConstraint: NSLayoutConstraint!
+
+    
+    let menuItemsOrder = [LeftMenuOptions.iOS.title,
+                     LeftMenuOptions.UI.title,
+                     LeftMenuOptions.SwiftStuff.title,
+                     LeftMenuOptions.Concurrency.title]
+    
     let menuItems =
     [LeftMenuOptions.iOS.title:
         [LeftMenuOptions.iOS.Data, LeftMenuOptions.iOS.CommunicationLocation, LeftMenuOptions.iOS.Notifications, LeftMenuOptions.iOS.ImagesCoreMotion],
@@ -64,7 +70,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menuItems.keys.count
+        return menuItemsOrder.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -85,8 +91,7 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: - Other helper methods
 
     func menuItemSectionTitle(_ section: Int) -> String {
-        let sectionIndex = menuItems.index(menuItems.startIndex, offsetBy: section)
-        let sectionTitle = menuItems.keys[sectionIndex]
+        let sectionTitle = menuItemsOrder[section]
 
         return sectionTitle
     }
@@ -97,14 +102,13 @@ class LeftMenuViewController: UIViewController, UITableViewDelegate, UITableView
      The returning of tuple is taken from Python: https://www.tutorialspoint.com/python/python_tuples.htm
      */
     func menuItemTitle(_ indexPath: IndexPath) -> (itemTitle: String, itemIcon: String)? {
-        let sectionIndex = menuItems.index(menuItems.startIndex, offsetBy: indexPath.section)
-        let sectionTitle = menuItems.keys[sectionIndex]
+        let sectionTitle = menuItemsOrder[indexPath.section]
 
         guard let itemsArray = menuItems[sectionTitle], itemsArray.count > 0 else {
             return nil
         }
 
-        let itemTitle = itemsArray[indexPath.row]
+        let itemTitle = itemsArray[indexPath.item] // equivalent to: itemsArray[indexPath.row]
 
         // Return tuple
         return (itemTitle, itemTitle.toEmoji())
@@ -132,5 +136,4 @@ class LeftMenuCell: UITableViewCell {
         self.cellTitle.text = cellTitle
         self.cellIcon.text = cellIcon
     }
-    
 }

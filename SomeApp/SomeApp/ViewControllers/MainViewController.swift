@@ -43,7 +43,7 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
             strongSelf.drawer.closeDrawer(animated: true, completion: nil)
         }
         
-        UIApplication.shared.isIdleTimerDisabled = true
+        PerrFuncs.keepAlive()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -141,48 +141,39 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
 
     func onMenuOptionSelected(optionSelected selectedOption: String) {
         switch selectedOption {
-        case LeftMenuOptions.SwiftStuff.OperatorsOverloading:
-            navigationController?.pushViewController(OperatorsViewController.instantiate(), animated: true)
-        case LeftMenuOptions.SwiftStuff.ButterflyHost:
-            ButterflySDK.overrideCountry("ze")
-            var selectedLanguage: BFInterfaceLanguage?
-            switch "qwe" {
-            case "he":
-                selectedLanguage = BFInterfaceLanguage.hebrew
-            case "en":
-                selectedLanguage = BFInterfaceLanguage.english
-            default: break // ignore...
-            }
-            if let selectedLanguage = selectedLanguage {
-                ButterflySDK.overrideLanguage(selectedLanguage)
-            }
-            
-            ButterflySDK.useCustomColor("0000ff")
-            ButterflySDK.openReporter(withKey: "your-API-key")
-        case LeftMenuOptions.SwiftStuff.DeleteNonFavorites:
-            ImagesAndMotionViewController.deleteNonFavouritesPhotos()
-        case LeftMenuOptions.Concurrency.GCD:
-            navigationController?.pushViewController(ConcurrencyViewController.instantiate(), animated: true)
-        case LeftMenuOptions.UI.Views_Animations:
-            navigationController?.pushViewController(AnimationsViewController.instantiate(), animated: true)
-        case LeftMenuOptions.UI.CollectionView:
-            let gameNavigationController = GameNavigationController(rootViewController: CollectionViewController.instantiate())
-            gameNavigationController.isNavigationBarHidden = true
-            navigationController?.present(gameNavigationController, animated: true, completion: nil)
-        //            navigationController?.pushViewController(gameNavigationController, animated: true) // This will crash
-        case LeftMenuOptions.iOS.Data:
-            navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
-        case LeftMenuOptions.iOS.CommunicationLocation:
-            navigationController?.pushViewController(MapLocationAndCommunicationViewController.instantiate(), animated: true)
-        case LeftMenuOptions.iOS.Notifications:
-            navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
-        case LeftMenuOptions.iOS.ImagesCoreMotion:
-            navigationController?.present(ImagesAndMotionViewController.instantiate(), animated: true, completion: nil)
-            //        case LeftMenuOptions.PersonalDevelopment.CrazyWhack:
-        //            navigationController?.present(CrazyWhackViewController(), animated: true, completion: nil)
-        default:
-            UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
-            📘("to be continued...")
+            case LeftMenuOptions.SwiftStuff.OperatorsOverloading:
+                navigationController?.pushViewController(OperatorsViewController.instantiate(), animated: true)
+            case LeftMenuOptions.SwiftStuff.ButterflyHost:
+    //            ButterflySDK.overrideCountry("ze")
+                ButterflySDK.overrideLanguage("ru")
+                
+                ButterflySDK.useCustomColor("0000ff")
+                ButterflySDK.openReporter(withKey: "test-bfc4a19d-a4d4-4c82-8d55-dcd43a246a72")
+                PerrFuncs.openOrphanButterfly();
+            case LeftMenuOptions.SwiftStuff.DeleteNonFavorites:
+                ImagesAndMotionViewController.deleteNonFavouritesPhotos()
+            case LeftMenuOptions.Concurrency.GCD:
+                navigationController?.pushViewController(ConcurrencyViewController.instantiate(), animated: true)
+            case LeftMenuOptions.UI.Views_Animations:
+                navigationController?.pushViewController(AnimationsViewController.instantiate(), animated: true)
+            case LeftMenuOptions.UI.CollectionView:
+                let gameNavigationController = GameNavigationController(rootViewController: CollectionViewController.instantiate())
+                gameNavigationController.isNavigationBarHidden = true
+                navigationController?.present(gameNavigationController, animated: true, completion: nil)
+            //            navigationController?.pushViewController(gameNavigationController, animated: true) // This will crash
+            case LeftMenuOptions.iOS.Data:
+                navigationController?.pushViewController(DataViewController.instantiate(), animated: true)
+            case LeftMenuOptions.iOS.CommunicationLocation:
+                navigationController?.pushViewController(MapLocationAndCommunicationViewController.instantiate(), animated: true)
+            case LeftMenuOptions.iOS.Notifications:
+                navigationController?.pushViewController(NotificationsViewController.instantiate(), animated: true)
+            case LeftMenuOptions.iOS.ImagesCoreMotion:
+                navigationController?.present(ImagesAndMotionViewController.instantiate(), animated: true, completion: nil)
+                //        case LeftMenuOptions.PersonalDevelopment.CrazyWhack:
+            //            navigationController?.present(CrazyWhackViewController(), animated: true, completion: nil)
+            default:
+                UIAlertController.alert(title: "Under contruction 🔨", message: "to be continued... 😉")
+                📘("to be continued...")
         }
     }
 

@@ -69,7 +69,6 @@ func ^ (left: Bool, right: Bool) -> Bool { // Reference: http://nshipster.com/sw
 // MARK: - Class
 
 open class PerrFuncs {
-
     static var dispatchTokens: [String] = []
     /// Allows us to make AOP (Aspect-Oriented Programming) in iOS: https://github.com/steipete/Aspects
     /// Read more about AOP here: https://en.wikipedia.org/wiki/Aspect-oriented_programming
@@ -89,30 +88,53 @@ open class PerrFuncs {
 
         block()
     }
-
+    
+    static public func keepAlive() {
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
+    
     @available(iOS 11.0, *)
     static public func readText(fromImage image: UIImage, block: @escaping (String?) -> ()) {
         guard let cgImage = image.cgImage else { block(nil); return }
-
+        
         let handler = VNImageRequestHandler(
             cgImage: cgImage,
             orientation: image.inferOrientation(),
             options: [VNImageOption: Any]()
         )
         
-        let request = VNDetectTextRectanglesRequest(completionHandler: { request, error in
-            DispatchQueue.main.async {
-                //self?.handle(image: image, request: request, error: error)
-                block(request.results?.first.debugDescription) // TODO: Please learn :)
+        if #available(iOS 13.0, *) {
+            let request = VNRecognizeTextRequest(completionHandler: { request, error in
+                DispatchQueue.main.async {
+                    // https://developer.apple.com/documentation/vision/recognizing_text_in_images
+                    
+                    //                    guard let observations = request.results as? [VNTextObservation] else { return }
+                    guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
+                    var recognizedStrings: [String] = observations.compactMap { observation in
+                        // Return the string of the  instance.
+                        if let topCandidate: String = observation.topCandidates(1).first?.string {
+                            return topCandidate
+                        }
+                        
+                        return ""
+                    }
+                    
+                    recognizedStrings = recognizedStrings.filter( { !$0.isEmpty } )
+                    block(recognizedStrings.first)
+                    
+                }
+            })
+            
+//            request.reportCharacterBoxes = true
+            do {
+                try handler.perform([request])
+            } catch {
+                print(error as Any)
             }
-        })
-        
-        request.reportCharacterBoxes = true
-        
-        do {
-            try handler.perform([request])
-        } catch {
-            print(error as Any)
+            
+        } else {
+            //TODO: Use online service / Firebase ML...
+            block(nil)
         }
     }
 
@@ -303,7 +325,7 @@ open class PerrFuncs {
         if #available(iOS 11.0, *) { //if #available(iOS 8.0, macOS 10.12.1, *) {
             if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
                 switch localAuthenticationContext.biometryType {
-                    case .faceID: // Device support Face ID
+                    case .faceID: // Device support Face ID (biometrics)
                         fallthrough
                     case .touchID: // Device supports Touch ID
                         localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: localAuthenticationLocalizedReasonString) { success, evaluateError in
@@ -382,7 +404,7 @@ extension String {
             emoji = "👀"
         case "Operators Overloading":
             emoji = "🔧"
-        case "Butterfly Host":
+        case "Butterfly":
             emoji = "🦋"
         case "Delete Non-Favorites":
             emoji = "🗑"
@@ -1258,7 +1280,7 @@ extension UserDefaults {
 
 extension Array {
     public subscript(safe index: Int) -> Element? {
-        guard count > index else {return nil }
+        guard count > index else { return nil }
         return self[index]
     }
     

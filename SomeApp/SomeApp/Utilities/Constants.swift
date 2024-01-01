@@ -31,7 +31,7 @@ public struct LeftMenuOptions {
         public static let title = "Swift Stuff"
         
         public static let OperatorsOverloading = "Operators Overloading"
-        public static let ButterflyHost = "Butterfly Host"
+        public static let ButterflyHost = "Butterfly"
         public static let DeleteNonFavorites = "Delete Non-Favorites"
     }
 

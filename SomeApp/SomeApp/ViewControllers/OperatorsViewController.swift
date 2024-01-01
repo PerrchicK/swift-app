@@ -114,16 +114,7 @@ class OperatorsViewController: UIViewController {
     }
     
     @IBAction func setButtonPressed(_ sender: AnyObject) {
-        valueTextField.resignFirstResponder()
-
         var huggingResult: Bool
-        if let text = valueTextField.text {
-            let p: PersistableUser = PersistableUser(email: text, firstName: text, lastName: text, nickname: text)
-            huggingResult = valueTextField.😘(huggedObject: text)
-            valueTextField.😘(huggedObject: p)
-        } else {
-            huggingResult = false
-        }
 
         defer {
             let isThisLove = huggingResult ? "❤️" : "💔"
@@ -132,18 +123,28 @@ class OperatorsViewController: UIViewController {
             
             valueTextField.text = ""
         }
+        
+        valueTextField.resignFirstResponder()
+
+        if let text = valueTextField.text {
+            let p: PersistableUser = PersistableUser(email: text, firstName: text, lastName: text, nickname: text)
+            huggingResult = valueTextField.😘(huggedObject: text)
+            valueTextField.😘(huggedObject: p)
+        } else {
+            huggingResult = false
+        }
     }
     
     @IBAction func getButtonPressed(_ sender: AnyObject) {
         valueTextField.resignFirstResponder()
 
-        if let beloved = valueTextField.😍() as? String {
-            UIAlertController.alert(title: "hugged string", message: beloved)
+        if let beloved = valueTextField.😍() as? PersistableUser {
+            UIAlertController.alert(title: "hugged string", message: beloved.firstName)
         }
     }
     
     @objc func dismiss(_ tapGestureRecognizer: UIGestureRecognizer) {
-        📘("Dismissing keyboard due to \(tapGestureRecognizer.pointerAddress)")
+        📘("Dismissing keyboard due to UIGestureRecognizer instance at address: \(tapGestureRecognizer.pointerAddress)")
         valueTextField.resignFirstResponder()
     }
 }

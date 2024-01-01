@@ -78,7 +78,13 @@
 }
 
 + (void)load {
-    NSLog(@"IDFA: %@", [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]);
+    if ([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled]) {
+        NSLog(@"IDFA: %@", [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]);
+    } else {
+        NSLog(@"isAdvertisingTrackingEnabled == false, IDFA: %@", [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]);
+    }
+    
+    NSLog(@"IDFV: %@", [[[UIDevice currentDevice] identifierForVendor] UUIDString]);
     NSLog(@"App loaded");
 }
 

@@ -13,6 +13,7 @@ import MobileCoreServices
 import BetterSegmentedControl
 import Photos
 import UIKit
+import Contacts
 
 class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
 
@@ -102,6 +103,18 @@ class ImagesAndMotionViewController: UIViewController, UIImagePickerControllerDe
             if #available(iOS 11.0, *) {
                 PerrFuncs.readText(fromImage: capturedImage, block: { (text) in
                     📘(text)
+
+                    if let recognizedText = text {
+                        ToastMessage.show(messageText: recognizedText)
+
+                        if let found: [CNContact] = ElbitHackathonTools.searchContacts(searchPhrase: recognizedText),
+                           let firstResult = found.first {
+                            📘(found)
+                            UIAlertController.makeAlert(title: "found contact", message: "\(firstResult.firstName) \(firstResult.familyName) \n \(firstResult.phoneNumbers.map( { $0.value.stringValue } ))" .description).withAction(UIAlertAction(title: "Thanks", style: UIAlertActionStyle.cancel, handler: nil)).show()
+                        }
+                    } else {
+                        ToastMessage.show(messageText: "Couldn't recognize text 😱")
+                    }
                 })
             }
         })
