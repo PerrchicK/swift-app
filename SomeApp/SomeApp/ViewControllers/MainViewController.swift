@@ -149,7 +149,6 @@ class MainViewController: UIViewController, LeftMenuViewControllerDelegate, UITe
                 
                 ButterflySDK.useCustomColor("0000ff")
                 ButterflySDK.openReporter(withKey: "test-bfc4a19d-a4d4-4c82-8d55-dcd43a246a72")
-                PerrFuncs.openOrphanButterfly();
             case LeftMenuOptions.SwiftStuff.DeleteNonFavorites:
                 ImagesAndMotionViewController.deleteNonFavouritesPhotos()
             case LeftMenuOptions.Concurrency.GCD:
